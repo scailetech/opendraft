@@ -18,105 +18,85 @@ html {
   scroll-behavior: smooth;
 }
 
-/* *=========== OpenDraft Brand Theme =========== */
+/* Clean B/W with Green Accent Theme */
 @layer base {
   :root {
-    /* Main backgrounds - keep warm cream/beige palette for readability */
-    --background: 60 14% 96%;        /* #f7f7f4 - Warm off-white */
-    --foreground: 45 19% 13%;        /* #26251e - Dark brown text */
+    /* Pure white background */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;           /* Near black #171717 */
 
-    /* Card system - layered cream shades for depth */
-    --card: 60 14% 94%;              /* #f2f1ed - Base card */
-    --card-foreground: 45 19% 13%;
-    --card-hover: 60 14% 91%;        /* #ebeae5 - Hover state */
+    /* Card system */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --card-hover: 0 0% 98%;
 
     /* Popover */
-    --popover: 60 14% 96%;
-    --popover-foreground: 45 19% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
 
-    /* PRIMARY = Brand Purple for CTAs and interactive elements */
-    --primary: 268 83% 58%;          /* #8B5CF6 - Purple-500 */
-    --primary-foreground: 0 0% 100%; /* White text */
+    /* PRIMARY = Green accent for CTAs */
+    --primary: 142 76% 36%;          /* Green-600 #16a34a */
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary - subtle card variation */
-    --secondary: 60 14% 92%;
-    --secondary-foreground: 45 19% 13%;
+    /* Secondary */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
 
-    /* Muted - for less important text/backgrounds */
-    --muted: 60 14% 92%;
-    --muted-foreground: 45 19% 40%;  /* 60% opacity brown */
+    /* Muted */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    /* ACCENT = Brand Cyan for highlights, links, and interactive states */
-    --accent: 187 100% 42%;          /* #06B6D4 - Cyan-500 */
-    --accent-foreground: 0 0% 100%;  /* White text */
+    /* ACCENT = Lighter green for highlights */
+    --accent: 142 71% 45%;           /* Green-500 #22c55e */
+    --accent-foreground: 0 0% 100%;
 
-    /* Destructive - error states */
-    --destructive: 350 89% 60%;
+    /* Destructive */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    /* Borders - purple tinted for brand consistency */
-    --border: 268 59% 88%;           /* Purple-200 tinted */
-    --input: 268 59% 88%;
-    --ring: 268 83% 58%;             /* Purple-500 focus ring */
+    /* Borders - subtle gray */
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 142 76% 36%;             /* Green focus ring */
 
-    /* Border radius - 4px for consistency */
-    --radius: 0.25rem;               /* 4px */
-
-    /* Brand gradients */
-    --gradient-hero: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
-    --gradient-card: linear-gradient(180deg, rgba(139,92,246,0.05) 0%, rgba(6,182,212,0.05) 100%);
+    /* Border radius */
+    --radius: 0.5rem;
   }
 
   .dark {
-    /* Dark mode - dark brown palette with purple accents */
-    --background: 45 28% 6%;         /* #14120b - Very dark brown */
-    --foreground: 0 3% 93%;          /* #edecec - Off-white */
+    /* Dark mode - pure black with green accents */
+    --background: 0 0% 9%;           /* #171717 */
+    --foreground: 0 0% 98%;
 
-    --card: 45 19% 10%;              /* #1b1913 - Dark card */
-    --card-foreground: 0 3% 93%;
-    --card-hover: 45 19% 12%;        /* Slightly lighter on hover */
+    --card: 0 0% 11%;
+    --card-foreground: 0 0% 98%;
+    --card-hover: 0 0% 13%;
 
-    --popover: 45 28% 6%;
-    --popover-foreground: 0 3% 93%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 98%;
 
-    /* PRIMARY = Lighter purple for dark mode visibility */
-    --primary: 268 83% 70%;          /* Purple-400 (lighter) */
-    --primary-foreground: 45 28% 6%; /* Dark background */
+    /* PRIMARY = Brighter green for dark mode */
+    --primary: 142 71% 45%;          /* Green-500 */
+    --primary-foreground: 0 0% 9%;
 
-    --secondary: 45 19% 10%;
-    --secondary-foreground: 0 3% 93%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 45 19% 10%;
-    --muted-foreground: 0 3% 65%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 64%;
 
-    /* ACCENT = Lighter cyan for dark mode visibility */
-    --accent: 187 100% 60%;          /* Cyan-400 (lighter) */
-    --accent-foreground: 45 28% 6%;  /* Dark background */
+    /* ACCENT = Even brighter green for visibility */
+    --accent: 142 76% 50%;           /* Green-400 */
+    --accent-foreground: 0 0% 9%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
 
-    /* Borders - purple tinted for dark mode */
-    --border: 268 64% 36%;           /* Purple-800 */
-    --input: 268 64% 36%;
-    --ring: 268 83% 70%;             /* Purple-400 for dark mode */
+    /* Borders - subtle gray */
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 142 71% 45%;
   }
-}
-
-/* Cursor-style subtle shadows */
-.shadow-light {
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05), 0 0 0.5rem rgba(0, 0, 0, 0.02);
-}
-
-.shadow-dark {
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3), 0 0 0.5rem rgba(0, 0, 0, 0.2);
-}
-
-/* Cursor-style prominent window shadow */
-.shadow-window {
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.14),
-              0 14px 32px rgba(0, 0, 0, 0.1),
-              0 0 0 1px hsl(var(--border));
 }
 
 @layer base {
@@ -129,10 +109,10 @@ html {
     font-family: var(--font-body), sans-serif;
   }
 
-  /* Premium Typography Hierarchy */
+  /* Typography */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display), sans-serif;
-    letter-spacing: -0.03em; /* Tighter tracking for display text */
+    letter-spacing: -0.025em;
     font-weight: 700;
   }
 
@@ -155,36 +135,22 @@ html {
     font-family: var(--font-mono), monospace;
   }
 
-  /* Accessible focus styles - visible outline for keyboard navigation */
+  /* Accessible focus styles */
   *:focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
-  /* Skip to content link for accessibility */
+  /* Skip to content link */
   .skip-to-content {
     @apply absolute -top-10 left-4 z-50 bg-primary text-primary-foreground px-4 py-2 rounded-md;
     @apply focus:top-4 transition-all;
   }
 
-  /* Smooth transitions - Cursor style (140ms) */
+  /* Smooth transitions */
   button,
   a,
   [role="button"] {
-    transition-duration: 140ms;
-    transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1); /* Spring ease */
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
-}
-
-/* Premium animations */
-@keyframes pulse-shadow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
-  }
-}
-
-.animate-pulse-shadow {
-  animation: pulse-shadow 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }

@@ -60,8 +60,8 @@ export function WaitlistStats() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Card>
         <CardContent className="flex items-center gap-4 p-6">
-          <div className="bg-brand-purple-100 dark:bg-brand-purple-900 p-3 rounded-full">
-            <Users className="h-6 w-6 text-brand-purple-600 dark:text-brand-purple-400" />
+          <div className="bg-border dark:bg-border p-3 rounded-full">
+            <Users className="h-6 w-6 text-primary dark:text-border" />
           </div>
           <div>
             <p className="text-sm text-muted-foreground">In Waitlist</p>

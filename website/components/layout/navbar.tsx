@@ -54,9 +54,9 @@ const routeList: RouteProps[] = [
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <header className="shadow-inner bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-4 mx-auto sticky border border-brand-purple-200/50 dark:border-brand-purple-800/50 z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
+    <header className="shadow-inner bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-4 mx-auto sticky border border-border/50 dark:border-border/50 z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
       <Link href="/" className="font-bold text-lg flex items-center">
-        <GraduationCap className="bg-gradient-to-tr from-brand-purple-500 to-brand-purple-600 rounded-lg w-9 h-9 mr-2 border border-brand-purple-400 text-white p-1.5" />
+        <GraduationCap className="bg-gradient-to-tr from-primary to-primary rounded-lg w-9 h-9 mr-2 border border-border text-white p-1.5" />
         OpenDraft
       </Link>
       {/* <!-- Mobile --> */}
@@ -78,7 +78,7 @@ export const Navbar = () => {
               <SheetHeader className="mb-4 ml-4">
                 <SheetTitle className="flex items-center">
                   <Link href="/" className="flex items-center">
-                    <GraduationCap className="bg-gradient-to-tr from-brand-purple-500 to-brand-purple-600 rounded-lg w-9 h-9 mr-2 border border-brand-purple-400 text-white p-1.5" />
+                    <GraduationCap className="bg-gradient-to-tr from-primary to-primary rounded-lg w-9 h-9 mr-2 border border-border text-white p-1.5" />
                     OpenDraft
                   </Link>
                 </SheetTitle>

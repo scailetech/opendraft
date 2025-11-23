@@ -47,8 +47,8 @@ export default function WaitlistPage({ searchParams }: PageProps) {
           <h2 className="text-2xl font-bold mb-6 text-center">How It Works</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <div className="bg-brand-purple-100 dark:bg-brand-purple-900 w-12 h-12 rounded-full flex items-center justify-center mb-3">
-                <span className="text-2xl font-bold text-brand-purple-600 dark:text-brand-purple-400">
+              <div className="bg-border dark:bg-border w-12 h-12 rounded-full flex items-center justify-center mb-3">
+                <span className="text-2xl font-bold text-primary dark:text-border">
                   1
                 </span>
               </div>
@@ -59,8 +59,8 @@ export default function WaitlistPage({ searchParams }: PageProps) {
             </div>
 
             <div>
-              <div className="bg-brand-purple-100 dark:bg-brand-purple-900 w-12 h-12 rounded-full flex items-center justify-center mb-3">
-                <span className="text-2xl font-bold text-brand-purple-600 dark:text-brand-purple-400">
+              <div className="bg-border dark:bg-border w-12 h-12 rounded-full flex items-center justify-center mb-3">
+                <span className="text-2xl font-bold text-primary dark:text-border">
                   2
                 </span>
               </div>
@@ -71,8 +71,8 @@ export default function WaitlistPage({ searchParams }: PageProps) {
             </div>
 
             <div>
-              <div className="bg-brand-purple-100 dark:bg-brand-purple-900 w-12 h-12 rounded-full flex items-center justify-center mb-3">
-                <span className="text-2xl font-bold text-brand-purple-600 dark:text-brand-purple-400">
+              <div className="bg-border dark:bg-border w-12 h-12 rounded-full flex items-center justify-center mb-3">
+                <span className="text-2xl font-bold text-primary dark:text-border">
                   3
                 </span>
               </div>

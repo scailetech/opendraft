@@ -35,7 +35,7 @@ export function TierProgress({
   return (
     <div className="space-y-6">
       {/* Current Status Card */}
-      <Card className="p-6 bg-gradient-to-br from-brand-purple-50 to-white dark:from-brand-purple-950 dark:to-slate-900 border-2 border-brand-purple-200 dark:border-brand-purple-800">
+      <Card className="p-6 bg-gradient-to-br from-border to-white dark:from-border dark:to-slate-900 border-2 border-border dark:border-border">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm mb-1">
@@ -59,7 +59,7 @@ export function TierProgress({
               <Users className="size-4" />
               <span>Verified Refs</span>
             </div>
-            <div className="text-2xl font-bold text-brand-purple-600 dark:text-brand-purple-400">
+            <div className="text-2xl font-bold text-primary dark:text-border">
               {verifiedReferrals}
             </div>
           </div>
@@ -132,7 +132,7 @@ export function TierProgress({
                 key={tier.tier}
                 className={`flex items-center justify-between p-3 rounded-lg border-2 transition-all ${
                   isCurrent
-                    ? 'border-brand-purple-500 bg-brand-purple-50 dark:bg-brand-purple-950'
+                    ? 'border-primary bg-border dark:bg-border'
                     : isUnlocked
                     ? 'border-green-500 bg-green-50 dark:bg-green-950'
                     : 'border-gray-200 dark:border-gray-800 opacity-60'
@@ -149,7 +149,7 @@ export function TierProgress({
                         </Badge>
                       )}
                       {isCurrent && (
-                        <Badge variant="outline" className="bg-brand-purple-500 text-white border-brand-purple-600">
+                        <Badge variant="outline" className="bg-primary text-white border-primary">
                           Current
                         </Badge>
                       )}

@@ -62,7 +62,7 @@ export function ReferralDashboard({ referralCode, userId }: ReferralDashboardPro
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Gift className="h-5 w-5 text-brand-purple-500" />
+          <Gift className="h-5 w-5 text-primary" />
           Referral Rewards
         </CardTitle>
       </CardHeader>

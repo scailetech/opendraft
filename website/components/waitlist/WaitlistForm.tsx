@@ -109,7 +109,7 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
         </p>
         <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-green-300 dark:border-green-700">
           <p className="text-xs text-muted-foreground mb-2">Your referral code:</p>
-          <code className="text-lg font-mono font-bold text-brand-purple-600 dark:text-brand-purple-400">
+          <code className="text-lg font-mono font-bold text-primary dark:text-border">
             {success.referralCode}
           </code>
         </div>
@@ -120,8 +120,8 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto space-y-6">
       {referralCode && (
-        <div className="bg-brand-purple-50 dark:bg-brand-purple-950 p-4 rounded-lg border border-brand-purple-200 dark:border-brand-purple-800">
-          <p className="text-sm text-brand-purple-800 dark:text-brand-purple-200">
+        <div className="bg-border dark:bg-border p-4 rounded-lg border border-border dark:border-border">
+          <p className="text-sm text-border dark:text-border">
             🎁 You were referred! Your friend will skip 100 positions when you verify your email.
           </p>
         </div>
@@ -228,7 +228,7 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
       <Button
         type="submit"
         disabled={isSubmitting || (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken)}
-        className="w-full bg-gradient-to-r from-brand-purple-500 to-brand-purple-600 hover:from-brand-purple-600 hover:to-brand-purple-700 text-white"
+        className="w-full bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-white"
         size="lg"
       >
         {isSubmitting ? (

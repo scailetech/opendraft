@@ -105,7 +105,7 @@ export default async function UserDashboard({ params, searchParams }: PageProps)
           </div>
           <div className="bg-muted/50 p-4 rounded-lg text-center">
             <p className="text-sm text-muted-foreground">Current Position</p>
-            <p className="text-2xl font-bold text-brand-purple-600 dark:text-brand-purple-400">
+            <p className="text-2xl font-bold text-primary dark:text-border">
               #{user.position}
             </p>
           </div>

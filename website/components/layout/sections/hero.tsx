@@ -28,7 +28,7 @@ export const HeroSection = () => {
           <div className="max-w-screen-md mx-auto text-center space-y-4">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] max-w-4xl mx-auto">
               Write Your Thesis{" "}
-              <span className="bg-gradient-to-r from-brand-purple-500 to-brand-cyan-500 bg-clip-text text-transparent">
+              <span className="text-primary">
                 Faster
               </span>{" "}
               with AI
@@ -36,7 +36,7 @@ export const HeroSection = () => {
 
             <p className="text-xl md:text-2xl text-muted-foreground font-medium max-w-2xl mx-auto mt-6">
               Generate a 20,000-word master&apos;s thesis in{" "}
-              <span className="font-mono text-brand-purple-600 dark:text-brand-purple-400">20-30 minutes</span>, not{" "}
+              <span className="font-mono text-primary">20-30 minutes</span>, not{" "}
               <span className="line-through opacity-60">months</span>
             </p>
           </div>
@@ -71,11 +71,11 @@ export const HeroSection = () => {
             <Button
               asChild
               size="lg"
-              className="w-full sm:w-auto px-8 py-6 text-base font-semibold rounded-xl group shadow-lg hover:shadow-2xl hover:shadow-brand-purple-500/20 transition-all duration-cursor-slow bg-gradient-to-r from-brand-purple-500 to-brand-purple-600 hover:from-brand-purple-600 hover:to-brand-purple-700 text-white border-0"
+              className="w-full sm:w-auto px-8 py-6 text-base font-semibold group"
             >
               <Link href="/waitlist" aria-label="Join waitlist for free thesis generation">
                 Get Free Thesis (100/day)
-                <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform duration-cursor" aria-hidden="true" />
+                <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </Link>
             </Button>
 
@@ -83,7 +83,7 @@ export const HeroSection = () => {
               asChild
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto px-8 py-6 text-base font-semibold rounded-xl border-2 border-brand-purple-200 dark:border-brand-purple-800 hover:border-brand-purple-400 dark:hover:border-brand-purple-600 hover:bg-brand-purple-50 dark:hover:bg-brand-purple-950 transition-all duration-cursor-slow"
+              className="w-full sm:w-auto px-8 py-6 text-base font-semibold"
             >
               <Link
                 href="https://github.com/federicodeponte/opendraft#-quick-start-10-minutes"
@@ -107,9 +107,6 @@ export const HeroSection = () => {
         </div>
 
         <div className="relative group mt-20 w-full">
-          {/* Gradient background glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-purple-500/20 to-brand-cyan-500/20 blur-3xl -z-10" />
-
           {/* Hero visual - Real thesis screenshots carousel */}
           <Carousel
             className="w-full md:w-[900px] lg:w-[1000px] mx-auto"
@@ -118,7 +115,7 @@ export const HeroSection = () => {
             <CarouselContent className="-ml-4">
               {CAROUSEL_ITEMS.map((item, index) => (
                 <CarouselItem key={index} className="pl-4">
-                  <div className="relative aspect-[16/10] w-full bg-gradient-to-br from-white to-gray-50 dark:from-slate-900 dark:to-slate-800 p-8 rounded-2xl border-2 border-brand-purple-100 dark:border-brand-purple-900/50 shadow-2xl hover:shadow-brand-purple-500/20 transition-shadow duration-cursor-slow">
+                  <div className="relative aspect-[16/10] w-full bg-gradient-to-br from-white to-gray-50 dark:from-neutral-900 dark:to-neutral-800 p-8 rounded-2xl border shadow-lg hover:shadow-xl transition-shadow">
                     <Image
                       src={item.src}
                       alt={item.alt}
@@ -131,8 +128,8 @@ export const HeroSection = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-4 size-12 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-900" aria-label="Previous slide" />
-            <CarouselNext className="right-4 size-12 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-900" aria-label="Next slide" />
+            <CarouselPrevious className="left-4 size-12 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-900" aria-label="Previous slide" />
+            <CarouselNext className="right-4 size-12 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-900" aria-label="Next slide" />
           </Carousel>
 
           {/* Active slide indicators */}
@@ -140,7 +137,7 @@ export const HeroSection = () => {
             {CAROUSEL_ITEMS.map((_, index) => (
               <button
                 key={index}
-                className="h-2 w-2 rounded-full bg-brand-purple-300 dark:bg-brand-purple-700 hover:bg-brand-purple-500 dark:hover:bg-brand-purple-500 transition-all duration-cursor data-[active=true]:w-8 data-[active=true]:bg-brand-purple-500"
+                className="h-2 w-2 rounded-full bg-muted-foreground/30 hover:bg-primary transition-all data-[active=true]:w-8 data-[active=true]:bg-primary"
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}

@@ -54,7 +54,7 @@ export function DownloadButtons({ pdfUrl, docxUrl, status }: DownloadButtonsProp
           {pdfUrl && (
             <Button
               asChild
-              className="w-full bg-gradient-to-r from-brand-purple-500 to-brand-purple-600 hover:from-brand-purple-600 hover:to-brand-purple-700 text-white"
+              className="w-full bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-white"
             >
               <a href={pdfUrl} download target="_blank" rel="noopener noreferrer">
                 <Download className="mr-2 h-4 w-4" />
@@ -67,7 +67,7 @@ export function DownloadButtons({ pdfUrl, docxUrl, status }: DownloadButtonsProp
             <Button
               asChild
               variant="outline"
-              className="w-full border-2 border-brand-purple-200 dark:border-brand-purple-800"
+              className="w-full border-2 border-border dark:border-border"
             >
               <a href={docxUrl} download target="_blank" rel="noopener noreferrer">
                 <Download className="mr-2 h-4 w-4" />

@@ -12,7 +12,7 @@ export const FooterSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-8">
           <div className="col-span-full md:col-span-2">
             <Link href="https://github.com/federicodeponte/opendraft" target="_blank" className="flex font-bold items-center">
-              <GraduationCap className="w-9 h-9 mr-2 bg-gradient-to-tr from-brand-purple-500 to-brand-purple-600 rounded-lg border border-brand-purple-400 text-white p-1.5" />
+              <GraduationCap className="w-9 h-9 mr-2 bg-gradient-to-tr from-primary to-primary rounded-lg border border-border text-white p-1.5" />
 
               <h3 className="text-2xl">OpenDraft</h3>
             </Link>
