@@ -22,10 +22,10 @@ interface FeaturesProps {
 const allFeatures: FeaturesProps[] = [
   {
     icon: "Bot",
-    title: "15 Specialized AI Agents",
+    title: "17 Specialized AI Agents",
     description:
       "From Scout (research) to Enhancer (final polish), each agent is an expert in one specific phase of academic writing.",
-    tooltip: "15 agents across 5 phases: Research (Scout, Scribe, Signal), Structure (Architect, Formatter), Compose (Crafter, Narrator, Thread), Validate (Skeptic, Verifier, Referee), Refine (Voice, Entropy, Polish, Enhancer).",
+    tooltip: "17 agents across 5 phases: Research (Scout, Scribe, Signal), Structure (Architect, Citation Manager, Formatter), Compose (Crafter, Narrator, Thread), Validate (Skeptic, Verifier, Referee), Refine (Voice, Entropy, Polish, Citation Compiler, Enhancer).",
   },
   {
     icon: "Database",

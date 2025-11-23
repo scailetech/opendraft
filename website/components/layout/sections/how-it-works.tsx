@@ -30,7 +30,7 @@ const stepsList: StepProps[] = [
     icon: Sparkles,
     title: "Choose Your Agents",
     description:
-      "Select from 15 specialized agents: Scout for research, Architect for structure, Crafter for content, or use them all.",
+      "Select from 17 specialized agents: Scout for research, Architect for structure, Crafter for content, or use them all.",
   },
   {
     step: 3,

@@ -35,7 +35,7 @@ const comparisonData: ComparisonItem[] = [
   },
   {
     feature: "Structured Workflow",
-    academicThesisAI: { icon: "check", label: "15 specialized agents" },
+    academicThesisAI: { icon: "check", label: "17 specialized agents" },
     chatgpt: { icon: "x", label: "Single prompt" },
     manual: { icon: "check", label: "Your process" },
   },

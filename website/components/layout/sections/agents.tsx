@@ -28,6 +28,7 @@ import {
   Sparkles,
   Database,
   Code,
+  FileCheck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -65,6 +66,12 @@ const structureAgents: AgentProps[] = [
     name: "Architect Agent",
     description: "Structure Design",
     capability: "Designs your thesis outline, argument flow, and chapter structure based on academic conventions and your research goals.",
+  },
+  {
+    icon: BookMarked,
+    name: "Citation Manager Agent",
+    description: "Citation Extraction",
+    capability: "Extracts all citations from research materials into a structured database for consistent reference management throughout the thesis.",
   },
   {
     icon: Layout,
@@ -134,6 +141,12 @@ const refinementAgents: AgentProps[] = [
     name: "Polish Agent",
     description: "Final Refinement",
     capability: "Performs final grammar, spelling, punctuation, and flow improvements to ensure draft-quality output ready for human review.",
+  },
+  {
+    icon: FileCheck,
+    name: "Citation Compiler Agent",
+    description: "Citation Formatting",
+    capability: "Transforms citation IDs into formatted citations and generates the reference list using the specified citation style (APA, MLA, Chicago, IEEE).",
   },
   {
     icon: Sparkles,
@@ -212,7 +225,7 @@ export const AgentsSection = () => {
     <section id="agents" className="container py-24 sm:py-32">
       <div className="mx-auto text-center mb-4">
         <p className="text-sm text-muted-foreground">
-          15 Specialized AI Agents • 100% Open Source (MIT License)
+          17 Specialized AI Agents • 100% Open Source (MIT License)
         </p>
       </div>
 
