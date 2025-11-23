@@ -700,6 +700,13 @@ def search_multi_source(
         >>> len(citations) > 0
         True
     """
+    # Validate inputs BEFORE trying any API calls
+    if not query or not query.strip():
+        raise ValueError("Search query cannot be empty")
+
+    if limit < 1 or limit > 100:
+        raise ValueError(f"Limit must be between 1 and 100, got {limit}")
+
     sources = ["semantic_scholar", "crossref", "arxiv"]
 
     # Reorder sources based on preference
