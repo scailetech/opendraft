@@ -17,14 +17,14 @@ export default async function Image() {
       <div
         style={{
           fontSize: 60,
-          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%)',
+          background: '#ffffff',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white',
+          color: '#171717',
           padding: '80px',
           fontFamily: 'system-ui, sans-serif',
         }}
@@ -66,8 +66,10 @@ export default async function Image() {
             fontSize: 24,
             marginTop: 40,
             padding: '15px 30px',
-            background: 'rgba(255, 255, 255, 0.2)',
+            background: '#16a34a',
+            color: '#ffffff',
             borderRadius: 10,
+            fontWeight: 600,
           }}
         >
           100% Free & Open Source
