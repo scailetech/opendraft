@@ -42,7 +42,7 @@ const FAQList: FAQProps[] = [
   {
     question: "Which AI should I use?",
     answer:
-      "For beginners: Google Gemini (free tier, good quality). For important papers: Claude Sonnet 4.5 (best quality, ~$20-50 per paper). The software is 100% free and open source - you only pay for AI API usage.",
+      "For beginners: Gemini 2.5 Flash (fastest, cheapest at $0.35-$1 per 20k words). For better quality: Gemini 2.5 Pro ($1-$3) or Claude Sonnet 4.5 ($3-$10 for best quality). The software is 100% free and open source - you only pay for AI API usage.",
     value: "item-3",
     icon: Sparkles,
   },
@@ -50,7 +50,7 @@ const FAQList: FAQProps[] = [
     question:
       "How much does it cost?",
     answer:
-      "The software is 100% free and open source. You only pay for AI API usage: Typical costs are $0-5 (Gemini free tier) or $20-50 (Claude) for a 6,000-word paper. A 20k-word master's thesis costs $10-20 (Gemini) or $50-100 (Claude).",
+      "The software is 100% free and open source. You only pay for AI API usage: Typical costs are $0.10-$0.30 (Gemini 2.5 Flash) or $1-$3 (Claude Sonnet 4.5) for a 6,000-word paper. A 20k-word master's thesis costs $0.35-$1 (Gemini 2.5 Flash), $1-$3 (Gemini 2.5 Pro), or $3-$10 (Claude Sonnet 4.5). Costs vary based on iterations and complexity.",
     value: "item-4",
     icon: DollarSign,
   },
@@ -63,7 +63,7 @@ const FAQList: FAQProps[] = [
   {
     question:
       "What quality can I expect?",
-    answer: "Typical output quality: Gemini 2.5 Flash (B+ to A-), Gemini 2.5 Pro (A- to A), Claude Sonnet 4.5 (A- to A+). Quality depends on your prompts and how much you review/edit the output. See our real 104-page, 27,500+ word master's thesis example showing draft-quality academic writing with proper citations and formatting ready for human review.",
+    answer: "Output quality varies by model and prompts: Gemini 2.5 Flash (good), Gemini 2.5 Pro (better), Claude Sonnet 4.5 (best). Quality depends heavily on your prompts and how much you review/edit the output. See our real 104-page, 27,500+ word master's thesis example showing draft-quality academic writing with proper citations and formatting ready for human review. Note: Quality assessment based on informal feedback, not academic validation.",
     value: "item-6",
     icon: Award,
   },

@@ -42,7 +42,7 @@ export const HeroSection = () => {
           </div>
 
           <p className="max-w-screen-sm mx-auto text-base text-muted-foreground leading-relaxed">
-            AI-powered framework with 15 specialized agents. 100% open source (MIT), no coding skills required. Access to 200M+ research papers.
+            AI-powered framework with 15 specialized agents. 100% open source (MIT), no coding skills required. Access to 225M+ research papers.
           </p>
 
           {/* GitHub Stats Badge */}

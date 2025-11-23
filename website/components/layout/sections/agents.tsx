@@ -43,7 +43,7 @@ const researchAgents: AgentProps[] = [
     icon: Search,
     name: "Scout Agent",
     description: "Research Discovery",
-    capability: "Searches 200M+ academic papers across Semantic Scholar, CrossRef, and arXiv to find the most relevant research for your topic.",
+    capability: "Searches 225M+ academic papers across Semantic Scholar, CrossRef, and arXiv to find the most relevant research for your topic.",
   },
   {
     icon: FileText,
@@ -154,7 +154,7 @@ const phases: PhaseProps[] = [
   {
     number: 1,
     title: "Research & Discovery",
-    description: "Find, read, and analyze relevant academic literature from 200M+ papers",
+    description: "Find, read, and analyze relevant academic literature from 225M+ papers",
     agents: researchAgents,
   },
   {
@@ -267,7 +267,7 @@ export const AgentsSection = () => {
             <div className="mx-auto bg-accent/20 p-3 rounded-full w-fit mb-2">
               <Database size={24} className="text-accent" />
             </div>
-            <CardTitle>200M+ Papers</CardTitle>
+            <CardTitle>225M+ Papers</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
