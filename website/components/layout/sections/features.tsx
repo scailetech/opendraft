@@ -22,10 +22,10 @@ interface FeaturesProps {
 const allFeatures: FeaturesProps[] = [
   {
     icon: "Bot",
-    title: "17 Specialized AI Agents",
+    title: "19 Specialized AI Agents",
     description:
       "From Scout (research) to Enhancer (final polish), each agent is an expert in one specific phase of academic writing.",
-    tooltip: "17 agents across 5 phases: Research (Scout, Scribe, Signal), Structure (Architect, Citation Manager, Formatter), Compose (Crafter, Narrator, Thread), Validate (Skeptic, Verifier, Referee), Refine (Voice, Entropy, Polish, Citation Compiler, Enhancer).",
+    tooltip: "19 agents across 5 phases: Research (Scout, Scribe, Signal, Deep Research), Structure (Architect, Citation Manager, Formatter), Compose (Crafter, Narrator, Thread), Validate (Skeptic, Verifier, Referee), Refine (Voice, Entropy, Polish, Citation Compiler, Enhancer, Abstract Generator). Mix and match based on your needs.",
   },
   {
     icon: "Database",
@@ -59,8 +59,8 @@ const allFeatures: FeaturesProps[] = [
     icon: "DollarSign",
     title: "99%+ Cheaper Than Professional Writing",
     description:
-      "Generate a 20k-word thesis draft for $0.35-$10 in API costs (depending on model and iterations) vs $1,000-$5,000 for professional writing services.",
-    tooltip: "Cost estimate based on API pricing: Gemini 2.5 Flash $0.35-$1, Gemini 2.5 Pro $1-$3, Claude Sonnet 4.5 $3-$10 for 20k+ word draft vs $1,000-$5,000 for hiring professional writers. Costs vary based on iterations and complexity. Additional editing recommended.",
+      "Generate a 20k-word thesis draft for estimated $0.35-$10 in API costs (depending on model and iterations) vs $1,000-$5,000 for professional writing services.",
+    tooltip: "Estimated cost based on API pricing: Gemini 2.5 Flash ~$0.35-$1, Gemini 2.5 Pro ~$1-$3, Claude Sonnet 4.5 ~$3-$10 for 20k+ word draft. Actual costs may vary based on iterations, complexity, and API usage. Professional writing services typically cost $1,000-$5,000.",
   },
 ];
 

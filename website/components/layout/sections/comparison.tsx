@@ -35,7 +35,7 @@ const comparisonData: ComparisonItem[] = [
   },
   {
     feature: "Structured Workflow",
-    academicThesisAI: { icon: "check", label: "17 specialized agents" },
+    academicThesisAI: { icon: "check", label: "19 specialized agents" },
     chatgpt: { icon: "x", label: "Single prompt" },
     manual: { icon: "check", label: "Your process" },
   },
@@ -53,7 +53,7 @@ const comparisonData: ComparisonItem[] = [
   },
   {
     feature: "Cost (20k words)",
-    academicThesisAI: { icon: "check", label: "$0.35-$10" },
+    academicThesisAI: { icon: "check", label: "~$0.35-$10 (est.)" },
     chatgpt: { icon: "minus", label: "$20 (ChatGPT Plus)" },
     manual: { icon: "x", label: "$0 (+ months of time)" },
   },

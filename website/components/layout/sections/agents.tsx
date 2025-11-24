@@ -225,7 +225,7 @@ export const AgentsSection = () => {
     <section id="agents" className="container py-24 sm:py-32">
       <div className="mx-auto text-center mb-4">
         <p className="text-sm text-muted-foreground">
-          17 Specialized AI Agents • 100% Open Source (MIT License)
+          19 Specialized AI Agents • 100% Open Source (MIT License)
         </p>
       </div>
 

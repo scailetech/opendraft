@@ -42,7 +42,7 @@ const FAQList: FAQProps[] = [
   {
     question: "Which AI should I use?",
     answer:
-      "For beginners: Gemini 2.5 Flash (fastest, cheapest at $0.35-$1 per 20k words). For better quality: Gemini 2.5 Pro ($1-$3) or Claude Sonnet 4.5 ($3-$10 for best quality). The software is 100% free and open source - you only pay for AI API usage.",
+      "For beginners: Gemini 2.5 Flash (fastest, cheapest at estimated ~$0.35-$1 per 20k words). For better quality: Gemini 2.5 Pro (~$1-$3) or Claude Sonnet 4.5 (~$3-$10 for best quality). The software is 100% free and open source - you only pay for AI API usage.",
     value: "item-3",
     icon: Sparkles,
   },
@@ -50,7 +50,7 @@ const FAQList: FAQProps[] = [
     question:
       "How much does it cost?",
     answer:
-      "The software is 100% free and open source. You only pay for AI API usage: Typical costs are $0.10-$0.30 (Gemini 2.5 Flash) or $1-$3 (Claude Sonnet 4.5) for a 6,000-word paper. A 20k-word master's thesis costs $0.35-$1 (Gemini 2.5 Flash), $1-$3 (Gemini 2.5 Pro), or $3-$10 (Claude Sonnet 4.5). Costs vary based on iterations and complexity.",
+      "The software is 100% free and open source. You only pay for AI API usage: Estimated costs are ~$0.10-$0.30 (Gemini 2.5 Flash) or ~$1-$3 (Claude Sonnet 4.5) for a 6,000-word paper. A 20k-word master's thesis costs approximately $0.35-$1 (Gemini 2.5 Flash), $1-$3 (Gemini 2.5 Pro), or $3-$10 (Claude Sonnet 4.5). Actual costs vary based on iterations, complexity, and API usage.",
     value: "item-4",
     icon: DollarSign,
   },
