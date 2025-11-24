@@ -41,7 +41,7 @@ export const TrustSection = () => {
         <div className="flex items-center gap-3">
           <FileText className="size-5 text-primary" />
           <div className="flex flex-col">
-            <span className="font-mono text-2xl font-bold">225M+</span>
+            <span className="font-mono text-2xl font-bold">200M+</span>
             <span className="text-sm text-muted-foreground">Papers Indexed</span>
           </div>
         </div>

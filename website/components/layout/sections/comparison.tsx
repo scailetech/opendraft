@@ -59,7 +59,7 @@ const comparisonData: ComparisonItem[] = [
   },
   {
     feature: "Time Required",
-    academicThesisAI: { icon: "check", label: "20-30 min AI generation" },
+    academicThesisAI: { icon: "check", label: "Hours (est.)" },
     chatgpt: { icon: "minus", label: "40-80 hours" },
     manual: { icon: "x", label: "2-3 months" },
   },

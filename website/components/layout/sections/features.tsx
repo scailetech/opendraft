@@ -1,5 +1,5 @@
 // ABOUTME: Features section highlighting 6 key value propositions of OpenDraft
-// ABOUTME: Single grid layout showing all features - 19 AI agents, 225M+ papers, multi-LLM support, citation validation, exports, cost savings
+// ABOUTME: Single grid layout showing all features - 19 AI agents, 200M+ papers, multi-LLM support, citation validation, exports, cost savings
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
@@ -29,10 +29,10 @@ const allFeatures: FeaturesProps[] = [
   },
   {
     icon: "Database",
-    title: "225M+ Research Papers",
+    title: "200M+ Research Papers",
     description:
       "Integrated access to Semantic Scholar, CrossRef, and arXiv for comprehensive literature reviews.",
-    tooltip: "Direct API integration with Semantic Scholar (225M+ papers, includes arXiv preprints) and CrossRef (167M+ DOI records). Access to arXiv papers through Semantic Scholar's index.",
+    tooltip: "Direct API integration with Semantic Scholar (200M+ papers indexed, includes arXiv preprints) and CrossRef (150M+ DOI records). Access to arXiv papers through Semantic Scholar's index. Note: Actual accessible papers may vary based on API limits and search queries.",
   },
   {
     icon: "Sparkles",

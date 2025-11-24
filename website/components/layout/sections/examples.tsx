@@ -100,7 +100,7 @@ export const ExamplesSection = () => {
             </div>
 
             <p className="text-xs text-center text-muted-foreground pt-2">
-              Generated in ~20 minutes using Gemini 2.5 Flash. Fully editable formats ready for your review.
+              AI-generated example thesis using Gemini 2.5 Flash. Fully editable formats ready for your review. Generation time varies.
             </p>
           </CardContent>
         </Card>

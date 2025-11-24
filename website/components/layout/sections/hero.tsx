@@ -35,14 +35,14 @@ export const HeroSection = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground font-medium max-w-2xl mx-auto mt-6">
-              Generate a 20,000-word master&apos;s thesis in{" "}
-              <span className="font-mono text-primary">20-30 minutes</span>, not{" "}
+              Generate a 20,000-word master&apos;s thesis draft in{" "}
+              <span className="font-mono text-primary">hours</span>, not{" "}
               <span className="line-through opacity-60">months</span>
             </p>
           </div>
 
           <p className="max-w-screen-sm mx-auto text-base text-muted-foreground leading-relaxed">
-            AI-powered framework with 19 specialized agents. 100% open source (MIT), no coding skills required. Access to 225M+ research papers.
+            AI-powered framework with 19 specialized agents. 100% open source (MIT), no coding skills required. Access to 200M+ research papers.
           </p>
 
           {/* GitHub Stats Badge */}
