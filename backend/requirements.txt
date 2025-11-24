@@ -2,4 +2,4 @@ modal==0.63.82
 supabase==2.3.4
 resend==2.0.0
 google-generativeai==0.3.2
-python-dotenv==1.0.0
+python-dotenv==1.2.1
