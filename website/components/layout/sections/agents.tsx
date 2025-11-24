@@ -1,4 +1,4 @@
-// ABOUTME: AI Agents & Architecture section showcasing 15 specialized agents using Accordion pattern
+// ABOUTME: AI Agents & Architecture section showcasing 19 specialized agents using Accordion pattern
 // ABOUTME: Accordion-based progressive disclosure for better UX - 5 phases with collapsible agent details
 
 "use client";
@@ -284,7 +284,7 @@ export const AgentsSection = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Direct API integration with Semantic Scholar, CrossRef, and arXiv databases
+              Direct API integration with Semantic Scholar and CrossRef; arXiv papers accessible via Semantic Scholar
             </p>
           </CardContent>
         </Card>
