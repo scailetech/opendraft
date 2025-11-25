@@ -62,6 +62,8 @@ output/
 !examples/*.html
 !examples/*.pdf
 !examples/*.docx
+# Exception: Allow example PDFs in docs/examples/
+!docs/examples/*.pdf
 
 # Test outputs (keep structure, ignore most generated files)
 tests/outputs/**/*.pdf
