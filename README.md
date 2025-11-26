@@ -22,7 +22,7 @@
 <p>
   <!-- CI/CD Status -->
   <a href="https://github.com/federicodeponte/opendraft/actions/workflows/ci.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/federicodeponte/opendraft/ci.yml?branch=main&label=tests&style=flat-square" alt="Tests">
+    <img src="https://img.shields.io/github/actions/workflow/status/federicodeponte/opendraft/ci.yml?branch=master&label=tests&style=flat-square" alt="Tests">
   </a>
   <!-- Test Coverage -->
   <a href="https://codecov.io/gh/federicodeponte/opendraft">
