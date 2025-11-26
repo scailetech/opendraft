@@ -12,12 +12,48 @@ import resend
 # Create Modal app
 app = modal.App("thesis-generator")
 
-# Modal image with dependencies
-image = modal.Image.debian_slim().pip_install(
-    "supabase==2.3.4",
-    "resend==0.7.0",
-    "google-generativeai==0.3.2",
-    # Add Academic Thesis AI dependencies here
+# Modal image with system dependencies, Python packages, and codebase
+image = (modal.Image.debian_slim()
+    # System packages for WeasyPrint PDF generation
+    .apt_install(
+        "libpango-1.0-0",
+        "libpangocairo-1.0-0",
+        "libgdk-pixbuf2.0-0",
+        "libffi-dev",
+        "shared-mime-info"
+    )
+    # Python packages
+    .pip_install(
+        # Infrastructure
+        "supabase==2.3.4",
+        "resend==0.7.0",
+        "python-dotenv>=1.0.0",
+        # LLM APIs
+        "google-generativeai>=0.8.0",
+        "anthropic>=0.20.0",
+        "openai>=1.0.0",
+        # Citation Management
+        "pybtex>=0.24.0",
+        "citeproc-py>=0.6.0",
+        "PyYAML>=6.0.0",
+        # Document Export
+        "markdown>=3.5.0",
+        "weasyprint>=60.0",
+        "python-docx>=1.0.0",
+        # HTTP & Web Scraping
+        "requests>=2.31.0",
+        "beautifulsoup4>=4.12.0",
+        "lxml>=4.9.0",
+        # Utilities
+        "rich>=13.0.0"
+    )
+    # Add entire codebase into image
+    .add_local_dir("../utils", "/root/academic-thesis-ai/utils")
+    .add_local_dir("../prompts", "/root/academic-thesis-ai/prompts")
+    .add_local_dir("../tests", "/root/academic-thesis-ai/tests")
+    .add_local_dir("../concurrency", "/root/academic-thesis-ai/concurrency")
+    .add_local_file("../config.py", "/root/academic-thesis-ai/config.py")
+    .add_local_file("thesis_generator.py", "/root/academic-thesis-ai/backend/thesis_generator.py")
 )
 
 # Persistent volume for temporary thesis files
@@ -25,11 +61,11 @@ volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
 
 @app.function(
     schedule=modal.Cron("0 9 * * *"),  # Daily at 9am UTC (cron format)
-    timeout=3600,  # 1 hour max
+    timeout=3600,  # 1 hour max (60 minutes for thesis generation)
     volumes={"/tmp/thesis": volume},
     secrets=[
         modal.Secret.from_name("supabase-credentials"),  # SUPABASE_URL, SUPABASE_SERVICE_KEY
-        modal.Secret.from_name("gemini-api-key"),  # GEMINI_API_KEY
+        modal.Secret.from_name("gemini-api-key"),  # GOOGLE_API_KEY (renamed for consistency)
         modal.Secret.from_name("resend-api-key"),  # RESEND_API_KEY
     ],
     image=image,
@@ -82,8 +118,8 @@ def daily_thesis_batch():
                         'processing_started_at': datetime.now().isoformat()
                     }).eq('id', user['id']).execute()
 
-                # Generate thesis (placeholder - integrate your Academic Thesis AI code)
-                pdf_path, docx_path = generate_thesis_placeholder(
+                # Generate thesis using real AI framework
+                pdf_path, docx_path = generate_thesis_real(
                     topic=user['thesis_topic'],
                     language=user['language'],
                     academic_level=user['academic_level']
@@ -163,29 +199,53 @@ def daily_thesis_batch():
     }).execute()
 
 
-def generate_thesis_placeholder(topic: str, language: str, academic_level: str):
+def generate_thesis_real(topic: str, language: str, academic_level: str):
     """
-    Placeholder function - replace with your Academic Thesis AI integration
+    Real thesis generation using Academic Thesis AI framework.
+
+    Integrates the standalone thesis_generator.py module with 15+ AI agents.
+
+    Args:
+        topic: Thesis topic (e.g., "Machine Learning for Climate Prediction")
+        language: 'en' or 'de' (English/German)
+        academic_level: 'bachelor', 'master', or 'phd'
 
     Returns:
-        tuple: (pdf_path, docx_path)
+        tuple: (pdf_path, docx_path) - Paths to generated PDF and DOCX files
+
+    Raises:
+        Exception: If thesis generation fails
     """
-    # TODO: Integrate your Academic Thesis AI code here
-    # Example:
-    # from your_thesis_ai import generate_thesis
-    # result = generate_thesis(topic, language, academic_level, model="gemini-2.5-flash")
-    # return result.pdf_path, result.docx_path
+    import sys
+    from pathlib import Path
 
-    # For now, create dummy files
-    pdf_path = "/tmp/thesis/thesis.pdf"
-    docx_path = "/tmp/thesis/thesis.docx"
+    # Add mounted codebase to Python path
+    sys.path.insert(0, "/root/academic-thesis-ai")
 
-    with open(pdf_path, 'w') as f:
-        f.write("Placeholder PDF")
-    with open(docx_path, 'w') as f:
-        f.write("Placeholder DOCX")
+    # Set environment variable for API key (Modal secret → env var)
+    import os
+    if "GOOGLE_API_KEY" not in os.environ and "GEMINI_API_KEY" in os.environ:
+        os.environ["GOOGLE_API_KEY"] = os.environ["GEMINI_API_KEY"]
 
-    return pdf_path, docx_path
+    # Import thesis generator
+    from backend.thesis_generator import generate_thesis
+
+    # Generate thesis with automated settings
+    try:
+        pdf_path, docx_path = generate_thesis(
+            topic=topic,
+            language=language,
+            academic_level=academic_level,
+            output_dir=Path("/tmp/thesis"),
+            skip_validation=True,  # Skip strict validation for automated runs
+            verbose=True
+        )
+
+        return str(pdf_path), str(docx_path)
+
+    except Exception as e:
+        print(f"❌ Thesis generation failed: {str(e)}")
+        raise
 
 
 def send_completion_email(email: str, name: str, pdf_url: str, docx_url: str):

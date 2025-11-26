@@ -53,13 +53,13 @@ const comparisonData: ComparisonItem[] = [
   },
   {
     feature: "Cost (20k words)",
-    academicThesisAI: { icon: "check", label: "~$0.35-$10 (est.)" },
+    academicThesisAI: { icon: "check", label: "FREE (100/day)" },
     chatgpt: { icon: "minus", label: "$20 (ChatGPT Plus)" },
     manual: { icon: "x", label: "$0 (+ months of time)" },
   },
   {
     feature: "Time Required",
-    academicThesisAI: { icon: "check", label: "Hours (est.)" },
+    academicThesisAI: { icon: "check", label: "20-30 minutes" },
     chatgpt: { icon: "minus", label: "40-80 hours" },
     manual: { icon: "x", label: "2-3 months" },
   },

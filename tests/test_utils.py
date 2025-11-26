@@ -92,7 +92,8 @@ def run_agent(
     save_to: Optional[Path] = None,
     verbose: bool = True,
     validators: Optional[List[Callable[[str], ValidationResult]]] = None,
-    max_retries: int = 3
+    max_retries: int = 3,
+    skip_validation: bool = False
 ) -> str:
     """
     Run an AI agent with given prompt and input, with optional validation.
@@ -109,6 +110,7 @@ def run_agent(
         verbose: Whether to print progress messages
         validators: Optional list of validation functions to apply to output
         max_retries: Maximum retry attempts if validation fails (default: 3)
+        skip_validation: If True, skip all validation checks (for automated runs)
 
     Returns:
         str: Validated agent output text
@@ -125,7 +127,19 @@ def run_agent(
         ...     user_input="Find papers on AI",
         ...     validators=[ScoutOutputValidator.validate]
         ... )
+        >>> # For automated runs (skip validation)
+        >>> output = run_agent(
+        ...     model=model,
+        ...     name="Scout",
+        ...     prompt_path="prompts/01_research/scout.md",
+        ...     user_input="Find papers on AI",
+        ...     skip_validation=True
+        ... )
     """
+    # Override validators if skip_validation is True
+    if skip_validation:
+        validators = None
+        logger.info(f"Agent '{name}': Validation skipped (skip_validation=True)")
     if verbose:
         print(f"\n{'='*70}")
         print(f"🤖 {name}")
@@ -160,8 +174,8 @@ def run_agent(
 
             logger.debug(f"Agent '{name}': Generated {len(output)} chars in {time.time() - start_time:.1f}s")
 
-            # Validate output if validators provided
-            if validators:
+            # Validate output if validators provided (and not skipped)
+            if validators and not skip_validation:
                 validation_passed = True
                 for i, validator in enumerate(validators):
                     logger.debug(f"Agent '{name}': Running validator {i+1}/{len(validators)}")

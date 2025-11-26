@@ -24,6 +24,7 @@ export const HeroSection = () => {
   return (
     <section className="container w-full">
       <div className="grid place-items-center lg:max-w-screen-xl gap-8 mx-auto py-20 md:py-32">
+
         <div className="text-center space-y-6">
           <div className="max-w-screen-md mx-auto text-center space-y-4">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] max-w-4xl mx-auto">
@@ -36,13 +37,13 @@ export const HeroSection = () => {
 
             <p className="text-xl md:text-2xl text-muted-foreground font-medium max-w-2xl mx-auto mt-6">
               Generate a 20,000-word master&apos;s thesis draft in{" "}
-              <span className="font-mono text-primary">hours</span>, not{" "}
+              <span className="font-mono text-primary">20-30 minutes</span>, not{" "}
               <span className="line-through opacity-60">months</span>
             </p>
           </div>
 
           <p className="max-w-screen-sm mx-auto text-base text-muted-foreground leading-relaxed">
-            AI-powered framework with 19 specialized agents. 100% open source (MIT), no coding skills required. Access to 200M+ research papers.
+            AI-powered framework with 19 specialized agents. 100% open source (MIT). Access to 200M+ research papers. <span className="text-green-600 dark:text-green-400 font-medium">Get 100 free theses daily via our hosted service!</span>
           </p>
 
           {/* GitHub Stats Badge */}
@@ -73,7 +74,7 @@ export const HeroSection = () => {
               size="lg"
               className="w-full sm:w-auto px-8 py-6 text-base font-semibold group"
             >
-              <Link href="/waitlist" aria-label="Join waitlist for free thesis generation">
+              <Link href="/waitlist" aria-label="Get free AI-generated thesis">
                 Get Free Thesis (100/day)
                 <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </Link>

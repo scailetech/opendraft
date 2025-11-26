@@ -208,18 +208,19 @@ def search_semantic_scholar(
         raise
 
 
-@retry(max_attempts=5, base_delay=2.0, max_delay=30.0, exceptions=(requests.HTTPError, requests.Timeout, requests.ConnectionError))
+@retry(max_attempts=5, base_delay=5.0, max_delay=60.0, exceptions=(requests.HTTPError, requests.Timeout, requests.ConnectionError))
 def _semantic_scholar_request_with_retry(url: str, params: Dict[str, Any]) -> requests.Response:
     """
     Make HTTP request to Semantic Scholar with retry logic.
 
     Handles rate limiting (429) with exponential backoff.
+    Increased delays for automated runs: base_delay=5s, max_delay=60s
     """
     response = requests.get(url, params=params, timeout=10)
 
     # Handle rate limiting
     if response.status_code == 429:
-        retry_after = int(response.headers.get('Retry-After', 5))
+        retry_after = int(response.headers.get('Retry-After', 10))  # Increased default from 5s to 10s
         logger.warning(f"Rate limited (429), waiting {retry_after}s before retry")
         time.sleep(retry_after)
         raise requests.HTTPError(f"Rate limited: {response.status_code}", response=response)
@@ -382,9 +383,9 @@ def search_crossref(query: str, limit: int = 10) -> List[Citation]:
         raise
 
 
-@retry(max_attempts=5, base_delay=2.0, max_delay=30.0, exceptions=(requests.HTTPError, requests.Timeout, requests.ConnectionError))
+@retry(max_attempts=5, base_delay=5.0, max_delay=60.0, exceptions=(requests.HTTPError, requests.Timeout, requests.ConnectionError))
 def _crossref_request_with_retry(url: str, params: Dict[str, Any]) -> requests.Response:
-    """Make HTTP request to CrossRef with retry logic."""
+    """Make HTTP request to CrossRef with retry logic. Increased delays for automated runs: base_delay=5s, max_delay=60s"""
     headers = {
         "User-Agent": "AcademicThesisAI/1.0 (mailto:research@example.com)"
     }
@@ -565,9 +566,9 @@ def search_arxiv(query: str, limit: int = 10) -> List[Citation]:
         raise
 
 
-@retry(max_attempts=5, base_delay=2.0, max_delay=30.0, exceptions=(requests.HTTPError, requests.Timeout, requests.ConnectionError))
+@retry(max_attempts=5, base_delay=5.0, max_delay=60.0, exceptions=(requests.HTTPError, requests.Timeout, requests.ConnectionError))
 def _arxiv_request_with_retry(url: str, params: Dict[str, Any]) -> requests.Response:
-    """Make HTTP request to arXiv with retry logic."""
+    """Make HTTP request to arXiv with retry logic. Increased delays for automated runs: base_delay=5s, max_delay=60s"""
     response = requests.get(url, params=params, timeout=10)
     response.raise_for_status()
     return response
