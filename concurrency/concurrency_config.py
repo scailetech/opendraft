@@ -26,6 +26,7 @@ class ConcurrencyConfig:
         crafter_parallel: Whether to run 6 Crafter agents in parallel
         scout_batch_delay: Seconds between Scout citation research batches
         scout_batch_size: Citations per batch
+        scout_parallel_workers: Number of parallel workers for citation research
         max_parallel_theses: Max thesis generations to run concurrently
     """
 
@@ -35,6 +36,7 @@ class ConcurrencyConfig:
     crafter_parallel: bool
     scout_batch_delay: float
     scout_batch_size: int
+    scout_parallel_workers: int
     max_parallel_theses: int
 
     @classmethod
@@ -58,6 +60,7 @@ class ConcurrencyConfig:
                 crafter_parallel=False,  # Would consume 6 RPM instantly (60% of quota)
                 scout_batch_delay=5.0,  # Conservative batch delay
                 scout_batch_size=10,
+                scout_parallel_workers=1,  # Sequential to avoid rate limits
                 max_parallel_theses=1,  # Recommend 1 thesis per Google account
             )
 
@@ -69,6 +72,7 @@ class ConcurrencyConfig:
                 crafter_parallel=True,  # 6 concurrent Crafters = ~50 RPM peak (2.5% of quota)
                 scout_batch_delay=1.0,  # Aggressive batching (Crossref/Semantic Scholar APIs)
                 scout_batch_size=15,  # Larger batches
+                scout_parallel_workers=4,  # Parallel citation research (4x speedup)
                 max_parallel_theses=10,  # Easily handle 10 concurrent theses
             )
 
@@ -80,6 +84,7 @@ class ConcurrencyConfig:
                 crafter_parallel=False,
                 scout_batch_delay=3.0,
                 scout_batch_size=10,
+                scout_parallel_workers=2,  # Conservative parallelism
                 max_parallel_theses=2,
             )
 
@@ -175,6 +180,7 @@ class ConcurrencyConfig:
         print(f"  • Crafter parallelization: {'✅ ENABLED' if self.crafter_parallel else '❌ DISABLED'} (6 sections)")
         print(f"  • Scout batch delay: {self.scout_batch_delay}s between batches")
         print(f"  • Scout batch size: {self.scout_batch_size} citations/batch")
+        print(f"  • Scout parallel workers: {self.scout_parallel_workers}")
         print(f"  • Max parallel theses: {self.max_parallel_theses}")
         print(f"{'='*70}\n")
 

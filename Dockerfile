@@ -44,6 +44,6 @@ EXPOSE 8501
 # Default command: run tests to verify installation
 CMD ["python", "tests/test_pdf_engines.py"]
 
-# Health check
+# Health check - verify Python and basic imports work
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import sys; from utils.pdf_engines import get_available_engines; sys.exit(0 if len(get_available_engines()) > 0 else 1)"
+    CMD python -c "import sys; sys.path.insert(0, '/app'); from utils.pdf_engines import get_available_engines; engines = get_available_engines(); print(f'PDF engines: {engines}'); sys.exit(0 if engines else 1)" || exit 1

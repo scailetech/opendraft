@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import google.generativeai as genai
 from config import get_config
-from tests.test_utils import setup_model, load_prompt
+from utils.agent_runner import setup_model, load_prompt
 from utils.citation_database import Citation, CitationDatabase
 from utils.citations import get_citation_from_doi
 
@@ -173,8 +173,8 @@ Return a JSON object with this structure:
                 if crossref_citation:
                     if verbose:
                         print(f"  ✓ DOI validated via CrossRef")
-            except:
-                pass
+            except Exception:
+                pass  # CrossRef validation is optional, continue silently
 
         if verbose:
             print(f"  ✓ Found: {citation.authors[0]} et al. ({citation.year})")

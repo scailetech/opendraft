@@ -25,7 +25,7 @@ image = (modal.Image.debian_slim()
     # Python packages
     .pip_install(
         # Infrastructure
-        "supabase==2.3.4",
+        "supabase>=2.10.0",  # Supports new sb_secret/sb_publishable key format
         "resend==0.7.0",
         "python-dotenv>=1.0.0",
         # LLM APIs
@@ -48,12 +48,12 @@ image = (modal.Image.debian_slim()
         "rich>=13.0.0"
     )
     # Add entire codebase into image
-    .add_local_dir("../utils", "/root/academic-thesis-ai/utils")
-    .add_local_dir("../prompts", "/root/academic-thesis-ai/prompts")
-    .add_local_dir("../tests", "/root/academic-thesis-ai/tests")
-    .add_local_dir("../concurrency", "/root/academic-thesis-ai/concurrency")
-    .add_local_file("../config.py", "/root/academic-thesis-ai/config.py")
-    .add_local_file("thesis_generator.py", "/root/academic-thesis-ai/backend/thesis_generator.py")
+    .add_local_dir("../opendraft", "/root/opendraft/opendraft")
+    .add_local_dir("../utils", "/root/opendraft/utils")
+    .add_local_dir("../prompts", "/root/opendraft/prompts")
+    .add_local_dir("../concurrency", "/root/opendraft/concurrency")
+    .add_local_dir("../backend", "/root/opendraft/backend")
+    .add_local_file("../config.py", "/root/opendraft/config.py")
 )
 
 # Persistent volume for temporary thesis files
@@ -220,7 +220,7 @@ def generate_thesis_real(topic: str, language: str, academic_level: str):
     from pathlib import Path
 
     # Add mounted codebase to Python path
-    sys.path.insert(0, "/root/academic-thesis-ai")
+    sys.path.insert(0, "/root/opendraft")
 
     # Set environment variable for API key (Modal secret → env var)
     import os
@@ -285,8 +285,8 @@ def send_completion_email(email: str, name: str, pdf_url: str, docx_url: str):
                     <div class="alert-box">
                         <p class="alert-text"><strong>⏰ These links expire in 7 days.</strong><br/>Make sure to download your thesis files before they expire.</p>
                     </div>
-                    <p class="content">Love your thesis? Star us on <a href="https://github.com/federicodeponte/academic-thesis-ai" style="color: #8B5CF6; text-decoration: underline;">GitHub</a>!</p>
-                    <p class="footer">Thanks,<br/>Academic Thesis AI Team</p>
+                    <p class="content">Love your thesis? Star us on <a href="https://github.com/federicodeponte/opendraft" style="color: #8B5CF6; text-decoration: underline;">GitHub</a>!</p>
+                    <p class="footer">Thanks,<br/>OpenDraft Team</p>
                 </div>
             </body>
             </html>

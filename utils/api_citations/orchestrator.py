@@ -392,7 +392,7 @@ class CitationResearcher:
 
         try:
             # Load Scout agent prompt
-            from tests.test_utils import load_prompt
+            from utils.agent_runner import load_prompt
 
             scout_prompt = load_prompt("prompts/01_research/scout.md")
 

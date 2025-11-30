@@ -1,18 +1,17 @@
 {
   "stats": {
-    "total_original": 63,
-    "total_filtered": 45,
-    "total_removed": 18,
+    "total_original": 58,
+    "total_filtered": 42,
+    "total_removed": 16,
     "removal_reasons": {
-      "invalid_url": 12,
-      "invalid_metadata": 3,
-      "invalid_doi": 3
+      "invalid_url": 14,
+      "invalid_doi": 2
     }
   },
   "removed_citations": [
     {
       "citation": {
-        "id": "cite_003",
+        "id": "cite_001",
         "authors": [
           "Okoli"
         ],
@@ -31,87 +30,72 @@
     },
     {
       "citation": {
-        "id": "cite_007",
+        "id": "cite_004",
         "authors": [
-          "Toro",
-          "Correa",
-          "Valencia-Arias",
-          "Benjumea-Arias"
+          "Evangelatos",
+          "Evangelatos",
+          "Upadya",
+          "Venne",
+          "Satyamoorthy",
+          "Brand",
+          "Brand",
+          "Ramashesha",
+          "Brand",
+          "Brand"
         ],
         "year": 2020,
-        "title": "A BIBLIOMETRIC ANALYSIS OF THE USE OF OPEN SOURCE SOFTWARE IN EDUCATIONAL CONTEXTS",
+        "title": "Digital Transformation and Governance Innovation for Public Biobanks and Free/Libre Open Source Software Using a Blockchain Technology",
         "source_type": "journal",
         "language": "english",
-        "doi": "10.33225/pec/20.78.114",
-        "url": "https://doi.org/10.33225/pec/20.78.114",
+        "journal": "Omics",
+        "doi": "10.1089/omi.2019.0178",
+        "url": "https://doi.org/10.1089/omi.2019.0178",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.33225/pec/20.78.114",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1089/omi.2019.0178",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_008",
+        "id": "cite_005",
         "authors": [
-          "Pazaitis",
-          "Giotitsas",
-          "Savvides",
-          "Kostakis"
+          "Krishnamurthy"
         ],
-        "year": 2025,
-        "title": "Reframing Innovation for Post-growth: Lessons from Patent Discourses in 3D Printing",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "Science Technology & Society",
-        "doi": "10.1177/09717218251326836",
-        "url": "https://doi.org/10.1177/09717218251326836",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1177/09717218251326836",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_015",
-        "authors": [
-          "Dahlander",
-          "Magnusson"
-        ],
-        "year": 2006,
-        "title": "Business Models and Community Relationships of Open Source Software Firms",
+        "year": 2005,
+        "title": "An Analysis of Open Source Business Models",
         "source_type": "book",
         "language": "english",
-        "journal": "The Economics of Open Source Software Development",
-        "publisher": "Elsevier",
-        "pages": "111-130",
-        "doi": "10.1016/b978-044452769-1/50005-6",
-        "url": "https://doi.org/10.1016/b978-044452769-1/50005-6",
+        "journal": "Perspectives on Free and Open Source Software",
+        "publisher": "The MIT Press",
+        "pages": "279-296",
+        "doi": "10.7551/mitpress/5326.003.0022",
+        "url": "https://doi.org/10.7551/mitpress/5326.003.0022",
         "api_source": "Crossref"
       },
-      "reason": "URL contains error keyword: 'https://doi.org/10.1016/b978-044452769-1/50005-6'",
+      "reason": "URL returns HTTP 403: https://doi.org/10.7551/mitpress/5326.003.0022",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_007",
+        "authors": [
+          "Tirole",
+          "Lerner"
+        ],
+        "year": 2002,
+        "title": "Some Simple Economics of Open Source",
+        "source_type": "journal",
+        "language": "english",
+        "doi": "10.1111/1467-6451.00174",
+        "url": "https://doi.org/10.1111/1467-6451.00174",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1111/1467-6451.00174",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_016",
-        "authors": [
-          "Dohmke",
-          "Iansiti",
-          "Richards"
-        ],
-        "year": 2023,
-        "title": "Sea Change in Software Development: Economic and Productivity Analysis of the AI-Powered Developer Lifecycle",
-        "source_type": "journal",
-        "language": "english",
-        "url": "https://www.semanticscholar.org/paper/e5bafaae57503b59a59386d0b74fc6eb40225ba8",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL contains error keyword: 'https://www.semanticscholar.org/paper/e5bafaae57503b59a59386d0b74fc6eb40225ba8'",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_021",
         "authors": [
           "Carta",
           "Chessa",
@@ -150,75 +134,86 @@
     },
     {
       "citation": {
-        "id": "cite_023",
+        "id": "cite_022",
         "authors": [
-          "Yakubi",
-          "Basuki",
-          "Purwono",
-          "Usman"
+          "Davidovitch",
+          "Eckhaus"
         ],
-        "year": 2022,
-        "title": "The Impact of Digital Technology and Business Regulations on Financial Inclusion and Socio-Economic Development in Low-Income Countries",
+        "year": 2024,
+        "title": "Effect of Crisis-Induced Online Shift on Student Academic Preferences: Insights for Education Institutions to Develop Equitable and Sustainable Learning Models",
         "source_type": "journal",
         "language": "english",
-        "journal": "SAGE Open",
-        "doi": "10.1177/21582440221116112",
-        "url": "https://doi.org/10.1177/21582440221116112",
+        "journal": "Sustainability",
+        "doi": "10.3390/su16125248",
+        "url": "https://doi.org/10.3390/su16125248",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1177/21582440221116112",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_026",
-        "authors": [
-          "Zhou"
-        ],
-        "year": 2022,
-        "title": "Open Source Software Digital Sociology: Engineering Open Source Software Ecosystem for Impact and Sustainability",
-        "source_type": "conference",
-        "language": "english",
-        "journal": "Federated Africa and Middle East Conference on Software Engineering",
-        "publisher": "ACM",
-        "pages": "95-96",
-        "doi": "10.1145/3531056.3542767",
-        "url": "https://doi.org/10.1145/3531056.3542767",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3531056.3542767",
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/su16125248",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_027",
         "authors": [
-          "Evangelatos",
-          "Evangelatos",
-          "Upadya",
-          "Venne",
-          "Satyamoorthy",
-          "Brand",
-          "Brand",
-          "Ramashesha",
-          "Brand",
-          "Brand"
+          "Linåker",
+          "Osborne",
+          "Ding",
+          "Burtenshaw"
         ],
-        "year": 2020,
-        "title": "Digital Transformation and Governance Innovation for Public Biobanks and Free/Libre Open Source Software Using a Blockchain Technology",
+        "year": 2025,
+        "title": "A Cartography of Open Collaboration in Open Source AI: Mapping Practices, Motivations, and Governance in 14 Open Large Language Model Projects",
         "source_type": "journal",
         "language": "english",
-        "journal": "Omics",
-        "doi": "10.1089/omi.2019.0178",
-        "url": "https://doi.org/10.1089/omi.2019.0178",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2509.25397",
+        "url": "https://doi.org/10.48550/arXiv.2509.25397",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1089/omi.2019.0178",
+      "reason": "DOI not found: 10.48550/arXiv.2509.25397",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_032",
+        "id": "cite_034",
+        "authors": [
+          "Kumar",
+          "Singh",
+          "Devarani",
+          "Maring"
+        ],
+        "year": 2025,
+        "title": "Ascertaining the Educational Efficacy of using Free Open-source Software Research Artificial Intelligence Tools: A Formulative Study at CPGS-AS, CAU(I), Umiam, Ri-Bhoi, Meghalaya",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Archives of Current Research International",
+        "doi": "10.9734/acri/2025/v25i21075",
+        "url": "https://doi.org/10.9734/acri/2025/v25i21075",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.9734/acri/2025/v25i21075",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_036",
+        "authors": [
+          "Dunbar-Hester"
+        ],
+        "year": 2021,
+        "title": "Hacking Technology, Hacking Communities: Codes of Conduct and Community Standards in Open Source",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "MIT Case Studies in Social and Ethical Responsibilities of Computing",
+        "doi": "10.21428/2c646de5.07bc6308",
+        "url": "https://doi.org/10.21428/2c646de5.07bc6308",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.21428/2c646de5.07bc6308",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_038",
         "authors": [
           "Plevnik",
           "Gumzej"
@@ -237,165 +232,120 @@
     },
     {
       "citation": {
-        "id": "cite_033",
+        "id": "cite_041",
         "authors": [
-          "Maske"
+          "Reijswoud",
+          "Mulo"
         ],
-        "year": 2016,
-        "title": "Competition Policy and the Digital Single Market in the Wake of Brexit: Is Geoblocking Always as Evil as Most Consumers Believe?",
+        "year": 2006,
+        "title": "Applying Open Source Software in a Development Context: Expectations and Experiences. A Case Study of a University in Uganda",
         "source_type": "journal",
         "language": "english",
-        "doi": "10.1093/JECLAP/LPW069",
-        "url": "https://doi.org/10.1093/JECLAP/LPW069",
+        "doi": "10.2304/elea.2006.3.3.361",
+        "url": "https://doi.org/10.2304/elea.2006.3.3.361",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1093/JECLAP/LPW069",
+      "reason": "URL returns HTTP 403: https://doi.org/10.2304/elea.2006.3.3.361",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_035",
+        "id": "cite_044",
         "authors": [
-          "Jahn",
-          "Engelbutzeder",
-          "Randall",
-          "Bollmann",
-          "Ntouros",
-          "Michel",
-          "Wulf"
-        ],
-        "year": 2024,
-        "title": "In Between Users and Developers: Serendipitous Connections and Intermediaries in Volunteer-Driven Open-Source Software Development",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "International Conference on Human Factors in Computing Systems",
-        "doi": "10.1145/3613904.3642541",
-        "url": "https://doi.org/10.1145/3613904.3642541",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3613904.3642541",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_038",
-        "authors": [
-          "Tong",
-          "Ananth",
-          "Vaughan",
-          "Geethanath"
-        ],
-        "year": 2024,
-        "title": "Expanding access to magnetic resonance education through open‐source web tutorials",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "NMR in Biomedicine",
-        "doi": "10.1002/nbm.5109",
-        "url": "https://doi.org/10.1002/nbm.5109",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1002/nbm.5109",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_039",
-        "authors": [
-          "Widener",
-          "Mazzuchi",
-          "Sarkani"
-        ],
-        "year": 2018,
-        "title": "Simplifying humanitarian assistance/disaster relief analytic models using activity-based intelligence: Syrian refugee crisis as a case study",
-        "source_type": "journal",
-        "language": "english",
-        "doi": "10.1108/DPM-06-2017-0134",
-        "url": "https://doi.org/10.1108/DPM-06-2017-0134",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1108/DPM-06-2017-0134",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_042",
-        "authors": [
-          "Robredo",
-          "Esposito",
-          "Palomba",
-          "Peñaloza",
-          "Lenarduzzi"
+          "Assunção"
         ],
         "year": 2025,
-        "title": "What Were You Thinking? An LLM-Driven Large-Scale Study of Refactoring Motivations in Open-Source Projects",
+        "title": "The Future of Software Engineering is in your hands, and I believe in you!",
         "source_type": "journal",
         "language": "english",
-        "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2509.07763",
-        "url": "https://doi.org/10.48550/arXiv.2509.07763",
+        "journal": "Software Product Lines Conference",
+        "doi": "10.1145/3744915.3749151",
+        "url": "https://doi.org/10.1145/3744915.3749151",
         "api_source": "Semantic Scholar"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2509.07763",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3744915.3749151",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_047",
+        "id": "cite_051",
         "authors": [
-          "Al-Kharusi",
-          "Khan",
-          "Rizwan",
-          "Bait-Suwailam"
+          "Dionisio"
         ],
-        "year": 2024,
-        "title": "Open-Source Artificial Intelligence Privacy and Security: A Review",
+        "year": 2019,
+        "title": "The evolution of social entrepreneurship research: a bibliometric analysis",
         "source_type": "journal",
         "language": "english",
-        "journal": "De Computis",
-        "doi": "10.3390/computers13120311",
-        "url": "https://doi.org/10.3390/computers13120311",
+        "journal": "Social Enterprise Journal",
+        "doi": "10.1108/SEJ-05-2018-0042",
+        "url": "https://doi.org/10.1108/SEJ-05-2018-0042",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.3390/computers13120311",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/SEJ-05-2018-0042",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_054",
         "authors": [
-          "Osborne"
+          "Tsioumani",
+          "Muzurakis",
+          "Ieropoulos",
+          "Tsioumanis"
         ],
-        "year": 2024,
-        "title": "Public-private funding models in open source software development: A case study on scikit-learn",
+        "year": 2015,
+        "title": "Following the Open Source Trail Outside the Digital World: Open Source Applications in Agricultural Research and Development",
         "source_type": "journal",
         "language": "english",
-        "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2404.06484",
-        "url": "https://doi.org/10.48550/arXiv.2404.06484",
+        "doi": "10.2139/SSRN.2697507",
+        "url": "https://doi.org/10.2139/SSRN.2697507",
         "api_source": "Semantic Scholar"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2404.06484; URL contains error keyword: 'https://doi.org/10.48550/arXiv.2404.06484'",
-      "issues": 2
+      "reason": "URL returns HTTP 403: https://doi.org/10.2139/SSRN.2697507",
+      "issues": 1
     },
     {
       "citation": {
-        "id": "cite_058",
+        "id": "cite_056",
         "authors": [
-          "Esposte",
-          "Kon",
-          "Costa",
-          "Lago"
+          "Walker",
+          "Shan"
         ],
-        "year": 2017,
-        "title": "InterSCity: A Scalable Microservice-based Open Source Platform for Smart Cities",
+        "year": 2016,
+        "title": "High-Fidelity General-Purpose Robotic Simulation Framework for Artificially Intelligent Space Exploration Vehicles",
         "source_type": "journal",
         "language": "english",
-        "journal": "International Conference on Smart Grids and Green IT Systems",
-        "doi": "10.5220/0006306200350046",
-        "url": "https://doi.org/10.5220/0006306200350046",
+        "doi": "10.2514/6.2016-0676",
+        "url": "https://doi.org/10.2514/6.2016-0676",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL contains error keyword: 'https://doi.org/10.5220/0006306200350046'",
+      "reason": "URL returns HTTP 403: https://doi.org/10.2514/6.2016-0676",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_060",
+        "authors": [
+          "Dunbar",
+          "Olsen",
+          "Salomon",
+          "Bhatt",
+          "Mutuku",
+          "Wasunna",
+          "Edwards",
+          "Kolko",
+          "Holeman"
+        ],
+        "year": 2021,
+        "title": "Towards Responsible Data Practices in Digital Health: A case study of an open source community's journey",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "CHI Extended Abstracts",
+        "doi": "10.1145/3411763.3443438",
+        "url": "https://doi.org/10.1145/3411763.3443438",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3411763.3443438",
       "issues": 1
     }
   ]

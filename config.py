@@ -111,10 +111,22 @@ class AppConfig:
 
     def __post_init__(self):
         """Validate configuration on initialization."""
+        # Note: API key validation moved to validate_api_keys() for lazy validation
+        # This allows importing config without requiring API keys (e.g., for --help)
+        pass
+
+    def validate_api_keys(self) -> None:
+        """
+        Validate that required API keys are present.
+
+        Call this before operations that need API access.
+        Raises ValueError if required keys are missing.
+        """
         if self.model.provider == 'gemini' and not self.google_api_key:
             raise ValueError(
                 "GOOGLE_API_KEY environment variable is required for Gemini models. "
-                "Set it in .env file or environment."
+                "Set it in .env file or environment. "
+                "Get your key at: https://makersuite.google.com/app/apikey"
             )
 
         if self.model.provider == 'claude' and not self.anthropic_api_key:
@@ -123,19 +135,33 @@ class AppConfig:
         if self.model.provider == 'openai' and not self.openai_api_key:
             raise ValueError("OPENAI_API_KEY required for OpenAI models")
 
+    @property
+    def has_api_key(self) -> bool:
+        """Check if required API key is configured (without raising)."""
+        if self.model.provider == 'gemini':
+            return bool(self.google_api_key)
+        if self.model.provider == 'claude':
+            return bool(self.anthropic_api_key)
+        if self.model.provider == 'openai':
+            return bool(self.openai_api_key)
+        return False
 
-# Global configuration instance - single source of truth
-config = AppConfig()
+
+# Global configuration instance - lazy loaded
+_config: Optional[AppConfig] = None
 
 
 def get_config() -> AppConfig:
     """
-    Get the global configuration instance.
+    Get the global configuration instance (lazy loaded).
 
     Returns:
         AppConfig: The application configuration
     """
-    return config
+    global _config
+    if _config is None:
+        _config = AppConfig()
+    return _config
 
 
 def update_model(model_name: str) -> None:
@@ -145,15 +171,17 @@ def update_model(model_name: str) -> None:
     Args:
         model_name: New model name to use
     """
-    global config
-    config.model.model_name = model_name
-    config.model.__post_init__()  # Re-validate
+    cfg = get_config()
+    cfg.model.model_name = model_name
+    cfg.model.__post_init__()  # Re-validate
 
 
 if __name__ == '__main__':
-    # Configuration validation on import
+    # Configuration validation test
+    cfg = get_config()
     print(f"✅ Configuration loaded successfully")
-    print(f"Model: {config.model.model_name}")
-    print(f"Provider: {config.model.provider}")
-    print(f"Validation per section: {config.validation.validate_per_section}")
-    print(f"Output directory: {config.paths.output_dir}")
+    print(f"Model: {cfg.model.model_name}")
+    print(f"Provider: {cfg.model.provider}")
+    print(f"API Key configured: {cfg.has_api_key}")
+    print(f"Validation per section: {cfg.validation.validate_per_section}")
+    print(f"Output directory: {cfg.paths.output_dir}")

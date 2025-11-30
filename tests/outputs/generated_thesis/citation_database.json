@@ -1,0 +1,644 @@
+{
+  "citations": [
+    {
+      "id": "cite_002",
+      "authors": [
+        "Rathore"
+      ],
+      "year": 2023,
+      "title": "Future of AI &amp; Generation Alpha: ChatGPT beyond Boundaries",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Eduzone : international peer reviewed/refereed academic multidisciplinary journal",
+      "publisher": "Edu Publications",
+      "volume": "12",
+      "issue": "01",
+      "pages": "63-68",
+      "doi": "10.56614/eiprmj.v12i1y23.254",
+      "url": "https://doi.org/10.56614/eiprmj.v12i1y23.254",
+      "api_source": "Crossref"
+    },
+    {
+      "id": "cite_003",
+      "authors": [
+        "Dey",
+        "Arya",
+        "Mathur",
+        "Chatterjee",
+        "Jadon"
+      ],
+      "year": 2024,
+      "title": "Exploring the Role of Artificial Intelligence and Machine Learning in Pharmaceutical Formulation Design",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Newgen Research in Pharmacy &amp; Healthcare",
+      "doi": "10.61554/ijnrph.v2i1.2024.67",
+      "url": "https://doi.org/10.61554/ijnrph.v2i1.2024.67",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_004",
+      "authors": [
+        "aihealthcarecompliance.com"
+      ],
+      "year": 2025,
+      "title": "OECD AI Principles – Global Ethics for AI in Healthcare",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://aihealthcarecompliance.com/resources/applicable-laws/oecd-ai-principles/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_005",
+      "authors": [
+        "Health Ethics &amp",
+        "Governance (HEG)"
+      ],
+      "year": 2021,
+      "title": "who.int",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.who.int/publications/i/item/9789240029200",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_006",
+      "authors": [
+        "persivia.com"
+      ],
+      "year": 2024,
+      "title": "Gartner's Predictions for AI in Healthcare 2024 | Persivia",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://persivia.com/gartners-prediction-for-ai-in-healthcare-2024/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_007",
+      "authors": [
+        "health.ec.europa.eu"
+      ],
+      "year": 2025,
+      "title": "Artificial Intelligence in healthcare - Public Health - European Commission",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://health.ec.europa.eu/ehealth-digital-health-and-care/artificial-intelligence-healthcare_en",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_008",
+      "authors": [
+        "aicerts.ai"
+      ],
+      "year": 2025,
+      "title": "Bridging the AI Healthcare Intelligence Gap: How AI Is Transforming Medicine - AI CERTs News",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.aicerts.ai/news/bridging-the-ai-healthcare-intelligence-gap-how-ai-is-transforming-medicine/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_009",
+      "authors": [
+        "standards.ieee.org"
+      ],
+      "year": 2025,
+      "title": "IEEE SA - IEEE 2802-2022",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://standards.ieee.org/ieee/2802/7460/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_012",
+      "authors": [
+        "Bokhorst",
+        "Nagtegaal",
+        "Fraggetta",
+        "Vatrano",
+        "Mesker",
+        "Vieth",
+        "Laak",
+        "Ciompi"
+      ],
+      "year": 2023,
+      "title": "Deep learning for multi-class semantic segmentation enables colorectal cancer detection and classification in digital pathology images",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Scientific Reports",
+      "doi": "10.1038/s41598-023-35491-z",
+      "url": "https://doi.org/10.1038/s41598-023-35491-z",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_014",
+      "authors": [
+        "Dixon",
+        "Sattar",
+        "Moros",
+        "Kesireddy",
+        "Ahsan",
+        "Lakkimsetti",
+        "Fatima",
+        "Doshi",
+        "Sadhu",
+        "Hassan"
+      ],
+      "year": 2024,
+      "title": "Unveiling the Influence of AI Predictive Analytics on Patient Outcomes: A Comprehensive Narrative Review",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Cureus",
+      "doi": "10.7759/cureus.59954",
+      "url": "https://doi.org/10.7759/cureus.59954",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_015",
+      "authors": [
+        "mckinsey.com"
+      ],
+      "year": 2025,
+      "title": "Source",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.mckinsey.com/industries/healthcare/our-insights/generative-ai-in-healthcare-current-trends-and-future-outlook",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_018",
+      "authors": [
+        "Abbasi",
+        "Hussain"
+      ],
+      "year": 2024,
+      "title": "Integration of Artificial Intelligence and Smart Technology: AI-Driven Robotics in Surgery: Precision and Efficiency",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Journal of Artificial Intelligence General science (JAIGS) ISSN:3006-4023",
+      "doi": "10.60087/jaigs.v5i1.207",
+      "url": "https://doi.org/10.60087/jaigs.v5i1.207",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_020",
+      "authors": [
+        "pubmed.ncbi.nlm.nih.gov"
+      ],
+      "year": 2025,
+      "title": "The Impact of Artificial Intelligence on Healthcare: A Comprehensive Review of Advancements in Diagnostics, Treatment, and Operational Efficiency",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39763580/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_021",
+      "authors": [
+        "Usuemerai",
+        "Ibikunle",
+        "Abass",
+        "Alemede",
+        "Nwankwo",
+        "Mbata"
+      ],
+      "year": 2024,
+      "title": "Advanced supply chain optimization for emerging market healthcare systems",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Management &amp; Entrepreneurship Research",
+      "doi": "10.51594/ijmer.v6i10.1637",
+      "url": "https://doi.org/10.51594/ijmer.v6i10.1637",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_023",
+      "authors": [
+        "Biswas",
+        "Talukdar"
+      ],
+      "year": 2024,
+      "title": "Intelligent Clinical Documentation: Harnessing Generative AI for Patient-Centric Clinical Note Generation",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Innovative Science and Research Technology",
+      "doi": "10.38124/ijisrt/IJISRT24MAY1483",
+      "url": "https://doi.org/10.38124/ijisrt/IJISRT24MAY1483",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_024",
+      "authors": [
+        "Sio",
+        "Wynsberghe"
+      ],
+      "year": 2015,
+      "title": "When Should We Use Care Robots? The Nature-of-Activities Approach",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Science and Engineering Ethics",
+      "doi": "10.1007/s11948-015-9715-4",
+      "url": "https://doi.org/10.1007/s11948-015-9715-4",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_025",
+      "authors": [
+        "Nair"
+      ],
+      "year": 2025,
+      "title": "Artificial intelligence in the diagnosis and prevention of multi-stage colorectal cancer: potential algorithmic bias and systematic mitigation",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Journal of Medical Artificial Intelligence",
+      "publisher": "AME Publishing Company",
+      "volume": "8",
+      "pages": "63-63",
+      "doi": "10.21037/jmai-24-169",
+      "url": "https://doi.org/10.21037/jmai-24-169",
+      "api_source": "Crossref"
+    },
+    {
+      "id": "cite_026",
+      "authors": [
+        "Haider",
+        "Mehdi",
+        "Zehra",
+        "Das",
+        "Ahmed",
+        "Zameer"
+      ],
+      "year": 2024,
+      "title": "The Impact of Current Trends in Health Care on the Pharmaceutical Sales Force of the Future",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Natural and Health Sciences",
+      "doi": "10.59890/ijnhs.v2i2.1260",
+      "url": "https://doi.org/10.59890/ijnhs.v2i2.1260",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_027",
+      "authors": [
+        "Thaker",
+        "Thaker"
+      ],
+      "year": 2024,
+      "title": "The Intersection of Generative AI and Wearable Health Devices: A Privacy-Focused Analysis",
+      "source_type": "conference",
+      "language": "english",
+      "journal": "2024 First International Conference on Data, Computation and Communication (ICDCC)",
+      "doi": "10.1109/ICDCC62744.2024.10961527",
+      "url": "https://doi.org/10.1109/ICDCC62744.2024.10961527",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_030",
+      "authors": [
+        "Sargiotis"
+      ],
+      "year": 2025,
+      "title": "Fostering Ethical and Inclusive AI: A Human-Centric Paradigm for Social Impact",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Research Publication and Reviews",
+      "doi": "10.55248/gengpi.6.0125.0529",
+      "url": "https://doi.org/10.55248/gengpi.6.0125.0529",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_031",
+      "authors": [
+        "Olugbile",
+        "Karieren",
+        "Olaniyi",
+        "Ayeku",
+        "Odele"
+      ],
+      "year": 2025,
+      "title": "Adversarial Attacks on AI Agents: Data Privacy Risks and Regulatory Implications",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Advances in Engineering and Management",
+      "doi": "10.35629/5252-07063447",
+      "url": "https://doi.org/10.35629/5252-07063447",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_032",
+      "authors": [
+        "Biasin",
+        "Kamenjašević"
+      ],
+      "year": 2024,
+      "title": "Regulatory Approaches Towards AI-Based Medical Device Cybersecurity: A Transatlantic Perspective",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "European Journal of Risk Regulation",
+      "doi": "10.1017/err.2024.23",
+      "url": "https://doi.org/10.1017/err.2024.23",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_033",
+      "authors": [
+        "Terranova",
+        "Cestonaro",
+        "Fava",
+        "Cinquetti"
+      ],
+      "year": 2024,
+      "title": "AI and professional liability assessment in healthcare. A revolution in legal medicine?",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Frontiers in Medicine",
+      "doi": "10.3389/fmed.2023.1337335",
+      "url": "https://doi.org/10.3389/fmed.2023.1337335",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_034",
+      "authors": [
+        "Maria",
+        "Purwinahyu",
+        "Fitriansyah",
+        "Rachmawaty",
+        "Aini"
+      ],
+      "year": 2025,
+      "title": "Artificial Intelligence and Labor Markets: Analyzing Job Displacement and Creation",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Engineering Science and Information Technology",
+      "doi": "10.52088/ijesty.v5i2.830",
+      "url": "https://doi.org/10.52088/ijesty.v5i2.830",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_035",
+      "authors": [
+        "Zeb"
+      ],
+      "year": 2025,
+      "title": "Healing with Intelligence: A Review of AI-Enabled Healthcare Solutions",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Multidisciplinary Sciences and Arts",
+      "doi": "10.47709/ijmdsa.v4i3.6839",
+      "url": "https://doi.org/10.47709/ijmdsa.v4i3.6839",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_036",
+      "authors": [
+        "fda.gov"
+      ],
+      "year": 2025,
+      "title": "Artificial Intelligence in Software as a Medical Device | FDA",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-software-medical-device",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_039",
+      "authors": [
+        "Pandey",
+        "Hasan",
+        "Soni",
+        "Padit"
+      ],
+      "year": 2023,
+      "title": "Achieving Equity in Machine Learning: Technical Solutions and Societal Implications",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Innovative Research in Computer and Communication Engineering",
+      "doi": "10.15680/ijircce.2022.1012034",
+      "url": "https://doi.org/10.15680/ijircce.2022.1012034",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_041",
+      "authors": [
+        "Sultana",
+        "Aktar"
+      ],
+      "year": 2024,
+      "title": "Artificial Intelligence And Big Data For Enhancing Public Health Surveillance And Disease Prevention: A Systematic Review",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Non human journal",
+      "doi": "10.70008/jmldeds.v1i01.50",
+      "url": "https://doi.org/10.70008/jmldeds.v1i01.50",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_044",
+      "authors": [
+        "jmir.org"
+      ],
+      "year": 2025,
+      "title": "Journal of Medical Internet Research - The Effectiveness of AI Chatbots in Alleviating Mental Distress and Promoting Health Behaviors Among Adolescents and Young Adults: Systematic Review and Meta-...",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.jmir.org/2025/1/e79850",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_047",
+      "authors": [
+        "Mahadevan"
+      ],
+      "year": 2024,
+      "title": "Personalized Treatment Plans Powered by AI and Genomics",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Scientific Research in Computer Science Engineering and Information Technology",
+      "doi": "10.32628/cseit241039",
+      "url": "https://doi.org/10.32628/cseit241039",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_048",
+      "authors": [
+        "Lai",
+        "Buchheit",
+        "Kitamura",
+        "Cook",
+        "Yarris",
+        "Chen",
+        "Kwon",
+        "Jordan"
+      ],
+      "year": 2024,
+      "title": "Five Key Articles on Curriculum Development for Graduate Medical Educators.",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Journal of Graduate Medical Education",
+      "doi": "10.4300/JGME-D-23-00208.1",
+      "url": "https://doi.org/10.4300/JGME-D-23-00208.1",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_049",
+      "authors": [
+        "Pasupuleti"
+      ],
+      "year": 2024,
+      "title": "The Impact of Robotics on Elderly Care: A Focus on Assistive Technologies and Patient Mobility",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "INTERANTIONAL JOURNAL OF SCIENTIFIC RESEARCH IN ENGINEERING AND MANAGEMENT",
+      "doi": "10.55041/ijsrem20296",
+      "url": "https://doi.org/10.55041/ijsrem20296",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_051",
+      "authors": [
+        "Merchant",
+        "Ali",
+        "Aslam",
+        "Haq",
+        "Taj",
+        "Javed"
+      ],
+      "year": 2025,
+      "title": "Investigating the Role of AI in Supporting Nursing Decision-Making and Practice",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Advance Social Science Archive Journal",
+      "doi": "10.55966/assaj.2025.4.1.0121",
+      "url": "https://doi.org/10.55966/assaj.2025.4.1.0121",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_052",
+      "authors": [
+        "Wassyng",
+        "Singh",
+        "Geven",
+        "Proscia",
+        "Wang",
+        "Lawford",
+        "Maibaum"
+      ],
+      "year": 2015,
+      "title": "Can Product-Specific Assurance Case Templates Be Used as Medical Device Standards?",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "IEEE design & test",
+      "doi": "10.1109/MDAT.2015.2462720",
+      "url": "https://doi.org/10.1109/MDAT.2015.2462720",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_053",
+      "authors": [
+        "Xia",
+        "Sun",
+        "Huang",
+        "Jin"
+      ],
+      "year": 2024,
+      "title": "Drug repurposing for cancer therapy",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Signal Transduction and Targeted Therapy",
+      "doi": "10.1038/s41392-024-01808-1",
+      "url": "https://doi.org/10.1038/s41392-024-01808-1",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_054",
+      "authors": [
+        "Sivakumar",
+        "R",
+        "J",
+        "Ramakrishnan"
+      ],
+      "year": 2025,
+      "title": "Assessment of Icu Admission and Length of Intensive Care Unit Stay in Acute Medical Presentations to the Emergency Department Using the Rapid Emergency Medicine Score (Rems)",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Environmental Science",
+      "doi": "10.64252/01yvxf26",
+      "url": "https://doi.org/10.64252/01yvxf26",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_055",
+      "authors": [
+        "Kazanskaia"
+      ],
+      "year": 2025,
+      "title": "Understanding the Context of Capacity Building in Developing Countries: Political, Economic, Social, Cultural, and Environmental Dimensions",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "NEYA Global Journal of Non-Profit Studies",
+      "doi": "10.64357/neya-gjnps-context-capacity-building-2025",
+      "url": "https://doi.org/10.64357/neya-gjnps-context-capacity-building-2025",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_058",
+      "authors": [
+        "jmlai.in"
+      ],
+      "year": 2025,
+      "title": "AI for Chronic Disease Management: Improving Long-Term Patient Outcomes | International Journal of Machine Learning and Artificial Intelligence",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://jmlai.in/index.php/ijmlai/article/view/44",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_060",
+      "authors": [
+        "Abhijit Poddar",
+        "S. R. Rao"
+      ],
+      "year": 2024,
+      "title": "Frontiers | Evolving intellectual property landscape for AI-driven innovations in the biomedical sector: opportunities in stable IP regime for shared success",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2024.1372161/full",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_061",
+      "authors": [
+        "Falvo",
+        "Cannataro"
+      ],
+      "year": 2024,
+      "title": "Explainability in Artificial Intelligence: Techniques, Tools and Applications in Medicine and Bioinformatics",
+      "source_type": "conference",
+      "language": "english",
+      "journal": "2024 Fourth International Conference on Digital Data Processing (DDP)",
+      "doi": "10.1109/DDP64453.2024.00026",
+      "url": "https://doi.org/10.1109/DDP64453.2024.00026",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_062",
+      "authors": [
+        "Ustabaşı"
+      ],
+      "year": 2024,
+      "title": "What Are the Challenges and Opportunities of Integrating AI Into Existing Healthcare Infrastructure?",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Next Frontier For Life Sciences and AI",
+      "doi": "10.62802/dvmbnm16",
+      "url": "https://doi.org/10.62802/dvmbnm16",
+      "api_source": "Semantic Scholar"
+    }
+  ],
+  "metadata": {
+    "total_citations": 41,
+    "citation_style": "APA 7th",
+    "thesis_language": "english",
+    "extracted_date": "2025-11-30T14:23:50.603925"
+  }
+}

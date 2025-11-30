@@ -35,7 +35,7 @@
 - [ ] Unit tests pass (`npm run test` or `pytest`)
 - [ ] E2E tests pass (if applicable)
 - [ ] Manual testing completed
-- [ ] All checks pass (`academic-thesis-ai verify`)
+- [ ] All checks pass (`opendraft verify`)
 
 **Test details:**
 

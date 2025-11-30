@@ -2,14 +2,14 @@
 
 ## Summary
 
-**Total Valid Citations**: 87
-**Success Rate**: 81.3%
-**Failed Topics**: 20
+**Total Valid Citations**: 98
+**Success Rate**: 96.1%
+**Failed Topics**: 4
 
 ### Sources Breakdown
 
-- **Crossref**: 56 (64.4%)
-- **Semantic Scholar**: 31 (35.6%)
+- **Crossref**: 13 (13.3%)
+- **Semantic Scholar**: 85 (86.7%)
 - **Gemini Grounded**: 0 (0.0%)
 - **Gemini LLM**: 0 (0.0%)
 
@@ -17,531 +17,597 @@
 
 ## Citations Found
 
-### From Crossref (56 citations)
+### From Crossref (13 citations)
 
-#### 1. AI Tools for Efficient Writing and Editing in Academic Research
-**Authors**: Abinaya, Vadivu
-**Year**: 2024
-**DOI**: 10.4018/979-8-3693-1798-3.ch009
-**URL**: https://doi.org/10.4018/979-8-3693-1798-3.ch009
-
-#### 2. Artificial Intelligence in Language Education: A Systematic Review of Multilingual Applications, Large Language Models, and Emerging Challenges
-**Authors**: Albedah
-**Year**: 2025
-**DOI**: 10.32038/ltrq.2025.49.13
-**URL**: https://doi.org/10.32038/ltrq.2025.49.13
-
-#### 3. InstructPatentGPT: training patent language models to follow instructions with human feedback
-**Authors**: Lee
-**Year**: 2024
-**DOI**: 10.1007/s10506-024-09401-1
-**URL**: https://doi.org/10.1007/s10506-024-09401-1
-
-#### 4. Uses of AI in Scholarly Publishing
-**Authors**: Naseem, Okuonghae, Okuonghae
-**Year**: 2025
-**DOI**: 10.14293/s2199-ssp-am25-01012
-**URL**: https://doi.org/10.14293/s2199-ssp-am25-01012
-
-#### 5. Automated Patient History Summarization using Generative AI
-**Authors**: Singh
-**Year**: 2025
-**DOI**: 10.2139/ssrn.5184805
-**URL**: https://doi.org/10.2139/ssrn.5184805
-
-#### 6. A systematic review of AI anxiety in education
-**Authors**: Wu, Li
-**Year**: 2025
-**DOI**: 10.1007/s43681-025-00783-9
-**URL**: https://doi.org/10.1007/s43681-025-00783-9
-
-#### 7. Introduction to Machine Learning, Deep Learning, and Natural Language Processing
-**Authors**: Pillai, Tedesco
-**Year**: 2023
-**DOI**: 10.1201/9781003296126-2
-**URL**: https://doi.org/10.1201/9781003296126-2
-
-#### 8. FUSION: A Novel Multi-Agent Architecture for Complex Problem-Solving
-**Authors**: Mezned, Bounouh
-**Year**: 2025
-**DOI**: 10.36227/techrxiv.174611764.45336756/v1
-**URL**: https://doi.org/10.36227/techrxiv.174611764.45336756/v1
-
-#### 9. Charting a human-centered path for generative AI in higher education
-**Authors**: Sabbaghan
-**Year**: 2025
-**DOI**: 10.4337/9781035337873.00019
-**URL**: https://doi.org/10.4337/9781035337873.00019
-
-#### 10. AI Writing Assistants in Tanzanian Universities: Adoption Trends, Challenges, and Opportunities
-**Authors**: Kondoro
-**Year**: 2025
-**DOI**: 10.18653/v1/2025.in2writing-1.4
-**URL**: https://doi.org/10.18653/v1/2025.in2writing-1.4
-
-#### 11. The need for ethical guidelines in mathematical research in the time of generative AI
-**Authors**: Pantsar
-**Year**: 2025
-**DOI**: 10.1007/s43681-025-00660-5
-**URL**: https://doi.org/10.1007/s43681-025-00660-5
-
-#### 12. Implications of the AI Act in relation to mobility
-**Authors**: Burden, Stenberg
-**Year**: 2023
-**DOI**: 10.1016/j.trpro.2023.11.660
-**URL**: https://doi.org/10.1016/j.trpro.2023.11.660
-
-#### 13. Artificial Intelligence Risk Management Framework (AI RMF 1.0) - Japanese translation
-**Authors**: NIST
-**Year**: 2024
-**DOI**: 10.6028/nist.ai.100-1.jpn
-**URL**: https://doi.org/10.6028/nist.ai.100-1.jpn
-
-#### 14. China powers the future of global AI innovation
-**Authors**: Shrivastava
-**Year**: 2024
-**DOI**: 10.59425/eabc.1724774400
-**URL**: https://doi.org/10.59425/eabc.1724774400
-
-#### 15. Academic Integrity and AI: Challenges and Opportunities in Higher Education
-**Authors**: Kohli, Aggarwal, Rathi
-**Year**: 2025
-**DOI**: 10.21276/saar/9788199015449
-**URL**: https://doi.org/10.21276/saar/9788199015449
-
-#### 16. Ten UNESCO Recommendations on the Ethics of Artificial Intelligence
-**Authors**: Morandín-Ahuerma
-**Year**: 2023
-**DOI**: 10.31219/osf.io/csyux
-**URL**: https://doi.org/10.31219/osf.io/csyux
-
-#### 17. DEĞER MUHASEBESİ VE ETKİ DEĞERLEME: PWC ve YORKSHIRE ÖRNEĞİ
-**Authors**: YÜKSEL
-**Year**: 2023
-**DOI**: 10.31460/mbdd.1198810
-**URL**: https://doi.org/10.31460/mbdd.1198810
-
-#### 18. Cooperative Behavior Rule Acquisition for Multi-Agent Systems by Machine Learning
-**Authors**: Xie
-**Year**: 2011
-**DOI**: 10.5772/13280
-**URL**: https://doi.org/10.5772/13280
-
-#### 19. Introduction to Large Language Models with OpenAI
-**Authors**: Martra
-**Year**: 2024
-**DOI**: 10.1007/979-8-8688-0515-8_1
-**URL**: https://doi.org/10.1007/979-8-8688-0515-8_1
-
-#### 20. Hidden Prompts in Manuscripts Exploit AI-Assisted Peer Review
-**Authors**: Lin
-**Year**: 2025
-**DOI**: 10.31234/osf.io/nea5u_v1
-**URL**: https://doi.org/10.31234/osf.io/nea5u_v1
-
-#### 21. Generative AI Tools in Salvadoran Higher Education: Balancing Equity, Ethics, and Knowledge Management in the Global South
-**Authors**: Valdivieso, González
-**Year**: 2025
-**DOI**: 10.3390/educsci15020214
-**URL**: https://doi.org/10.3390/educsci15020214
-
-#### 22. LEGAL AND ETHICAL PERSPECTIVES ON (BIG) DATA, PLATFORMS, AI AND ALGORITHMS
-**Authors**: AISDL
+#### 1. Journaling: A powerful Academic Writing Learning Tool
+**Authors**: Mittal Brahmbhatt
 **Year**: 2020
-**DOI**: 10.31219/osf.io/y2bmk
-**URL**: https://doi.org/10.31219/osf.io/y2bmk
+**DOI**: 10.58213/ell.v2i2.23
+**URL**: https://doi.org/10.58213/ell.v2i2.23
 
-#### 23. Scientific Publication Guide for Non-Native English-Speaking Researchers
-**Authors**: Moez
-**Year**: 2023
-**DOI**: 10.4018/978-1-6684-6859-3.ch017
-**URL**: https://doi.org/10.4018/978-1-6684-6859-3.ch017
-
-#### 24. Autonomous Experimentation in Practice
-**Authors**: Yager
-**Year**: 2023
-**DOI**: 10.1201/9781003359593-1
-**URL**: https://doi.org/10.1201/9781003359593-1
-
-#### 25. Preventing Money Laundering using AI Agents
-**Authors**: Bos
-**Year**: 2022
-**DOI**: 10.31237/osf.io/f62k9
-**URL**: https://doi.org/10.31237/osf.io/f62k9
-
-#### 26. Agentic AI-Powered Automation: A New Paradigm for Healthcare Workflow Optimization
-**Authors**: Babul Kumar Sahu
+#### 2. Agentic information fusion for urban building energy services using a multi-agent AI system
+**Authors**: Choi, Lee, Seok, Yoo, Yoon
 **Year**: 2025
-**DOI**: 10.52710/cfs.708
-**URL**: https://doi.org/10.52710/cfs.708
+**DOI**: 10.2139/ssrn.5428967
+**URL**: https://doi.org/10.2139/ssrn.5428967
 
-#### 27. LLM-Based Multi-Agent Systems
-**Authors**: Sharma, Sahu, Chaturvedi
-**Year**: 2025
-**DOI**: 10.4018/979-8-3373-1419-8.ch003
-**URL**: https://doi.org/10.4018/979-8-3373-1419-8.ch003
-
-#### 28. Charting Strategic Directions for Global Collaboration in Open Source AI: Key Takeaways from the GOSIM Open Source AI Strategy Forum
-**Authors**: Osborne
-**Year**: 2025
-**DOI**: 10.70828/kcrf4119
-**URL**: https://doi.org/10.70828/kcrf4119
-
-#### 29. Interoperability rules for heterogenous multi-agent systems: Levels of conceptual interoperability model applied for multi-agent systems
-**Authors**: Wassermann, Fay
-**Year**: 2017
-**DOI**: 10.1109/indin.2017.8104752
-**URL**: https://doi.org/10.1109/indin.2017.8104752
-
-#### 30. Charting Strategic Directions for Global Collaboration in Open Source AI: Key Takeaways from the GOSIM Open Source AI Strategy Forum
-**Authors**: Osborne
-**Year**: 2025
-**DOI**: 10.70828/kcrf4119
-**URL**: https://doi.org/10.70828/kcrf4119
-
-#### 31. Education Shifts and Futuristic Society in the AI Age
-**Authors**: Chang
-**Year**: 2025
-**DOI**: 10.1201/9781003630081-20
-**URL**: https://doi.org/10.1201/9781003630081-20
-
-#### 32. Democratizing Access to Accurate Air Quality Measurements with Open-Source Tools
-**Authors**: Krause, Saladin
-**Year**: 2025
-**DOI**: 10.5194/egusphere-egu25-8701
-**URL**: https://doi.org/10.5194/egusphere-egu25-8701
-
-#### 33. Complex legacies and future prospects: Conceptualising changes in South African doctoral education
-**Authors**: Tshuma, Bitzer
-**Year**: 2024
-**DOI**: 10.4324/9781003582335-11
-**URL**: https://doi.org/10.4324/9781003582335-11
-
-#### 34. Automated Synthesis of Multi-Agent Control
-**Authors**: Mataric
-**Year**: 2000
-**DOI**: 10.21236/ada382439
-**URL**: https://doi.org/10.21236/ada382439
-
-#### 35. Building Digital Skills and Capacity for AI Adoption in Developing Countries
-**Authors**: wathsmma
-**Year**: 2023
-**DOI**: 10.31219/osf.io/3nuev
-**URL**: https://doi.org/10.31219/osf.io/3nuev
-
-#### 36. Identity, Institutions and Governance in an AI World
-**Authors**: Bloom
+#### 3. Drafting Autobiographical Memoir
+**Authors**: Brien
 **Year**: 2020
-**DOI**: 10.1007/978-3-030-36181-5
-**URL**: https://doi.org/10.1007/978-3-030-36181-5
+**DOI**: 10.5040/9781350494473.ch-002
+**URL**: https://doi.org/10.5040/9781350494473.ch-002
 
-#### 37. AI-Powered Research Tools for Literature Review and Scientific Discovery
-**Authors**: Onwuakor
+#### 4. Hybrid Multi-Agent AI/MCTS Systems for Complex Information-Imperfect Games
+**Authors**: Jain
 **Year**: 2025
-**DOI**: 10.55277/researchhub.23t3yp02
-**URL**: https://doi.org/10.55277/researchhub.23t3yp02
+**DOI**: 10.22541/au.176405957.77536600/v1
+**URL**: https://doi.org/10.22541/au.176405957.77536600/v1
 
-#### 38. Bayesian Deep Multi-Agent Multimodal Reinforcement Learning for Embedded Systems in Games, Natural Language Processing and Robotics
-**Authors**: Kourouklides
-**Year**: 2022
-**DOI**: 10.31219/osf.io/sjrkh
-**URL**: https://doi.org/10.31219/osf.io/sjrkh
-
-#### 39. Increase in AI-generated text in higher education dissertations from 2020 to 2025 : Implications for academic integrity
-**Authors**: Ison
+#### 5. Exploring the Role of AI-Driven Dynamic Writing Platforms in Improving  EFL Learners' Writing Skills and Fostering Their Motivation
+**Authors**: Tajik
 **Year**: 2025
-**DOI**: 10.69554/nzea7835
-**URL**: https://doi.org/10.69554/nzea7835
+**DOI**: 10.21203/rs.3.rs-5788599/v1
+**URL**: https://doi.org/10.21203/rs.3.rs-5788599/v1
 
-#### 40. An Extended Introduction to the `prismAId` Tool: Open-Source and Open Science AI for Systematic Reviews
-**Authors**: Boero
-**Year**: 2024
-**DOI**: 10.31222/osf.io/wh8qn
-**URL**: https://doi.org/10.31222/osf.io/wh8qn
-
-#### 41. Generative AI's Impact on Student Achievement and Implications for Worker Productivity *
-**Authors**: Hausman, Rigbi, Weisburd
-**Year**: 2025
-**DOI**: 10.2139/ssrn.5224465
-**URL**: https://doi.org/10.2139/ssrn.5224465
-
-#### 42. The Evolution and Latest Trends of AI Technology
-**Authors**: Yu
-**Year**: 2025
-**DOI**: 10.1007/978-981-96-9005-3_1
-**URL**: https://doi.org/10.1007/978-981-96-9005-3_1
-
-#### 43. The AI-policy-governance nexus: How regulation and AI shift corporate governance toward stakeholders
-**Authors**: Cordeiro, Adomaitis, Huang
-**Year**: 2026
-**DOI**: 10.1016/j.techsoc.2025.103117
-**URL**: https://doi.org/10.1016/j.techsoc.2025.103117
-
-#### 44. Recommended Methods for Using the 2020 NIST Principles for AI Explainability
-**Authors**: Quinn, Piper, Bliss, Keever
-**Year**: 2020
-**DOI**: 10.1109/bigdata50022.2020.9377760
-**URL**: https://doi.org/10.1109/bigdata50022.2020.9377760
-
-#### 45. Book review: Darrell M. West, The Future of Work: Robots, AI, and Automation (Brookings Institution Press, Washington, DC, USA 2018) 205 pp.
-**Authors**: Cashman
-**Year**: 2020
-**DOI**: 10.4337/roke.2020.01.11
-**URL**: https://doi.org/10.4337/roke.2020.01.11
-
-#### 46. Advancements of Deep Learning-Based Pneumonia Chest Classification
-**Authors**: Tong
-**Year**: 2024
-**DOI**: 10.5220/0012959300004508
-**URL**: https://doi.org/10.5220/0012959300004508
-
-#### 47. Ethics, Academic and Research Integrity, Generative AI, and Scholarly Communication
+#### 6. Ethics, Academic and Research Integrity, Generative AI, and Scholarly Communication
 **Authors**: Bhatt
 **Year**: 2025
 **DOI**: 10.17918/00011205
 **URL**: https://doi.org/10.17918/00011205
 
-#### 48. Berkeley Lab Computing Sciences: Accelerating Scientific Discovery
-**Authors**: Hules
-**Year**: 2008
-**DOI**: 10.2172/948134
-**URL**: https://doi.org/10.2172/948134
-
-#### 49. Future Trends in AI and Academic Research Writing
-**Authors**: Roy, Ashmika, Chakraborty, Sharafat
+#### 7. Exploring the Impact of Deep Learning Activities in the Mathematics Classroom on Students’ Academic Performance: A Comprehensive Study
+**Authors**: Suglo
 **Year**: 2024
-**DOI**: 10.4018/979-8-3693-1798-3.ch015
-**URL**: https://doi.org/10.4018/979-8-3693-1798-3.ch015
+**DOI**: 10.20944/preprints202403.1551.v1
+**URL**: https://doi.org/10.20944/preprints202403.1551.v1
 
-#### 50. AI Ethics in Higher Education: Research Experiences from Practical Development and Deployment of AI Systems
-**Authors**: Nakatumba-Nabende, Suuna, Bainomugisha
-**Year**: 2023
-**DOI**: 10.1007/978-3-031-23035-6_4
-**URL**: https://doi.org/10.1007/978-3-031-23035-6_4
-
-#### 51. AI Governance for Dark Data: Ethical Management of Unlabeled and Unstructured Data in AI Systems
-**Authors**: Abdul Kareem
+#### 8. A review of the applications of multi-agent reinforcement learning in smart factories
+**Authors**: Bahrpeyma, Reichelt
 **Year**: 2022
-**DOI**: 10.21275/sr22910213254
-**URL**: https://doi.org/10.21275/sr22910213254
+**DOI**: 10.3389/frobt.2022.1027340
+**URL**: https://doi.org/10.3389/frobt.2022.1027340
 
-#### 52. Multi-Agent Models in Workflow Design
-**Authors**: Iordan
-**Year**: 2011
-**DOI**: 10.5772/15903
-**URL**: https://doi.org/10.5772/15903
+#### 9. Free and (Mostly) Open Source Data Analysis Software for Academic Research
+**Authors**: Chinchu
+**Year**: 2021
+**DOI**: 10.31234/osf.io/9pnkw
+**URL**: https://doi.org/10.31234/osf.io/9pnkw
 
-#### 53. RISE: an open-source architecture for interdisciplinary and reproducible human–robot interaction research
-**Authors**: Groß, Schütze, Brandt, Wrede, Richter
+#### 10. AI by Design and the Future-Back Methodology
+**Authors**: Campbell
+**Year**: 2022
+**DOI**: 10.1201/9781003267003-2
+**URL**: https://doi.org/10.1201/9781003267003-2
+
+#### 11. Advancements in Multi-Agent Large Language Model Systems for Next-Generation AI
+**Authors**: Gopalakrishnan, Ramya, Preethiya, Nithya Paranthaman, Ashwini, Dhwarithaa
+**Year**: 2025
+**DOI**: 10.4018/979-8-3373-1419-8.ch002
+**URL**: https://doi.org/10.4018/979-8-3373-1419-8.ch002
+
+#### 12. Human-AI Teaming in Critical Care: A Comparative Analysis of Data Scientists’ and Clinicians’ Perspectives on AI Augmentation and Automation (Preprint)
+**Authors**: Bienefeld, Keller, Grote
 **Year**: 2023
-**DOI**: 10.3389/frobt.2023.1245501
-**URL**: https://doi.org/10.3389/frobt.2023.1245501
+**DOI**: 10.2196/preprints.50130
+**URL**: https://doi.org/10.2196/preprints.50130
 
-#### 54. Large Language Model AI and Lx Academic Writing: Challenges and Opportunities
-**Authors**: Ballance, Coxhead
+#### 13. Academic Writing in the Age of AI: Opportunities, Challenges, and Best Practices
+**Authors**: Madhavi
 **Year**: 2025
-**DOI**: 10.31338/uw.9788323567332.pp.170-201
-**URL**: https://doi.org/10.31338/uw.9788323567332.pp.170-201
+**DOI**: 10.21124/tsp.2025.08.14
+**URL**: https://doi.org/10.21124/tsp.2025.08.14
 
-#### 55. Review of Blockchain Application With Graph Neural Networks, Graph Convolutional Networks and Convolutional Neural Networks
-**Authors**: Ancelotti, Liason
+### From Semantic Scholar (85 citations)
+
+#### 1. ChatGPT: how to use it and the pitfalls/cautions in academia
+**Authors**: Lee
+**Year**: 2025
+**DOI**: 10.6065/apem.2550028.014
+**URL**: https://doi.org/10.6065/apem.2550028.014
+
+#### 2. Research Productivity and Impact in Foot and Ankle Surgery: Insights From Relative Citation Ratio Analysis of Recent Fellowship Graduates
+**Authors**: Benes, ElNemer, Avendano, Hsu, Aiyer
 **Year**: 2024
-**DOI**: 10.2139/ssrn.4971275
-**URL**: https://doi.org/10.2139/ssrn.4971275
+**DOI**: 10.5435/JAAOSGlobal-D-23-00280
+**URL**: https://doi.org/10.5435/JAAOSGlobal-D-23-00280
 
-#### 56. Factors Influencing AI-Assisted Thesis Writing in University: A Pull-Push-Mooring Theory Narrative Inquiry Study
-**Authors**: Butarbutar
+#### 3. Systematic analysis of generative AI tools integration in academic research and peer review
+**Authors**: Salman, Ahmad, Ibrahim, Mahmood
 **Year**: 2025
-**DOI**: 10.2139/ssrn.5176603
-**URL**: https://doi.org/10.2139/ssrn.5176603
+**DOI**: 10.30935/ojcmt/15832
+**URL**: https://doi.org/10.30935/ojcmt/15832
 
-### From Semantic Scholar (31 citations)
+#### 4. Generative AI and the Future of Service Design: The potential to transform the service design practice in dramatic and efficient ways
+**Authors**: Ocampo, Biltz, Rhea
+**Year**: 2024
+**DOI**: 10.30819/touchpoint.15-2.06
+**URL**: https://doi.org/10.30819/touchpoint.15-2.06
 
-#### 1. ECONOMIC GLOBALIZATION AND EXPRESSIONS OF NATIONALISM : A Quantitative Analysis of the Present-day Chinese Identity
-**Authors**: Bai, Petersen, Arthur, Sloan, Supervisor, Arthur
-**Year**: 2011
+#### 5. Leveraging Generative AI in Higher Education: An Analysis of Opportunities and Challenges Addressed in University Guidelines
+**Authors**: Christ‐Brendemühl
+**Year**: 2024
+**DOI**: 10.1111/ejed.12891
+**URL**: https://doi.org/10.1111/ejed.12891
+
+#### 6. Public Insight and Policy Foresight: A Policy Review of AI Governance in India
+**Authors**: Kadambi, Seshadri, Munjandira, Appaji
+**Year**: 2024
+**DOI**: 10.1109/COMSNETS59351.2024.10427081
+**URL**: https://doi.org/10.1109/COMSNETS59351.2024.10427081
+
+#### 7. The European AI Act and How It Matters for Research into AI in Media and Journalism
+**Authors**: Helberger, Diakopoulos
+**Year**: 2022
+**DOI**: 10.1080/21670811.2022.2082505
+**URL**: https://doi.org/10.1080/21670811.2022.2082505
+
+#### 8. AI Horizon Scanning, White Paper p3395, IEEE-SA. Part I: Areas of Attention
+**Authors**: Cortes, Liddle, Emmanouilidis, Kelly, Matusow, Ragunathan, Suess, Tambouratzis, Zalewski, Bray
+**Year**: 2024
+**DOI**: 10.48550/arXiv.2410.01808
+**URL**: https://doi.org/10.48550/arXiv.2410.01808
+
+#### 9. Can linguists distinguish between ChatGPT/AI and human writing?: A study of research ethics and academic publishing
+**Authors**: Casal, Kessler
+**Year**: 2023
+**DOI**: 10.1016/j.rmal.2023.100068
+**URL**: https://doi.org/10.1016/j.rmal.2023.100068
+
+#### 10. The problem of integrity in RBAC-based policies within relational databases: synthesis and problem study
+**Authors**: Jaïdi, Labbene
+**Year**: 2015
+**DOI**: 10.1145/2701126.2701196
+**URL**: https://doi.org/10.1145/2701126.2701196
+
+#### 11. Symposium: Topics in Risk Analysis
+**Authors**: Lave, Hilaire
+**Year**: 1988
+**DOI**: 10.3109/10915818809019526
+**URL**: https://doi.org/10.3109/10915818809019526
+
+#### 12. AI Tools in Teaching and Learning English Academic Writing Skills
+**Authors**: Tran
+**Year**: 2024
+**DOI**: 10.54855/paic.23413
+**URL**: https://doi.org/10.54855/paic.23413
+
+#### 13. Exploring Multi-Agent Systems for Intermodal Freight Fleets: Literature-based Justification of a New Concept
+**Authors**: Maecker, Gösling, Heinbach, Kammler
+**Year**: 2023
 **DOI**: 
-**URL**: https://www.semanticscholar.org/paper/5c9ecfef851427969a60251b8e995daacad50eda
+**URL**: https://www.semanticscholar.org/paper/e56bae6feed5dc42d3d928b39e783971c3b3a0b8
 
-#### 2. Network for Knowledge Organization (NEKO): an AI knowledge mining workflow for synthetic biology research
-**Authors**: Xiao, Pakrasi, Chen, Tang
+#### 14. The Economic and Workforce Impacts of Open Source AI: Insights from Industry, Academia, and Open Source Research Publications
+**Authors**: Hermansen, Osborne
+**Year**: 2025
+**DOI**: 10.70828/itvq4899
+**URL**: https://doi.org/10.70828/itvq4899
+
+#### 15. Automated Retinal Image Analysis and Medical Report Generation through Deep Learning
+**Authors**: Huang
 **Year**: 2024
-**DOI**: 10.1101/2024.06.27.601082
-**URL**: https://doi.org/10.1101/2024.06.27.601082
+**DOI**: 10.48550/arXiv.2408.07349
+**URL**: https://doi.org/10.48550/arXiv.2408.07349
 
-#### 3. A Multi-Agent Based Architecture Proposal with Integrated Question Answering System for Collaborative E-Learning
-**Authors**: Samadi, Qbadou, Akef
-**Year**: 2019
+#### 16. PlantScience.ai: An LLM-Powered Virtual Scientist for Plant Science
+**Authors**: Yu, Zhou, Huang, Ding, Chen, Wang, Ren, Cheng, Wang, Liang, Zhang, Ding, Li
+**Year**: 2025
+**DOI**: 10.1101/2025.10.24.684337
+**URL**: https://doi.org/10.1101/2025.10.24.684337
+
+#### 17. The Future of Scientific Writing: AI Tools, Benefits, and Ethical Implications
+**Authors**: Granjeiro, Cury, Cury, Bueno, Sousa-Neto, Estrela
+**Year**: 2025
+**DOI**: 10.1590/0103-644020256471
+**URL**: https://doi.org/10.1590/0103-644020256471
+
+#### 18. DrugAgent: Automating AI-aided Drug Discovery Programming through LLM Multi-Agent Collaboration
+**Authors**: Liu, Lu, Chen, Hu, Zhao, Fu, Zhao
+**Year**: 2024
+**DOI**: 10.48550/arXiv.2411.15692
+**URL**: https://doi.org/10.48550/arXiv.2411.15692
+
+#### 19. Near-field probing the magnetic field vector of visible light with a silicon nanoparticle probe and nanopolarimetry
+**Authors**: In, Un, Enfeng, Ai, Iaoxia, Eng, ong, ui, Uangyi, Hang, Ia, Ang
+**Year**: 2018
 **DOI**: 
-**URL**: https://www.semanticscholar.org/paper/dce3dd192248f9bec6b1e43ab255b14669dc6058
+**URL**: https://www.semanticscholar.org/paper/d721986a5a4c160a796c88ef56ea2fa40a3f40bb
 
-#### 4. The role of open-source bioinformatics tools in resource-limited African settings
-**Authors**: Mbisva
+#### 20. Impact of Large Language Models on Scholarly Publication Titles and Abstracts: A Comparative Analysis
+**Authors**: Teh, Uwasomba
+**Year**: 2024
+**DOI**: 10.23919/jsc.2024.0011
+**URL**: https://doi.org/10.23919/jsc.2024.0011
+
+#### 21. Beyond Human Authorship: AI, Pedagogy, and Ethics in Academic Writing
+**Authors**: Kotsis
 **Year**: 2025
-**DOI**: 10.36922/imo.8111
-**URL**: https://doi.org/10.36922/imo.8111
+**DOI**: 10.59652/jcpas.v3i3.630
+**URL**: https://doi.org/10.59652/jcpas.v3i3.630
 
-#### 5. The De-democratization of AI: Deep Learning and the Compute Divide in Artificial Intelligence Research
-**Authors**: Ahmed, Wahed
-**Year**: 2020
+#### 22. OmniScientist: Toward a Co-evolving Ecosystem of Human and AI Scientists
+**Authors**: Shao, Huang, Li, Zhao, Lin, Zhang, Zeng, Chen, Li, Huang, Wu, Liu, Zhao, Zhao, Zhang, Wang, Zhen, Xu, Li, Liu
+**Year**: 2025
 **DOI**: 
-**URL**: https://www.semanticscholar.org/paper/e585f6e752fb2668b33f7d4b18c8af9bd5abc1a4
+**URL**: https://www.semanticscholar.org/paper/2810ea2826d3aff2f6dcd6d14fe3c0a42cd6a442
 
-#### 6. 34 Examples of LLM Applications in Materials Science and Chemistry: Towards Automation, Assistants, Agents, and Accelerated Scientific Discovery
-**Authors**: Zimmermann, Bazgir, Al-Feghali, Ansari, Brinson, Yuan, Çirci, Chiu, Daelman, Evans, Gangan, George, Harb, Khalighinejad, Khan, Klawohn, Lederbauer, Mahjoubi, Mohr, Moosavi, Naik, Ozhan, Plessers, Roy, Schoppach, Schwaller, Terboven, Ueltzen, Zhu, Janssen, Li, Foster, Blaiszik
-**Year**: 2025
-**DOI**: 10.48550/arXiv.2505.03049
-**URL**: https://doi.org/10.48550/arXiv.2505.03049
+#### 23. Open Science in Kenya: Where Are We?
+**Authors**: Mwangi, Mainye, Ouso, Esoh, Muraya, Mwangi, Naitore, Karega, Kibet-Rono, Musundi, Mutisya, Mwangi, Mgawe, Miruka, Kibet
+**Year**: 2021
+**DOI**: 10.3389/frma.2021.669675
+**URL**: https://doi.org/10.3389/frma.2021.669675
 
-#### 7. Enhancing Academic Writing through Digital Tools: A Systematic Review
-**Authors**: Ramadhan, Rahim, Darmanto, Paris
+#### 24. Unlocking the power of AI to accelerate scientific progress and global collaboration
+**Authors**: Dalabih, Aljabari
+**Year**: 2023
+**DOI**: 10.1038/s41390-023-02590-6
+**URL**: https://doi.org/10.1038/s41390-023-02590-6
+
+#### 25. Exploring the Role of Artificial Intelligence in Enhancing Equity and Inclusion in Education
+**Authors**: Pawar, Khose
 **Year**: 2024
-**DOI**: 10.36312/jolls.v4i4.2342
-**URL**: https://doi.org/10.36312/jolls.v4i4.2342
+**DOI**: 10.38124/ijisrt/ijisrt24apr1939
+**URL**: https://doi.org/10.38124/ijisrt/ijisrt24apr1939
 
-#### 8. Balancing Innovation with Ethics: AI Applications for Enhancing Language Competence in Academic Writing and Reading
-**Authors**: Kudritskaya, Plastinina, Kushnina, Plekhanova, Matytcina, Stepanova
+#### 26. Can AI Facilitate a Human-Centric Approach to Writing a Problem of Practice Dissertation?
+**Authors**: Kell, Kraeer, Cain
+**Year**: 2025
+**DOI**: 10.5195/ie.2025.482
+**URL**: https://doi.org/10.5195/ie.2025.482
+
+#### 27. Methodology for AI-Based Search Strategy of Scientific Papers: Exemplary Search for Hybrid and Battery Electric Vehicles in the Semantic Scholar Database
+**Authors**: Wätzold, Popiela, Mayer
 **Year**: 2024
-**DOI**: 10.1109/TELE62556.2024.10605668
-**URL**: https://doi.org/10.1109/TELE62556.2024.10605668
+**DOI**: 10.3390/publications12040049
+**URL**: https://doi.org/10.3390/publications12040049
 
-#### 9. Investigating Gender Bias in LLM-Generated Stories via Psychological Stereotypes
-**Authors**: Masoudian, Escobedo, Strauss, Schedl
-**Year**: 2025
-**DOI**: 10.48550/arXiv.2508.03292
-**URL**: https://doi.org/10.48550/arXiv.2508.03292
-
-#### 10. Authenticity in authorship: the Writer’s Integrity framework for verifying human-generated text
-**Authors**: Aburass, Rumman
+#### 28. Just-DNA-Seq, open-source personal genomics platform: longevity science for everyone
+**Authors**: Anton, Olga, Alexey, Maria, Nikolay, Alina, Sergey, Malvina, Kim, Biostatistics, Medicine, Research, Academy, Alliance, Srl, Srl, MitoSpace, Ukraine, Llc
 **Year**: 2024
-**DOI**: 10.1007/s10676-024-09797-z
-**URL**: https://doi.org/10.1007/s10676-024-09797-z
+**DOI**: 
+**URL**: https://www.semanticscholar.org/paper/fd2bddac5ad673d91d8a13b64adcb6a81008d419
 
-#### 11. The future of academic publishing in India: Embracing innovations for quality and global recognition
-**Authors**: Gupta, Pandit
+#### 29. Buy versus build: Navigating Artificial Intelligence (AI) tool adoption in academic libraries
+**Authors**: Michalak, Ellixson
 **Year**: 2024
-**DOI**: 10.18231/j.ijlsit.2023.021
-**URL**: https://doi.org/10.18231/j.ijlsit.2023.021
+**DOI**: 10.1177/18758789241296755
+**URL**: https://doi.org/10.1177/18758789241296755
 
-#### 12. Employee Well-Being Research Trends in HR Management
-**Authors**: Judijanto, Soesanto, Pahrijal
+#### 30. The Role of AI in Enhancing Marketing Communication: Implications for Policy and Development in Indonesian Higher Education
+**Authors**: Isnaini, Muslimin
+**Year**: 2024
+**DOI**: 10.11114/smc.v12i4.7013
+**URL**: https://doi.org/10.11114/smc.v12i4.7013
+
+#### 31. Fostering global data sharing: highlighting the recommendations of the Research Data Alliance COVID-19 working group
+**Authors**: Austin, Bernier, Bezuidenhout, Bicarregui, Biro, Cambon-Thomsen, Carroll, Cournia, Dabrowski, Diallo, Duflot, García, Gesing, González-Beltrán, Gururaj, Harrower, Lin, Medeiros, Méndez, Meyers, Mietchen, Nagrani, Nilsonne, Parker, Pickering, Pienta, Polydoratou, Psomopoulos, Rennes, Rowe, Sansone, Shanahan, Sitz, Stocks, Tovani-Palone, Uhlmansiek
+**Year**: 2021
+**DOI**: 10.12688/wellcomeopenres.16378.2
+**URL**: https://doi.org/10.12688/wellcomeopenres.16378.2
+
+#### 32. Exploring the Impact of ISO/IEC 42001:2023 AI Management Standard on Organizational Practices
+**Authors**: Biroğul, Şahin, əsgərli
 **Year**: 2025
-**DOI**: 10.58812/wsis.v3i03.1781
-**URL**: https://doi.org/10.58812/wsis.v3i03.1781
+**DOI**: 10.54569/aair.1709628
+**URL**: https://doi.org/10.54569/aair.1709628
 
-#### 13. Large Language Models and Their Evolution
-**Authors**: Zhou
+#### 33. Diffusion Models for Recommender Systems: From Content Distribution To Content Creation
+**Authors**: Lin, Cao, Yu, Zhang
 **Year**: 2025
-**DOI**: 10.54254/2755-2721/2025.25586
-**URL**: https://doi.org/10.54254/2755-2721/2025.25586
+**DOI**: 10.1145/3711896.3736554
+**URL**: https://doi.org/10.1145/3711896.3736554
 
-#### 14. Machine Learning in Education: Innovations, Impacts, and Ethical Considerations
-**Authors**: Elbasi, Nadeem, Alzoubi, Topcu, Varghese
+#### 34. Democratizing Knowledge Creation Through Human-AI Collaboration in Academic Peer Review
+**Authors**: Sarker, Susarla, Gopal, Thatcher
+**Year**: 2024
+**DOI**: 10.17705/1jais.00872
+**URL**: https://doi.org/10.17705/1jais.00872
+
+#### 35. Ethical AI Integration in African Higher Education: Enhancing Research Supervision, Grant Discovery, and Proposal Writing Without Compromising Academic Integrity
+**Authors**: Sangwa, Nsabiyumva, Ngobi, Mutabazi
 **Year**: 2025
-**DOI**: 10.1109/ACCESS.2025.3590134
-**URL**: https://doi.org/10.1109/ACCESS.2025.3590134
+**DOI**: 10.2139/ssrn.5331595
+**URL**: https://doi.org/10.2139/ssrn.5331595
 
-#### 15. Campus Navigation Application using Augmented Reality
-**Authors**: Pacho, Cabutaje, Cauilan, Pugeda, Gazzingan
-**Year**: 2025
-**DOI**: 10.57180/pcmv4222
-**URL**: https://doi.org/10.57180/pcmv4222
+#### 36. Automated Question Generation for Science Tests in Arabic Language Using NLP Techniques
+**Authors**: Tami, Ashqar, Elhenawy
+**Year**: 2024
+**DOI**: 10.48550/arXiv.2406.08520
+**URL**: https://doi.org/10.48550/arXiv.2406.08520
 
-#### 16. The Use and Perceptions Towards AI Tools For Academic Writing Among University Students
+#### 37. Exploring students’ perspectives on Generative AI-assisted academic writing
+**Authors**: Kim, Yu, Detrick, Li
+**Year**: 2024
+**DOI**: 10.1007/s10639-024-12878-7
+**URL**: https://doi.org/10.1007/s10639-024-12878-7
+
+#### 38. Machine Learning Data Pipeline for the Democratization of AI
+**Authors**: DiCostanzo, Ayan, Jhawar, Allen, Patterson
+**Year**: 2023
+**DOI**: 10.1177/2327857923121029
+**URL**: https://doi.org/10.1177/2327857923121029
+
+#### 39. The Use and Perceptions Towards AI Tools For Academic Writing Among University Students
 **Authors**: Demirel
 **Year**: 2024
 **DOI**: 10.53463/innovltej.20240328
 **URL**: https://doi.org/10.53463/innovltej.20240328
 
-#### 17. Accelerating Earth Science Discovery via Multi-Agent LLM Systems
-**Authors**: Pantiukhin, Shapkin, Kuznetsov, Jost, Koldunov
-**Year**: 2025
-**DOI**: 10.48550/arXiv.2503.05854
-**URL**: https://doi.org/10.48550/arXiv.2503.05854
+#### 40. The Transformative Impact of AI-Powered Tools on Academic Writing: Perspectives of EFL University Students
+**Authors**: Selim
+**Year**: 2024
+**DOI**: 10.5539/ijel.v14n1p14
+**URL**: https://doi.org/10.5539/ijel.v14n1p14
 
-#### 18. Democratizing social media for health research: LLM-powered data analytics platform for NCDs
-**Authors**: Thippimanporn, Khamna, Wiratchawa, Intharah
+#### 41. AI-Enhanced Scholarly Communication: Transforming Peer Review, Knowledge Dissemination, and Academic Publishing Workflows in the Digital Era
+**Authors**: Huzaifa, Salih, Gul, Bukhari, Liaqat, Majeed
 **Year**: 2025
-**DOI**: 10.1371/journal.pone.0332484
-**URL**: https://doi.org/10.1371/journal.pone.0332484
+**DOI**: 10.64229/4qp06e84
+**URL**: https://doi.org/10.64229/4qp06e84
 
-#### 19. Ethical limits and suggestions for improving the use of AI in scientific research, academic publishing, and the peer review process, based on deontological and consequentialist viewpoints
-**Authors**: Daoudi
+#### 42. The future of academic publishing in India: Embracing innovations for quality and global recognition
+**Authors**: Gupta, Pandit
+**Year**: 2024
+**DOI**: 10.18231/j.ijlsit.2023.021
+**URL**: https://doi.org/10.18231/j.ijlsit.2023.021
+
+#### 43. PREDICTIVE MAINTENANCE IN INDUSTRIAL AUTOMATION: A SYSTEMATIC REVIEW OF IOT SENSOR TECHNOLOGIES AND AI ALGORITHMS
+**Authors**: Haque, Bajwa, Siddiqui, Ahmed
+**Year**: 2024
+**DOI**: 10.63125/hd2ac988
+**URL**: https://doi.org/10.63125/hd2ac988
+
+#### 44. Title: AI-Driven Predictive Maintenance in Smart Agriculture: A Comprehensive Review
+**Authors**: Prajapati
 **Year**: 2025
-**DOI**: 10.1007/s44217-025-00696-z
-**URL**: https://doi.org/10.1007/s44217-025-00696-z
+**DOI**: 10.55041/isjem03406
+**URL**: https://doi.org/10.55041/isjem03406
 
-#### 20. A foundation model for human-AI collaboration in medical literature mining
-**Authors**: Wang, Cao, Jin, Chan, Wan, Afzali, Cho, Choi, Emamverdi, Gill, Kim, Li, Liu, Ong, Rousseau, Sheikh, Wei, Xu, Zallek, Kim, Peng, Lu, Sun
+#### 45. Assessing generative A.I. through the lens of the 2023 Gartner Hype Cycle for Emerging Technologies: a collaborative autoethnography
+**Authors**: King, Prasetyo
+**Year**: 2023
+**DOI**: 10.3389/feduc.2023.1300391
+**URL**: https://doi.org/10.3389/feduc.2023.1300391
+
+#### 46. Stakeholder engagement in food and health innovation research programming – key learnings and policy recommendations from the INPROFOOD project
+**Authors**: Gemen, Breda, Coutinho, Celemín, Khan, Kugelberg, Newton, Rowe, Strähle, Timotijevic, Urban, Zolotonosa, Hadwiger
+**Year**: 2015
+**DOI**: 10.1111/NBU.12127
+**URL**: https://doi.org/10.1111/NBU.12127
+
+#### 47. Responsible AI—Two Frameworks for Ethical Design Practice
+**Authors**: Peters, Vold, Robinson, Calvo
+**Year**: 2020
+**DOI**: 10.1109/TTS.2020.2974991
+**URL**: https://doi.org/10.1109/TTS.2020.2974991
+
+#### 48. Challenges and efforts in managing AI trustworthiness risks: a state of knowledge
+**Authors**: Polemi, Praça, Kioskli, Bécue
+**Year**: 2024
+**DOI**: 10.3389/fdata.2024.1381163
+**URL**: https://doi.org/10.3389/fdata.2024.1381163
+
+#### 49. Problematisation Analytics: New Foucauldian Direction in Theory and Method for Cybersecurity and AI Governance Research
+**Authors**: Egbobamwonyi-Bedaux
 **Year**: 2025
-**DOI**: 10.48550/arXiv.2501.16255
-**URL**: https://doi.org/10.48550/arXiv.2501.16255
+**DOI**: 10.60097/acig/210682
+**URL**: https://doi.org/10.60097/acig/210682
 
-#### 21. European Union. European Commission: Communications on intellectual property rights enforcement
-**Authors**: Fathaigh
-**Year**: 2018
+#### 50. A comprehensive AI policy education framework for university teaching and learning
+**Authors**: Chan
+**Year**: 2023
+**DOI**: 10.1186/s41239-023-00408-3
+**URL**: https://doi.org/10.1186/s41239-023-00408-3
+
+#### 51. EVOLUTION OF QUALITY CONTROL SYSTEMS: FROM TAYLOR TO MODERN STANDARDS
+**Authors**: Solonytska, Popel, Mardar, Ganchev
+**Year**: 2024
+**DOI**: 10.15673/swonaft.v88i2.3055
+**URL**: https://doi.org/10.15673/swonaft.v88i2.3055
+
+#### 52. AI techniques for automated penetration testing in MQTT networks: a literature investigation
+**Authors**: Alencar, Fernandes, Lima, Silva
+**Year**: 2024
+**DOI**: 10.1080/1206212X.2024.2443504
+**URL**: https://doi.org/10.1080/1206212X.2024.2443504
+
+#### 53. DGoT: Dynamic Graph of Thoughts for Scientific Abstract Generation
+**Authors**: Ning, Zhao, Liu, Yang
+**Year**: 2024
+**DOI**: 10.48550/arXiv.2403.17491
+**URL**: https://doi.org/10.48550/arXiv.2403.17491
+
+#### 54. USID and Pycroscopy -- Open frameworks for storing and analyzing spectroscopic and imaging data
+**Authors**: Somnath, Smith, Laanait, Vasudevan, Ievlev, Belianinov, Lupini, Shankar, Kalinin, Jesse
+**Year**: 2019
 **DOI**: 
-**URL**: https://www.semanticscholar.org/paper/e3c8e014d6e1986a1c8fc2219dc9a44d893cbe5c
+**URL**: https://www.semanticscholar.org/paper/8461c18071130e1efe83c43ecec7da3a1eaa2a68
 
-#### 22. AI-driven risk identification and mitigation strategies for government projects
-**Authors**: Salifu
+#### 55. The future of language education: Teachers’ perceptions about the surge of AI writing tools
+**Authors**: Zimotti, Frances, Whitaker
+**Year**: 2024
+**DOI**: 10.29140/tltl.v6n1.1136
+**URL**: https://doi.org/10.29140/tltl.v6n1.1136
+
+#### 56. Revolutionizing Data Accessibility: AI-Driven Natural Language Interfaces for Democratizing Data Discovery
+**Authors**: Katam
 **Year**: 2025
-**DOI**: 10.30574/ijsra.2025.15.3.1454
-**URL**: https://doi.org/10.30574/ijsra.2025.15.3.1454
+**DOI**: 10.55041/ijsrem41620
+**URL**: https://doi.org/10.55041/ijsrem41620
 
-#### 23. Market Access and Compliance Innovation for Aibased Functional Safety Systems
-**Authors**: Myklebust
+#### 57. Leveraging AI for sustainable accounting: Developing models for environmental impact assessment and reporting
+**Authors**: Adelakun, Antwi, Ntiakoh, Eziefule
+**Year**: 2024
+**DOI**: 10.51594/farj.v6i6.1234
+**URL**: https://doi.org/10.51594/farj.v6i6.1234
+
+#### 58. Philosophical, Legal, Ethical, and Practical Considerations in the Emerging Use of Generative AI in Academic Journals: Guidelines for Research in Science Education (RISE)
+**Authors**: Tang, Cooper, Nielsen
+**Year**: 2024
+**DOI**: 10.1007/s11165-024-10192-3
+**URL**: https://doi.org/10.1007/s11165-024-10192-3
+
+#### 59. Intellectual property law and artificial intelligence in Uganda: Trending issues and future prospects
+**Authors**: Adebowale, Mohamed, Chukwuemeka, Shehu, Chima, Joshua, N.
+**Year**: 2024
+**DOI**: 10.59568/kiulj-2024-6-2-12
+**URL**: https://doi.org/10.59568/kiulj-2024-6-2-12
+
+#### 60. Use of an AI-powered Rewriting Support Software in Context with Other Tools: A Study of Non-Native English Speakers
+**Authors**: Ito, Yamashita, Kuribayashi, Hidaka, Suzuki, Gao, Jamieson, Inui
+**Year**: 2023
+**DOI**: 10.1145/3586183.3606810
+**URL**: https://doi.org/10.1145/3586183.3606810
+
+#### 61. Early Career Researcher Input to the European Strategy for Particle Physics Update: White Paper
+**Authors**: Arling, Burgman, Dimitriadi, Einhaus, Gall'en, Haddad, Huhta, Ilg, Klamka, Long, Madlener, Tarda, Musumeci, Mkekala, Pacchi, Pfaff, Reichelt, Reichenbach, Stapf, Ucci, Wallin, Watson, Addepalli, Alves, Amarinei, Barru'e, Brenner, Molin, Giorgi, Dudar, Giuli, Gurgone, Jes'us-Valls, Laudrain, Losekamm, Masełek, Naskar, Nebot-Guinot, Pesut, Poschl, Segarra, Taylor, Vana, Wakeling, Desy, Hamburg, Germany, University, Stockholm, Sweden, Technology, Technology, Karlsruhe, University, Uppsala, Auvergne, CNRSIN2p3, Auvergne, France, Jyvaskyla, Jyvaskyla, Finland, Zurich, Zurich, Switzerland, Warsaw, Warsaw, Poland, University, Prague, Republic, Institute, Copenhagen, Denmark., Corpuscular, Valencia, Paterna, Spain, Oklahoma, Norman, Oklahoma, Usa, London, London, Kingdom., Cern, Geneva, Bonn, Bonn, Pavia, Pavia, Italy, Pavia, University, Lund, Edinburgh, Edinburgh, Laboratory, Park, Leprince-Ringuet, Polytechnique, Paris, Palaiseau, Geneva, Part'iculas, Lisbon, Portugal, Physics, Amsterdam, Netherlands., Phenomenology, University, Durham, Mainz, Mainz, Fisica, Vergata, Romé, INFN-SezionediRoma, Pisa, Pisa, Pisa, Ipmu, Utias, Tokyo, Kashiwa, Japan, Munich, Munich, Grenoble, Grenoble, Glasgow, Glasgow, Institute, Villigen, Science, Oxford, Oxford, Manchester, Manchester
 **Year**: 2025
-**DOI**: 10.1109/CAI64502.2025.00277
-**URL**: https://doi.org/10.1109/CAI64502.2025.00277
-
-#### 24. NATIONAL SECURITY POPULATION AND AGING PUBLIC SAFETY SCIENCE AND TECHNOLOGY SUBSTANCE ABUSE TERRORISM AND HOMELAND SECURITY TRANSPORTATION AND INFRASTRUCTURE WORKFORCE AND WORKPLACE The RAND
-**Authors**: Gates, Zellman, Moini
-**Year**: 2006
 **DOI**: 
-**URL**: https://www.semanticscholar.org/paper/7290419588e78de8cab795fedf7b85d58a7f854e
+**URL**: https://www.semanticscholar.org/paper/e08acacabd47abb2c7533c2fe7af2ed3656ae4c6
 
-#### 25. AI implementation by the government in the sectors ofUrban Development, Health and Education
-**Authors**: Majumder
+#### 62. Integration of Automated Feedback Tools in EFL Academic Writing Classes: Teachers’ Perspective
+**Authors**: Merkviladze
+**Year**: 2024
+**DOI**: 10.31578/jebs.v10i1.323
+**URL**: https://doi.org/10.31578/jebs.v10i1.323
+
+#### 63. From Automation to Autonomy: A Survey on Large Language Models in Scientific Discovery
+**Authors**: ZHENG, Deng, Tsang, Wang, Bai, Wang, Song
 **Year**: 2025
-**DOI**: 10.30574/ijsra.2025.16.3.2533
-**URL**: https://doi.org/10.30574/ijsra.2025.16.3.2533
+**DOI**: 10.48550/arXiv.2505.13259
+**URL**: https://doi.org/10.48550/arXiv.2505.13259
 
-#### 26. OA2090. smartHEALTH: Driving digital transformation in healthcare and public services
-**Authors**: Katehakis, Filippidis, Makridaki, Dimitriadis, Kouroubali, Karamanis, Plexousakis
+#### 64. Solving Zebra Puzzles Using Constraint-Guided Multi-Agent Systems
+**Authors**: Berman, McKeown, Ray
+**Year**: 2024
+**DOI**: 10.48550/arXiv.2407.03956
+**URL**: https://doi.org/10.48550/arXiv.2407.03956
+
+#### 65. OpenSAFELY: a platform for analysing electronic health records designed for reproducible research
+**Authors**: Nab, Schaffer, Hulme, Devito, Dillingham, Wiedemann, Andrews, Curtis, Fisher, Green, Massey, Walters, Higgins, Cunningham, Morley, Mehrkar, Hart, Davy, Evans, Hickman, Inglesby, Morton, Smith, Ward, O'Dwyer, Maude, Bridges, Butler-Cole, Stables, Stokes, Bates, Cockburn, Hester, Parry, Bhaskaran, Schultze, Rentsch, Mathur, Tomlinson, Williamson, Smeeth, Walker, Bacon, Mackenna, Goldacre
+**Year**: 2024
+**DOI**: 10.1002/pds.5815
+**URL**: https://doi.org/10.1002/pds.5815
+
+#### 66. Generative Knowledge Production Pipeline Driven by Academic Influencers
+**Authors**: Feher, Demeter
 **Year**: 2025
-**DOI**: 10.1093/eurpub/ckaf165.022
-**URL**: https://doi.org/10.1093/eurpub/ckaf165.022
+**DOI**: 10.48550/arXiv.2505.24681
+**URL**: https://doi.org/10.48550/arXiv.2505.24681
 
-#### 27. ETHICAL CONSIDERATIONS IN THE USE OF AI FOR ACADEMIC RESEARCH AND SCIENTIFIC DISCOVERY: A NARRATIVE REVIEW
-**Authors**: Shah, Shahzad, Saleem, Taj, Amin, Almagharbeh, Muhammad, Durvesh
+#### 67. A Proposal for Research on the Application of AI/ML in ITPM: Intelligent Project Management
+**Authors**: Mishra, Tripathi, Khazanchi
+**Year**: 2023
+**DOI**: 10.4018/ijitpm.315290
+**URL**: https://doi.org/10.4018/ijitpm.315290
+
+#### 68. Application of AI in Sepsis: Citation Network Analysis and Evidence Synthesis
+**Authors**: Wu, Islam, Poly, Lin
+**Year**: 2024
+**DOI**: 10.2196/54490
+**URL**: https://doi.org/10.2196/54490
+
+#### 69. ACADEMIC INTEGRITY IN THE ERA OF ARTIFICIAL INTELLIGENCE: CHALLENGES AND OPPORTUNITIES FOR STUDENTS
+**Authors**: Partyko, Smyrnova, Zhytomyrska
+**Year**: 2024
+**DOI**: 10.32782/2663-6085/2024/72.53
+**URL**: https://doi.org/10.32782/2663-6085/2024/72.53
+
+#### 70. HUMAN-AI COLLABORATION IN SCIENCE EDUCATION: CHALLENGES AND STEPS FORWARD
+**Authors**: Yang
 **Year**: 2025
-**DOI**: 10.71000/jfesgv69
-**URL**: https://doi.org/10.71000/jfesgv69
+**DOI**: 10.33225/jbse/25.24.800
+**URL**: https://doi.org/10.33225/jbse/25.24.800
 
-#### 28. Books Received
-**Authors**: Ahmad, Becher, Dm, Aitken, Beals, Brennan, Psilos, Westebbe, Goldsmith, Hickman, Reveived, Hildebrand, Liu
-**Year**: 1965
-**DOI**: 10.1086/450135
-**URL**: https://doi.org/10.1086/450135
+#### 71. Crafting personalized learning paths with AI for lifelong learning: a systematic literature review
+**Authors**: Bayly-Castaneda, Ramirez-Montoya, Morita-Alexander, Schrader, Awidi
+**Year**: 2024
+**DOI**: 10.3389/feduc.2024.1424386
+**URL**: https://doi.org/10.3389/feduc.2024.1424386
 
-#### 29. NATIONAL SECURITY POPULATION AND AGING PUBLIC SAFETY SCIENCE AND TECHNOLOGY SUBSTANCE ABUSE TERRORISM AND HOMELAND SECURITY TRANSPORTATION AND INFRASTRUCTURE WORKFORCE AND WORKPLACE The RAND
-**Authors**: Gates, Zellman, Moini
-**Year**: 2006
+#### 72. Papers-to-Posts: Supporting Detailed Long-Document Summarization with an Interactive LLM-Powered Source Outline
+**Authors**: Radensky, Weld, Chang, Siangliulue, Bragg
+**Year**: 2024
 **DOI**: 
-**URL**: https://www.semanticscholar.org/paper/7290419588e78de8cab795fedf7b85d58a7f854e
+**URL**: https://www.semanticscholar.org/paper/fd345f081a344867b0d772fb497b31146a94d04f
 
-#### 30. IEEE AI Standards for Agentic Systems
-**Authors**: Tong, Li, Raghavan, Wen, Gray, Paul, Liang, Zalewski, Yang, Tambouratzis, Ang
+#### 73. The Spark Effect: On Engineering Creative Diversity in Multi-Agent AI Systems
+**Authors**: Doudkin, Voelker, Borries
 **Year**: 2025
-**DOI**: 10.1109/CAI64502.2025.00269
-**URL**: https://doi.org/10.1109/CAI64502.2025.00269
+**DOI**: 10.48550/arXiv.2510.15568
+**URL**: https://doi.org/10.48550/arXiv.2510.15568
 
-#### 31. Integrating Privacy-Preserving AI Models into AI Governance Frameworks
-**Authors**: Hundeyin, Adegbenro, Rindap, Adaba
+#### 74. The Value of Open Source AI for APEC Economies
+**Authors**: Hermansen, Sandberg
 **Year**: 2025
-**DOI**: 10.38124/ijisrt/25oct209
-**URL**: https://doi.org/10.38124/ijisrt/25oct209
+**DOI**: 10.70828/fcup6837
+**URL**: https://doi.org/10.70828/fcup6837
+
+#### 75. Evaluation of AI content generation tools for verification of academic integrity in higher education
+**Authors**: Saqib, Zia
+**Year**: 2024
+**DOI**: 10.1108/jarhe-10-2023-0470
+**URL**: https://doi.org/10.1108/jarhe-10-2023-0470
+
+#### 76. The role of Open Access Data in democratizing healthcare AI: A pathway to research enhancement, patient well-being and treatment equity in Andalusia, Spain
+**Authors**: Ritoré, Jiménez, González, Rejón-Parrilla, Hervás, Toro, Parra-Calderón, Celi, Túnez, Hoz
+**Year**: 2024
+**DOI**: 10.1371/journal.pdig.0000599
+**URL**: https://doi.org/10.1371/journal.pdig.0000599
+
+#### 77. Science in the Era of ChatGPT, Large Language Models and AI: Challenges for Research Ethics Review and How to Respond
+**Authors**: Pournaras
+**Year**: 2023
+**DOI**: 10.48550/arXiv.2305.15299
+**URL**: https://doi.org/10.48550/arXiv.2305.15299
+
+#### 78. AI-assisted prescreening of biomedical research proposals: ethical considerations and the pilot case of “la Caixa” Foundation
+**Authors**: Cortés, Parra-Rojas, Pérez-Lozano, Arcara, Vargas-Sánchez, Fernández-Montenegro, Casado-Marín, Rondelli, López-Verdeguer
+**Year**: 2024
+**DOI**: 10.1017/dap.2024.41
+**URL**: https://doi.org/10.1017/dap.2024.41
+
+#### 79. Exploring the impact of ai adoption in recruitment on positive organizational shock and career development: the moderating role of family support and emotional intelligence
+**Authors**: Roya
+**Year**: 2024
+**DOI**: 10.46727/c.17-18-05-2024.p345-353
+**URL**: https://doi.org/10.46727/c.17-18-05-2024.p345-353
+
+#### 80. REMOR: Automated Peer Review Generation with LLM Reasoning and Multi-Objective Reinforcement Learning
+**Authors**: Taechoyotin, Acuna
+**Year**: 2025
+**DOI**: 10.48550/arXiv.2505.11718
+**URL**: https://doi.org/10.48550/arXiv.2505.11718
+
+#### 81. Science Across Languages: Assessing LLM Multilingual Translation of Scientific Papers
+**Authors**: Kleidermacher, Zou
+**Year**: 2025
+**DOI**: 10.48550/arXiv.2502.17882
+**URL**: https://doi.org/10.48550/arXiv.2502.17882
+
+#### 82. War and Peace (WarAgent): Large Language Model-based Multi-Agent Simulation of World Wars
+**Authors**: Hua, Fan, Li, Mei, Ji, Ge, Hemphill, Zhang
+**Year**: 2023
+**DOI**: 10.48550/arXiv.2311.17227
+**URL**: https://doi.org/10.48550/arXiv.2311.17227
+
+#### 83. PyC2MC: An Open-Source Software Solution for Visualization and Treatment of High-Resolution Mass Spectrometry Data.
+**Authors**: Sueur, Maillard, Lacroix-Andrivet, Rüger, Giusti, Lavanant, Afonso
+**Year**: 2023
+**DOI**: 10.1021/jasms.2c00323
+**URL**: https://doi.org/10.1021/jasms.2c00323
+
+#### 84. Adoption of AI writing tools among academic researchers: A Theory of Reasoned Action approach
+**Authors**: Al-bukhrani, Alrefaee, Tawfik
+**Year**: 2025
+**DOI**: 10.1371/journal.pone.0313837
+**URL**: https://doi.org/10.1371/journal.pone.0313837
+
+#### 85. NNsight and NDIF: Democratizing Access to Open-Weight Foundation Model Internals
+**Authors**: Fiotto-Kaufman, Loftus, Todd, Brinkmann, Pal, Troitskii, Ripa, Belfki, Rager, Juang, Mueller, Marks, Sharma, Lucchetti, Prakash, Brodley, Guha, Bell, Wallace, Bau
+**Year**: 2024
+**DOI**: 
+**URL**: https://www.semanticscholar.org/paper/da0525d1d4a5af0d6cc4f55207f7196e6ef122a7
 
 ---
 
@@ -549,23 +615,7 @@
 
 The following topics did not return valid citations:
 
-- OECD 'AI policy frameworks for education'
-- BCG white paper 'transforming research with AI'
-- IEEE standards 'AI trustworthiness and transparency'
-- Deloitte report 'AI in professional services writing'
-- IBM Research 'multi-agent AI for scientific simulation'
-- impact of open source LLMs on academic collaboration
-- multi-agent LLM architecture for complex document generation
-- NIST 'best practices for AI model governance in research'
-- OECD 'open science policy and AI'
-- ethical guidelines for AI in scholarly communication
-- impact of AI on research funding and grants
-- AI tools for citation discovery and management
-- open source LLMs for academic writing support
-- author:Sutton 'reinforcement learning multi-agent'
-- OECD 'digital skills and AI for researchers'
-- RAND Corporation 'ethical implications of AI in research'
-- UNESCO 'AI for sustainable development goals research'
-- ISO 'AI quality management systems'
-- McKinsey 'AI's potential for societal impact'
-- OECD 'AI and the future of work in academia'
+- RAND Corporation AI for scientific discovery
+- McKinsey report AI and the future of work research
+- OECD principles on AI research and innovation
+- Automated research synthesis AI

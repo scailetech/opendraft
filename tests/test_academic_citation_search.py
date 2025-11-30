@@ -643,6 +643,158 @@ class TestMultiSourceFallback:
             assert len(result) > 0
             assert result[0].title == "Test Paper"
 
+    @pytest.mark.integration
+    def test_multi_source_all_apis_fail_gracefully(self):
+        """Test multi-source returns empty list when all APIs fail."""
+        from unittest.mock import patch
+        from utils.exceptions import NetworkError, CitationFetchError
+
+        with patch('utils.academic_citation_search.search_semantic_scholar') as mock_ss, \
+             patch('utils.academic_citation_search.search_crossref') as mock_cr, \
+             patch('utils.academic_citation_search.search_arxiv') as mock_arx:
+
+            # All APIs fail with different error types
+            mock_ss.side_effect = NetworkError(
+                endpoint="api.semanticscholar.org",
+                reason="Connection timeout"
+            )
+            mock_cr.side_effect = CitationFetchError(
+                citation_id="query:test",
+                source="CrossRef",
+                reason="API error"
+            )
+            mock_arx.side_effect = NetworkError(
+                endpoint="export.arxiv.org",
+                reason="Connection refused"
+            )
+
+            # Should return empty list (graceful degradation)
+            result = search_multi_source("test query", limit=10)
+            assert result == []
+
+            # Verify all APIs were attempted
+            assert mock_ss.called
+            assert mock_cr.called
+            assert mock_arx.called
+
+    @pytest.mark.integration
+    def test_multi_source_fallback_priority(self):
+        """Test multi-source respects fallback priority order."""
+        from unittest.mock import patch, call
+
+        mock_citation_ss = Citation(
+            title="Semantic Scholar Paper",
+            authors=["SS Author"],
+            year=2020,
+            venue="SS Venue",
+            doi="10.1111/ss"
+        )
+        mock_citation_cr = Citation(
+            title="CrossRef Paper",
+            authors=["CR Author"],
+            year=2020,
+            venue="CR Venue",
+            doi="10.2222/cr"
+        )
+
+        with patch('utils.academic_citation_search.search_semantic_scholar') as mock_ss, \
+             patch('utils.academic_citation_search.search_crossref') as mock_cr, \
+             patch('utils.academic_citation_search.search_arxiv') as mock_arx:
+
+            # All APIs succeed
+            mock_ss.return_value = [mock_citation_ss]
+            mock_cr.return_value = [mock_citation_cr]
+            mock_arx.return_value = []
+
+            # Call with low limit to trigger early stopping
+            result = search_multi_source("test query", limit=1, prefer_source="semantic_scholar")
+
+            # Should call Semantic Scholar first
+            assert mock_ss.called
+            # Should get Semantic Scholar result
+            assert len(result) >= 1
+
+            # Verify per-source limit calculation
+            expected_limit = 1 // 3 + 1  # per_source_limit = limit // len(sources) + 1
+            mock_ss.assert_called_once_with("test query", limit=expected_limit)
+
+    @pytest.mark.integration
+    def test_multi_source_stops_when_limit_reached(self):
+        """Test multi-source stops calling APIs once limit is reached."""
+        from unittest.mock import patch
+
+        # Create more citations than limit
+        mock_citations = [
+            Citation(
+                title=f"Paper {i}",
+                authors=[f"Author {i}"],
+                year=2020,
+                venue="Test Venue",
+                doi=f"10.1234/test{i}"
+            )
+            for i in range(15)
+        ]
+
+        with patch('utils.academic_citation_search.search_semantic_scholar') as mock_ss, \
+             patch('utils.academic_citation_search.search_crossref') as mock_cr, \
+             patch('utils.academic_citation_search.search_arxiv') as mock_arx:
+
+            # First API returns enough citations to exceed limit
+            mock_ss.return_value = mock_citations[:12]
+            mock_cr.return_value = mock_citations[12:]
+            mock_arx.return_value = []
+
+            # Call with limit of 10
+            result = search_multi_source("test query", limit=10)
+
+            # Should return exactly 10 citations (limit enforced)
+            assert len(result) == 10
+
+            # Should call Semantic Scholar
+            assert mock_ss.called
+
+            # May or may not call CrossRef/arXiv (depends on early stopping logic)
+            # The key is total results <= limit
+
+    @pytest.mark.integration
+    def test_multi_source_exception_context_logged(self):
+        """Test that exception context is properly logged when APIs fail."""
+        from unittest.mock import patch
+        from utils.exceptions import APIQuotaExceededError
+        import logging
+
+        # Capture log messages
+        with patch('utils.academic_citation_search.logger') as mock_logger:
+            with patch('utils.academic_citation_search.search_semantic_scholar') as mock_ss, \
+                 patch('utils.academic_citation_search.search_crossref') as mock_cr, \
+                 patch('utils.academic_citation_search.search_arxiv') as mock_arx:
+
+                # First API exceeds quota
+                mock_ss.side_effect = APIQuotaExceededError(
+                    api_name="Semantic Scholar",
+                    reset_time="2024-01-01 00:00:00"
+                )
+                # Second API succeeds
+                mock_cr.return_value = [Citation(
+                    title="Success Paper",
+                    authors=["Author"],
+                    year=2020,
+                    venue="Venue",
+                    doi="10.1234/test"
+                )]
+                mock_arx.return_value = []
+
+                # Should succeed with fallback
+                result = search_multi_source("test query", limit=5)
+                assert len(result) > 0
+
+                # Verify warning was logged
+                mock_logger.warning.assert_called()
+
+                # Check that warning message contains relevant info
+                warning_calls = [str(call) for call in mock_logger.warning.call_args_list]
+                assert any("semantic_scholar" in str(call).lower() for call in warning_calls)
+
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v', '--tb=short'])

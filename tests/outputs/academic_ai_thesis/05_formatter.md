@@ -1,7 +1,7 @@
 # Formatted Paper Outline
 
-**Format Applied:** IMRaD (adapted for theoretical/case study paper)
-**Target Journal:** Technology/Social Impact Journal
+**Format Applied:** IMRaD (adapted for Theoretical Analysis with Case Studies)
+**Target Journal:** Journal of AI & Society (also suitable for Computers & Education, Journal of Scholarly Publishing, AI & Ethics)
 **Word Limit:** 8,000-10,000 words
 **Citation Style:** APA 7th Edition
 
@@ -14,18 +14,16 @@
 - **Line Spacing:** Double
 - **Margins:** 1 inch all sides
 - **Page Numbers:** Top right corner
-- **Headings:** Unnumbered for main sections (APA style), numbered for subsections (as per template guidance, adapted to APA levels)
+- **Headings:** Numbered (main sections)
 
-### Section Heading Levels (APA 7th Edition Style)
-- **Level 1:** Centered, Bold, Title Case (e.g., **Abstract**, **Introduction**, **References**)
-- **Level 2:** Flush Left, Bold, Title Case (e.g., **1.1 Background and Motivation**)
-- **Level 3:** Flush Left, Bold Italic, Title Case (e.g., *1.1.1 Historical Context*)
-- **Level 4:** Indented, Bold, Title Case, ending with a period. Text begins on the same line.
-- **Level 5:** Indented, Bold Italic, Title Case, ending with a period. Text begins on the same line.
+### Section Heading Levels
+- **Level 1:** Bold, Centered, Title Case (e.g., **1. INTRODUCTION**)
+- **Level 2:** Bold, Left-Aligned, Title Case (e.g., **1.1 Background and Motivation**)
+- **Level 3:** Bold, Indented, Sentence case (e.g., **1.1.1 Current AI Tools.**)
 
 ### Citation Format
 - **In-text:** (Author, Year)
-- **Bibliography:** Full APA 7th Edition format. Entries should include author(s), year of publication, title of work, and source information (e.g., journal name and volume/issue for articles, publisher for books, DOI/URL).
+- **Bibliography:** Full APA 7th Edition format specification
 
 ### ⚠️ CITATION REQUIREMENTS - CRITICAL
 
@@ -71,268 +69,270 @@
 ## Formatted Structure
 
 ### Title
-**Format:** Bold, Centered, 14pt (or 16pt, check specific journal guidelines)
+**Format:** Bold, Centered, 14pt
 **Max Length:** 100 characters
-**Suggested:** **Democratizing Academic Research: An Open-Source Multi-Agent AI Framework for Holistic Scholarly Advancement**
+**Suggested:** **OpenDraft: A Multi-Agent AI Framework for Democratizing Academic Writing and Fostering Critical Thinking**
 
 ### Author Information
 **Format:**
-- Name(s): Full Name (e.g., John Doe)
-- Affiliation(s): Department, University, City, Country
-- Email(s): Corresponding author email clearly marked
-- ORCID: [Optional, recommended]
+- Name(s): Full Name, Centered
+- Affiliation(s): Department, University, City, State, Country, Centered
+- Email(s): Corresponding author email, Centered
+- ORCID: [Optional, include if available]
 
 ### Abstract
-**Heading:** **Abstract** (Level 1, Centered, Bold)
+**Heading:** Abstract (Bold, Centered)
 **Length:** 250-300 words
 **Structure:**
-- Background (1-2 sentences): The accelerating pace of research demands innovative tools, yet current AI applications in academia remain fragmented and raise significant ethical concerns.
-- Objective (1 sentence): This paper proposes a novel, open-source, multi-agent AI framework to democratize academic writing and research.
-- Methods (2-3 sentences): We outline a theoretical framework for holistic AI integration across the research lifecycle, emphasizing ethical application and domain-specific support. Illustrative case studies demonstrate its potential.
-- Results (2-3 sentences): The framework addresses limitations in current AI tools by providing comprehensive, adaptable, and ethically guided assistance for all stages of academic inquiry, accelerating knowledge creation.
-- Conclusions (1-2 sentences): This multi-agent approach offers profound implications for scholarly communication, fostering an inclusive and efficient research ecosystem.
+- Background (1-2 sentences: Inequity in academic writing support, rise of AI).
+- Objective (1 sentence: Introduce OpenDraft as a solution to democratize writing and foster critical thinking).
+- Theoretical Framework/Approach (2-3 sentences: Multi-agent AI, OpenDraft's architecture, ethical and pedagogical foundations).
+- Key Insights/Case Studies (2-3 sentences: How OpenDraft addresses limitations of current tools and supports diverse writing tasks).
+- Conclusions (1-2 sentences: Significance for equitable human-AI collaboration in scholarship).
 
-**Keywords:** Multi-agent AI, Academic Writing, Research Democratization, Scholarly Communication, AI Ethics, Open Source
+**Keywords:** 3-6 keywords (e.g., Multi-agent AI, Academic Writing, Critical Thinking, Democratization, AI Ethics, OpenDraft)
 
 ---
 
-## Introduction
-**Heading:** **Introduction** (Level 1, Centered, Bold)
-**Section Number:** (No number for main APA sections)
-**Length:** 900-1100 words
+## 1. Introduction
+**Section Number:** 1
+**Length:** 900-1000 words
 **Subsections:**
 
 ### 1.1 Background and Motivation
-**Heading:** **Background and Motivation** (Level 2, Flush Left, Bold)
-[Format specifications: Narrative paragraphs establishing the context of academic research challenges and the rise of AI. Emphasize the need for holistic solutions.]
+**Format:** Left-aligned, Title Case, Bold
+*   Establish academic writing as a critical skill.
+*   Highlight the inequitable access to high-quality writing support, creating barriers to participation and success in academia.
+*   Introduce the growing role of AI in writing and its potential.
 
 ### 1.2 Problem Statement
-**Heading:** **Problem Statement** (Level 2, Flush Left, Bold)
-[Format specifications: Clearly articulate the fragmentation of existing AI tools, lack of holistic integration, and ethical concerns in academic AI applications. Connect to the need for democratization.]
+**Format:** Left-aligned, Title Case, Bold
+*   Articulate the limitations and concerns of current single-agent AI writing tools (e.g., academic integrity, critical thinking erosion, lack of pedagogical depth).
+*   Frame this as a gap in ethical, equitable, and effective AI support.
 
-### 1.3 Research Question and Objectives
-**Heading:** **Research Question and Objectives** (Level 2, Flush Left, Bold)
-**Research Question:** How can a multi-agent AI framework democratize academic writing and research, addressing current limitations in holistic AI integration, ethical application, and domain-specific support across the research lifecycle?
-**List format for objectives:**
-1.  To critically analyze the limitations of current AI applications in academic writing and research.
-2.  To propose a novel, open-source, multi-agent AI theoretical framework for holistic scholarly advancement.
-3.  To explore the ethical implications and governance mechanisms required for responsible AI integration in research.
-4.  To demonstrate the potential of this framework through illustrative case studies across diverse research stages.
+### 1.3 Research Question
+**Format:** Left-aligned, Title Case, Bold
+*   Clearly state the research question: "How can a multi-agent AI system like OpenDraft democratize academic writing by providing equitable, ethical, and pedagogically sound support that fosters critical thinking and addresses the limitations of current AI tools?"
 
-### 1.4 Contributions
-**Heading:** **Contributions** (Level 2, Flush Left, Bold)
-**Bullet format:**
--   **Conceptual Framework:** Introduction of a novel multi-agent AI architecture designed for the entire research lifecycle.
--   **Ethical Integration:** Emphasis on ethical considerations and a framework for responsible AI application in academia.
--   **Democratization Model:** A theoretical model for making advanced research tools accessible and adaptable to diverse domains.
--   **Future Research Agenda:** Identification of key areas for future development and implementation of such frameworks.
+### 1.4 Thesis Statement and Contributions
+**Format:** Left-aligned, Title Case, Bold
+*   **Thesis Statement:** Multi-agent AI systems, exemplified by the OpenDraft framework, offer a novel and robust approach to democratize academic writing by providing comprehensive, adaptive, and ethically grounded support that actively fosters critical thinking and intrinsic motivation, thereby mitigating key challenges posed by current single-agent AI tools.
+*   **Contributions:**
+    -   Proposing a novel multi-agent AI framework (OpenDraft) for academic writing.
+    -   Addressing critical issues of equity, ethics, and pedagogy in AI writing tools.
+    -   Demonstrating how multi-agent systems can foster critical thinking and intrinsic motivation.
+    -   Providing conceptual case studies to illustrate practical application.
 
 ### 1.5 Paper Organization
-**Heading:** **Paper Organization** (Level 2, Flush Left, Bold)
-[Standard paragraph: Briefly outline the structure of the remainder of the paper, guiding the reader through the subsequent sections.]
+**Format:** Left-aligned, Title Case, Bold
+*   Briefly outline the structure of the paper (e.g., "The remainder of this paper is organized as follows...").
 
 ---
 
-## 2. Literature Review: Current AI in Academic Research
-**Heading:** **Literature Review: Current AI in Academic Research** (Level 1, Centered, Bold)
-**Section Number:** (No number for main APA sections)
-**Length:** 2300-2700 words
-**Organization:** Thematic subsections, critically evaluating existing AI tools and identifying gaps.
+## 2. Related Work / Literature Review
+**Section Number:** 2
+**Length:** 1800-2000 words
+**Organization:** Thematic subsections, building towards the identified research gap.
 
-### 2.1 Task-Specific AI Tools in Academia
-**Heading:** **2.1 Task-Specific AI Tools in Academia** (Level 2, Flush Left, Bold)
-[Format: Narrative discussion of AI tools for specific tasks (e.g., grammar checking, citation management, text generation, data analysis). Focus on their utility and inherent limitations when viewed holistically.]
+### 2.1 The Landscape of Academic Writing Support
+**Format:** Left-aligned, Title Case, Bold
+*   Overview of traditional academic writing support (writing centers, peer review, mentorship).
+*   Discussion of their strengths and inherent limitations regarding scalability and accessibility.
 
-#### 2.1.1 AI for Text Generation and Editing
-**Heading:** *2.1.1 AI for Text Generation and Editing* (Level 3, Flush Left, Bold Italic)
-[Discuss tools like GPT models, Grammarly, etc.]
+### 2.2 Evolution and Impact of AI in Writing
+**Format:** Left-aligned, Title Case, Bold
+*   Early AI writing tools and their functionalities.
+*   The advent of large language models (LLMs) and their capabilities (e.g., content generation, summarization, grammar checking).
+*   Examination of the reported benefits (efficiency, accessibility for some tasks).
 
-#### 2.1.2 AI for Data Analysis and Visualization
-**Heading:** *2.1.2 AI for Data Analysis and Visualization* (Level 3, Flush Left, Bold Italic)
-[Discuss tools like automated statistical analysis, visualization generators.]
+### 2.3 Challenges and Ethical Concerns of Current AI Writing Tools
+**Format:** Left-aligned, Title Case, Bold
+*   **2.3.1 Academic Integrity and Plagiarism:** Discussion of detection, prevention, and the blurry lines of AI assistance.
+*   **2.3.2 Impact on Critical Thinking and Learning Outcomes:** Concerns about over-reliance, reduced cognitive effort, and superficial learning.
+*   **2.3.3 Bias and Equity:** How existing tools might perpetuate biases or be inaccessible to certain populations.
+*   **2.3.4 Transparency and Explainability:** Lack of insight into AI decision-making processes.
 
-#### 2.1.3 AI for Information Retrieval and Synthesis
-**Heading:** *2.1.3 AI for Information Retrieval and Synthesis* (Level 3, Flush Left, Bold Italic)
-[Discuss tools for literature search, summarization, knowledge graphing.]
+### 2.4 Multi-Agent Systems in Educational Contexts
+**Format:** Left-aligned, Title Case, Bold
+*   Review of existing multi-agent AI applications in education and learning.
+*   Highlight the benefits of multi-agent architectures (specialization, collaboration, robustness, adaptability).
 
-### 2.2 Ethical Considerations and Bias in Academic AI
-**Heading:** **2.2 Ethical Considerations and Bias in Academic AI** (Level 2, Flush Left, Bold)
-[Format: Critical discussion on algorithmic bias, data privacy, intellectual property, and academic integrity issues arising from current AI use.]
-
-### 2.3 Gaps in Holistic AI Integration Across the Research Lifecycle
-**Heading:** **2.3 Gaps in Holistic AI Integration Across the Research Lifecycle** (Level 2, Flush Left, Bold)
-[Format: Synthesis paragraph identifying the fragmentation of existing tools and the absence of a unified, ethically-governed framework that supports the entire research process from ideation to dissemination.]
-
-**Table 1:** Summary of Current AI Tools and Identified Gaps
-| Category of Tool | Examples | Strengths | Limitations/Gaps |
-|------------------|----------|----------|-----------------|
-| Text Generation  | ChatGPT, Jasper | Draft generation, brainstorming | Lack of domain expertise, ethical concerns, factual inaccuracies, limited integration |
-| Data Analysis    | IBM Watson | Pattern recognition, prediction | Requires expert input, black-box issues, data dependency |
-| Literature Review| Elicit, Scite | Summarization, citation analysis | Limited contextual understanding, potential for bias in synthesis |
-| **Holistic Integration** | (Currently lacking) | - | No unified ethical framework, fragmented support, limited domain adaptability |
-*Source: Adapted from various scholarly works (Author, Year) [VERIFY]*
+### 2.5 Summary and Research Gap
+**Format:** Left-aligned, Title Case, Bold
+*   Synthesize the literature, emphasizing the gap between the potential of AI for writing support and the current limitations concerning ethics, pedagogy, and fostering critical thinking.
+*   Position multi-agent AI as a promising paradigm to bridge this gap.
 
 ---
 
-## 3. Theoretical Framework: A Multi-Agent AI Architecture for Scholarly Advancement
-**Heading:** **Theoretical Framework: A Multi-Agent AI Architecture for Scholarly Advancement** (Level 1, Centered, Bold)
-**Section Number:** (No number for main APA sections)
-**Length:** 900-1100 words
-**Organization:** Detailed description of the proposed framework.
+## 3. Theoretical Framework: The OpenDraft Multi-Agent Architecture
+**Section Number:** 3
+**Length:** 1350-1500 words
+**This section adapts the "Methods" part of IMRaD for a theoretical paper, laying out the conceptual design.**
 
-### 3.1 Principles of Multi-Agent AI for Academic Research
-**Heading:** **3.1 Principles of Multi-Agent AI for Academic Research** (Level 2, Flush Left, Bold)
-[Format: Narrative describing the core principles: autonomy, social ability, reactivity, proactivity. Explain why a multi-agent approach is superior for holistic research support.]
+### 3.1 Principles of OpenDraft Design
+**Format:** Left-aligned, Title Case, Bold
+*   **3.1.1 Pedagogical Soundness:** Emphasize scaffolding, formative feedback, and active learning.
+*   **3.1.2 Ethical AI Design:** Transparency, fairness, privacy, and user agency.
+*   **3.1.3 Open Source and Accessibility:** Commitment to democratizing access and community-driven development.
+*   **3.1.4 Fostering Critical Thinking:** Strategies to encourage analysis, synthesis, and evaluation rather than automation.
 
-### 3.2 Proposed Multi-Agent Architecture
-**Heading:** **3.2 Proposed Multi-Agent Architecture** (Level 2, Flush Left, Bold)
-[Format: Detailed description of the framework's components, agent types, and their interactions.]
+### 3.2 Multi-Agent Architecture Overview
+**Format:** Left-aligned, Title Case, Bold
+*   High-level description of the system's components and their interactions.
+*   **Figure 1:** Conceptual Diagram of the OpenDraft Multi-Agent Framework
+    *   [Placeholder for a block diagram illustrating agents and their communication pathways.]
 
-#### 3.2.1 Core Agents and Their Roles
-**Heading:** *3.2.1 Core Agents and Their Roles* (Level 3, Flush Left, Bold Italic)
-[Example: Research Agent, Writing Agent, Ethical Review Agent, Data Agent, Collaboration Agent.]
+### 3.3 Key Agents and Their Roles
+**Format:** Left-aligned, Title Case, Bold
+*   **3.3.1 The Architect Agent:** (Structure, outline generation, logical flow)
+*   **3.3.2 The Crafter Agent(s):** (Content generation, drafting, refinement based on specific sections)
+*   **3.3.3 The Formatter Agent:** (Style, citation, compliance with academic standards)
+*   **3.3.4 The Critic Agent:** (Critical feedback, argument strength, counter-arguments, identifying logical fallacies)
+*   **3.3.5 The Citation Verifier Agent:** (Accuracy of sources, adherence to citation style, identifying [VERIFY] tags)
+*   **3.3.6 The Pedagogical Agent:** (Guides user learning, provides prompts for reflection, tracks skill development)
+*   **3.3.7 The Ethical AI Monitor:** (Ensures bias detection, promotes responsible AI use, flags potential integrity issues)
+*   **3.3.8 The User Interface Agent:** (Manages user interaction, displays feedback, allows user control)
 
-#### 3.2.2 Inter-Agent Communication and Workflow
-**Heading:** *3.2.2 Inter-Agent Communication and Workflow* (Level 3, Flush Left, Bold Italic)
-[Describe how agents interact, share information, and manage the research lifecycle.]
-
-**Figure 1:** Conceptual Diagram of the Multi-Agent AI Framework
-[Placeholder for a conceptual diagram illustrating the agents, their functions, and interconnections within the research lifecycle. Ensure caption follows APA format: *Figure 1. Conceptual diagram of the proposed multi-agent AI framework for scholarly advancement.*]
-
-### 3.3 Open-Source and Adaptability Considerations
-**Heading:** **3.3 Open-Source and Adaptability Considerations** (Level 2, Flush Left, Bold)
-[Format: Discuss the benefits of an open-source model for transparency, community development, and domain-specific customization. Emphasize adaptability for diverse scientific disciplines.]
-
-### 3.4 Ethical Governance and Human-in-the-Loop Design
-**Heading:** **3.4 Ethical Governance and Human-in-the-Loop Design** (Level 2, Flush Left, Bold)
-[Format: Detail the mechanisms for ethical oversight, bias mitigation, and ensuring human agency and control within the framework.]
+### 3.4 Inter-Agent Communication and Workflow
+**Format:** Left-aligned, Title Case, Bold
+*   Describe how agents collaborate, pass information, and resolve conflicts.
+*   Illustrate a typical writing workflow using OpenDraft (e.g., from prompt to final draft).
 
 ---
 
-## 4. Illustrative Case Studies: Democratizing Research through Multi-Agent AI
-**Heading:** **Illustrative Case Studies: Democratizing Research through Multi-Agent AI** (Level 1, Centered, Bold)
-**Section Number:** (No number for main APA sections)
-**Length:** 2300-2700 words
-**Organization:** Each subsection presents a case study demonstrating the framework's application.
+## 4. OpenDraft in Practice: Conceptual Case Studies
+**Section Number:** 4
+**Length:** 1800-2000 words
+**This section adapts the "Results" part of IMRaD, demonstrating the application of the theoretical framework through illustrative examples.**
 
-### 4.1 Case Study 1: Accelerating Literature Review and Synthesis
-**Heading:** **4.1 Case Study 1: Accelerating Literature Review and Synthesis** (Level 2, Flush Left, Bold)
-[Format: Describe how the framework's agents (e.g., Research Agent, Synthesis Agent) could assist a researcher in a novel interdisciplinary field, identifying key papers, synthesizing findings, and flagging emerging trends, ensuring ethical sourcing and bias checking.]
+### 4.1 Case Study 1: Developing a Literature Review
+**Format:** Left-aligned, Title Case, Bold
+*   **4.1.1 Scenario:** A student needs to write a comprehensive literature review on a complex topic.
+*   **4.1.2 OpenDraft's Multi-Agent Approach:**
+    *   Architect Agent helps structure themes and identify gaps.
+    *   Crafter Agents assist in synthesizing sources, identifying key arguments.
+    *   Critic Agent challenges interpretations, suggests alternative perspectives.
+    *   Citation Verifier ensures accuracy and proper referencing.
+    *   Pedagogical Agent prompts the student to critically evaluate sources and synthesize information.
+*   **4.1.3 Addressing Limitations:** How this approach mitigates plagiarism risks and fosters deeper engagement with sources compared to single-agent tools.
 
-#### 4.1.1 Scenario Description
-**Heading:** *4.1.1 Scenario Description* (Level 3, Flush Left, Bold Italic)
+### 4.2 Case Study 2: Crafting a Research Proposal
+**Format:** Left-aligned, Title Case, Bold
+*   **4.2.1 Scenario:** A researcher is preparing a grant proposal requiring a strong problem statement and methodology.
+*   **4.2.2 OpenDraft's Multi-Agent Approach:**
+    *   Architect Agent helps define the problem, objectives, and methods sections.
+    *   Crafter Agents assist in articulating innovative aspects and impact.
+    *   Critic Agent scrutinizes feasibility, potential weaknesses, and ethical considerations.
+    *   Ethical AI Monitor flags potential biases in research design or data collection.
+    *   User Interface Agent allows for iterative refinement and collaboration.
+*   **4.2.3 Fostering Critical Thinking:** How the system encourages the user to anticipate challenges and refine their research design.
 
-#### 4.1.2 Framework Application
-**Heading:** *4.1.2 Framework Application* (Level 3, Flush Left, Bold Italic)
-
-### 4.2 Case Study 2: Enhancing Experimental Design and Data Analysis
-**Heading:** **4.2 Case Study 2: Enhancing Experimental Design and Data Analysis** (Level 2, Flush Left, Bold)
-[Format: Illustrate the framework's utility in designing robust experiments, suggesting appropriate methodologies, and analyzing complex datasets, particularly for researchers with limited statistical expertise, ensuring transparency and reproducibility.]
-
-#### 4.2.1 Scenario Description
-**Heading:** *4.2.1 Scenario Description* (Level 3, Flush Left, Bold Italic)
-
-#### 4.2.2 Framework Application
-**Heading:** *4.2.2 Framework Application* (Level 3, Flush Left, Bold Italic)
-
-### 4.3 Case Study 3: Facilitating Ethical Writing and Publication
-**Heading:** **4.3 Case Study 3: Facilitating Ethical Writing and Publication** (Level 2, Flush Left, Bold)
-[Format: Demonstrate how agents (e.g., Writing Agent, Ethical Review Agent) can assist in drafting, ensuring academic integrity, checking for plagiarism, suggesting appropriate language, and navigating publication ethics for non-native English speakers or early-career researchers.]
-
-#### 4.3.1 Scenario Description
-**Heading:** *4.3.1 Scenario Description* (Level 3, Flush Left, Bold Italic)
-
-#### 4.3.2 Framework Application
-**Heading:** *4.3.2 Framework Application* (Level 3, Flush Left, Bold Italic)
+### 4.3 Case Study 3: Overcoming Writer's Block and Structuring Arguments
+**Format:** Left-aligned, Title Case, Bold
+*   **4.3.1 Scenario:** An author struggles with organizing complex ideas or starting a difficult section.
+*   **4.3.2 OpenDraft's Multi-Agent Approach:**
+    *   Architect Agent provides structural suggestions and prompts for brainstorming.
+    *   Crafter Agents offer diverse starting points or rephrasing options.
+    *   Pedagogical Agent provides scaffolding questions to break down the task.
+    *   Critic Agent helps identify logical gaps or underdeveloped arguments early on.
+*   **4.3.3 Democratizing Access:** How this provides personalized, on-demand support that mimics a human mentor, making advanced writing strategies accessible.
 
 ---
 
 ## 5. Discussion
-**Heading:** **Discussion** (Level 1, Centered, Bold)
-**Section Number:** (No number for main APA sections)
-**Length:** 1100-1300 words
+**Section Number:** 5
+**Length:** 1800-2000 words
 
-### 5.1 Interpretation of Findings and Framework Efficacy
-**Heading:** **5.1 Interpretation of Findings and Framework Efficacy** (Level 2, Flush Left, Bold)
-[Format: Narrative synthesizing the implications of the case studies. Discuss how the multi-agent framework effectively addresses the identified gaps and limitations of current AI tools.]
+### 5.1 Interpretation of Findings
+**Format:** Left-aligned, Title Case, Bold
+*   Synthesize how the conceptual case studies demonstrate OpenDraft's potential to address the research question.
+*   Reiterate how the multi-agent architecture enables functionalities beyond single-agent tools.
 
-### 5.2 Comparison with Prior Work and Existing AI Paradigms
-**Heading:** **5.2 Comparison with Prior Work and Existing AI Paradigms** (Level 2, Flush Left, Bold)
-[Format: Compare the proposed multi-agent framework with existing approaches (e.g., single-task AI, large language models). Highlight its unique advantages in terms of holism, ethical integration, and adaptability.]
+### 5.2 Comparison with Prior Work and Existing AI Tools
+**Format:** Left-aligned, Title Case, Bold
+*   Directly compare OpenDraft's approach to the limitations identified in Section 2.
+*   Highlight how OpenDraft's multi-agent system provides a more nuanced, ethical, and pedagogically effective form of support.
 
 ### 5.3 Theoretical Implications
-**Heading:** **5.3 Theoretical Implications** (Level 2, Flush Left, Bold)
-[Format: Discuss how the framework contributes to theories of human-AI collaboration, distributed cognition, and the sociology of science. How does it redefine the role of the researcher?]
+**Format:** Left-aligned, Title Case, Bold
+*   Discuss how OpenDraft contributes to the theoretical understanding of human-AI collaboration in creative and intellectual tasks.
+*   Implications for AI ethics, educational technology, and the philosophy of writing.
 
-### 5.4 Practical Implications for Research Democratization
-**Heading:** **5.4 Practical Implications for Research Democratization** (Level 2, Flush Left, Bold)
-[Format: Bullet points or paragraphs detailing the impact on research accessibility, equity, efficiency, and quality across various demographics and institutions.]
+### 5.4 Practical Implications and Democratization
+**Format:** Left-aligned, Title Case, Bold
+*   How OpenDraft can level the playing field for diverse learners and scholars.
+*   Potential for enhancing writing pedagogy in educational institutions.
+*   Role of open-source development in ensuring equitable access and transparency.
 
 ### 5.5 Limitations and Future Work
-**Heading:** **5.5 Limitations and Future Work** (Level 2, Flush Left, Bold)
-[Format: Honest assessment of the theoretical framework's current limitations (e.g., computational complexity, implementation challenges, human oversight requirements). Suggest concrete directions for future research and development.]
+**Format:** Left-aligned, Title Case, Bold
+*   **5.5.1 Current Limitations:** Acknowledge that this is a theoretical framework, requiring empirical validation. Discuss challenges in agent coordination, scalability, and preventing over-reliance.
+*   **5.5.2 Future Research Directions:**
+    *   Empirical testing and user studies.
+    *   Development of specific agent algorithms and interfaces.
+    *   Exploring adaptive learning paths based on user proficiency.
+    *   Addressing the evolving landscape of AI and academic integrity.
 
 ---
 
 ## 6. Conclusion
-**Heading:** **Conclusion** (Level 1, Centered, Bold)
-**Section Number:** (No number for main APA sections)
-**Length:** 400-600 words
+**Section Number:** 6
+**Length:** 900-1000 words
 
 [No subsections - continuous narrative]
 
 **Required elements:**
-- Restate the core problem (fragmented AI, ethical concerns, limited access) and the paper's approach (multi-agent framework).
-- Summarize key findings from the theoretical framework and illustrative case studies.
-- Emphasize the unique contributions of the multi-agent AI framework to democratizing academic research.
-- Reiterate the potential for a more inclusive, efficient, and ethically sound research ecosystem.
-- Suggest broader future directions for the integration of advanced AI in scholarly communication.
+- Restate the problem of inequitable academic writing support and the limitations of current AI tools.
+- Summarize OpenDraft's multi-agent approach as a novel solution.
+- Reiterate key insights from the conceptual case studies on how OpenDraft democratizes writing and fosters critical thinking.
+- Emphasize the core contributions of the paper: a robust, ethical, and pedagogically sound framework.
+- Suggest future directions for research and development, underscoring the potential for OpenDraft to redefine human-AI collaboration in scholarship.
 
 ---
 
 ## Acknowledgments
-**Heading:** **Acknowledgments** (Level 1, Centered, Bold)
-[If applicable - funding sources, significant contributors, institutional support. Follow journal-specific guidelines for formatting.]
+[If applicable - funding, contributors, institutional support, etc.]
 
 ---
 
 ## References
-**Heading:** **References** (Level 1, Centered, Bold)
 **Format:** APA 7th Edition
-**Minimum:** 30-40 references for theoretical/case study paper.
+**Minimum:** 30-40 references (for a theoretical paper of this length)
+
 **Categories:**
-- Foundational works (pre-2019): [~20-30%]
-- Recent works (2020-2024): [~70-80%]
+- Foundational works (pre-2019): [~20-30%] (e.g., classic AI, education theory, writing pedagogy)
+- Recent works (2020-2024): [~70-80%] (e.g., LLMs, AI ethics, current educational tech)
 - Including own prior work: [Optional, max 10%]
 
 ---
 
 ## Appendices
-**Heading:** **Appendices** (Level 1, Centered, Bold)
-[If applicable - supplementary materials such as detailed agent specifications, ethical guideline checklists, or extended case study details. Each appendix should have a clear title (e.g., Appendix A: Agent Interaction Protocols).]
+[If applicable, e.g., detailed agent specifications, additional conceptual diagrams, ethical guidelines checklist.]
+- Appendix A: Detailed Agent Specifications
+- Appendix B: OpenDraft Ethical Framework Principles
 
 ---
 
 ## Journal-Specific Requirements
 
-### Technology/Social Impact Journal (Generic)
+### Journal of AI & Society (or similar)
 
 **Mandatory sections:**
-- [ ] Data Availability Statement (even for theoretical papers, state if no data used or if frameworks/code will be open-sourced)
+- [ ] Data Availability Statement (if applicable, for empirical work; for theoretical, state no new data generated)
 - [ ] Conflict of Interest Statement
 - [ ] Author Contributions (if multiple authors)
 - [ ] Funding Statement (if applicable)
 
 **Formatting specifics:**
-- Figures: [PNG/TIFF, min 300dpi, vector graphics preferred for diagrams]
-- Tables: [Editable format (e.g., Word table), not images]
-- Equations: [Numbered, right-aligned, if any are used]
+- Figures: [PNG/TIFF, min 300dpi, clearly labeled]
+- Tables: [Editable format, not images, clearly labeled and titled]
+- Equations: [Numbered, right-aligned, if applicable]
 
 **Submission checklist:**
-- [ ] Cover letter (highlighting novelty and fit for journal)
+- [ ] Cover letter
 - [ ] Highlights (3-5 bullet points summarizing key findings/contributions)
 - [ ] Graphical abstract (if required, often a visual summary of the framework)
-- [ ] Supplementary materials (if applicable)
+- [ ] Supplementary materials (if any appendices are extensive)
 
 ---
 
@@ -340,14 +340,15 @@
 
 | Section | Words | % of Total |
 |-------------------------|-------|------------|
-| Abstract                | 250   | 3%         |
-| Introduction            | 1000  | 11%        |
-| Literature Review       | 2500  | 28%        |
-| Theoretical Framework   | 1000  | 11%        |
-| Illustrative Case Studies | 2500  | 28%        |
-| Discussion              | 1200  | 13%        |
-| Conclusion              | 500   | 6%         |
-| **Total**               | **8950**| **100%**   |
+| Abstract                | 270   | 3%         |
+| 1. Introduction         | 900   | 10%        |
+| 2. Related Work         | 1800  | 20%        |
+| 3. Theoretical Framework| 1350  | 15%        |
+| 4. Case Studies         | 1800  | 20%        |
+| 5. Discussion           | 1800  | 20%        |
+| 6. Conclusion           | 900   | 10%        |
+| **Total (Approx.)**     | **8820**| **98%**      |
+| *References & Appendices*| *~500-1000+* | *Adjust as needed* |
 
 ---
 
@@ -355,23 +356,25 @@
 
 ### Structure
 - [x] All required sections present
-- [x] Logical flow between sections (Introduction -> Lit Review -> Framework -> Case Studies -> Discussion -> Conclusion)
-- [x] Appropriate section lengths (as per targets above)
+- [x] Logical flow between sections, following the core argument progression
+- [x] Appropriate section lengths, adhering to targets
+- [x] Clear transition sentences between paragraphs and sections
 
 ### Formatting
-- [x] Consistent heading styles (APA 7th levels applied)
-- [x] Proper citation format (APA 7th specified)
-- [x] Figures/tables numbered correctly (using APA style)
-- [x] Captions complete and descriptive (APA style specified)
+- [x] Consistent heading styles (numbered, APA-compliant levels)
+- [x] Proper citation format (APA 7th, in-text and reference list)
+- [x] Figures/tables numbered correctly (e.g., Figure 1, Table 1)
+- [x] Captions complete and descriptive for all figures and tables
+- [x] Overall manuscript specifications (font, spacing, margins) applied
 
 ### Content
-- [x] Abstract summarizes whole paper (as per structure)
-- [x] Introduction states clear RQ and objectives
-- [x] Literature Review critically evaluates existing work and identifies gaps
-- [x] Theoretical Framework clearly describes the proposed multi-agent architecture
-- [x] Illustrative Case Studies demonstrate the framework's application and potential
-- [x] Discussion interprets findings, compares with prior work, and highlights implications
-- [x] Conclusion emphasizes contribution and future directions
+- [x] Abstract summarizes the entire paper, including framework, insights, and implications
+- [x] Introduction clearly states the problem, research question, and thesis
+- [x] Literature Review effectively identifies the research gap and positions the work
+- [x] Theoretical Framework enables clear understanding of OpenDraft's architecture
+- [x] Case Studies effectively demonstrate the application and benefits of the framework
+- [x] Discussion interprets findings, compares with prior work, and outlines implications
+- [x] Conclusion emphasizes contributions and future directions
 
 ---
 
@@ -379,33 +382,43 @@
 
 ### Academic Tone
 - ✅ **Use:** "The results indicate...", "We observed...", "This suggests...", "The framework proposes..."
-- ❌ **Avoid:** "Obviously...", "Clearly...", "It's interesting that..."
+- ❌ **Avoid:** "Obviously...", "Clearly...", "It's interesting that...", "I think..."
 
 ### Tense Usage
-- **Introduction:** Present tense (current state of research, the paper's argument)
-- **Literature Review:** Past tense (what others found), Present tense (current state of the field)
-- **Theoretical Framework:** Present tense (describing the proposed framework)
-- **Illustrative Case Studies:** Present tense (describing the potential application of the framework), or conditional future tense ("would demonstrate," "could assist")
-- **Discussion:** Present tense (what the findings mean, implications)
-- **Conclusion:** Present tense (summary of paper, future outlook)
+- **Introduction:** Present tense (current state of knowledge, the problem)
+- **Literature Review:** Past tense (what others found), Present tense (current understanding, implications)
+- **Theoretical Framework:** Present tense (describing the proposed system/framework)
+- **Case Studies:** Present tense (describing how OpenDraft *would* function in scenarios)
+- **Discussion:** Present tense (interpreting meaning, implications)
+- **Conclusion:** Present tense (summarizing, stating contributions)
 
 ### Voice
-- **Active vs Passive:** Prefer active for clarity, passive for objectivity. Strive for a balance.
+- **Active vs Passive:** Prefer active for clarity, passive for objectivity.
 - ✅ "We analyzed the data" (active, clear)
 - ✅ "The data were analyzed" (passive, objective)
-- ✅ "This paper proposes..." (active, clear)
-- ✅ "The framework is designed to..." (passive, objective)
+- For theoretical papers, often "This framework proposes...", "The agent is designed to...", "The system aims to..."
 
 ---
 
 ## Next Steps
 
 After formatting:
-1. Review against journal guidelines (if a specific journal is chosen later)
-2. Ensure all placeholders are noted (e.g., [Placeholder for conceptual diagram], [VERIFY])
-3. Proceed to Compose phase with clear structure
+1. Review against target journal guidelines (if more specific than general APA 7th).
+2. Ensure all placeholders (`[Placeholder for...]`, `[VERIFY]`, `[TODO]`) are noted for Crafter agents.
+3. Proceed to Compose phase with this clear, formatted structure.
 4. Save to `outline_formatted.md`
 
-```markdown
-# Formatted Paper Outline
-```
+---
+
+## ⚠️ ACADEMIC INTEGRITY & VERIFICATION
+
+**CRITICAL:** When structuring the paper, ensure all claims are traceable to sources.
+
+**Your responsibilities:**
+1. **Verify citations exist** before including them in outlines
+2. **Never suggest fabricated examples** or statistics
+3. **Mark placeholders** clearly with [VERIFY] or [TODO]
+4. **Ensure structure supports** verifiable, evidence-based arguments
+5. **Flag sections** that will need strong citation support
+
+**A well-structured paper with fabricated content will still fail verification. Build for accuracy.**

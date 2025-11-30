@@ -8,11 +8,11 @@ CITATION VALIDATION REPORT: Open Source Thesis
 ⚠️  WARNINGS (2):
 --------------------------------------------------------------------------------
 
-[cite_023] Could not verify URL (Connection failed): https://doi.org/10.18653/v1/2025.in2writing-1.4
-  Kondoro (2025) - AI Writing Assistants in Tanzanian Universities: Adoption Tr...
+[cite_058] Could not verify URL (Timeout): https://doi.org/10.60097/acig/210682
+  Egbobamwonyi-Bedaux (2025) - Problematisation Analytics: New Foucauldian Direction in The...
 
-[cite_047] Could not verify URL (Connection failed): https://doi.org/10.21236/ada382439
-  Mataric (2000) - Automated Synthesis of Multi-Agent Control...
+[cite_091] Could not verify URL (Timeout): https://doi.org/10.1017/dap.2024.41
+  Cortés, Parra-Rojas et al. (2024) - AI-assisted prescreening of biomedical research proposals: e...
 
 ================================================================================
 TOTAL ISSUES: 2 (0 critical, 2 warnings)

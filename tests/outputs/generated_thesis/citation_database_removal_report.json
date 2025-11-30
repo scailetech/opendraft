@@ -1,0 +1,374 @@
+{
+  "stats": {
+    "total_original": 57,
+    "total_filtered": 41,
+    "total_removed": 16,
+    "removal_reasons": {
+      "invalid_url": 9,
+      "invalid_metadata": 4,
+      "invalid_author": 3
+    }
+  },
+  "removed_citations": [
+    {
+      "citation": {
+        "id": "cite_001",
+        "authors": [
+          "Joshi",
+          "Badola"
+        ],
+        "year": 2025,
+        "title": "Evaluation of AI in Healthcare: A Systematic Review on India",
+        "source_type": "book",
+        "language": "english",
+        "journal": "Revolutionary Impact of 5G on Advancement of Technology in Healthcare",
+        "publisher": "Apple Academic Press",
+        "pages": "95-118",
+        "doi": "10.1201/9781003637455-5",
+        "url": "https://doi.org/10.1201/9781003637455-5",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 503: https://doi.org/10.1201/9781003637455-5",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_010",
+        "authors": [
+          "Min",
+          "Jung"
+        ],
+        "year": 2025,
+        "title": "Automating Radiology Report Generation: A Systematic Review of Deep Learning Methods",
+        "source_type": "report",
+        "language": "english",
+        "publisher": "MDPI AG",
+        "doi": "10.20944/preprints202503.2218.v1",
+        "url": "https://doi.org/10.20944/preprints202503.2218.v1",
+        "api_source": "Crossref"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.20944/preprints202503.2218.v1'",
+      "issues": 2
+    },
+    {
+      "citation": {
+        "id": "cite_013",
+        "authors": [
+          "researchgate.net"
+        ],
+        "year": 2025,
+        "title": "researchgate.net",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.researchgate.net/publication/387602712_Exploring_AI_in_Medical_Imaging_and_Diagnosis",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'researchgate.net'",
+      "issues": 4
+    },
+    {
+      "citation": {
+        "id": "cite_016",
+        "authors": [
+          "Cordes"
+        ],
+        "year": 2014,
+        "title": "Diabetes Breakthroughs: Januvia and Janumet",
+        "source_type": "book",
+        "language": "english",
+        "journal": "Hallelujah Moments",
+        "publisher": "Oxford University Press",
+        "doi": "10.1093/oso/9780199337149.003.0016",
+        "url": "https://doi.org/10.1093/oso/9780199337149.003.0016",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1093/oso/9780199337149.003.0016",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_017",
+        "authors": [
+          "Chenoweth",
+          "Giacomini",
+          "Pirmohamed",
+          "Hill",
+          "Schaik",
+          "Schwab",
+          "Shuldiner",
+          "Relling",
+          "Tyndale"
+        ],
+        "year": 2019,
+        "title": "Global Pharmacogenomics Within Precision Medicine: Challenges and Opportunities",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Clinical pharmacology and therapy",
+        "doi": "10.1002/cpt.1664",
+        "url": "https://doi.org/10.1002/cpt.1664",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1002/cpt.1664",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_019",
+        "authors": [
+          "Cesario",
+          "Simone",
+          "Paris",
+          "Boldrini",
+          "Orlandi",
+          "Franceschini",
+          "Lococo",
+          "Bria",
+          "Magno",
+          "Mulè",
+          "Santoro",
+          "Damiani",
+          "Bianchi",
+          "Picchi",
+          "Rasi",
+          "Daniele",
+          "Fabi",
+          "Sergi",
+          "Tortora",
+          "Masetti",
+          "Valentini",
+          "D'Oria",
+          "Scambia"
+        ],
+        "year": 2021,
+        "title": "Development of a Digital Research Assistant for the Management of Patients’ Enrollment in Oncology Clinical Trials within a Research Hospital",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Personalized Medicine",
+        "doi": "10.3390/jpm11040244",
+        "url": "https://doi.org/10.3390/jpm11040244",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/jpm11040244",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_022",
+        "authors": [
+          "Snoswell",
+          "Vitangcol",
+          "Haydon",
+          "Gray",
+          "Leedie",
+          "Smith",
+          "Caffery"
+        ],
+        "year": 2023,
+        "title": "Cost-effectiveness of remote patient monitoring for First Nations peoples living with diabetes in regional Australia",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Telemedicine and Telecare",
+        "doi": "10.1177/1357633X231214019",
+        "url": "https://doi.org/10.1177/1357633X231214019",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1177/1357633X231214019",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_029",
+        "authors": [
+          "beckershospitalreview.com"
+        ],
+        "year": 2025,
+        "title": "beckershospitalreview.com",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.beckershospitalreview.com/hospital-management-administration/leveraging-ai-technology-to-proactively-optimize-inpatient-flow-and-capacity/",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'beckershospitalreview.com'",
+      "issues": 4
+    },
+    {
+      "citation": {
+        "id": "cite_038",
+        "authors": [
+          "Hussain",
+          "Bresnahan",
+          "Jie"
+        ],
+        "year": 2024,
+        "title": "The bias algorithm: how AI in healthcare exacerbates ethnic and racial disparities – a scoping review",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Ethnicity and Health",
+        "doi": "10.1080/13557858.2024.2422848",
+        "url": "https://doi.org/10.1080/13557858.2024.2422848",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1080/13557858.2024.2422848",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_040",
+        "authors": [
+          "Krajcer"
+        ],
+        "year": 2022,
+        "title": "Artificial Intelligence in Cardiovascular Medicine: Historical Overview, Current Status, and Future Directions.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Texas Heart Institute Journal",
+        "doi": "10.14503/THIJ-20-7527",
+        "url": "https://doi.org/10.14503/THIJ-20-7527",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.14503/THIJ-20-7527'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_042",
+        "authors": [
+          "ama-assn.org"
+        ],
+        "year": 2025,
+        "title": "ama-assn.org",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.ama-assn.org/practice-management/digital-health/2-3-physicians-are-using-health-ai-78-2023",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'ama-assn.org'",
+      "issues": 4
+    },
+    {
+      "citation": {
+        "id": "cite_046",
+        "authors": [
+          "Vasey",
+          "Nagendran",
+          "Campbell",
+          "Clifton",
+          "Collins",
+          "Denaxas",
+          "Denniston",
+          "Faes",
+          "Geerts",
+          "Ibrahim",
+          "Liu",
+          "Mateen",
+          "Mathur",
+          "McCradden",
+          "Morgan",
+          "Ordish",
+          "Rogers",
+          "Saria",
+          "Ting",
+          "Watkinson",
+          "Weber",
+          "Wheatstone",
+          "McCulloch"
+        ],
+        "year": 2022,
+        "title": "Reporting guideline for the early stage clinical evaluation of decision support systems driven by artificial intelligence: DECIDE-AI",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "British medical journal",
+        "doi": "10.1136/bmj-2022-070904",
+        "url": "https://doi.org/10.1136/bmj-2022-070904",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1136/bmj-2022-070904",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_050",
+        "authors": [
+          "Adachi",
+          "El-Hattab",
+          "Jain",
+          "Crespo",
+          "Lazo",
+          "Scarpa",
+          "Summar",
+          "Wattanasirichaigoon"
+        ],
+        "year": 2023,
+        "title": "Enhancing Equitable Access to Rare Disease Diagnosis and Treatment around the World: A Review of Evidence, Policies, and Challenges",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "International Journal of Environmental Research and Public Health",
+        "doi": "10.3390/ijerph20064732",
+        "url": "https://doi.org/10.3390/ijerph20064732",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/ijerph20064732",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_056",
+        "authors": [
+          "Gomez-Cabello",
+          "Borna",
+          "Pressman",
+          "Haider",
+          "Haider",
+          "Forte"
+        ],
+        "year": 2024,
+        "title": "Artificial-Intelligence-Based Clinical Decision Support Systems in Primary Care: A Scoping Review of Current Clinical Implementations",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "European Journal of Investigation in Health, Psychology and Education",
+        "doi": "10.3390/ejihpe14030045",
+        "url": "https://doi.org/10.3390/ejihpe14030045",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.3390/ejihpe14030045'",
+      "issues": 2
+    },
+    {
+      "citation": {
+        "id": "cite_057",
+        "authors": [
+          "Nicholas Feenie"
+        ],
+        "year": 2025,
+        "title": "contemporaryhealth.co.uk",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.contemporaryhealth.co.uk/digital-health/healthcare-ai-drives-nearly-4-billion-in-venture-funding-powering-digital-healths-strong-momentum-in-2025/",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'contemporaryhealth.co.uk'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_063",
+        "authors": [
+          "Deng",
+          "Xuan",
+          "Ma",
+          "Kong"
+        ],
+        "year": 2024,
+        "title": "A Reliable Framework for Human-in-the-Loop Anomaly Detection in Time Series",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "ACM Transactions on Interactive Intelligent Systems",
+        "doi": "10.1145/3778167",
+        "url": "https://doi.org/10.1145/3778167",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3778167",
+      "issues": 1
+    }
+  ]
+}

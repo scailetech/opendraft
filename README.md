@@ -6,18 +6,17 @@
 
 **Generate publication-ready theses with 15 specialized AI agents and access to 200M+ research papers** via academic APIs (Semantic Scholar, arXiv, PubMed, Crossref)
 
-![Demo](docs/assets/screenshots/demo-placeholder.svg)
-<!-- TODO: Replace with real demo GIF - see docs/VISUAL_ASSETS_GUIDE.md -->
+![OpenDraft Generated Thesis](docs/assets/screenshots/thesis_title.png)
 
 <p>
-  <a href="https://opendraft.ai"><strong>🌐 Website</strong></a> ·
+  <a href="https://opendraft-landing.vercel.app"><strong>🌐 Website</strong></a> ·
   <a href="#-see-it-in-action"><strong>🎬 Demo</strong></a> ·
   <a href="#-quick-start"><strong>⚡ Quick Start</strong></a> ·
   <a href="docs/"><strong>📖 Docs</strong></a> ·
   <a href="examples/"><strong>🎓 Examples</strong></a>
 </p>
 
-> **📁 Monorepo Structure**: This repository contains both the core framework (`src/`) and the landing page (`website/`). Everything in one place!
+> **📁 Monorepo Structure**: This repository contains both the core thesis engine (root) and the landing page (`website/`).
 
 <p>
   <!-- CI/CD Status -->
@@ -70,17 +69,17 @@ while maintaining quality and academic integrity
 <table>
   <tr>
     <td width="50%">
-      <img src="docs/assets/screenshots/terminal-verify-placeholder.svg" alt="Terminal verification">
-      <p align="center"><strong>Installation Verification</strong></p>
+      <img src="docs/assets/screenshots/thesis_abstract.png" alt="Thesis Abstract">
+      <p align="center"><strong>Professional Abstract</strong></p>
     </td>
     <td width="50%">
-      <img src="docs/assets/screenshots/pdf-preview-placeholder.svg" alt="Generated PDF">
+      <img src="docs/assets/screenshots/thesis_methodology.png" alt="Methodology Section">
       <p align="center"><strong>Publication-Ready Output</strong></p>
     </td>
   </tr>
   <tr>
     <td colspan="2">
-      <img src="docs/assets/screenshots/citation-database-placeholder.svg" alt="Citation database">
+      <img src="docs/assets/screenshots/thesis_literature.png" alt="Literature Review with Citations">
       <p align="center"><strong>Automated Citation Research (200M+ Papers)</strong></p>
     </td>
   </tr>
@@ -407,9 +406,9 @@ pip install -e .
 opendraft verify
 ```
 
-### Option 2: Docker
+### Option 2: Docker (Build Locally)
 ```bash
-docker pull opendraft:latest
+docker build -t opendraft .
 docker run -it opendraft
 ```
 

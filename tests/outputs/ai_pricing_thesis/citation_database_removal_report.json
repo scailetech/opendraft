@@ -1,12 +1,12 @@
 {
   "stats": {
-    "total_original": 57,
-    "total_filtered": 31,
-    "total_removed": 26,
+    "total_original": 72,
+    "total_filtered": 43,
+    "total_removed": 29,
     "removal_reasons": {
-      "invalid_url": 17,
-      "invalid_metadata": 3,
-      "invalid_doi": 5,
+      "invalid_url": 18,
+      "invalid_doi": 8,
+      "invalid_metadata": 2,
       "invalid_author": 1
     }
   },
@@ -15,24 +15,167 @@
       "citation": {
         "id": "cite_002",
         "authors": [
-          "Luria",
-          "Grybos"
+          "Yates"
         ],
         "year": 2025,
-        "title": "Policy Considerations for Socially Interactive AI Agents: A Systematic Literature Review",
-        "source_type": "report",
+        "title": "Future Trends in Securing Autonomous AI Agents",
+        "source_type": "book",
         "language": "english",
-        "publisher": "Elsevier BV",
-        "doi": "10.2139/ssrn.5375608",
-        "url": "https://doi.org/10.2139/ssrn.5375608",
+        "journal": "Advances in Computational Intelligence and Robotics",
+        "publisher": "IGI Global Scientific Publishing",
+        "pages": "307-338",
+        "doi": "10.4018/979-8-3373-6876-4.ch010",
+        "url": "https://doi.org/10.4018/979-8-3373-6876-4.ch010",
         "api_source": "Crossref"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.5375608",
+      "reason": "URL returns HTTP 429: https://doi.org/10.4018/979-8-3373-6876-4.ch010",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_004",
+        "id": "cite_009",
+        "authors": [
+          "Desai",
+          "Srinivasan"
+        ],
+        "year": 1995,
+        "title": "Demand signalling under unobservable effort in franchising: linear and nonlinear price contracts",
+        "source_type": "journal",
+        "language": "english",
+        "doi": "10.1287/MNSC.41.10.1608",
+        "url": "https://doi.org/10.1287/MNSC.41.10.1608",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1287/MNSC.41.10.1608",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_010",
+        "authors": [
+          "Lu",
+          "Li"
+        ],
+        "year": 2025,
+        "title": "Agent Model Based on Large Language Model as a Pathway to General Artificial Intelligence in Revolutionizing Crowd Dynamics Research",
+        "source_type": "report",
+        "language": "english",
+        "publisher": "Elsevier BV",
+        "doi": "10.2139/ssrn.5496390",
+        "url": "https://doi.org/10.2139/ssrn.5496390",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.5496390",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_013",
+        "authors": [
+          "Miskiel",
+          "Bye",
+          "Pagliaro",
+          "Pagliaro"
+        ],
+        "year": 2024,
+        "title": "Medicare Reimbursement in Orthopaedic Foot and Ankle Surgery: A Continued Decline",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Foot & Ankle Orthopaedics",
+        "doi": "10.1177/2473011424s00357",
+        "url": "https://doi.org/10.1177/2473011424s00357",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1177/2473011424s00357",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_014",
+        "authors": [
+          "Aparício",
+          "Aparicio",
+          "Aparicio",
+          "Costa"
+        ],
+        "year": 2024,
+        "title": "Predicting the Impact of Generative AI Using an Agent-Based Model",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2408.17268",
+        "url": "https://doi.org/10.48550/arXiv.2408.17268",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2408.17268",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_016",
+        "authors": [
+          "Ali",
+          "Xu",
+          "Baig",
+          "Rehman",
+          "Aslam",
+          "Qasim"
+        ],
+        "year": 2024,
+        "title": "From data to decisions: enhancing financial forecasts with LSTM for AI token prices",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Economic Studies",
+        "doi": "10.1108/jes-01-2024-0022",
+        "url": "https://doi.org/10.1108/jes-01-2024-0022",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/jes-01-2024-0022",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_017",
+        "authors": [
+          "Prince",
+          "Greenstein"
+        ],
+        "year": 2019,
+        "title": "Mobile Internet Usage and Usage Based Pricing",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "SSRN Electronic Journal",
+        "publisher": "Elsevier BV",
+        "doi": "10.2139/ssrn.3480746",
+        "url": "https://doi.org/10.2139/ssrn.3480746",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.3480746",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_019",
+        "authors": [
+          "Wang",
+          "Jiang",
+          "Mi"
+        ],
+        "year": 2024,
+        "title": "Advancing Serverless Computing for Scalable AI Model Inference: Challenges and Opportunities",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "WOSC@Middleware",
+        "doi": "10.1145/3702634.3702950",
+        "url": "https://doi.org/10.1145/3702634.3702950",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3702634.3702950",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_021",
         "authors": [
           "Barbere",
           "Martin",
@@ -54,168 +197,200 @@
     },
     {
       "citation": {
-        "id": "cite_006",
+        "id": "cite_022",
         "authors": [
-          "Tupe",
-          "Thube"
+          "Tan",
+          "Dimayuga",
+          "Gabud"
+        ],
+        "year": 2024,
+        "title": "BiodiViz: Leveraging NER and RE for Automated Knowledge Graph Generation in Biodiversity Research",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Biodiversity Information Science and Standards",
+        "doi": "10.3897/biss.8.140428",
+        "url": "https://doi.org/10.3897/biss.8.140428",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.3897/biss.8.140428'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_023",
+        "authors": [
+          "Pham",
+          "Teo",
+          "Thoai",
+          "Nguyen"
+        ],
+        "year": 2009,
+        "title": "An approach to vickrey-based resource allocation in the presence of monopolistic sellers",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Australasian Symposium on Grid Computing and e-Research",
+        "url": "https://www.semanticscholar.org/paper/6dc1ea210107ad7d13654046d520d48ad6b6a8a7",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL contains error keyword: 'https://www.semanticscholar.org/paper/6dc1ea210107ad7d13654046d520d48ad6b6a8a7'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_024",
+        "authors": [
+          "Li",
+          "Chen"
         ],
         "year": 2025,
-        "title": "AI Agentic workflows and Enterprise APIs: Adapting API architectures for the age of AI agents",
-        "source_type": "report",
+        "title": "A Deep Q-Learning Optimization Framework for Dynamic Pricing in E-Commerce",
+        "source_type": "conference",
         "language": "english",
-        "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
-        "doi": "10.36227/techrxiv.173895544.45005813/v1",
-        "url": "https://doi.org/10.36227/techrxiv.173895544.45005813/v1",
-        "api_source": "Crossref"
-      },
-      "reason": "URL contains error keyword: 'https://doi.org/10.36227/techrxiv.173895544.45005813/v1'; URL returns HTTP 403: https://doi.org/10.36227/techrxiv.173895544.45005813/v1",
-      "issues": 2
-    },
-    {
-      "citation": {
-        "id": "cite_009",
-        "authors": [
-          "Zhang",
-          "Wang",
-          "Gong",
-          "Lin",
-          "Mao"
-        ],
-        "year": 2024,
-        "title": "USimAgent: Large Language Models for Simulating Search Users",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "Annual International ACM SIGIR Conference on Research and Development in Information Retrieval",
-        "doi": "10.1145/3626772.3657963",
-        "url": "https://doi.org/10.1145/3626772.3657963",
+        "journal": "Proceedings of the 2025 4th International Conference on Cyber Security, Artificial Intelligence and the Digital Economy",
+        "doi": "10.1145/3729706.3729764",
+        "url": "https://doi.org/10.1145/3729706.3729764",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3626772.3657963",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3729706.3729764",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_010",
+        "id": "cite_029",
         "authors": [
-          "Niu",
-          "Hu",
-          "Peng",
-          "Cao",
-          "Liu",
-          "Han",
-          "Guo"
+          "Poushneh",
+          "Vasquez-Parraga"
         ],
-        "year": 2025,
-        "title": "Scenario, Role, and Persona: A Scoping Review of Design Strategies for Socially Intelligent AI Agents",
+        "year": 2024,
+        "title": "The effect of semiautonomous augmented reality on customer experience and augmentation experience",
         "source_type": "journal",
         "language": "english",
-        "journal": "CHI Extended Abstracts",
-        "doi": "10.1145/3706599.3719762",
-        "url": "https://doi.org/10.1145/3706599.3719762",
+        "journal": "European Journal of Marketing",
+        "doi": "10.1108/ejm-05-2022-0402",
+        "url": "https://doi.org/10.1108/ejm-05-2022-0402",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3706599.3719762",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/ejm-05-2022-0402",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_013",
+        "id": "cite_031",
         "authors": [
-          "Costa",
-          "Hans"
+          "Wenger",
+          "Jäger",
+          "Näyhä",
+          "Plakolb",
+          "Krassnitzer",
+          "Stern"
         ],
         "year": 2024,
-        "title": "OPPORTUNITIES AND CHALLENGES FOR INDIAN RETAIL STORES AND THEIR MARKETING STRATEGIES",
+        "title": "Exploring potential diffusion pathways of biorefinery innovations—An agent‐based simulation approach for facilitating shared value creation",
         "source_type": "journal",
         "language": "english",
-        "journal": "EPRA international journal of multidisciplinary research",
-        "doi": "10.36713/epra15414",
-        "url": "https://doi.org/10.36713/epra15414",
+        "journal": "Business Strategy and the Environment",
+        "doi": "10.1002/bse.3671",
+        "url": "https://doi.org/10.1002/bse.3671",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 404: https://doi.org/10.36713/epra15414",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1002/bse.3671",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_014",
+        "id": "cite_033",
         "authors": [
-          "Sami",
-          "Rasheed",
-          "Kemell",
-          "Waseem",
-          "Kilamo",
-          "Saari",
-          "Nguyen-Duc",
-          "Systä",
-          "Abrahamsson"
+          "Li",
+          "S'anchez-Momp'o",
+          "Farnham",
+          "Khan",
+          "Aijaz"
         ],
         "year": 2024,
-        "title": "System for systematic literature review using multiple AI agents: Concept and an empirical evaluation",
+        "title": "Large Generative AI Models meet Open Networks for 6G: Integration, Platform, and Monetization",
         "source_type": "journal",
         "language": "english",
         "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2403.08399",
-        "url": "https://doi.org/10.48550/arXiv.2403.08399",
+        "doi": "10.48550/arXiv.2410.18790",
+        "url": "https://doi.org/10.48550/arXiv.2410.18790",
         "api_source": "Semantic Scholar"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2403.08399; URL contains error keyword: 'https://doi.org/10.48550/arXiv.2403.08399'",
+      "reason": "DOI not found: 10.48550/arXiv.2410.18790",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_038",
+        "authors": [
+          "Harris"
+        ],
+        "year": 2022,
+        "title": "The History of AI Rights Research",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2208.04714",
+        "url": "https://doi.org/10.48550/arXiv.2208.04714",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2208.04714",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_039",
+        "authors": [
+          "Chen",
+          "Li"
+        ],
+        "year": 2024,
+        "title": "Octopus v3: Technical Report for On-device Sub-billion Multimodal AI Agent",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2404.11459",
+        "url": "https://doi.org/10.48550/arXiv.2404.11459",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2404.11459; URL contains error keyword: 'https://doi.org/10.48550/arXiv.2404.11459'",
       "issues": 2
     },
     {
       "citation": {
-        "id": "cite_015",
+        "id": "cite_041",
         "authors": [
-          "Dan Robinson"
+          "bcg.com"
         ],
-        "year": 2025,
-        "title": "McKinsey wonders how to sell AI with no measurable benefits • The Register",
+        "year": 2024,
+        "title": "How Vietnamese Companies Can Stay Ahead",
         "source_type": "website",
         "language": "english",
-        "url": "https://www.theregister.com/2025/10/09/mckinsey_ai_monetization/",
+        "url": "https://www.bcg.com/ja-jp/publications/2024/vietnam-leading-with-genai-ai-how-vietnamese-companies-can-stay-ahead",
         "api_source": "Gemini Grounded"
       },
-      "reason": "URL returns HTTP 403: https://www.theregister.com/2025/10/09/mckinsey_ai_monetization/",
-      "issues": 1
+      "reason": "Domain name as author: 'bcg.com'; URL returns HTTP 403: https://www.bcg.com/ja-jp/publications/2024/vietnam-leading-with-genai-ai-how-vietnamese-companies-can-stay-ahead",
+      "issues": 2
     },
     {
       "citation": {
-        "id": "cite_017",
+        "id": "cite_042",
         "authors": [
-          "Singh",
-          "Kumar"
+          "Navarro"
         ],
-        "year": 2025,
-        "title": "AI-Driven Cybersecurity Strategies for ISPs: Balancing Threat Mitigation and Monetization",
+        "year": 2019,
+        "title": "Préstamos intragrupo en la normativa española sobre operaciones vinculadas del Impuesto sobre sociedades (Intra-group Loans within the Spanish Transfer Pricing Regulations)",
         "source_type": "journal",
         "language": "english",
-        "journal": "International Conference on Cyber Warfare and Security",
-        "doi": "10.34190/iccws.20.1.3344",
-        "url": "https://doi.org/10.34190/iccws.20.1.3344",
+        "doi": "10.2307/j.ctv102bk7q.7",
+        "url": "https://doi.org/10.2307/j.ctv102bk7q.7",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 429: https://doi.org/10.34190/iccws.20.1.3344",
+      "reason": "URL returns HTTP 403: https://doi.org/10.2307/j.ctv102bk7q.7",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_019",
-        "authors": [
-          "2021.ai"
-        ],
-        "year": 2025,
-        "title": "Understanding the EU AI Act penalties and achieving regulatory compliance",
-        "source_type": "website",
-        "language": "english",
-        "url": "https://2021.ai/news/understanding-the-eu-ai-act-penalties-and-achieving-regulatory-compliance",
-        "api_source": "Gemini Grounded"
-      },
-      "reason": "Domain name as author: '2021.ai'",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_020",
+        "id": "cite_044",
         "authors": [
           "Swaminathan",
           "Danks"
@@ -234,221 +409,44 @@
     },
     {
       "citation": {
-        "id": "cite_021",
+        "id": "cite_048",
         "authors": [
-          "Ragone",
-          "Tibidò",
-          "Buono",
-          "Lanzilotti",
-          "Ragone",
-          "Baldassarre"
+          "Singh",
+          "Kumar"
         ],
         "year": 2025,
-        "title": "Evaluating the Gaps in Existing AI Ethics Frameworks for Children",
+        "title": "AI-Driven Cybersecurity Strategies for ISPs: Balancing Threat Mitigation and Monetization",
         "source_type": "journal",
         "language": "english",
-        "journal": "ACM SIGCHI Italian Chapter International Conference on Computer-Human Interaction",
-        "doi": "10.1145/3750069.3750296",
-        "url": "https://doi.org/10.1145/3750069.3750296",
+        "journal": "International Conference on Cyber Warfare and Security",
+        "doi": "10.34190/iccws.20.1.3344",
+        "url": "https://doi.org/10.34190/iccws.20.1.3344",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL contains error keyword: 'https://doi.org/10.1145/3750069.3750296'; URL returns HTTP 403: https://doi.org/10.1145/3750069.3750296",
-      "issues": 2
-    },
-    {
-      "citation": {
-        "id": "cite_022",
-        "authors": [
-          "Malcolm"
-        ],
-        "year": 1989,
-        "title": "Louise B. Russell, Evaluating preventive care: Report on a workshop (Studies in Social Economics) The Brookings Institution, Washington D.C. 1987 Price (U.S.) $22.95 (Paper $8.95)",
-        "source_type": "journal",
-        "language": "english",
-        "doi": "10.1002/HPM.4740040208",
-        "url": "https://doi.org/10.1002/HPM.4740040208",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "Year out of range: 1989; URL returns HTTP 403: https://doi.org/10.1002/HPM.4740040208",
-      "issues": 2
-    },
-    {
-      "citation": {
-        "id": "cite_023",
-        "authors": [
-          "Leeroy",
-          "Leeroy"
-        ],
-        "year": 2025,
-        "title": "AI as a Decision Companion: Supporting Executive Pricing and FX Decisions in Global Enterprises Through LSTM Forecasting",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "Journal of Risk and Financial Management",
-        "doi": "10.3390/jrfm18100542",
-        "url": "https://doi.org/10.3390/jrfm18100542",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.3390/jrfm18100542",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_025",
-        "authors": [
-          "Yang",
-          "Bhatnagar",
-          "Qiu",
-          "Miao",
-          "Kon",
-          "Xiao",
-          "Huang",
-          "Casado",
-          "Chen"
-        ],
-        "year": 2025,
-        "title": "Cloud Infrastructure Management in the Age of AI Agents",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "ACM SIGOPS Operating Systems Review",
-        "doi": "10.1145/3759441.3759443",
-        "url": "https://doi.org/10.1145/3759441.3759443",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3759441.3759443",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_028",
-        "authors": [
-          "Duncan",
-          "Tran",
-          "Witt",
-          "Elfar",
-          "Rashid",
-          "Vassar"
-        ],
-        "year": 2025,
-        "title": "Disrupting Drug Costs: The Role of Cost-Plus Pricing in Reducing Medicare Spending on Hypertension Treatments.",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "Health Services Research",
-        "doi": "10.1111/1475-6773.70045",
-        "url": "https://doi.org/10.1111/1475-6773.70045",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1111/1475-6773.70045",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_033",
-        "authors": [
-          "Panagou",
-          "Katsoulis",
-          "Nannos",
-          "Zantalis",
-          "Koulouras"
-        ],
-        "year": 2025,
-        "title": "A Comprehensive Evaluation of IoT Cloud Platforms: A Feature-Driven Review with a Decision-Making Tool",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "Italian National Conference on Sensors",
-        "doi": "10.3390/s25165124",
-        "url": "https://doi.org/10.3390/s25165124",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.3390/s25165124",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_034",
-        "authors": [
-          "Liu",
-          "Shen",
-          "Che",
-          "Ghandi",
-          "Li"
-        ],
-        "year": 2025,
-        "title": "HERA: Hybrid Edge-cloud Resource Allocation for Cost-Efficient AI Agents",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2504.00434",
-        "url": "https://doi.org/10.48550/arXiv.2504.00434",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "DOI not found: 10.48550/arXiv.2504.00434",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_036",
-        "authors": [
-          "Chen",
-          "Deng",
-          "Han",
-          "Zhao"
-        ],
-        "year": 2025,
-        "title": "Policy Frameworks for Transparent Chain-of-Thought Reasoning in Large Language Models",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2503.14521",
-        "url": "https://doi.org/10.48550/arXiv.2503.14521",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "DOI not found: 10.48550/arXiv.2503.14521; URL contains error keyword: 'https://doi.org/10.48550/arXiv.2503.14521'",
-      "issues": 2
-    },
-    {
-      "citation": {
-        "id": "cite_038",
-        "authors": [
-          "Kozaitis"
-        ],
-        "year": 2013,
-        "title": "ANTHROPOLOGICAL PRAXIS IN HIGHER EDUCATION",
-        "source_type": "journal",
-        "language": "english",
-        "doi": "10.1111/NAPA.12021",
-        "url": "https://doi.org/10.1111/NAPA.12021",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1111/NAPA.12021",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_040",
-        "authors": [
-          "Chen",
-          "Zhao",
-          "Lu",
-          "Jin",
-          "Gu",
-          "Li",
-          "Wang"
-        ],
-        "year": 2025,
-        "title": "Application of Self-Supervised Autonomous Agent Framework With Growing Scheme for Digital Transformation of Elder/Existed Well Potentials Discovery",
-        "source_type": "journal",
-        "language": "english",
-        "journal": "International Petroleum Technology Conference",
-        "doi": "10.2523/iptc-24776-ms",
-        "url": "https://doi.org/10.2523/iptc-24776-ms",
-        "api_source": "Semantic Scholar"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.2523/iptc-24776-ms",
+      "reason": "URL returns HTTP 429: https://doi.org/10.34190/iccws.20.1.3344",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_050",
+        "authors": [
+          "Serageldin"
+        ],
+        "year": 2001,
+        "title": "From vision to action after the second world water forum.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Water Science and Technology",
+        "doi": "10.2166/WST.2001.0170",
+        "url": "https://doi.org/10.2166/WST.2001.0170",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.2166/WST.2001.0170",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_051",
         "authors": [
           "Han",
           "Wang",
@@ -471,93 +469,128 @@
     },
     {
       "citation": {
-        "id": "cite_052",
+        "id": "cite_053",
         "authors": [
-          "Staifi",
-          "Belguidoum"
+          "Kraprayoon",
+          "Williams",
+          "Fayyaz"
         ],
-        "year": 2021,
-        "title": "Adapted smart home services based on smart contracts and service level agreements",
+        "year": 2025,
+        "title": "AI Agent Governance: A Field Guide",
         "source_type": "journal",
         "language": "english",
-        "journal": "Concurrency and Computation",
-        "doi": "10.1002/cpe.6208",
-        "url": "https://doi.org/10.1002/cpe.6208",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2505.21808",
+        "url": "https://doi.org/10.48550/arXiv.2505.21808",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1002/cpe.6208",
+      "reason": "DOI not found: 10.48550/arXiv.2505.21808",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_054",
         "authors": [
-          "Zhou",
-          "Wang",
-          "Wu",
-          "Yang"
+          "Duho",
+          "Asare",
+          "Glover",
+          "Duho"
         ],
         "year": 2024,
-        "title": "FinRobot: AI Agent for Equity Research and Valuation with Large Language Models",
+        "title": "Transfer pricing, earnings management and corporate governance among listed firms: Evidence from Ghana",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Corporate Governance: The International Journal of Business in Society",
+        "doi": "10.1108/cg-12-2022-0519",
+        "url": "https://doi.org/10.1108/cg-12-2022-0519",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/cg-12-2022-0519",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_061",
+        "authors": [
+          "Whish",
+          "Bailey"
+        ],
+        "year": 2018,
+        "title": "18. Abuse of dominance (2): pricing practices",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Competition Law",
+        "doi": "10.1093/LAW-OCL/9780198779063.003.0018",
+        "url": "https://doi.org/10.1093/LAW-OCL/9780198779063.003.0018",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1093/LAW-OCL/9780198779063.003.0018",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_062",
+        "authors": [
+          "Dotan",
+          "Blili-Hamelin",
+          "Madhavan",
+          "Matthews",
+          "Scarpino"
+        ],
+        "year": 2024,
+        "title": "Evolving AI Risk Management: A Maturity Model based on the NIST AI Risk Management Framework",
         "source_type": "journal",
         "language": "english",
         "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2411.08804",
-        "url": "https://doi.org/10.48550/arXiv.2411.08804",
+        "doi": "10.48550/arXiv.2401.15229",
+        "url": "https://doi.org/10.48550/arXiv.2401.15229",
         "api_source": "Semantic Scholar"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2411.08804",
+      "reason": "DOI not found: 10.48550/arXiv.2401.15229",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_055",
+        "id": "cite_071",
         "authors": [
-          "Lee",
-          "Oh",
-          "Fang",
-          "An",
-          "Park",
-          "Song",
-          "Oh",
-          "Kim",
-          "Kim",
-          "Kim",
-          "Raikhel",
-          "Je",
-          "Shin"
+          "Tlaie"
         ],
-        "year": 2015,
-        "title": "Identification of plant compounds that disrupt the insect juvenile hormone receptor complex",
+        "year": 2024,
+        "title": "Using AI Alignment Theory to understand the potential pitfalls of regulatory frameworks",
         "source_type": "journal",
         "language": "english",
-        "journal": "Proceedings of the National Academy of Sciences of the United States of America",
-        "doi": "10.1073/pnas.1424386112",
-        "url": "https://doi.org/10.1073/pnas.1424386112",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2410.19749",
+        "url": "https://doi.org/10.48550/arXiv.2410.19749",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1073/pnas.1424386112",
+      "reason": "DOI not found: 10.48550/arXiv.2410.19749",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_057",
+        "id": "cite_074",
         "authors": [
-          "Geraghty",
-          "Hale",
-          "Sen",
-          "Kroecker"
+          "Yang",
+          "Bhatnagar",
+          "Qiu",
+          "Miao",
+          "Kon",
+          "Xiao",
+          "Huang",
+          "Casado",
+          "Chen"
         ],
-        "year": 2020,
-        "title": "FUN-Agent: A 2020 HUMAINE Competition Entrant",
-        "source_type": "book",
+        "year": 2025,
+        "title": "Cloud Infrastructure Management in the Age of AI Agents",
+        "source_type": "journal",
         "language": "english",
-        "journal": "Proceedings of the 1st International Workshop on Multimodal Conversational AI",
-        "doi": "10.1145/3423325.3423736",
-        "url": "https://doi.org/10.1145/3423325.3423736",
+        "journal": "ACM SIGOPS Operating Systems Review",
+        "doi": "10.1145/3759441.3759443",
+        "url": "https://doi.org/10.1145/3759441.3759443",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3423325.3423736",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3759441.3759443",
       "issues": 1
     }
   ]

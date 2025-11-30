@@ -8,7 +8,7 @@ import os
 import sys
 import shutil
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Tuple, Optional
 from dataclasses import dataclass, field
 
 from utils.logging_config import get_logger
@@ -32,7 +32,7 @@ class HealthCheckResult:
     component: str
     status: str  # "healthy", "degraded", "failed"
     message: str
-    details: Dict[str, any] = field(default_factory=dict)
+    details: Dict[str, Any] = field(default_factory=dict)
     error: Optional[Exception] = None
 
     def is_healthy(self) -> bool:

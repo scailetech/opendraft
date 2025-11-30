@@ -81,5 +81,5 @@ body:
       options:
         - label: I have searched existing issues
           required: true
-        - label: I have run `academic-thesis-ai verify`
+        - label: I have run `opendraft verify`
           required: false

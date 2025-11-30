@@ -21,74 +21,74 @@ This is a **monorepo** containing multiple related projects unified under a sing
 ### Repository Contents
 
 ```
-academic-thesis-ai/
-├── opendraft/              # UNUSED - Legacy package name (kept for compatibility)
-├── academic_thesis_ai/     # Main Python package (274 lines)
+opendraft/                  # Repository root
+├── opendraft/              # Main Python package (CLI entry point)
 │   ├── __init__.py        # Package initialization
 │   ├── cli.py             # Command-line interface entry point
-│   └── config.py          # Configuration management
-├── utils/                  # Core business logic (1.2MB)
-│   ├── ai/                # LLM clients (Gemini, Claude, OpenAI)
-│   ├── agents/            # 15 specialized AI agents
-│   ├── citations/         # Citation APIs (Crossref, Semantic Scholar, arXiv, PubMed)
-│   ├── exporters/         # PDF, DOCX, LaTeX generators
-│   └── helpers/           # Shared utilities
-├── concurrency/            # Async execution (32KB)
-│   ├── async_agent_executor.py
-│   └── rate_limiter.py
-├── scripts/                # Development scripts (228KB)
-│   ├── test_agents.py
-│   └── validate_thesis.py
-├── tests/                  # Test suite (178 tests, 28MB outputs)
-│   ├── scripts/           # Thesis generation tests
-│   ├── outputs/           # Generated thesis examples
-│   └── exploratory/       # Experimental tests
-├── website/                # Next.js landing page (8.1MB, separate deployment)
-│   ├── app/              # Frontend (Next.js 15.5.4)
-│   ├── backend/          # Python Modal worker (serverless backend)
-│   └── .env.local        # (gitignored - not in repo)
-├── docs/                   # Documentation (11 user-facing files)
+│   ├── verify.py          # Installation verification
+│   └── version.py         # Version management
+├── utils/                  # Core business logic
+│   ├── api_citations/     # Citation APIs (Crossref, Semantic Scholar, arXiv, PubMed)
+│   ├── formatting/        # Document formatting utilities
+│   ├── pdf_engines/       # PDF generation engines
+│   ├── citation_*.py      # Citation management modules
+│   └── export*.py         # PDF, DOCX, LaTeX exporters
+├── concurrency/            # Async execution and rate limiting
+├── prompts/                # AI agent prompts (15 agents across 6 phases)
+│   ├── 01_research/       # Scout, Scribe, Signal
+│   ├── 02_structure/      # Architect, Formatter, Citation Manager
+│   ├── 03_compose/        # Crafter, Thread, Narrator
+│   ├── 04_validate/       # Skeptic, Verifier, Referee
+│   ├── 05_refine/         # Voice, Entropy, Polish
+│   └── 06_enhance/        # Enhancer
+├── backend/                # Modal.com serverless backend
+├── tests/                  # Test suite (70+ tests)
+│   ├── scripts/           # Integration test scripts
+│   └── outputs/           # Generated thesis examples
+├── website/                # Next.js landing page (separate deployment)
+├── docs/                   # Documentation
 │   ├── guides/            # User guides (BEST_PRACTICES.md, FAQ.md)
-│   └── archive/           # Historical docs (47 archived files)
-└── examples/               # Sample theses (PDFs, 4 production examples)
+│   └── archive/           # Historical docs
+└── examples/               # Sample theses (4 production PDFs)
 ```
 
 ---
 
-## Project #1: CLI Tool (`academic_thesis_ai/`)
+## Project #1: CLI Tool (`opendraft/`)
 
 **Primary Interface:** Command-line Python application
 
 ### Installation
 
 ```bash
-pip install .
-# or
-pip install -e .  # Editable mode for development
+git clone https://github.com/federicodeponte/opendraft.git
+cd opendraft
+pip install -e .  # Editable mode (recommended)
 ```
 
 ### Usage
 
 ```bash
-academic-thesis-ai --topic "Your research topic" --llm gemini-2.5-flash
+opendraft verify  # Verify installation
+opendraft --help  # Show available commands
 # or
-thesis-ai --topic "Your topic"  # Alias
+thesis-ai --help  # Alias
 ```
 
 ### Components
 
-**Entry Point:** `academic_thesis_ai/cli.py`
+**Entry Point:** `opendraft/cli.py`
 - Parses command-line arguments
 - Orchestrates 15-agent workflow
 - Exports to PDF/DOCX/LaTeX
 
 **Core Logic:** `utils/` directory
-- **`utils/agents/`**: 15 specialized AI agents (Scout, Scribe, Signal, Architect, etc.)
-- **`utils/ai/`**: LLM providers (Gemini, Claude, OpenAI)
-- **`utils/citations/`**: Citation APIs (Crossref 200M+ papers, Semantic Scholar, arXiv, PubMed)
-- **`utils/exporters/`**: Format converters (Markdown → PDF, DOCX, LaTeX)
+- **`utils/api_citations/`**: Citation APIs (Crossref 200M+ papers, Semantic Scholar, arXiv, PubMed)
+- **`utils/citation_*.py`**: Citation management, compilation, validation
+- **`utils/export*.py`**: Format converters (Markdown → PDF, DOCX, LaTeX)
+- **`utils/pdf_engines/`**: PDF generation engines (WeasyPrint, Pandoc)
 
-**Configuration:** `academic_thesis_ai/config.py`
+**Configuration:** `config.py` (project root)
 - API keys (via `.env`)
 - Model selection
 - Output formats
@@ -217,7 +217,7 @@ These are used by **both** CLI and website:
 ```
 User Input
    ↓
-academic-thesis-ai CLI
+opendraft CLI
    ↓
 Phase 1: Research (Scout + Scribe + Signal) → 20-50 papers
    ↓
@@ -314,8 +314,8 @@ pytest --cov=. --cov-report=term-missing
 - ✅ Exporters
 
 **Independent:**
-- CLI has `academic_thesis_ai/cli.py`
-- Website has Modal worker (`website/backend/main.py`)
+- CLI has `opendraft/cli.py`
+- Website has Modal worker (`backend/modal_worker.py`)
 
 ### Website → CLI
 
@@ -334,7 +334,7 @@ User Machine
    ↓
 pip install opendraft
    ↓
-academic-thesis-ai (local execution)
+opendraft (local execution)
    ↓
 Gemini/Claude/OpenAI APIs (cloud)
    ↓
@@ -395,9 +395,9 @@ modal secret create claude-key CLAUDE_API_KEY=your-key
 ### Planned Improvements (v2.0)
 
 **Code Structure:**
-- Move `utils/` into `academic_thesis_ai/` package
+- Move `utils/` into `opendraft/` package
 - Proper Python package hierarchy
-- Importable modules (`from academic_thesis_ai.agents import Scout`)
+- Importable modules (`from opendraft.agents import Scout`)
 
 **Multi-Tenancy:**
 - User authentication (website)

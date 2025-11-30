@@ -15,7 +15,7 @@ Complete deployment instructions for automated thesis generation service.
 ### 1.1 Run Schema Migration
 
 1. Go to your Supabase Dashboard → SQL Editor
-2. Copy the entire contents of `/home/federicodeponte/academic-thesis-ai/website/lib/supabase/schema.sql`
+2. Copy the entire contents of `website/lib/supabase/schema.sql`
 3. Paste into SQL Editor
 4. Click "Run"
 
@@ -75,7 +75,7 @@ modal secret list
 ### 3.1 Navigate to Backend Directory
 
 ```bash
-cd /home/federicodeponte/academic-thesis-ai/backend
+cd backend
 ```
 
 ### 3.2 Deploy Worker
@@ -224,7 +224,7 @@ Expected output:
 # In modal_worker.py, verify:
 code_mount = modal.Mount.from_local_dir(
     local_path="../",  # Correct: parent of backend/
-    remote_path="/root/academic-thesis-ai"
+    remote_path="/root/opendraft"
 )
 ```
 

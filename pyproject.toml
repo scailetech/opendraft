@@ -9,10 +9,10 @@ description = "AI-Powered Academic Writing Framework with 15 specialized agents 
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Federico De Ponte", email = "federico.deponte@example.com"}
+    {name = "Federico De Ponte"}
 ]
 maintainers = [
-    {name = "Federico De Ponte", email = "federico.deponte@example.com"}
+    {name = "Federico De Ponte"}
 ]
 keywords = [
     "academic-writing",
@@ -85,11 +85,11 @@ opendraft = "opendraft.cli:main"
 thesis-ai = "opendraft.cli:main"
 
 [tool.setuptools]
-packages = ["opendraft", "utils", "concurrency"]
+packages = ["opendraft", "utils", "utils.api_citations", "utils.formatting", "utils.pdf_engines", "concurrency"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-opendraft = ["*.md", "prompts/**/*.md"]
+"*" = ["*.md", "**/*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

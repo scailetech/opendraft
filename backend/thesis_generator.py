@@ -313,11 +313,11 @@ def generate_thesis(
 
     full_thesis = f"""# {topic}
 
-**Author:** OpenDraft AI
-**Institution:** AI-Generated Academic Thesis
-**Date:** {current_date}
-**Thesis Type:** {'PhD Dissertation' if level == 'phd' else 'Master Thesis'}
-**Word Count:** {word_count:,} words
+**Author:** OpenDraft AI  
+**Institution:** AI-Generated Academic Thesis  
+**Date:** {current_date}  
+**Thesis Type:** {'PhD Dissertation' if level == 'phd' else 'Master Thesis'}  
+**Word Count:** {word_count:,} words  
 
 ---
 

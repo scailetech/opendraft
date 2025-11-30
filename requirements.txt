@@ -24,3 +24,4 @@ lxml>=4.9.0                 # Fast XML/HTML parser for BeautifulSoup
 # === Utilities ===
 python-dotenv>=1.0.0        # Load .env files
 rich>=13.0.0                # Pretty terminal output (for scripts)
+psutil>=5.9.0               # System monitoring for health checks

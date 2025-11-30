@@ -8,129 +8,123 @@
 ## Summary
 
 **Strengths:**
-- The Fazit is well-structured, covering main findings, the thesis's contribution, and future research directions.
-- It effectively summarizes the mechanisms and acknowledged complexities of Emissions Trading Systems (ETS).
-- It highlights important aspects like cost-efficiency, innovation incentives, and the need for adaptive policy design.
-- The discussion integrates contemporary policy developments like the "Fit for 55" package and the Carbon Border Adjustment Mechanism (CBAM).
-- It identifies relevant and important avenues for future research, including social and distributive impacts, and the integrity of voluntary carbon markets.
-- Citations are present for many key claims, which adds credibility.
+- Addresses a highly relevant and complex topic (Emissions Trading).
+- Provides a comprehensive overview of the mechanisms, challenges, and potentials of market-based climate policy instruments.
+- Highlights the nuanced factors influencing the effectiveness of Emission Trading Systems (ETS), such as design, political framing, and market conditions.
+- Incorporates specific examples and findings from various global regions (EU, Canada, China, UK, India, Indonesia).
+- Clearly structures future research directions, though some specific suggestions need refinement.
+- Generally well-cited for the claims made, indicating a thorough literature review.
 
-**Critical Issues:** 3 major, 4 moderate, 7 minor
-**Recommendation:** Revisions needed before final submission.
+**Critical Issues:** 3 major, 4 moderate, 3 minor
+**Recommendation:** Revisions needed before publication
 
 ---
 
 ## MAJOR ISSUES (Must Address)
 
-### Issue 1: Overstated Novelty of Thesis Contribution
-**Location:** Paragraph 3, multiple sentences (e.g., "Diese Arbeit leistet einen wesentlichen Beitrag zum bestehenden Verständnis des Emissionshandels, indem sie eine integrierte Perspektive auf die theoretischen Grundlagen, die empirische Evidenz und die politischen Herausforderungen bietet. Während frühere Studien oft spezifische Aspekte...isoliert betrachtet haben, verbindet diese Untersuchung diese Elemente, um ein kohärenteres Bild...zu zeichnen.")
-**Problem:** The claim of providing an "integrated perspective" that connects theory, evidence, and policy, or drawing a "coherent picture," is a standard goal for comprehensive literature reviews and synthesis papers. Many existing academic works already aim for this. Without specifying *how* this thesis's integration is unique, novel, or offers a deeper insight than prior comprehensive reviews, these claims appear overstated. The subsequent points presented as "central contributions" (e.g., ETS not an isolated instrument, importance of price signal quality) are generally well-established understandings in the field.
-**Fix:** Rephrase the contribution to be more specific and modest. Instead of claiming a novel *integration*, highlight the specific *focus*, *depth*, or *up-to-dateness* of the integration. For example, "Diese Arbeit trägt dazu bei, indem sie die *jüngsten Entwicklungen* im EU ETS detailliert mit den theoretischen Grundlagen verbindet und dabei spezifische Implikationen für die Politikgestaltung in [specific context/region, if applicable] aufzeigt." Or, "Diese Arbeit liefert eine aktualisierte und synthetische Darstellung der komplexen Wechselwirkungen, die für die Wirksamkeit von ETS entscheidend sind, und integriert dabei besonders die Diskussionen um CBAM und die jüngsten Anpassungen im EU ETS."
-**Severity:** 🔴 High - affects the perceived academic merit and originality of the thesis.
+### Issue 1: Overclaim of "Meta-Analyse"
+**Location:** "Hauptergebnisse zur Klimaschutzwirkung" section, 2nd paragraph
+**Claim:** "Eine Meta-Analyse von Ex-post-Evaluierungen legt nahe..." (A meta-analysis of ex-post evaluations suggests...)
+**Problem:** The introductory paragraph states the paper's methodology as "Synthese bestehender Literatur und die kritische Bewertung verschiedener Implementierungsmodelle" (synthesis of existing literature and critical evaluation of various implementation models). Conducting a *new* meta-analysis is a distinct and rigorous methodological undertaking that would typically be a central focus of the paper's methods section. If the paper *synthesized findings from existing meta-analyses*, the phrasing should reflect this (e.g., "Meta-Analysen der Literatur legen nahe..."). If the paper *did* conduct a new meta-analysis, the abstract and introduction should clearly state this as a core contribution, and the methods section must detail it.
+**Evidence:** Contradiction between stated methodology in the introduction and the claim in the "Hauptergebnisse" section.
+**Fix:** Clarify whether *this paper* performed a meta-analysis or synthesized findings *from* existing meta-analyses. Adjust the phrasing accordingly. If a new meta-analysis was performed, ensure it's prominently highlighted in the paper's methods and contribution.
+**Severity:** 🔴 High - affects the stated methodology and potential overstatement of the paper's original research contribution.
 
-### Issue 2: Missing Self-Critical Reflection / Limitations of *This Work*
-**Location:** Throughout Paragraph 3 (Contribution) and Paragraph 4 (Future Research)
-**Problem:** The conclusion extensively discusses future research directions for the *field* of ETS, which is good. However, it lacks a critical self-reflection on the specific limitations of *this particular Master's thesis*. A strong academic conclusion typically includes a dedicated section or paragraph on the limitations of the *current study itself* (e.g., scope, chosen methodology, specific focus, data constraints) before moving to broader future research. This is crucial for academic rigor.
-**Missing:** A clear statement like "Trotz des umfassenden Überblicks ist diese Arbeit durch [specific limitation 1, e.g., Fokus auf Sekundärliteratur, keine eigene empirische Erhebung] und [specific limitation 2, e.g., primärer Fokus auf EU ETS] begrenzt. Diese Einschränkungen eröffnen jedoch direkt die Notwendigkeit für weitere Forschung in den folgenden Bereichen..."
-**Fix:** Add a dedicated paragraph or section on the limitations of the Master's thesis itself, explaining what aspects could not be covered in depth or what methodological choices inherently limit its scope.
-**Severity:** 🔴 High - a standard and expected component of academic rigor, especially in a Master's thesis.
+### Issue 2: Overclaims regarding "Significant Contribution" and "Comprehensive Analysis"
+**Location:** Initial paragraph, "Beitrag zum Verständnis des Emissionshandels" section, 1st paragraph
+**Claim:** "Durch eine umfassende Analyse... wurde ein detailliertes Bild..." (Through a comprehensive analysis... a detailed picture was drawn...) and "Diese Arbeit leistet einen signifikanten Beitrag zum Verständnis des Emissionshandels..." (This work makes a significant contribution to the understanding of emissions trading...).
+**Problem:** While the paper appears to provide a thorough synthesis, terms like "umfassend" (comprehensive), "detailliert" (detailed), and especially "signifikanten Beitrag" (significant contribution) are strong claims for a literature synthesis. A synthesis is valuable, but "significant contribution" usually implies novel empirical work, a new theoretical framework, or a groundbreaking meta-analysis. If the paper's primary method is literature synthesis and critical evaluation, these claims should be carefully re-evaluated to accurately reflect the scope and novelty of the *paper's own* findings versus a summary of existing knowledge.
+**Evidence:** The stated methodology is literature synthesis. While valuable, this typically doesn't warrant claims of "significant contribution" without a specific, novel analytical framework or empirical finding.
+**Fix:** Moderate the language. For example, "This paper offers a thorough overview..." instead of "comprehensive analysis." For contribution, focus on *how* the synthesis contributes (e.g., "by structuring complex information," "by highlighting overlooked interdependencies," or "by critically evaluating diverse models") rather than just stating "significant contribution."
+**Severity:** 🔴 High - affects the perceived originality and scope of the paper.
 
-### Issue 3: Implied Universality vs. Context-Specificity
-**Location:** Paragraph 2 (Effectiveness), Paragraph 3 (Contribution)
-**Problem:** While the text briefly mentions "Beispiele aus anderen Regionen, wie die Entwicklung des chinesischen Emissionshandels," the overwhelming focus and detailed examples (EU ETS, Fit for 55, CBAM) are European. The claims about the "Wirksamkeit von Emissionshandelssystemen" and the "Beitrag zum Verständnis des Emissionshandels" often sound universal, without sufficient hedging for context-specificity. The text sometimes implies the EU ETS is a directly transferable model, but the challenges in other regions suggest significant contextual differences.
-**Missing:** A more explicit acknowledgment that the effectiveness and optimal design principles, while generally applicable, are heavily influenced by national/regional political, economic, and social contexts.
-**Fix:** Add nuance to claims about general effectiveness and transferable lessons. Explicitly state that while principles are universal, implementation success is context-dependent. For example, "Während die prinzipielle Wirksamkeit von ETS universell anerkannt ist, zeigen die Erfahrungen, dass die konkrete Ausgestaltung und damit der Erfolg stark von den spezifischen nationalen und regionalen Rahmenbedingungen abhängt."
-**Severity:** 🔴 High - important for nuanced academic discourse and avoiding overgeneralization.
+### Issue 3: Lack of Specificity and Relevance in Future Research Directions
+**Location:** "Zukünftige Forschungsrichtungen" section, points 1 and 2
+**Problem:** Some of the suggested future research topics seem tangential or too specific without a clear connection established *within this paper* to the core themes of emissions trading design and effectiveness.
+*   **Point 1:** While socioeconomic distribution is crucial, the jump to "Wechselwirkungen zwischen Kohlenstoffbepreisung und Nahrungsmittelqualität sowie Treibhausgasemissionen aus der Ernährung" (interactions between carbon pricing and food quality as well as GHG emissions from nutrition) feels like a very specific niche that wasn't elaborated earlier.
+*   **Point 2:** Similarly, "Lieferkettendigitalisierung und nicht-intrusiver Lastüberwachung" (supply chain digitalization and non-intrusive load monitoring) and "Environmental Management Accounting im Zeitalter der Digitalisierung" (Environmental Management Accounting in the age of digitalization) are specific technical/managerial topics. The link to how ETS *specifically* promotes disruptive innovation or public acceptance through these avenues is missing.
+**Evidence:** These specific research ideas appear without preceding discussion or context in the paper's findings, making their inclusion here seem somewhat arbitrary or disconnected from the paper's main narrative.
+**Fix:** Either provide a brief, explicit rationale for *why* these specific topics are relevant extensions of the paper's findings on emissions trading, or generalize these suggestions to broader categories (e.g., "the role of digital technologies in MRV and supply chain optimization for ETS compliance").
+**Severity:** 🔴 High - weakens the logical flow and perceived coherence of the future research agenda stemming from *this specific paper*.
 
 ---
 
 ## MODERATE ISSUES (Should Address)
 
-### Issue 4: "Unverzichtbares" (Indispensable) Claim - Potential Overclaim
-**Location:** Paragraph 1, line 3; Final Paragraph, line 1
-**Claim:** "...sind marktwirtschaftliche Ansätze wie der Emissionshandel von entscheidender Bedeutung" and "Emissionshandel ein unverzichtbares, wenn auch komplexes Instrument im globalen Klimaschutz".
-**Problem:** While ETS is undoubtedly a very important instrument, calling it "unverzichtbar" (indispensable) or "entscheidend" (decisive/critical) can be an overclaim. Many climate economists and policymakers argue for a portfolio of instruments (e.g., carbon tax, direct regulations, subsidies, R&D funding) where ETS is *one* key component, but perhaps not universally "indispensable" in *all* contexts or as the *sole* solution. This phrasing might inadvertently dismiss the crucial role of other significant policy tools or alternative approaches (e.g., pure carbon taxation, command-and-control for certain sectors).
-**Missing Counterargument:** An acknowledgment that there are ongoing debates about the optimal mix of instruments, and that some argue for alternative primary mechanisms or for ETS playing a supporting role in specific contexts.
-**Fix:** Soften the language. Replace "unverzichtbares" with "ein zentrales und hochwirksames Instrument" or "eines der wichtigsten Instrumente". Acknowledge that its role is often debated in conjunction with other policy tools.
-**Severity:** 🟡 Moderate - improves balance and acknowledges the broader policy debate.
+### Issue 4: Missing Acknowledgment of Paper's Own Limitations
+**Location:** Throughout the Fazit
+**Problem:** The Fazit effectively summarizes the complexities and challenges of ETS in general. However, it does not explicitly acknowledge the limitations of *this specific paper's* methodology or scope. For example, if it's purely a literature review, it cannot draw new empirical conclusions. If it focused on certain regions or types of ETS, this should be stated. Acknowledging these limitations strengthens the paper's credibility and provides a more balanced perspective.
+**Missing:** A dedicated paragraph or statement outlining the limitations of *this paper's* approach (e.g., scope of literature reviewed, specific analytical focus, lack of primary data analysis).
+**Fix:** Add a brief section or paragraph discussing the limitations of the current study. This is crucial for academic rigor.
 
-### Issue 5: Lack of Specificity in "Empirische Analysen"
-**Location:** Paragraph 2, "Empirische Analysen, insbesondere des Europäischen Emissionshandelssystems (EU ETS), zeigen, dass solche Systeme in der Lage sind, Emissionen signifikant zu reduzieren {cite_006}{cite_027}."
-**Problem:** While cited, "empirische Analysen" is a broad term. For a Master's thesis conclusion, it would be stronger to briefly hint at *what kind* of empirical analysis (e.g., econometric studies, ex-post evaluations, impact assessments) or *what specific metrics* (e.g., observed emission reductions, price elasticity studies) were primarily reviewed to draw this conclusion. This adds precision.
-**Fix:** Add a brief clarifying phrase. E.g., "Empirische Analysen, insbesondere ökonometrische Studien zum Europäischen Emissionshandelssystems (EU ETS), zeigen..."
-**Severity:** 🟡 Moderate - improves clarity and academic precision.
+### Issue 5: Repetitive Phrasing
+**Location:** Throughout the Fazit, especially in the summary and conclusion sentences of paragraphs.
+**Problem:** The Fazit, at 1126 words, is quite long. This length sometimes leads to slightly repetitive phrasing or restating similar points in different words, particularly when emphasizing the complexity, dependence on design, and importance of adaptation.
+**Example:** "Es wurde deutlich, dass der Emissionshandel... in seiner tatsächlichen Wirkung stark von seinem Design, der politischen Rahmung und den spezifischen Marktbedingungen abhängt." is a key takeaway, but similar sentiments are repeated.
+**Fix:** Streamline the language to avoid redundancy. Condense sentences where possible to make the argument more concise and impactful.
 
-### Issue 6: Nuance on "Fördern grüne Innovationen"
-**Location:** Paragraph 2, "Darüber hinaus fördern Emissionshandelssysteme die Entwicklung und den Einsatz von grünen Innovationen und Technologien..."
-**Problem:** While true in principle, the *extent* to which ETS truly drives *breakthrough* innovation versus incremental improvements or the adoption of existing technologies is a debated topic. Some argue that carbon pricing alone might not be sufficient for radical innovation, which often requires additional R&D support or targeted policies.
-**Missing Nuance:** Acknowledgment of this debate or the conditions under which ETS most effectively fosters transformative innovation.
-**Fix:** Add a slight hedge or nuance. E.g., "...fördern Emissionshandelssysteme die Entwicklung und den Einsatz von grünen Innovationen und Technologien, *wobei die Art und das Ausmaß der Innovation stark von der Höhe und Stabilität des Kohlenstoffpreises sowie komplementären Maßnahmen abhängen*."
-**Severity:** 🟡 Moderate - adds academic depth to a common claim.
+### Issue 6: Tone - Overly Confident in Synthesis
+**Location:** "Beitrag zum Verständnis des Emissionshandels" section
+**Problem:** While the paper clearly synthesizes a lot of information, some claims in the "Contribution" section might be too strong for a literature review. For instance, "trägt die Studie dazu bei, die Rolle von Verknüpfungsmechanismen zwischen verschiedenen Kohlenstoffmärkten *besser zu verstehen*" (the study contributes to *better understanding* the role of linking mechanisms). While it consolidates existing knowledge, claiming to make it "better understood" implies a new level of insight that might not be fully justified by a synthesis alone.
+**Fix:** Adjust the wording to reflect the *nature* of the contribution more precisely, e.g., "This study *clarifies* the role...", "This study *synthesizes existing knowledge on*..."
 
-### Issue 7: "Brücke zwischen akademischer Forschung und angewandter Klimapolitik" - Needs Justification
-**Location:** Paragraph 3, final sentence
-**Claim:** "Der theoretische Rahmen wurde um praktische Implikationen für politische Entscheidungsträger erweitert, um eine Brücke zwischen akademischer Forschung und angewandter Klimapolitik zu schlagen."
-**Problem:** This is a laudable goal, but claiming to have successfully "built a bridge" requires demonstrating *how* this was achieved in the thesis. A conclusion should summarize the *actual findings* that contribute to this, rather than just stating the intent or general outcome.
-**Fix:** Briefly summarize *how* the thesis built this bridge. E.g., "Der theoretische Rahmen wurde um praktische Implikationen für politische Entscheidungsträger erweitert, *indem spezifische Empfehlungen zur Gestaltung von Marktstabilitätsreserven oder zur Einnahmenverwendung abgeleitet wurden*, um eine Brücke zwischen akademischer Forschung und angewandter Klimapolitik zu schlagen." (Use specific examples from the thesis if possible).
-**Severity:** 🟡 Moderate - strengthens the claim by providing evidence from the thesis.
+### Issue 7: Missing Discussion on Fundamental Critiques of Market-Based Mechanisms
+**Location:** Throughout the Fazit
+**Problem:** While the Fazit discusses challenges within ETS design (over-allocation, carbon leakage), it primarily operates within the paradigm of market-based climate policy. It could briefly acknowledge broader, more fundamental critiques of carbon pricing or market-based environmental instruments (e.g., ethical concerns about commodifying pollution, questions about their ability to drive truly transformative societal change vs. incremental adjustments, or concerns about equity beyond just cost distribution). While these might have been discussed in the main body, a brief mention in the Fazit would demonstrate a more holistic awareness of the academic and societal debate.
+**Fix:** Add a sentence or two in the "Fazit" or "Zukünftige Forschungsrichtungen" to acknowledge the existence of fundamental critiques against market-based mechanisms, perhaps framing it as a challenge for future research regarding the social license or ethical implications.
 
 ---
 
 ## MINOR ISSUES
 
-1.  **Vague claim:** "um ein umfassendes Verständnis ihres Beitrags zur Dekarbonisierung zu ermöglichen" (Para 1) -> "um ein *tieferes* Verständnis..." or "um die *komplexen Aspekte* ihres Beitrags..." "Umfassend" is a very high bar for a Master's thesis.
-2.  **Repetitive phrasing:** "Die Hauptergebnisse dieser Untersuchung bestätigen..." (Para 2), "Diese Arbeit leistet einen wesentlichen Beitrag zum bestehenden Verständnis..." (Para 3), and "Die vorliegende Arbeit hat dazu beigetragen..." (Para 5). Can be slightly varied for better flow and impact.
-3.  **Missing specific examples for "grünen Innovationen":** (Para 2) While "erneuerbare Energien, Energieeffizienz und Kohlenstoffabscheidungstechnologien" are mentioned, if the thesis discussed particular innovations, briefly naming one or two could strengthen the point.
-4.  **Slightly strong wording:** "maximiert die Gesamtwirtschaftlichkeit" (Para 2) -> "optimiert die Gesamtwirtschaftlichkeit" or "verbessert die Gesamtwirtschaftlichkeit erheblich". "Maximiert" is a very strong, often hard-to-prove, claim.
-5.  **Overuse of "entscheidend":** (Para 1, Para 2, Para 3, Para 4) The word "entscheidend" appears multiple times. Varying vocabulary would enhance the text.
-6.  **Wording on "wissenschaftliche Glaubwürdigkeit":** (Para 4) "Die wissenschaftliche Glaubwürdigkeit und Integrität von Kohlenstoffmärkten, insbesondere im Hinblick auf freiwillige Märkte..." The phrase "wissenschaftliche Glaubwürdigkeit" might be better phrased as "Transparenz, Glaubwürdigkeit und Robustheit der Emissionsreduktionen" when referring to the market itself. "Wissenschaftlich" often refers to the research *about* the market.
-7.  **Citation check:** The same citation {cite_038} is used in Para 1 to support the "dringenden Notwendigkeit" of emission reduction and in Para 4 for the idea of "Schaffung eines globalen, interoperablen Kohlenstoffmarktes". While possible, it's worth verifying if {cite_038} truly covers both aspects equally well, or if a more specific citation for the urgency of reduction might be appropriate in Para 1.
+1.  **Vague claims in "Zukünftige Forschungsrichtungen":** Some connections between the broad research topic (e.g., "technologische Innovationen und Verhaltensänderungen") and the highly specific examples (e.g., "Lieferkettendigitalisierung") are not immediately obvious.
+2.  **Long sentences:** Some sentences are quite long and complex, which could be broken down for better readability.
+3.  **Consistency in citation style:** Ensure all citations, if they were full references, included DOI or arXiv ID as per the academic integrity guidelines. (Cannot check actual content here, but flag as a general point).
 
 ---
 
 ## Logical Gaps
 
-### Gap 1: Implicit Assumption of Thesis's Role
-**Location:** Paragraph 1
-**Logic:** "Problem X ist wichtig und marktwirtschaftliche Ansätze sind entscheidend" → "Diese Arbeit hat [analysiert]...um ein umfassendes Verständnis...zu ermöglichen."
-**Missing:** While the problem's importance justifies the research topic, the jump to "ermöglichen ein umfassendes Verständnis" without explicitly linking back to the *research questions* or *specific objectives* of the thesis (which should be clearly stated in the introduction) makes the connection in the conclusion feel a bit like a non-sequitur. The conclusion should summarize how the thesis *answered its own RQs*, not just generally contributed to understanding.
-**Fix:** Rephrase to explicitly link back to the thesis's specific objectives. E.g., "...um die in dieser Arbeit formulierten Forschungsfragen zu beantworten und so ein tieferes Verständnis..."
+### Gap 1: Implied Novelty vs. Stated Methodology
+**Location:** "Beitrag zum Verständnis des Emissionshandels" section
+**Logic:** The section claims the paper "highlights the complexity" and "enables a differentiated evaluation." While a synthesis can certainly do this, the language sometimes implies *new* insights or an *original* framework for this highlighting/evaluation, which isn't explicitly supported by the stated "literature synthesis" methodology.
+**Missing:** A clearer articulation of *how* this specific paper's synthesis or critical evaluation goes beyond merely summarizing existing literature to offer a truly novel perspective or framework for understanding.
+**Fix:** Strengthen the argument in the main body about the unique analytical lens or framework used for the synthesis, and then reflect that more precisely in the Fazit.
 
 ---
 
-## Methodological Concerns
+## Methodological Concerns (as reflected in Fazit)
 
-### Concern 1: Scope of Evidence for Global Claims
-**Issue:** The conclusion makes claims about ETS effectiveness globally and the thesis's "integrated perspective" on ETS generally, but the detailed examples and specific policy discussions are heavily focused on the EU ETS.
-**Risk:** The generalizability of findings and the "integrated perspective" might be implicitly limited by the scope of the underlying literature review or empirical analysis within the thesis. If the thesis did not extensively review non-EU ETS, the broad claims might be unsubstantiated by the actual work.
-**Reviewer Question:** "To what extent did the thesis's analysis truly cover a *global* perspective beyond the EU and a brief mention of China, given the broad claims?"
-**Suggestion:** Explicitly state the primary geographical/systematic focus of the thesis (e.g., "While drawing lessons for global application, this thesis primarily focused on the EU ETS as a leading example, given its maturity and data availability..."). This relates back to Major Issue 3 and 2.
+### Concern 1: Scope of "Comprehensive" Analysis
+**Issue:** The Fazit claims a "comprehensive analysis" covering "both theoretical foundations and empirical findings." While the text mentions various aspects and regions, the sheer breadth implies a depth that might be hard to achieve in a single paper, especially one primarily based on literature synthesis.
+**Risk:** The claim of comprehensiveness might lead readers to expect an exhaustive treatment that the paper (understandably) cannot deliver.
+**Reviewer Question:** "What specific theoretical foundations and empirical findings were *not* covered, and how does that impact the 'comprehensive' claim?"
+**Suggestion:** Rephrase "umfassende Analyse" to something more precise, like "eine breit angelegte Analyse" (a broad analysis) or "eine vertiefende Analyse" (an in-depth analysis) of key aspects.
 
 ---
 
 ## Missing Discussions
 
-1.  **Specific Challenges/Failures of ETS:** While "Herausforderungen" (challenges) in China and the dependence on system design are mentioned, the conclusion could benefit from a brief, balanced mention of specific instances where ETS *failed* or faced severe difficulties (e.g., early phases of EU ETS, specific regional systems that struggled, issues with specific offset mechanisms). This would add balance to the generally positive outlook.
-2.  **Political Economy of ETS:** The text hints at this (adaptive approach, policy design), but a more explicit discussion of the political challenges beyond just design flaws (e.g., lobbying by incumbent industries, resistance from energy-intensive sectors, public acceptance issues, sovereign control) would provide a more complete picture of the instrument's real-world implementation.
-3.  **Distributional Impacts (beyond future research):** While identified as a crucial future research direction, the conclusion could briefly acknowledge that these impacts are *already* a significant challenge that *existing* ETS systems grapple with, and perhaps briefly touch on current mechanisms (or lack thereof) to address them (e.g., free allowances, revenue recycling).
-4.  **Interaction with other policies (complementary vs. conflicting):** While "komplementäre Maßnahmen" (complementary measures) are mentioned, a brief discussion of potential conflicts or overlaps with other climate policies (e.g., direct regulations on energy efficiency, renewable energy mandates, fossil fuel subsidies) could be valuable, rather than solely focusing on synergy.
+1.  **Practical Implications/Policy Recommendations:** While the Fazit discusses challenges for policymakers, it could briefly summarize the most salient *policy-relevant takeaways* or *recommendations* derived from the paper's synthesis, beyond merely stating that complexity requires dynamic approaches.
+2.  **Trade-offs:** The Fazit mentions balancing ambition, efficiency, and justice. A brief discussion of the inherent *trade-offs* among these goals, as identified by the paper, would be valuable.
+3.  **Role of Non-State Actors:** The Fazit focuses heavily on governmental policy and market mechanisms. A brief mention of the role of non-state actors (e.g., NGOs, industry associations, civil society) in influencing ETS design, implementation, and public acceptance could be a valuable addition.
 
 ---
 
 ## Tone & Presentation Issues
 
-1.  **Slightly repetitive use of strong adjectives:** "entscheidend," "wesentlich," "umfassend," "drastisch," "signifikant." Varying these can improve readability and impact.
-2.  **Generally confident tone:** While appropriate for a conclusion, some claims of the thesis's own contribution could be slightly softened to allow for more nuanced interpretation (as per Major Issue 1).
+1.  **Slightly formal/academic:** The tone is appropriate for an academic paper, but some sentences could be made more direct without losing academic rigor.
+2.  **Repetitive emphasis:** The repeated emphasis on "complexity" and "dependence on design" could be condensed.
 
 ---
 
 ## Questions a Reviewer Will Ask
 
-1.  "What are the specific limitations of *this particular Master's thesis* (e.g., scope, methodology, data sources, depth of analysis) that inform these future research directions?" (Relates to Major Issue 2)
-2.  "Given the strong focus on the EU ETS, how confident can we be that the 'integrated perspective' and general conclusions apply equally well to other, less mature or differently structured ETS globally?" (Relates to Major Issue 3, Methodological Concern 1)
-3.  "You claim the thesis makes a 'central contribution' by highlighting that ETS is not an isolated instrument. How does this go beyond existing, widely accepted policy literature on integrated climate policy frameworks?" (Relates to Major Issue 1)
-4.  "Could the claim of ETS being 'unverzichtbar' be an overstatement, potentially downplaying the role of other crucial climate policy instruments or alternative approaches?" (Relates to Moderate Issue 4)
-5.  "How does this thesis specifically 'build a bridge' between academic research and policy, beyond a general statement of intent? Can you provide concrete examples from your findings?" (Relates to Moderate Issue 7)
+1.  "Did the paper conduct a *new* meta-analysis, or did it synthesize findings *from* existing meta-analyses? Please clarify the methodology."
+2.  "What are the specific limitations of *this paper's* analysis (e.g., scope of literature, geographical focus, methodological approach)?"
+3.  "How does this paper's 'significant contribution' differentiate itself from other comprehensive literature reviews on emissions trading?"
+4.  "Can you provide a clearer logical link for the inclusion of highly specific future research directions like 'food quality and nutrition emissions' or 'supply chain digitalization' within the context of ETS effectiveness?"
+5.  "Given the length of the Fazit, are there opportunities to condense repetitive points or streamline the discussion for greater impact?"
 
 **Prepare answers or add to paper**
 
@@ -139,13 +133,13 @@
 ## Revision Priority
 
 **Before resubmission:**
-1.  🔴 **Fix Issue 1 (Overstated Novelty):** Refine the claims of the thesis's contribution to be more specific and modest.
-2.  🔴 **Address Issue 2 (Missing Self-Critical Reflection):** Add a dedicated section on the limitations of *this specific thesis*.
-3.  🔴 **Resolve Issue 3 (Implied Universality):** Add nuance regarding the context-specificity of ETS effectiveness and design.
-4.  🟡 **Address Issue 4 (Overclaim "Unverzichtbar"):** Soften the language regarding the indispensability of ETS.
-5.  🟡 **Address Issue 7 (Bridge Claim):** Provide concrete examples from the thesis to support the claim of bridging research and policy.
+1.  🔴 Fix Issue 1 (overclaim of meta-analysis) - critical for methodological accuracy.
+2.  🔴 Address Issue 2 (overclaims of "significant contribution" and "comprehensive") - crucial for accurate representation of the paper's scope.
+3.  🔴 Resolve Issue 3 (specificity of future research) - improves logical coherence.
+4.  🟡 Add an explicit section/paragraph on the paper's own limitations (Issue 4) - vital for academic rigor.
+5.  🟡 Refine the tone regarding "contribution" (Issue 6) - enhances credibility.
+6.  🟡 Consider adding a brief acknowledgment of fundamental critiques (Issue 7) - for a more balanced perspective.
 
 **Can defer:**
-- Minor wording issues (e.g., repetition of adjectives, "umfassend").
-- Adding more specific examples for innovations (if not central to the thesis's original content).
-- Verification of {cite_038} if the source truly covers both aspects.
+- Minor wording and sentence structure improvements (addressed during overall revision).
+- Further condensation (can be part of general editing).

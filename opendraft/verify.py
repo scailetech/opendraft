@@ -59,7 +59,8 @@ def check_api_keys():
     print("\n🔑 API Keys (from environment):")
 
     keys = {
-        "GEMINI_API_KEY": "Google Gemini",
+        "GOOGLE_API_KEY": "Google Gemini (primary)",
+        "GEMINI_API_KEY": "Google Gemini (alias)",
         "ANTHROPIC_API_KEY": "Anthropic Claude",
         "OPENAI_API_KEY": "OpenAI GPT",
     }

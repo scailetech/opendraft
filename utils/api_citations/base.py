@@ -54,7 +54,7 @@ class BaseAPIClient(ABC):
 
         # Session for connection pooling
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": "AcademicThesisAI/1.0 (mailto:research@example.com)"})
+        self.session.headers.update({"User-Agent": "OpenDraft/1.3 (https://github.com/federicodeponte/opendraft)"})
 
     def _rate_limit_wait(self) -> None:
         """Wait if necessary to respect rate limit."""

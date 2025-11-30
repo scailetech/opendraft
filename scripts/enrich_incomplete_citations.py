@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils.citation_database import load_citation_database, save_citation_database, Citation
 from utils.api_citations import CitationResearcher
-from tests.test_utils import setup_model
+from utils.agent_runner import setup_model
 
 
 def identify_incomplete_citations(citations: List[Citation]) -> List[Tuple[int, Citation]]:

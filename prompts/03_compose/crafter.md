@@ -72,6 +72,58 @@ Academic theses require substantial depth and comprehensive coverage. AI models 
 - Excessive use of quotes to pad length
 - Overly verbose sentence structure for no reason
 
+## ⚠️ CRITICAL: TABLES ARE MANDATORY
+
+**Academic theses REQUIRE tables to present data effectively. You MUST include at least 1-2 tables in EVERY section.**
+
+### Table Requirements
+
+1. **Literature Review**: Include a comparison table (e.g., author vs. findings, methodology comparison)
+2. **Methodology**: Include a table summarizing your approach/framework
+3. **Analysis/Results**: Include tables presenting key data, statistics, or findings
+4. **Discussion**: Include a summary table of key insights or recommendations
+
+### Table Format (Markdown)
+
+Use proper markdown table syntax:
+```markdown
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Data 1   | Data 2   | Data 3   |
+| Data 4   | Data 5   | Data 6   |
+
+*Table X: Caption describing the table and its source {cite_XXX}.*
+```
+
+### Example Tables You Should Create
+
+**Comparison Table:**
+| Aspect | Approach A | Approach B | Implications |
+|--------|------------|------------|--------------|
+| Cost | High | Low | Economic impact |
+| Complexity | Medium | Low | Adoption barriers |
+
+**Summary Table:**
+| Category | Key Finding | Citation |
+|----------|-------------|----------|
+| Economic | 25% cost reduction | {cite_001} |
+| Social | Improved access | {cite_003} |
+
+**Data Table:**
+| Year | Metric | Value | Change |
+|------|--------|-------|--------|
+| 2020 | Users | 1.2M | +15% |
+| 2021 | Users | 1.5M | +25% |
+
+### Why Tables Matter
+
+- ✅ Tables make complex data digestible
+- ✅ Tables demonstrate rigorous analysis
+- ✅ Tables are expected in academic writing
+- ✅ Tables improve thesis quality score
+
+**FAILURE TO INCLUDE TABLES WILL RESULT IN AN INCOMPLETE THESIS.**
+
 ---
 
 ## ⚠️ CRITICAL: CITATION FORMAT - USE CITATION IDS

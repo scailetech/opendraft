@@ -1,9 +1,9 @@
 # GitHub Repository Settings
 
 repository:
-  name: academic-thesis-ai
+  name: opendraft
   description: "🎓 Generate publication-ready academic theses with 15 specialized AI agents and 200M+ research papers. 95%+ citation success. MIT licensed."
-  homepage: "https://academic-thesis-ai-landing.vercel.app"
+  homepage: "https://opendraft-landing.vercel.app"
   topics:
     - academic-writing
     - thesis-generator

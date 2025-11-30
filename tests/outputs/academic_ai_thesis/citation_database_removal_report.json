@@ -1,13 +1,14 @@
 {
   "stats": {
-    "total_original": 85,
-    "total_filtered": 58,
-    "total_removed": 27,
+    "total_original": 98,
+    "total_filtered": 56,
+    "total_removed": 42,
     "removal_reasons": {
-      "invalid_url": 19,
-      "invalid_doi": 4,
+      "invalid_url": 24,
+      "invalid_metadata": 3,
+      "invalid_doi": 13,
       "generic_title": 1,
-      "invalid_metadata": 3
+      "invalid_author": 1
     }
   },
   "removed_citations": [
@@ -15,421 +16,403 @@
       "citation": {
         "id": "cite_001",
         "authors": [
-          "Abinaya",
-          "Vadivu"
+          "Mittal Brahmbhatt"
         ],
-        "year": 2024,
-        "title": "AI Tools for Efficient Writing and Editing in Academic Research",
-        "source_type": "book",
+        "year": 2020,
+        "title": "Journaling: A powerful Academic Writing Learning Tool",
+        "source_type": "journal",
         "language": "english",
-        "journal": "Advances in Educational Technologies and Instructional Design",
-        "publisher": "IGI Global",
-        "pages": "141-157",
-        "doi": "10.4018/979-8-3693-1798-3.ch009",
-        "url": "https://doi.org/10.4018/979-8-3693-1798-3.ch009",
+        "journal": "International Peer Reviewed E Journal of English Language &amp; Literature Studies - ISSN: 2583-5963",
+        "publisher": "Vedant Knowledge Systems Private Limited",
+        "volume": "2",
+        "issue": "2",
+        "pages": "01-32",
+        "doi": "10.58213/ell.v2i2.23",
+        "url": "https://doi.org/10.58213/ell.v2i2.23",
         "api_source": "Crossref"
       },
-      "reason": "URL returns HTTP 429: https://doi.org/10.4018/979-8-3693-1798-3.ch009",
+      "reason": "URL returns HTTP 500: https://doi.org/10.58213/ell.v2i2.23",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_006",
+        "id": "cite_002",
         "authors": [
-          "Xiao",
-          "Pakrasi",
-          "Chen",
-          "Tang"
+          "Lee"
         ],
-        "year": 2024,
-        "title": "Network for Knowledge Organization (NEKO): an AI knowledge mining workflow for synthetic biology research",
+        "year": 2025,
+        "title": "ChatGPT: how to use it and the pitfalls/cautions in academia",
         "source_type": "journal",
         "language": "english",
-        "journal": "bioRxiv",
-        "doi": "10.1101/2024.06.27.601082",
-        "url": "https://doi.org/10.1101/2024.06.27.601082",
+        "journal": "Annals of Pediatric Endocrinology & Metabolism",
+        "doi": "10.6065/apem.2550028.014",
+        "url": "https://doi.org/10.6065/apem.2550028.014",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1101/2024.06.27.601082",
+      "reason": "URL contains error keyword: 'https://doi.org/10.6065/apem.2550028.014'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_003",
+        "authors": [
+          "Choi",
+          "Lee",
+          "Seok",
+          "Yoo",
+          "Yoon"
+        ],
+        "year": 2025,
+        "title": "Agentic information fusion for urban building energy services using a multi-agent AI system",
+        "source_type": "report",
+        "language": "english",
+        "publisher": "Elsevier BV",
+        "doi": "10.2139/ssrn.5428967",
+        "url": "https://doi.org/10.2139/ssrn.5428967",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.5428967",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_004",
+        "authors": [
+          "Benes",
+          "ElNemer",
+          "Avendano",
+          "Hsu",
+          "Aiyer"
+        ],
+        "year": 2024,
+        "title": "Research Productivity and Impact in Foot and Ankle Surgery: Insights From Relative Citation Ratio Analysis of Recent Fellowship Graduates",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of the American Academy of Orthopaedic Surgeons. Global research & reviews",
+        "doi": "10.5435/JAAOSGlobal-D-23-00280",
+        "url": "https://doi.org/10.5435/JAAOSGlobal-D-23-00280",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.5435/JAAOSGlobal-D-23-00280",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_007",
+        "authors": [
+          "Christ‐Brendemühl"
+        ],
+        "year": 2024,
+        "title": "Leveraging Generative AI in Higher Education: An Analysis of Opportunities and Challenges Addressed in University Guidelines",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "European Journal of Education",
+        "doi": "10.1111/ejed.12891",
+        "url": "https://doi.org/10.1111/ejed.12891",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1111/ejed.12891",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_009",
+        "authors": [
+          "Helberger",
+          "Diakopoulos"
+        ],
+        "year": 2022,
+        "title": "The European AI Act and How It Matters for Research into AI in Media and Journalism",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Digital Journalism",
+        "doi": "10.1080/21670811.2022.2082505",
+        "url": "https://doi.org/10.1080/21670811.2022.2082505",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1080/21670811.2022.2082505",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_010",
         "authors": [
-          "Singh"
+          "Cortes",
+          "Liddle",
+          "Emmanouilidis",
+          "Kelly",
+          "Matusow",
+          "Ragunathan",
+          "Suess",
+          "Tambouratzis",
+          "Zalewski",
+          "Bray"
         ],
-        "year": 2025,
-        "title": "Automated Patient History Summarization using Generative AI",
-        "source_type": "report",
-        "language": "english",
-        "publisher": "Elsevier BV",
-        "doi": "10.2139/ssrn.5184805",
-        "url": "https://doi.org/10.2139/ssrn.5184805",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.5184805",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_011",
-        "authors": [
-          "Zimmermann",
-          "Bazgir",
-          "Al-Feghali",
-          "Ansari",
-          "Brinson",
-          "Yuan",
-          "Çirci",
-          "Chiu",
-          "Daelman",
-          "Evans",
-          "Gangan",
-          "George",
-          "Harb",
-          "Khalighinejad",
-          "Khan",
-          "Klawohn",
-          "Lederbauer",
-          "Mahjoubi",
-          "Mohr",
-          "Moosavi",
-          "Naik",
-          "Ozhan",
-          "Plessers",
-          "Roy",
-          "Schoppach",
-          "Schwaller",
-          "Terboven",
-          "Ueltzen",
-          "Zhu",
-          "Janssen",
-          "Li",
-          "Foster",
-          "Blaiszik"
-        ],
-        "year": 2025,
-        "title": "34 Examples of LLM Applications in Materials Science and Chemistry: Towards Automation, Assistants, Agents, and Accelerated Scientific Discovery",
+        "year": 2024,
+        "title": "AI Horizon Scanning, White Paper p3395, IEEE-SA. Part I: Areas of Attention",
         "source_type": "journal",
         "language": "english",
         "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2505.03049",
-        "url": "https://doi.org/10.48550/arXiv.2505.03049",
+        "doi": "10.48550/arXiv.2410.01808",
+        "url": "https://doi.org/10.48550/arXiv.2410.01808",
         "api_source": "Semantic Scholar"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2505.03049",
+      "reason": "DOI not found: 10.48550/arXiv.2410.01808",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_012",
         "authors": [
-          "Ramadhan",
-          "Rahim",
-          "Darmanto",
-          "Paris"
+          "Jaïdi",
+          "Labbene"
         ],
-        "year": 2024,
-        "title": "Enhancing Academic Writing through Digital Tools: A Systematic Review",
+        "year": 2015,
+        "title": "The problem of integrity in RBAC-based policies within relational databases: synthesis and problem study",
         "source_type": "journal",
         "language": "english",
-        "journal": "Journal of Language and Literature Studies",
-        "doi": "10.36312/jolls.v4i4.2342",
-        "url": "https://doi.org/10.36312/jolls.v4i4.2342",
+        "journal": "International Conference on Ubiquitous Information Management and Communication",
+        "doi": "10.1145/2701126.2701196",
+        "url": "https://doi.org/10.1145/2701126.2701196",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.36312/jolls.v4i4.2342",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/2701126.2701196",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_013",
+        "authors": [
+          "Lave",
+          "Hilaire"
+        ],
+        "year": 1988,
+        "title": "Symposium: Topics in Risk Analysis",
+        "source_type": "journal",
+        "language": "english",
+        "doi": "10.3109/10915818809019526",
+        "url": "https://doi.org/10.3109/10915818809019526",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "Year out of range: 1988; URL returns HTTP 403: https://doi.org/10.3109/10915818809019526",
       "issues": 2
     },
     {
       "citation": {
-        "id": "cite_014",
+        "id": "cite_017",
         "authors": [
-          "Masoudian",
-          "Escobedo",
-          "Strauss",
-          "Schedl"
+          "Huang"
         ],
-        "year": 2025,
-        "title": "Investigating Gender Bias in LLM-Generated Stories via Psychological Stereotypes",
+        "year": 2024,
+        "title": "Automated Retinal Image Analysis and Medical Report Generation through Deep Learning",
         "source_type": "journal",
         "language": "english",
         "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2508.03292",
-        "url": "https://doi.org/10.48550/arXiv.2508.03292",
+        "doi": "10.48550/arXiv.2408.07349",
+        "url": "https://doi.org/10.48550/arXiv.2408.07349",
         "api_source": "Semantic Scholar"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2508.03292",
+      "reason": "DOI not found: 10.48550/arXiv.2408.07349",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_018",
+        "authors": [
+          "Yu",
+          "Zhou",
+          "Huang",
+          "Ding",
+          "Chen",
+          "Wang",
+          "Ren",
+          "Cheng",
+          "Wang",
+          "Liang",
+          "Zhang",
+          "Ding",
+          "Li"
+        ],
+        "year": 2025,
+        "title": "PlantScience.ai: An LLM-Powered Virtual Scientist for Plant Science",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "bioRxiv",
+        "doi": "10.1101/2025.10.24.684337",
+        "url": "https://doi.org/10.1101/2025.10.24.684337",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1101/2025.10.24.684337",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_020",
         "authors": [
-          "Pillai",
-          "Tedesco"
-        ],
-        "year": 2023,
-        "title": "Introduction to Machine Learning, Deep Learning, and Natural Language Processing",
-        "source_type": "book",
-        "language": "english",
-        "journal": "Machine Learning and Deep Learning in Natural Language Processing",
-        "publisher": "CRC Press",
-        "pages": "3-14",
-        "doi": "10.1201/9781003296126-2",
-        "url": "https://doi.org/10.1201/9781003296126-2",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 503: https://doi.org/10.1201/9781003296126-2",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_021",
-        "authors": [
-          "Mezned",
-          "Bounouh"
-        ],
-        "year": 2025,
-        "title": "FUSION: A Novel Multi-Agent Architecture for Complex Problem-Solving",
-        "source_type": "report",
-        "language": "english",
-        "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
-        "doi": "10.36227/techrxiv.174611764.45336756/v1",
-        "url": "https://doi.org/10.36227/techrxiv.174611764.45336756/v1",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.36227/techrxiv.174611764.45336756/v1",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_026",
-        "authors": [
-          "NIST"
+          "Liu",
+          "Lu",
+          "Chen",
+          "Hu",
+          "Zhao",
+          "Fu",
+          "Zhao"
         ],
         "year": 2024,
-        "title": "Artificial Intelligence Risk Management Framework (AI RMF 1.0) - Japanese translation",
-        "source_type": "report",
+        "title": "DrugAgent: Automating AI-aided Drug Discovery Programming through LLM Multi-Agent Collaboration",
+        "source_type": "journal",
         "language": "english",
-        "publisher": "National Institute of Standards and Technology",
-        "doi": "10.6028/nist.ai.100-1.jpn",
-        "url": "https://doi.org/10.6028/nist.ai.100-1.jpn",
-        "api_source": "Crossref"
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2411.15692",
+        "url": "https://doi.org/10.48550/arXiv.2411.15692",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 404: https://doi.org/10.6028/nist.ai.100-1.jpn",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_027",
-        "authors": [
-          "Shrivastava"
-        ],
-        "year": 2024,
-        "title": "China powers the future of global AI innovation",
-        "source_type": "report",
-        "language": "english",
-        "publisher": "East Asia Forum",
-        "doi": "10.59425/eabc.1724774400",
-        "url": "https://doi.org/10.59425/eabc.1724774400",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.59425/eabc.1724774400",
+      "reason": "DOI not found: 10.48550/arXiv.2411.15692",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_030",
         "authors": [
-          "YÜKSEL"
+          "Wätzold",
+          "Popiela",
+          "Mayer"
         ],
-        "year": 2023,
-        "title": "DEĞER MUHASEBESİ VE ETKİ DEĞERLEME: PWC ve YORKSHIRE ÖRNEĞİ",
+        "year": 2024,
+        "title": "Methodology for AI-Based Search Strategy of Scientific Papers: Exemplary Search for Hybrid and Battery Electric Vehicles in the Semantic Scholar Database",
         "source_type": "journal",
         "language": "english",
-        "journal": "Muhasebe Bilim Dünyası Dergisi",
-        "publisher": "Muhasebe Bilim Dunyas脹 Dergisi",
-        "doi": "10.31460/mbdd.1198810",
-        "url": "https://doi.org/10.31460/mbdd.1198810",
-        "api_source": "Crossref"
+        "journal": "Publ.",
+        "doi": "10.3390/publications12040049",
+        "url": "https://doi.org/10.3390/publications12040049",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 404: https://doi.org/10.31460/mbdd.1198810",
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/publications12040049",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_034",
+        "id": "cite_032",
         "authors": [
-          "Valdivieso",
-          "González"
+          "Michalak",
+          "Ellixson"
         ],
-        "year": 2025,
-        "title": "Generative AI Tools in Salvadoran Higher Education: Balancing Equity, Ethics, and Knowledge Management in the Global South",
+        "year": 2024,
+        "title": "Buy versus build: Navigating Artificial Intelligence (AI) tool adoption in academic libraries",
         "source_type": "journal",
         "language": "english",
-        "journal": "Education Sciences",
-        "publisher": "MDPI AG",
-        "volume": "15",
-        "issue": "2",
-        "pages": "214",
-        "doi": "10.3390/educsci15020214",
-        "url": "https://doi.org/10.3390/educsci15020214",
-        "api_source": "Crossref"
+        "journal": "Information Services and Use",
+        "doi": "10.1177/18758789241296755",
+        "url": "https://doi.org/10.1177/18758789241296755",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.3390/educsci15020214",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1177/18758789241296755",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_036",
         "authors": [
-          "Moez"
+          "Lin",
+          "Cao",
+          "Yu",
+          "Zhang"
         ],
-        "year": 2023,
-        "title": "Scientific Publication Guide for Non-Native English-Speaking Researchers",
-        "source_type": "book",
+        "year": 2025,
+        "title": "Diffusion Models for Recommender Systems: From Content Distribution To Content Creation",
+        "source_type": "conference",
         "language": "english",
-        "journal": "Advances in Knowledge Acquisition, Transfer, and Management",
-        "publisher": "IGI Global",
-        "pages": "267-288",
-        "doi": "10.4018/978-1-6684-6859-3.ch017",
-        "url": "https://doi.org/10.4018/978-1-6684-6859-3.ch017",
-        "api_source": "Crossref"
+        "journal": "Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2",
+        "doi": "10.1145/3711896.3736554",
+        "url": "https://doi.org/10.1145/3711896.3736554",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 429: https://doi.org/10.4018/978-1-6684-6859-3.ch017",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3711896.3736554",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_037",
+        "id": "cite_038",
         "authors": [
-          "Yager"
+          "Sangwa",
+          "Nsabiyumva",
+          "Ngobi",
+          "Mutabazi"
         ],
-        "year": 2023,
-        "title": "Autonomous Experimentation in Practice",
-        "source_type": "book",
+        "year": 2025,
+        "title": "Ethical AI Integration in African Higher Education: Enhancing Research Supervision, Grant Discovery, and Proposal Writing Without Compromising Academic Integrity",
+        "source_type": "journal",
         "language": "english",
-        "journal": "Methods and Applications of Autonomous Experimentation",
-        "publisher": "Chapman and Hall/CRC",
-        "pages": "5-25",
-        "doi": "10.1201/9781003359593-1",
-        "url": "https://doi.org/10.1201/9781003359593-1",
-        "api_source": "Crossref"
+        "journal": "Social Science Research Network",
+        "doi": "10.2139/ssrn.5331595",
+        "url": "https://doi.org/10.2139/ssrn.5331595",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 503: https://doi.org/10.1201/9781003359593-1",
+      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.5331595",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_039",
+        "authors": [
+          "Tami",
+          "Ashqar",
+          "Elhenawy"
+        ],
+        "year": 2024,
+        "title": "Automated Question Generation for Science Tests in Arabic Language Using NLP Techniques",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2406.08520",
+        "url": "https://doi.org/10.48550/arXiv.2406.08520",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2406.08520",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_040",
         "authors": [
-          "Sharma",
-          "Sahu",
-          "Chaturvedi"
+          "Jain"
         ],
         "year": 2025,
-        "title": "LLM-Based Multi-Agent Systems",
-        "source_type": "book",
+        "title": "Hybrid Multi-Agent AI/MCTS Systems for Complex Information-Imperfect Games",
+        "source_type": "report",
         "language": "english",
-        "journal": "Advances in Computational Intelligence and Robotics",
-        "publisher": "IGI Global Scientific Publishing",
-        "pages": "53-82",
-        "doi": "10.4018/979-8-3373-1419-8.ch003",
-        "url": "https://doi.org/10.4018/979-8-3373-1419-8.ch003",
+        "publisher": "Wiley",
+        "doi": "10.22541/au.176405957.77536600/v1",
+        "url": "https://doi.org/10.22541/au.176405957.77536600/v1",
         "api_source": "Crossref"
       },
-      "reason": "URL returns HTTP 429: https://doi.org/10.4018/979-8-3373-1419-8.ch003",
+      "reason": "URL returns HTTP 403: https://doi.org/10.22541/au.176405957.77536600/v1",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_042",
+        "authors": [
+          "DiCostanzo",
+          "Ayan",
+          "Jhawar",
+          "Allen",
+          "Patterson"
+        ],
+        "year": 2023,
+        "title": "Machine Learning Data Pipeline for the Democratization of AI",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Proceedings of the International Symposium on Human Factors and Ergonomics in Health Care",
+        "doi": "10.1177/2327857923121029",
+        "url": "https://doi.org/10.1177/2327857923121029",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1177/2327857923121029",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_044",
-        "authors": [
-          "Chang"
-        ],
-        "year": 2025,
-        "title": "Education Shifts and Futuristic Society in the AI Age",
-        "source_type": "book",
-        "language": "english",
-        "journal": "Critical Thinking and Creative Analogies in Statistics, Science, and Technology",
-        "publisher": "Chapman and Hall/CRC",
-        "pages": "299-313",
-        "doi": "10.1201/9781003630081-20",
-        "url": "https://doi.org/10.1201/9781003630081-20",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 503: https://doi.org/10.1201/9781003630081-20",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_046",
-        "authors": [
-          "Tshuma",
-          "Bitzer"
-        ],
-        "year": 2024,
-        "title": "Complex legacies and future prospects: Conceptualising changes in South African doctoral education",
-        "source_type": "book",
-        "language": "english",
-        "journal": "Global Perspectives on Graduate and Doctoral Education",
-        "publisher": "Routledge",
-        "pages": "113-122",
-        "doi": "10.4324/9781003582335-11",
-        "url": "https://doi.org/10.4324/9781003582335-11",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 503: https://doi.org/10.4324/9781003582335-11",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_054",
-        "authors": [
-          "Hausman",
-          "Rigbi",
-          "Weisburd"
-        ],
-        "year": 2025,
-        "title": "Generative AI's Impact on Student Achievement and Implications for Worker Productivity *",
-        "source_type": "report",
-        "language": "english",
-        "publisher": "Elsevier BV",
-        "doi": "10.2139/ssrn.5224465",
-        "url": "https://doi.org/10.2139/ssrn.5224465",
-        "api_source": "Crossref"
-      },
-      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.5224465",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_057",
-        "authors": [
-          "Quinn",
-          "Piper",
-          "Bliss",
-          "Keever"
-        ],
-        "year": 2020,
-        "title": "Recommended Methods for Using the 2020 NIST Principles for AI Explainability",
-        "source_type": "conference",
-        "language": "english",
-        "journal": "2020 IEEE International Conference on Big Data (Big Data)",
-        "publisher": "IEEE",
-        "pages": "2034-2037",
-        "doi": "10.1109/bigdata50022.2020.9377760",
-        "url": "https://doi.org/10.1109/bigdata50022.2020.9377760",
-        "api_source": "Crossref"
-      },
-      "reason": "URL contains error keyword: 'https://doi.org/10.1109/bigdata50022.2020.9377760'",
-      "issues": 1
-    },
-    {
-      "citation": {
-        "id": "cite_061",
         "authors": [
           "Demirel"
         ],
@@ -447,180 +430,511 @@
     },
     {
       "citation": {
-        "id": "cite_062",
+        "id": "cite_050",
         "authors": [
-          "Pantiukhin",
-          "Shapkin",
-          "Kuznetsov",
-          "Jost",
-          "Koldunov"
+          "Suglo"
         ],
-        "year": 2025,
-        "title": "Accelerating Earth Science Discovery via Multi-Agent LLM Systems",
-        "source_type": "journal",
+        "year": 2024,
+        "title": "Exploring the Impact of Deep Learning Activities in the Mathematics Classroom on Students’ Academic Performance: A Comprehensive Study",
+        "source_type": "report",
         "language": "english",
-        "journal": "Frontiers in Artificial Intelligence",
-        "doi": "10.48550/arXiv.2503.05854",
-        "url": "https://doi.org/10.48550/arXiv.2503.05854",
-        "api_source": "Semantic Scholar"
+        "publisher": "MDPI AG",
+        "doi": "10.20944/preprints202403.1551.v1",
+        "url": "https://doi.org/10.20944/preprints202403.1551.v1",
+        "api_source": "Crossref"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2503.05854; URL contains error keyword: 'https://doi.org/10.48550/arXiv.2503.05854'",
-      "issues": 2
+      "reason": "URL contains error keyword: 'https://doi.org/10.20944/preprints202403.1551.v1'; URL returns HTTP 403: https://doi.org/10.20944/preprints202403.1551.v1",
+      "issues": 3
     },
     {
       "citation": {
-        "id": "cite_068",
+        "id": "cite_055",
         "authors": [
-          "Roy",
-          "Ashmika",
-          "Chakraborty",
-          "Sharafat"
+          "Gemen",
+          "Breda",
+          "Coutinho",
+          "Celemín",
+          "Khan",
+          "Kugelberg",
+          "Newton",
+          "Rowe",
+          "Strähle",
+          "Timotijevic",
+          "Urban",
+          "Zolotonosa",
+          "Hadwiger"
         ],
-        "year": 2024,
-        "title": "Future Trends in AI and Academic Research Writing",
-        "source_type": "book",
+        "year": 2015,
+        "title": "Stakeholder engagement in food and health innovation research programming – key learnings and policy recommendations from the INPROFOOD project",
+        "source_type": "journal",
         "language": "english",
-        "journal": "Advances in Educational Technologies and Instructional Design",
-        "publisher": "IGI Global",
-        "pages": "232-254",
-        "doi": "10.4018/979-8-3693-1798-3.ch015",
-        "url": "https://doi.org/10.4018/979-8-3693-1798-3.ch015",
-        "api_source": "Crossref"
+        "doi": "10.1111/NBU.12127",
+        "url": "https://doi.org/10.1111/NBU.12127",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 429: https://doi.org/10.4018/979-8-3693-1798-3.ch015",
+      "reason": "URL returns HTTP 403: https://doi.org/10.1111/NBU.12127",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_069",
+        "id": "cite_061",
         "authors": [
-          "Wang",
-          "Cao",
-          "Jin",
-          "Chan",
-          "Wan",
-          "Afzali",
-          "Cho",
-          "Choi",
-          "Emamverdi",
-          "Gill",
-          "Kim",
-          "Li",
+          "Campbell"
+        ],
+        "year": 2022,
+        "title": "AI by Design and the Future-Back Methodology",
+        "source_type": "book",
+        "language": "english",
+        "journal": "AI by Design",
+        "publisher": "Chapman and Hall/CRC",
+        "pages": "15-23",
+        "doi": "10.1201/9781003267003-2",
+        "url": "https://doi.org/10.1201/9781003267003-2",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 503: https://doi.org/10.1201/9781003267003-2",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_062",
+        "authors": [
+          "Alencar",
+          "Fernandes",
+          "Lima",
+          "Silva"
+        ],
+        "year": 2024,
+        "title": "AI techniques for automated penetration testing in MQTT networks: a literature investigation",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "International Journal of Computer Applications",
+        "doi": "10.1080/1206212X.2024.2443504",
+        "url": "https://doi.org/10.1080/1206212X.2024.2443504",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1080/1206212X.2024.2443504",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_063",
+        "authors": [
+          "Ning",
+          "Zhao",
           "Liu",
-          "Ong",
-          "Rousseau",
-          "Sheikh",
-          "Wei",
-          "Xu",
-          "Zallek",
-          "Kim",
-          "Peng",
-          "Lu",
-          "Sun"
+          "Yang"
+        ],
+        "year": 2024,
+        "title": "DGoT: Dynamic Graph of Thoughts for Scientific Abstract Generation",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "International Conference on Language Resources and Evaluation",
+        "doi": "10.48550/arXiv.2403.17491",
+        "url": "https://doi.org/10.48550/arXiv.2403.17491",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2403.17491; URL contains error keyword: 'https://doi.org/10.48550/arXiv.2403.17491'",
+      "issues": 2
+    },
+    {
+      "citation": {
+        "id": "cite_064",
+        "authors": [
+          "Gopalakrishnan",
+          "Ramya",
+          "Preethiya",
+          "Nithya Paranthaman",
+          "Ashwini",
+          "Dhwarithaa"
         ],
         "year": 2025,
-        "title": "A foundation model for human-AI collaboration in medical literature mining",
+        "title": "Advancements in Multi-Agent Large Language Model Systems for Next-Generation AI",
+        "source_type": "book",
+        "language": "english",
+        "journal": "Advances in Computational Intelligence and Robotics",
+        "publisher": "IGI Global Scientific Publishing",
+        "pages": "33-52",
+        "doi": "10.4018/979-8-3373-1419-8.ch002",
+        "url": "https://doi.org/10.4018/979-8-3373-1419-8.ch002",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 429: https://doi.org/10.4018/979-8-3373-1419-8.ch002",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_070",
+        "authors": [
+          "Adebowale",
+          "Mohamed",
+          "Chukwuemeka",
+          "Shehu",
+          "Chima",
+          "Joshua",
+          "N."
+        ],
+        "year": 2024,
+        "title": "Intellectual property law and artificial intelligence in Uganda: Trending issues and future prospects",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Kampala International University law journal",
+        "doi": "10.59568/kiulj-2024-6-2-12",
+        "url": "https://doi.org/10.59568/kiulj-2024-6-2-12",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "Initials only (incomplete): 'N.'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_071",
+        "authors": [
+          "Ito",
+          "Yamashita",
+          "Kuribayashi",
+          "Hidaka",
+          "Suzuki",
+          "Gao",
+          "Jamieson",
+          "Inui"
+        ],
+        "year": 2023,
+        "title": "Use of an AI-powered Rewriting Support Software in Context with Other Tools: A Study of Non-Native English Speakers",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "ACM Symposium on User Interface Software and Technology",
+        "doi": "10.1145/3586183.3606810",
+        "url": "https://doi.org/10.1145/3586183.3606810",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1145/3586183.3606810",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_075",
+        "authors": [
+          "ZHENG",
+          "Deng",
+          "Tsang",
+          "Wang",
+          "Bai",
+          "Wang",
+          "Song"
+        ],
+        "year": 2025,
+        "title": "From Automation to Autonomy: A Survey on Large Language Models in Scientific Discovery",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+        "doi": "10.48550/arXiv.2505.13259",
+        "url": "https://doi.org/10.48550/arXiv.2505.13259",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2505.13259",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_076",
+        "authors": [
+          "Berman",
+          "McKeown",
+          "Ray"
+        ],
+        "year": 2024,
+        "title": "Solving Zebra Puzzles Using Constraint-Guided Multi-Agent Systems",
         "source_type": "journal",
         "language": "english",
         "journal": "arXiv.org",
-        "doi": "10.48550/arXiv.2501.16255",
-        "url": "https://doi.org/10.48550/arXiv.2501.16255",
+        "doi": "10.48550/arXiv.2407.03956",
+        "url": "https://doi.org/10.48550/arXiv.2407.03956",
         "api_source": "Semantic Scholar"
       },
-      "reason": "DOI not found: 10.48550/arXiv.2501.16255",
+      "reason": "DOI not found: 10.48550/arXiv.2407.03956",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_077",
+        "authors": [
+          "Nab",
+          "Schaffer",
+          "Hulme",
+          "Devito",
+          "Dillingham",
+          "Wiedemann",
+          "Andrews",
+          "Curtis",
+          "Fisher",
+          "Green",
+          "Massey",
+          "Walters",
+          "Higgins",
+          "Cunningham",
+          "Morley",
+          "Mehrkar",
+          "Hart",
+          "Davy",
+          "Evans",
+          "Hickman",
+          "Inglesby",
+          "Morton",
+          "Smith",
+          "Ward",
+          "O'Dwyer",
+          "Maude",
+          "Bridges",
+          "Butler-Cole",
+          "Stables",
+          "Stokes",
+          "Bates",
+          "Cockburn",
+          "Hester",
+          "Parry",
+          "Bhaskaran",
+          "Schultze",
+          "Rentsch",
+          "Mathur",
+          "Tomlinson",
+          "Williamson",
+          "Smeeth",
+          "Walker",
+          "Bacon",
+          "Mackenna",
+          "Goldacre"
+        ],
+        "year": 2024,
+        "title": "OpenSAFELY: a platform for analysing electronic health records designed for reproducible research",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Pharmacoepidemiology and Drug Safety",
+        "doi": "10.1002/pds.5815",
+        "url": "https://doi.org/10.1002/pds.5815",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1002/pds.5815",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_079",
         "authors": [
-          "Ancelotti",
-          "Liason"
+          "Feher",
+          "Demeter"
         ],
-        "year": 2024,
-        "title": "Review of Blockchain Application With Graph Neural Networks, Graph Convolutional Networks and Convolutional Neural Networks",
-        "source_type": "report",
+        "year": 2025,
+        "title": "Generative Knowledge Production Pipeline Driven by Academic Influencers",
+        "source_type": "journal",
         "language": "english",
-        "publisher": "Elsevier BV",
-        "doi": "10.2139/ssrn.4971275",
-        "url": "https://doi.org/10.2139/ssrn.4971275",
-        "api_source": "Crossref"
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2505.24681",
+        "url": "https://doi.org/10.48550/arXiv.2505.24681",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.4971275",
+      "reason": "DOI not found: 10.48550/arXiv.2505.24681",
       "issues": 1
     },
     {
       "citation": {
         "id": "cite_080",
         "authors": [
-          "Butarbutar"
+          "Mishra",
+          "Tripathi",
+          "Khazanchi"
         ],
-        "year": 2025,
-        "title": "Factors Influencing AI-Assisted Thesis Writing in University: A Pull-Push-Mooring Theory Narrative Inquiry Study",
+        "year": 2023,
+        "title": "A Proposal for Research on the Application of AI/ML in ITPM: Intelligent Project Management",
         "source_type": "journal",
         "language": "english",
-        "journal": "SSRN Electronic Journal",
-        "publisher": "Elsevier BV",
-        "doi": "10.2139/ssrn.5176603",
-        "url": "https://doi.org/10.2139/ssrn.5176603",
-        "api_source": "Crossref"
+        "journal": "International Journal of Information Technology Project Management",
+        "doi": "10.4018/ijitpm.315290",
+        "url": "https://doi.org/10.4018/ijitpm.315290",
+        "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.2139/ssrn.5176603",
+      "reason": "URL returns HTTP 429: https://doi.org/10.4018/ijitpm.315290",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_082",
+        "id": "cite_083",
         "authors": [
-          "Katehakis",
-          "Filippidis",
-          "Makridaki",
-          "Dimitriadis",
-          "Kouroubali",
-          "Karamanis",
-          "Plexousakis"
+          "Yang"
         ],
         "year": 2025,
-        "title": "OA2090. smartHEALTH: Driving digital transformation in healthcare and public services",
+        "title": "HUMAN-AI COLLABORATION IN SCIENCE EDUCATION: CHALLENGES AND STEPS FORWARD",
         "source_type": "journal",
         "language": "english",
-        "journal": "European Journal of Public Health",
-        "doi": "10.1093/eurpub/ckaf165.022",
-        "url": "https://doi.org/10.1093/eurpub/ckaf165.022",
+        "journal": "Journal of Baltic Science Education",
+        "doi": "10.33225/jbse/25.24.800",
+        "url": "https://doi.org/10.33225/jbse/25.24.800",
         "api_source": "Semantic Scholar"
       },
-      "reason": "URL returns HTTP 403: https://doi.org/10.1093/eurpub/ckaf165.022",
+      "reason": "URL returns HTTP 403: https://doi.org/10.33225/jbse/25.24.800",
       "issues": 1
     },
     {
       "citation": {
-        "id": "cite_084",
+        "id": "cite_086",
         "authors": [
-          "Ahmad",
-          "Becher",
-          "Dm",
-          "Aitken",
-          "Beals",
-          "Brennan",
-          "Psilos",
-          "Westebbe",
-          "Goldsmith",
-          "Hickman",
-          "Reveived",
-          "Hildebrand",
-          "Liu"
+          "Doudkin",
+          "Voelker",
+          "Borries"
         ],
-        "year": 1965,
-        "title": "Books Received",
+        "year": 2025,
+        "title": "The Spark Effect: On Engineering Creative Diversity in Multi-Agent AI Systems",
         "source_type": "journal",
         "language": "english",
-        "journal": "Economic development and cultural change",
-        "doi": "10.1086/450135",
-        "url": "https://doi.org/10.1086/450135",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2510.15568",
+        "url": "https://doi.org/10.48550/arXiv.2510.15568",
         "api_source": "Semantic Scholar"
       },
-      "reason": "Year out of range: 1965; URL returns HTTP 403: https://doi.org/10.1086/450135",
-      "issues": 2
+      "reason": "DOI not found: 10.48550/arXiv.2510.15568",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_088",
+        "authors": [
+          "Saqib",
+          "Zia"
+        ],
+        "year": 2024,
+        "title": "Evaluation of AI content generation tools for verification of academic integrity in higher education",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Applied Research in Higher Education",
+        "doi": "10.1108/jarhe-10-2023-0470",
+        "url": "https://doi.org/10.1108/jarhe-10-2023-0470",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/jarhe-10-2023-0470",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_090",
+        "authors": [
+          "Pournaras"
+        ],
+        "year": 2023,
+        "title": "Science in the Era of ChatGPT, Large Language Models and AI: Challenges for Research Ethics Review and How to Respond",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2305.15299",
+        "url": "https://doi.org/10.48550/arXiv.2305.15299",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2305.15299",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_092",
+        "authors": [
+          "Roya"
+        ],
+        "year": 2024,
+        "title": "Exploring the impact of ai adoption in recruitment on positive organizational shock and career development: the moderating role of family support and emotional intelligence",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "\"Research – Innovation – Innovative Entrepreneurship\". International Congress, 2nd edition, May 17-18, 2024",
+        "doi": "10.46727/c.17-18-05-2024.p345-353",
+        "url": "https://doi.org/10.46727/c.17-18-05-2024.p345-353",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 400: https://doi.org/10.46727/c.17-18-05-2024.p345-353",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_093",
+        "authors": [
+          "Taechoyotin",
+          "Acuna"
+        ],
+        "year": 2025,
+        "title": "REMOR: Automated Peer Review Generation with LLM Reasoning and Multi-Objective Reinforcement Learning",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2505.11718",
+        "url": "https://doi.org/10.48550/arXiv.2505.11718",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2505.11718",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_094",
+        "authors": [
+          "Kleidermacher",
+          "Zou"
+        ],
+        "year": 2025,
+        "title": "Science Across Languages: Assessing LLM Multilingual Translation of Scientific Papers",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2502.17882",
+        "url": "https://doi.org/10.48550/arXiv.2502.17882",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2502.17882",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_095",
+        "authors": [
+          "Hua",
+          "Fan",
+          "Li",
+          "Mei",
+          "Ji",
+          "Ge",
+          "Hemphill",
+          "Zhang"
+        ],
+        "year": 2023,
+        "title": "War and Peace (WarAgent): Large Language Model-based Multi-Agent Simulation of World Wars",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "arXiv.org",
+        "doi": "10.48550/arXiv.2311.17227",
+        "url": "https://doi.org/10.48550/arXiv.2311.17227",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "DOI not found: 10.48550/arXiv.2311.17227",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_096",
+        "authors": [
+          "Sueur",
+          "Maillard",
+          "Lacroix-Andrivet",
+          "Rüger",
+          "Giusti",
+          "Lavanant",
+          "Afonso"
+        ],
+        "year": 2023,
+        "title": "PyC2MC: An Open-Source Software Solution for Visualization and Treatment of High-Resolution Mass Spectrometry Data.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of the American Society for Mass Spectrometry",
+        "doi": "10.1021/jasms.2c00323",
+        "url": "https://doi.org/10.1021/jasms.2c00323",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1021/jasms.2c00323",
+      "issues": 1
     }
   ]
 }

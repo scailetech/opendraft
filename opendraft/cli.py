@@ -27,15 +27,35 @@ def main():
         help="Verify installation and configuration"
     )
 
-    # Generate command (placeholder for future implementation)
+    # Generate command
     generate_parser = subparsers.add_parser(
         "generate",
-        help="Generate a thesis (coming soon)"
+        help="Generate a thesis from a topic"
     )
     generate_parser.add_argument(
         "--topic",
         type=str,
-        help="Research topic"
+        required=True,
+        help="Research topic for the thesis"
+    )
+    generate_parser.add_argument(
+        "--language",
+        type=str,
+        default="en",
+        choices=["en", "de"],
+        help="Thesis language (default: en)"
+    )
+    generate_parser.add_argument(
+        "--level",
+        type=str,
+        default="master",
+        choices=["bachelor", "master", "phd"],
+        help="Academic level (default: master)"
+    )
+    generate_parser.add_argument(
+        "--output",
+        type=str,
+        help="Output directory (default: ./output)"
     )
 
     args = parser.parse_args()
@@ -44,10 +64,39 @@ def main():
         from opendraft.verify import verify_installation
         sys.exit(verify_installation())
     elif args.command == "generate":
-        print("❌ Thesis generation via CLI is coming soon!")
-        print("For now, please use the Python API or test scripts.")
-        print("See: https://github.com/federicodeponte/opendraft#quick-start")
-        sys.exit(1)
+        from pathlib import Path
+        try:
+            from backend.thesis_generator import generate_thesis
+        except ImportError:
+            # Try with sys.path adjustment for non-installed usage
+            import os
+            sys.path.insert(0, str(Path(__file__).parent.parent))
+            from backend.thesis_generator import generate_thesis
+
+        output_dir = Path(args.output) if args.output else Path("./output")
+
+        print(f"🎓 Generating thesis on: {args.topic}")
+        print(f"   Language: {args.language}")
+        print(f"   Level: {args.level}")
+        print(f"   Output: {output_dir}")
+        print()
+
+        try:
+            pdf_path, docx_path = generate_thesis(
+                topic=args.topic,
+                language=args.language,
+                academic_level=args.level,
+                output_dir=output_dir,
+                skip_validation=True,
+                verbose=True
+            )
+            print(f"\n✅ Thesis generated successfully!")
+            print(f"   PDF:  {pdf_path}")
+            print(f"   DOCX: {docx_path}")
+            sys.exit(0)
+        except Exception as e:
+            print(f"\n❌ Generation failed: {e}")
+            sys.exit(1)
     else:
         parser.print_help()
         sys.exit(1)

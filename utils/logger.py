@@ -53,7 +53,7 @@ class ThesisLogger:
         self.log_file = self.log_dir / f"thesis_generation_{timestamp}.log"
 
         # Configure root logger
-        self.logger = logging.getLogger("academic_thesis_ai")
+        self.logger = logging.getLogger("opendraft")
         self.logger.setLevel(logging.DEBUG)  # Capture everything
 
         # Prevent duplicate handlers
@@ -104,7 +104,7 @@ class ThesisLogger:
             logger = ThesisLogger().get_logger(__name__)
             logger.info("Processing started")
         """
-        return logging.getLogger(f"academic_thesis_ai.{name}")
+        return logging.getLogger(f"opendraft.{name}")
 
 
 # Convenience function for easy imports

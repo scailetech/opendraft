@@ -33,7 +33,7 @@ jobs:
 
     - name: Run verification
       run: |
-        python -m academic_thesis_ai.verify || true
+        python -m opendraft.verify || true
 
     - name: Run tests with pytest
       run: |
@@ -83,7 +83,7 @@ jobs:
 
     - name: Type check with mypy
       run: |
-        mypy academic_thesis_ai --ignore-missing-imports || true
+        mypy opendraft utils --ignore-missing-imports || true
 
   docs:
     name: Documentation Build

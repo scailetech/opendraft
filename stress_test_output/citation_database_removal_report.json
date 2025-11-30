@@ -1,0 +1,438 @@
+{
+  "stats": {
+    "total_original": 51,
+    "total_filtered": 32,
+    "total_removed": 19,
+    "removal_reasons": {
+      "invalid_url": 15,
+      "invalid_metadata": 2,
+      "generic_title": 1,
+      "invalid_author": 1
+    }
+  },
+  "removed_citations": [
+    {
+      "citation": {
+        "id": "cite_001",
+        "authors": [
+          "Zlokarnik"
+        ],
+        "year": 1999,
+        "title": "Peer Reviewed: Fluorescent Molecular Sensor for Drug Discovery.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Analytical Chemistry",
+        "publisher": "American Chemical Society (ACS)",
+        "volume": "71",
+        "issue": "9",
+        "pages": "322A-328A",
+        "doi": "10.1021/ac990359+",
+        "url": "https://doi.org/10.1021/ac990359+",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1021/ac990359+",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_004",
+        "authors": [
+          "Ding",
+          "Huang",
+          "Yuan"
+        ],
+        "year": 2023,
+        "title": "Molecular docking via quantum approximate optimization algorithm",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Physical Review Applied",
+        "doi": "10.1103/physrevapplied.21.034036",
+        "url": "https://doi.org/10.1103/physrevapplied.21.034036",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.1103/physrevapplied.21.034036'",
+      "issues": 2
+    },
+    {
+      "citation": {
+        "id": "cite_005",
+        "authors": [
+          "Hamid",
+          "Anisurrahman",
+          "Alam"
+        ],
+        "year": 2025,
+        "title": "Quantum Machine Learning for Drug Discovery: A Systematic Review",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "International Journal on Computational Modelling Applications",
+        "publisher": "Adroid Connectz Private Limited",
+        "volume": "2",
+        "issue": "3",
+        "pages": "01-08",
+        "doi": "10.63503/j.ijcma.2025.156",
+        "url": "https://doi.org/10.63503/j.ijcma.2025.156",
+        "api_source": "Crossref"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.63503/j.ijcma.2025.156'",
+      "issues": 2
+    },
+    {
+      "citation": {
+        "id": "cite_006",
+        "authors": [
+          "Kassal",
+          "Whitfield",
+          "Perdomo-Ortiz",
+          "Yung",
+          "Aspuru-Guzik"
+        ],
+        "year": 2010,
+        "title": "Simulating chemistry using quantum computers.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Annual review of physical chemistry (Print)",
+        "doi": "10.1146/annurev-physchem-032210-103512",
+        "url": "https://doi.org/10.1146/annurev-physchem-032210-103512",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1146/annurev-physchem-032210-103512",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_007",
+        "authors": [
+          "Iyengar",
+          "Ricard",
+          "Zhu"
+        ],
+        "year": 2024,
+        "title": "Reformulation of All ONIOM-Type Molecular Fragmentation Approaches and Many-Body Theories Using Graph-Theory-Based Projection Operators: Applications to Dynamics, Molecular Potential Surfaces, Machine Learning, and Quantum Computing.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Physical Chemistry A",
+        "doi": "10.1021/acs.jpca.3c05630",
+        "url": "https://doi.org/10.1021/acs.jpca.3c05630",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1021/acs.jpca.3c05630",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_009",
+        "authors": [
+          "Chaudhuri",
+          "Huynh",
+          "Amory",
+          "Rogers",
+          "Cranney",
+          "Martínez-Martínez",
+          "Macrì",
+          "Jones",
+          "Sheridan",
+          "Khedkar",
+          "Mineh",
+          "Montanaro",
+          "Inzani",
+          "Hirst"
+        ],
+        "year": 2025,
+        "title": "Challenges and Advances in the Simulation of Targeted Covalent Inhibitors Using Quantum Computing",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Physical Chemistry Letters",
+        "doi": "10.1021/acs.jpclett.5c01680",
+        "url": "https://doi.org/10.1021/acs.jpclett.5c01680",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1021/acs.jpclett.5c01680",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_016",
+        "authors": [
+          "Kumar",
+          "Premkumar",
+          "Langeswaran",
+          "Ramavenkateswari",
+          "Anitha",
+          "Sangavi",
+          "Sangeetha"
+        ],
+        "year": 2023,
+        "title": "Virtual screening, molecular docking, molecular dynamics and quantum chemical studies on (2-methoxy-4-prop-2-enylphenyl) N-(2-methoxy-4-nitrophenyl) carbamate: a novel inhibitor of hepatocellular carcinoma",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Biomolecular Structure and Dynamics",
+        "doi": "10.1080/07391102.2023.2192795",
+        "url": "https://doi.org/10.1080/07391102.2023.2192795",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1080/07391102.2023.2192795",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_021",
+        "authors": [
+          "Truhlar",
+          "Gao",
+          "Alhambra",
+          "Garcia-Viloca",
+          "Corchado",
+          "Sánchez",
+          "Villá"
+        ],
+        "year": 2002,
+        "title": "The incorporation of quantum effects in enzyme kinetics modeling.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Accounts of Chemical Research",
+        "doi": "10.1021/AR0100226",
+        "url": "https://doi.org/10.1021/AR0100226",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1021/AR0100226",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_024",
+        "authors": [
+          "Bhowmick",
+          "Awotunde"
+        ],
+        "year": 2025,
+        "title": "Optical and Quantum Computing in Industry 4.0 and Industry 5.0",
+        "source_type": "book",
+        "language": "english",
+        "journal": "Computational Intelligence for Analysis of Trends in Industry 4.0 and 5.0",
+        "publisher": "Auerbach Publications",
+        "pages": "373-398",
+        "doi": "10.1201/9781003533023-15",
+        "url": "https://doi.org/10.1201/9781003533023-15",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 503: https://doi.org/10.1201/9781003533023-15",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_026",
+        "authors": [
+          "Yndurain"
+        ],
+        "year": 2025,
+        "title": "Healthcare Life Sciences",
+        "source_type": "book",
+        "language": "english",
+        "journal": "Quantum Computing Strategy",
+        "publisher": "Chapman and Hall/CRC",
+        "pages": "140-145",
+        "doi": "10.1201/9781003302674-20",
+        "url": "https://doi.org/10.1201/9781003302674-20",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 503: https://doi.org/10.1201/9781003302674-20",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_027",
+        "authors": [
+          "Gomase",
+          "Ghatule",
+          "Sharma",
+          "Dhamane"
+        ],
+        "year": 2025,
+        "title": "Quantum Computing in Drug Discovery Techniques, Challenges, and Emerging Opportunities.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Current Drug Discovery Technologies",
+        "doi": "10.2174/0115701638371707250729040426",
+        "url": "https://doi.org/10.2174/0115701638371707250729040426",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.2174/0115701638371707250729040426'",
+      "issues": 2
+    },
+    {
+      "citation": {
+        "id": "cite_037",
+        "authors": [
+          "Al-Ogbi",
+          "Felemban"
+        ],
+        "year": 2025,
+        "title": "Solving Computational Fluid Dynamic Problems Using Quantum Computing",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Middle East Oil, Gas and Geosciences Show (MEOS GEO)",
+        "doi": "10.2118/227721-ms",
+        "url": "https://doi.org/10.2118/227721-ms",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.2118/227721-ms",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_039",
+        "authors": [
+          "Salam",
+          "Ilyas"
+        ],
+        "year": 2024,
+        "title": "Quantum computing challenges and solutions in software industry - A multivocal literature review",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "IET Quantum Communication",
+        "doi": "10.1049/qtc2.12096",
+        "url": "https://doi.org/10.1049/qtc2.12096",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1049/qtc2.12096",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_041",
+        "authors": [
+          "Matarèse",
+          "Purushotham"
+        ],
+        "year": 2025,
+        "title": "Quantum Oncology",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Quantum Reports",
+        "doi": "10.3390/quantum7010009",
+        "url": "https://doi.org/10.3390/quantum7010009",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/quantum7010009",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_049",
+        "authors": [
+          "Patil",
+          "Patil",
+          "Kulkarni"
+        ],
+        "year": 2025,
+        "title": "Quantum Computing in Drug Discovery: A Review of Foundations and Emerging Applications",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "International Journal of Advanced Pharmaceutical Sciences and Research",
+        "doi": "10.54105/ijapsr.e4078.05040625",
+        "url": "https://doi.org/10.54105/ijapsr.e4078.05040625",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 404: https://doi.org/10.54105/ijapsr.e4078.05040625",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_052",
+        "authors": [
+          "Smaldone",
+          "Shee",
+          "Kyro",
+          "Xu",
+          "Vu",
+          "Dutta",
+          "Farag",
+          "Galda",
+          "Kumar",
+          "Kyoseva",
+          "Batista"
+        ],
+        "year": 2024,
+        "title": "Quantum Machine Learning in Drug Discovery: Applications in Academia and Pharmaceutical Industries.",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Chemical Reviews",
+        "doi": "10.1021/acs.chemrev.4c00678",
+        "url": "https://doi.org/10.1021/acs.chemrev.4c00678",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1021/acs.chemrev.4c00678",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_054",
+        "authors": [
+          "Blunt",
+          "Camps",
+          "Crawford",
+          "Izs'ak",
+          "Leontica",
+          "Mirani",
+          "Moylett",
+          "Scivier",
+          "Sunderhauf",
+          "Schopf",
+          "Taylor",
+          "Holzmann"
+        ],
+        "year": 2022,
+        "title": "Perspective on the Current State-of-the-Art of Quantum Computing for Drug Discovery Applications",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Chemical Theory and Computation",
+        "doi": "10.1021/acs.jctc.2c00574",
+        "url": "https://doi.org/10.1021/acs.jctc.2c00574",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1021/acs.jctc.2c00574",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_060",
+        "authors": [
+          "Chow"
+        ],
+        "year": 2024,
+        "title": "Quantum Computing in Medicine",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Medical Science",
+        "doi": "10.3390/medsci12040067",
+        "url": "https://doi.org/10.3390/medsci12040067",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/medsci12040067",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_061",
+        "authors": [
+          "A.",
+          "A.",
+          "E.",
+          "E.",
+          "E."
+        ],
+        "year": 2024,
+        "title": "The Synergy of Molecular Docking and Bioinformatics: An in Depth Review in Drug Discovery",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Biotechnology Journal International",
+        "doi": "10.9734/bji/2024/v28i4732",
+        "url": "https://doi.org/10.9734/bji/2024/v28i4732",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.9734/bji/2024/v28i4732",
+      "issues": 6
+    }
+  ]
+}

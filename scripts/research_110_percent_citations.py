@@ -13,7 +13,7 @@ from pathlib import Path
 # Ensure project root is in path (script is in scripts/, so parent is root)
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from tests.test_utils import setup_model, research_citations_via_api
+from utils.agent_runner import setup_model, research_citations_via_api
 
 
 def research_ai_pricing_citations(model):

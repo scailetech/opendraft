@@ -1,5 +1,8 @@
-modal==0.63.82
+# Backend-specific requirements for Modal.com deployment
+# These versions MUST match what's in modal_worker.py pip_install()
+
+modal>=0.63.0
 supabase==2.3.4
-resend==2.0.0
-google-generativeai==0.3.2
-python-dotenv==1.0.0
+resend==0.7.0
+google-generativeai>=0.8.0
+python-dotenv>=1.0.0

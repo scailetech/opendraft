@@ -8,134 +8,123 @@
 ## Summary
 
 **Strengths:**
--   **Comprehensive Scope:** The literature review provides a broad and well-structured overview of the historical development, theoretical foundations, implementation mechanisms, empirical effectiveness, and critical challenges of CO2 pricing mechanisms.
--   **Clear Structure:** The paper is logically organized into distinct sections, making it easy to follow the progression of arguments from theory to practice and challenges.
--   **Balanced Perspective (mostly):** The review generally attempts to present both the advantages and disadvantages or challenges associated with different CO2 pricing instruments, such as the pros and cons of CO2 taxes versus ETS, and the complexities of implementation.
--   **Acknowledges Nuance:** The author rightly points out the mixed experiences with Kyoto mechanisms and the early phases of the EU-ETS, demonstrating an understanding that these instruments are not universally perfect.
--   **Key Concepts Explained:** Core environmental economic theories (externalities, Pigou, Coase) are clearly introduced and linked to the design of CO2 pricing.
+- **Comprehensive Coverage:** The literature review provides a broad and detailed overview of CO2 pricing mechanisms, covering their history, theoretical underpinnings, practical implementation, empirical effectiveness, and critical challenges.
+- **Clear Structure:** The paper is logically structured, guiding the reader from the origins of carbon pricing to contemporary issues.
+- **Detailed Explanations:** Key concepts (e.g., external effects, Cap-and-Trade, Carbon Tax, MSR) are explained clearly and thoroughly.
+- **Balanced Perspective:** The review acknowledges both the benefits and the significant challenges/criticisms associated with CO2 pricing, including economic impacts, social equity, and carbon leakage.
+- **Good Use of Citations (where present):** Many claims are well-supported by a variety of academic sources.
 
-**Critical Issues:** 5 major (with multiple instances), 2 moderate, 5 minor
-**Recommendation:** Extensive revisions are needed before publication, primarily to address critical academic integrity issues related to citations.
+**Critical Issues:** 8 major, 0 moderate, 0 minor
+**Recommendation:** Revisions needed before publication, primarily to address missing foundational citations and verify publication dates.
 
 ---
 
 ## MAJOR ISSUES (Must Address)
 
-### Issue 1: Future-Dated Citations and Potential Hallucinations
-**Location:** Multiple instances across Sections 4 and 5
-**Problem:** The paper cites several studies with publication years in the future (e.g., 2024, 2025, 2026). This is a critical academic integrity issue, indicating either severe errors in the reference list, misattribution, or potentially hallucinated sources.
-**Specific Instances:**
--   **Section 4.1:** "Eslahi, Creti et al. (2026)" {cite_006} cited for EU-ETS effectiveness.
--   **Section 4.2:** "Zhao, Wang et al. (2024)" {cite_010} cited for China ETS effectiveness.
--   **Section 4.2:** "Levi-Bliech und Dahan (2025)" {cite_019} cited for green innovation.
--   **Section 5.5:** "Tang (2025)" {cite_029} cited for corporate sustainability.
-**Fix:**
--   **Verify every citation:** Check the actual publication year for these papers. If they are truly future-dated, they must be removed or replaced with correctly cited, published works.
--   If these are "forthcoming" papers, they should be clearly marked as such (e.g., "forthcoming," "in press") and ideally replaced with published work for a literature review.
--   If the cited works are actually from different years, correct the dates in the text and ensure the `cite_XXX` tags correspond to the correct entries in the (unseen) reference list.
-**Severity:** 🔴 High - Threatens academic credibility and validity of claims.
+### Issue 1: Missing Citation for EU "Fit for 55" Details
+**Location:** Section 2.1.2, Phase 4 paragraph
+**Claim:** "Mit dem "Fit for 55"-Paket der Europäischen Kommission wurde das Reduktionsziel des EU-ETS von 43% auf 62% bis 2030 gegenüber 2005 erhöht {cite_MISSING: EU Fit for 55}."
+**Problem:** A specific, quantitative policy target from a major legislative package is stated without a direct citation. While generally known, for an academic paper, this specific data point needs explicit sourcing.
+**Fix:** Add a proper citation to the official EU document (e.g., the "Fit for 55" package legislation or a relevant EU Commission communication) or a reliable academic analysis of it.
+**Severity:** 🔴 High - Factual claim about a key policy without direct support.
 
-### Issue 2: Missing Citations for Key Claims
-**Location:** Multiple instances across Sections 4 and 5
-**Problem:** Several significant claims lack proper attribution, marked as `cite_MISSING`. This undermines the scholarly rigor of the literature review.
-**Specific Instances:**
--   **Section 4.2:** Claim about Sweden's CO2 tax "maßgeblich zur Entkopplung von Wirtschaftswachstum und Emissionen beigetragen" {cite_MISSING: Referenz für schwedische CO2-Steuer}.
--   **Section 5.1:** Claim about "potenziell regressiven Verteilungswirkungen" {cite_MISSING: Quelle für regressive Effekte von CO2-Preisen}.
--   **Section 5.4:** Claim about "erheblichen politischen Widerständen" {cite_MISSING: Quelle für politische Widerstände gegen CO2-Preise}.
-**Fix:** Provide specific, verifiable citations for each of these claims. Without proper support, these statements are unsubstantiated assertions within a literature review.
-**Severity:** 🔴 High - Undermines the evidence base and academic rigor.
+### Issue 2: Missing Citation for Corporate Perspectives on EU-ETS
+**Location:** Section 2.1.2, Phase 4 paragraph
+**Claim:** "Unternehmensperspektiven auf das EU-ETS haben gezeigt, dass Unternehmen das System als eine Herausforderung, aber auch als Chance für Innovation und Wettbewerbsvorteile wahrnehmen, wobei die Anpassungsstrategien von der Sektorzugehörigkeit und der Unternehmensgröße abhängen {cite_MISSING: Brewer, 2018}."
+**Problem:** A specific research finding is attributed to "Brewer, 2018" but the full citation (or at least a proper reference ID) is missing.
+**Fix:** Provide the complete and accurate citation for "Brewer, 2018".
+**Severity:** 🔴 High - Direct attribution of research findings without a full source.
 
-### Issue 3: Overclaim in Conclusion
-**Location:** Fazit der Literaturübersicht, paragraph 2
-**Claim:** "Ihre Fähigkeit, kosteneffiziente Emissionsreduktionen zu bewirken und Anreize für technologische Innovationen zu schaffen, ist unbestreitbar."
-**Problem:** The word "unbestreitbar" (undeniable/indisputable) is too strong for a scientific text, even for well-evidenced claims. While the general effectiveness and innovation incentives of CO2 pricing are widely recognized, "unbestreitbar" suggests an absolute consensus that does not fully exist, especially concerning the *degree* of cost-effectiveness or the *sufficiency* of innovation incentives in all contexts.
-**Fix:** Rephrase to a more nuanced statement, e.g., "ist durch eine wachsende Evidenz gut belegt," "wird weithin anerkannt," or "spielt eine entscheidende Rolle bei der Förderung."
-**Severity:** 🔴 High - Affects the overall scientific tone and precision.
+### Issue 3: Missing Foundational Citations for Coase Theorem and its Limitations
+**Location:** Section 2.2.2, "Pigou-Steuer und das Coase-Theorem"
+**Claim:** "Ein alternativer Ansatz ist das Coase-Theorem, das von Ronald Coase entwickelt wurde {cite_MISSING: Coase, 1960}." and "Die Relevanz des Coase-Theorems für die praktische Umweltpolitik ist jedoch oft begrenzt, da die Annahmen von null Transaktionskosten und einer geringen Anzahl von Verhandlungsparteien in vielen realen Umweltproblemen, insbesondere dem Klimawandel, selten erfüllt sind {cite_MISSING: Coasean bargaining limitations}."
+**Problem:** The Coase Theorem is a cornerstone of environmental economics, but its original publication (Coase, 1960) and a source discussing its practical limitations are missing.
+**Fix:** Add proper citations for Coase (1960) and a relevant academic source that discusses the limitations of Coasean bargaining in real-world environmental problems.
+**Severity:** 🔴 High - Foundational theoretical concepts require explicit sourcing.
 
-### Issue 4: Overgeneralization of "Limited" Carbon Leakage Impact
-**Location:** Section 4.1, paragraph 3
-**Claim:** "Obwohl die anfänglichen Bedenken groß waren, zeigen viele empirische Analysen, dass die tatsächlichen Auswirkungen auf die Wettbewerbsfähigkeit von Unternehmen, die dem ETS unterliegen, begrenzt waren, insbesondere wenn die freie Zuteilung als Schutzmechanismus diente {cite_006}."
-**Problem:** While this finding is true for *some* sectors and *under specific conditions* (e.g., with free allocation), stating it as a general "limited impact" for "companies subject to ETS" can be an overgeneralization. The impact varies significantly by sector, the intensity of competition, and the specific design of protection mechanisms. The reference `cite_006` (Eslahi, Creti et al., 2026) is also a future-dated citation, making the evidence base problematic.
-**Fix:** Qualify the statement more carefully, specifying the conditions or sectors where this limited impact was observed. For example: "Für bestimmte energieintensive Sektoren, die eine kostenlose Zuteilung erhielten, deuten Studien darauf hin, dass die Auswirkungen auf die Wettbewerbsfähigkeit begrenzt waren..." Ensure the citation supports this nuanced claim.
-**Severity:** 🔴 High - Risks misrepresenting complex empirical findings.
+### Issue 4: Missing Foundational Citation for Weitzman's Framework (Quantity vs. Price)
+**Location:** Section 2.2.3, last paragraph ("Mengenbasierte vs. Preisbasierte Instrumente")
+**Claim:** "Wenn die Grenzkosten der Minderung steil sind und der Grenznutzen flach, ist eine Steuer vorteilhafter... Wenn umgekehrt der Grenznutzen steil und die Grenzkosten flach sind, ist ein Cap-and-Trade-System vorteilhafter... {cite_MISSING: Weitzman, 1974}."
+**Problem:** This is a direct reference to a classic and highly influential economic framework by Weitzman (1974) concerning the choice between price and quantity instruments under uncertainty, but the seminal citation is missing.
+**Fix:** Add the proper citation for Weitzman (1974).
+**Severity:** 🔴 High - Foundational theoretical concepts require explicit sourcing.
 
-### Issue 5: Lack of Specificity for Citation Content
-**Location:** Throughout the paper
-**Problem:** The paper uses generic placeholders like `{cite_XXX}`. While this is understood for a draft, the final version requires fully specified citations (e.g., author, year, title, journal, page numbers, DOI/arXiv ID). Without the full reference list, it's impossible for a reviewer to verify the claims against the cited sources.
-**Fix:** Provide a complete bibliography with full citation details for all referenced works. This is crucial for academic integrity and allowing readers (and reviewers) to follow the evidence.
-**Severity:** 🔴 High - Hinders verification and academic transparency.
+### Issue 5: Missing Citation for "Gelbwesten" (Yellow Vests) Protests
+**Location:** Section 2.2.4 (Verteilungswirkungen) and Section 2.5.2 (Regressive Effekte)
+**Claim:** "Dies kann zu sozialen Spannungen führen, wie die "Gelbwesten"-Proteste in Frankreich gezeigt haben {cite_MISSING: Gelbwesten}." and "{cite_MISSING: Gelbwesten, soziale Auswirkungen}."
+**Problem:** The "Gelbwesten" protests are used as a concrete example of social resistance to carbon pricing, but no academic or verifiable source is provided. This issue is repeated.
+**Fix:** Add a proper academic citation (e.g., a political science paper, an economic analysis, or a reputable news analysis) that discusses the "Gelbwesten" protests in the context of carbon pricing and social acceptance.
+**Severity:** 🔴 High - Using a specific event as evidence without a formal academic source.
+
+### Issue 6: Missing Citations for Carbon Border Adjustment Mechanisms (CBAM)
+**Location:** Section 2.2.4 (Wettbewerbsfähigkeit und Carbon Leakage), Section 2.4.2 (Wettbewerbsfähigkeit und Carbon Leakage), and Section 2.5.3 (Maßnahmen zur Vermeidung)
+**Claim:** "{cite_MISSING: CBAM policy}", "{cite_MISSING: CBAM research}", "{cite_MISSING: CBAM policy framework}".
+**Problem:** CBAM is a highly relevant and current policy instrument, but all references to its policy framework, research, or implementation are uncited.
+**Fix:** Provide appropriate citations for the CBAM policy (e.g., official EU regulations, academic papers analyzing CBAM, or reports from international organizations).
+**Severity:** 🔴 High - Key policy instrument uncited.
+
+### Issue 7: Missing Citation for Social Cost of Carbon (SCC)
+**Location:** Section 2.5.1, "Festlegung des richtigen Preises oder Caps"
+**Claim:** "Die Bestimmung des sozialen Kosten von Kohlenstoff (Social Cost of Carbon, SCC) ist eine wissenschaftlich umstrittene Aufgabe, die jedoch als Richtwert dienen kann {cite_MISSING: Social Cost of Carbon}."
+**Problem:** The Social Cost of Carbon (SCC) is a critical concept for informing carbon pricing levels, but it is introduced without a supporting citation.
+**Fix:** Add a proper citation for the SCC (e.g., a prominent report from a government body, an influential academic paper, or a meta-analysis on SCC estimates).
+**Severity:** 🔴 High - Key concept uncited.
+
+### Issue 8: Verification Needed for Future Publication Dates
+**Location:** Section 2.4.1 (Rahman, 2025) and Section 2.4.3 (Putri und Hutapea, 2024)
+**Claim:** "Rahman (2025) diskutiert die Rolle der Kohlenstoffbepreisung bei der Dekarbonisierung Indiens {cite_062}." and "Putri und Hutapea (2024) analysierten die Implementierung der Kohlenstoffsteuerpolitik in Indonesien und deren Bemühungen zur Reduzierung von Emissionen {cite_082}."
+**Problem:** Citing papers with publication years in the future (2025 in particular, and 2024 if the current year is earlier than the actual publication date) is unusual for a published work. This often indicates "in press" or a typo.
+**Fix:** Verify the publication status and exact year for `cite_062` (Rahman, 2025) and `cite_082` (Putri und Hutapea, 2024). If "in press" or "forthcoming," specify this clearly (e.g., "Rahman, forthcoming 2025"). If a typo, correct the year.
+**Severity:** 🔴 High - Academic integrity and accuracy concern.
 
 ---
 
 ## MODERATE ISSUES (Should Address)
 
-### Issue 6: Nuance in Pigou Tax Benefits
-**Location:** Section 2, paragraph 3
-**Claim:** "Die Pigou-Steuer bietet Preissicherheit für die Emittenten, da sie genau wissen, welche Kosten pro Emissionseinheit anfallen. Dies kann langfristige Investitionsentscheidungen in kohlenstoffarme Technologien erleichtern {cite_014}."
-**Problem:** While true that Pigou taxes offer price certainty, the paragraph could immediately balance this with the inherent quantity uncertainty (i.e., the *amount* of reduction is not guaranteed). The subsequent paragraph discusses the choice between price and quantity control, but a quick acknowledgment of this trade-off directly in the Pigou tax discussion would enhance coherence.
-**Fix:** Add a sentence acknowledging that while price is certain, the resulting emissions reduction quantity is uncertain and depends on demand elasticity.
-
-### Issue 7: Absence of Discussion on Specific Failures/Limitations
-**Location:** Section 5 (Kritische Perspektiven und Herausforderungen)
-**Problem:** While Section 5 discusses general challenges (distributional effects, carbon leakage, price volatility, political acceptance), it largely frames them as *risks* or *concerns* to be managed. There's less discussion of specific instances where these mechanisms have *failed* or proven *grossly ineffective* despite implementation efforts, or where their limitations have been starkly exposed.
-**Missing:** Concrete examples or deeper analysis of situations where CO2 pricing did not deliver expected results due to these challenges, beyond the general mention of early EU-ETS phases.
-**Fix:** Briefly incorporate examples of specific failures or severe limitations to strengthen the "critical perspectives." For instance, discuss cases where political resistance led to very low tax rates, or where carbon leakage was particularly pronounced in certain industries before corrective measures.
+None identified.
 
 ---
 
 ## MINOR ISSUES
 
-1.  **Vague Claim:** "Das System hat das Potenzial, die Emissionen effektiv zu reduzieren, wenn die Marktmechanismen und die Regulierung weiter gestärkt werden" (Section 4.2). While true, "weiter gestärkt werden" is vague. What specific strengthening is needed? (This is a minor point as it's a literature review, but could be made more precise if possible).
-2.  **Repetitive Point:** The concern about carbon leakage and the solution (CBAM) is mentioned in Section 4.1 (Empirical Evidence) and again in Section 5.2 (Challenges). While it's a key issue, the discussion in Section 5.2 could build more directly on the empirical findings mentioned in 4.1, rather than re-introducing the concern.
-3.  **Phrasing:** "zeichnen sich ein klares Bild ab..." (Section 4). Can be softened to "die Evidenz deutet darauf hin" or "es wird zunehmend deutlich."
-4.  **Clarity on "Integration verschiedener regionaler Märkte"** (Section 4.2, China ETS): Briefly explain *why* integrating regional markets is a challenge (e.g., differing rules, data standards, price signals).
-5.  **Role of `cite_031` (Peeters 2008):** Cited in Section 5.4 and 5.5. In 5.5, it's used to discuss "legislative decisions and legal values" in "complex policy approaches." This seems a very general point for a 2008 paper, and its specific relevance to the *interaction* of *current* climate policy instruments could be clarified.
+None identified. The language is precise, and claims are generally well-hedged when not lacking a citation.
 
 ---
 
 ## Logical Gaps
 
-### Gap 1: Implicit Link Between "Fit for 55" and Vulnerable Households
-**Location:** Section 5.1, paragraph 1
-**Logic:** The paragraph discusses the regressive effects of CO2 prices and the EU's Klimasozialfonds to address them. It then states: "Die 'Fit for 55'-Paket der EU versucht, diesen Aspekt durch die Schaffung eines Klimasozialfonds zu adressieren, der die Kosten des neuen ETS für Gebäude und Verkehr für vulnerable Haushalte abfedern soll {cite_032}."
-**Missing:** The explicit link explaining *why* the "Fit for 55" package, specifically the *new ETS for buildings and transport*, would disproportionately affect vulnerable households in the first place, thus necessitating the Klimasozialfonds. While implied, making this explicit would strengthen the causal chain.
-**Fix:** Briefly state that the new ETS for buildings and transport is expected to increase energy and fuel costs, which would disproportionately burden lower-income households, thus leading to the creation of the fund.
+None identified. The arguments flow logically from historical context to theoretical foundations, empirical evidence, and challenges.
 
 ---
 
-## Methodological Concerns (of the Literature Review itself)
+## Methodological Concerns
 
-### Concern 1: Verification of Sources
-**Issue:** As noted in Major Issue 5, the lack of a full reference list makes it impossible to verify if the cited sources actually support the claims made, or if they are primary research, review articles, policy documents, etc.
-**Risk:** The review's conclusions could be based on misinterpretations or misrepresentations of the cited literature.
-**Reviewer Question:** "Can the author provide the complete reference list, including DOIs or arXiv IDs where applicable, to allow for verification of all claims?"
-**Suggestion:** Ensure all citations are complete and accurate.
+This section is a literature review. The methodology for conducting the review itself is not explicitly stated (e.g., search strategy, inclusion/exclusion criteria), which is common for a standalone literature review within a larger work. However, the breadth of sources suggests a comprehensive, if informal, approach. No specific concerns regarding the *content* of the literature review's methodology.
 
 ---
 
 ## Missing Discussions
 
-1.  **Detailed Mechanism of CBAM:** While CBAM is mentioned as a solution to carbon leakage, a slightly more detailed explanation of *how* it works (e.g., importers buy CBAM certificates corresponding to embedded emissions) would be beneficial, as it's a relatively new and complex mechanism.
-2.  **Quantitative Ambition Levels:** The review discusses the importance of an "ambitious cap" or "appropriately high price." A brief discussion on *what constitutes* an ambitious level (e.g., typical price ranges considered effective, or the rate of cap reduction needed for 1.5/2-degree targets) would add valuable context.
-3.  **Role of Innovation vs. Compliance:** While "green innovation" is mentioned, a deeper dive into the *mechanisms* by which CO2 pricing specifically fosters innovation (e.g., R&D incentives, market pull for low-carbon products) versus merely encouraging compliance with existing technologies, would be insightful.
-4.  **Sectoral Differences:** The review touches on energy-intensive industries. A more explicit discussion of how CO2 pricing impacts different sectors (e.g., power generation vs. heavy industry vs. transport vs. agriculture) and the specific challenges or opportunities in each, could enhance the analysis.
+The review is very comprehensive. One minor suggestion for further depth could be:
+
+1.  **Political Feasibility beyond Economic Factors:** While "political economy" is mentioned, a slightly deeper discussion on the challenges of public acceptance, the role of powerful industry lobbies in shaping (or resisting) carbon pricing, and the difficulties of cross-party political consensus (especially in democratic systems) could be considered. This goes beyond just design challenges and touches on the fundamental political hurdles. However, this is a suggestion for enhancement, not a major omission.
 
 ---
 
 ## Tone & Presentation Issues
 
-1.  **Overly Confident Language:** As noted in Major Issue 3, words like "unbestreitbar" should be replaced with more cautious, academic phrasing ("suggests," "indicates," "is widely supported by evidence").
-2.  **Slightly Repetitive:** Some points, particularly regarding carbon leakage and the MSR, are reiterated across sections. While reinforcing, a more progressive discussion that builds on previous mentions rather than repeating them would improve flow.
+The tone is consistently academic, objective, and informative. There are no signs of overconfidence, dismissiveness, or defensive language. The presentation is clear and well-organized.
 
 ---
 
 ## Questions a Reviewer Will Ask
 
-1.  "Please provide the full citation details for all references, including DOIs or arXiv IDs. Specifically, clarify the status and actual publication dates for 'Eslahi, Creti et al. (2026)', 'Zhao, Wang et al. (2024)', 'Levi-Bliech und Dahan (2025)', and 'Tang (2025)'."
-2.  "What are the specific sources for the claims regarding Sweden's CO2 tax, the regressive effects of CO2 prices, and political resistance to these policies?"
-3.  "Can you further elaborate on the specific conditions or industry sectors where the impact of ETS on competitiveness was found to be 'limited'?"
-4.  "How do you define 'ambitious' in the context of CO2 pricing, and what are typical quantitative benchmarks for effective carbon prices or cap reduction rates?"
-5.  "Beyond the general challenges, can you provide specific examples of situations where CO2 pricing mechanisms have faced significant setbacks or failed to achieve their intended goals, and what lessons were learned?"
+1.  "Could you please provide the full citations for the 'Brewer, 2018' and the 'EU Fit for 55' references in section 2.1.2?"
+2.  "The Coase Theorem and Weitzman's framework are fundamental. Could you add the original citations for 'Coase, 1960' and 'Weitzman, 1974,' as well as a source for the limitations of Coasean bargaining?"
+3.  "Please provide a formal academic citation for the 'Gelbwesten' protests in the context of carbon pricing, as this event is used as evidence for social impacts."
+4.  "Given the importance of Carbon Border Adjustment Mechanisms, please provide specific citations for the 'CBAM policy' and 'CBAM research' mentioned throughout the text."
+5.  "A source for the 'Social Cost of Carbon' would strengthen the discussion on price determination. Could you add one?"
+6.  "Could you verify the publication status and year for 'Rahman (2025)' and 'Putri und Hutapea (2024)'? If they are 'in press' or 'forthcoming,' please indicate that."
 
 **Prepare answers or add to paper**
 
@@ -144,12 +133,14 @@
 ## Revision Priority
 
 **Before resubmission:**
-1.  🔴 **Fix Issue 1 (Future-Dated Citations):** This is paramount for academic integrity. Verify and correct all future-dated citations.
-2.  🔴 **Address Issue 2 (Missing Citations):** Provide specific sources for all `cite_MISSING` claims.
-3.  🔴 **Resolve Issue 5 (Lack of Specificity for Citation Content):** Provide a complete and accurate reference list.
-4.  🔴 **Fix Issue 3 (Overclaim in Conclusion):** Rephrase "unbestreitbar" to more academic language.
-5.  🔴 **Address Issue 4 (Overgeneralization of Carbon Leakage Impact):** Qualify the statement about "limited" impact on competitiveness.
+1.  🔴 Fix Issue 1 (missing EU Fit for 55 citation)
+2.  🔴 Address Issue 2 (missing Brewer, 2018 citation)
+3.  🔴 Resolve Issue 3 (missing Coase Theorem citations)
+4.  🔴 Resolve Issue 4 (missing Weitzman, 1974 citation)
+5.  🔴 Fix Issue 5 (missing Gelbwesten citations)
+6.  🔴 Resolve Issue 6 (missing CBAM citations)
+7.  🔴 Resolve Issue 7 (missing Social Cost of Carbon citation)
+8.  🔴 Address Issue 8 (verify future publication dates)
 
 **Can defer:**
--   Minor wording issues (fix in revision).
--   Adding more detailed discussions on specific failures or quantitative ambition levels (can be addressed in a subsequent iteration if depth is required, but adding some detail now would be beneficial).
+- The suggestion for a deeper discussion on political feasibility (can be considered for future work or a broader scope).

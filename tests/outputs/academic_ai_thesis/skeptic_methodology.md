@@ -8,164 +8,140 @@
 ## Summary
 
 **Strengths:**
--   **Ambitious & Novel Architecture:** The proposed 14-agent multi-agent system for academic thesis writing is highly ambitious and presents a novel conceptual framework for AI assistance in complex cognitive tasks.
--   **Clear Problem Framing:** The introduction clearly articulates the goal of democratizing academic writing and identifies key barriers, providing a strong rationale for the system.
--   **Comprehensive Citation Strategy:** The API-backed citation discovery methodology is well-conceived for ensuring formal citation accuracy and preventing hallucinated references.
--   **Multi-Dimensional Evaluation:** The proposed evaluation criteria cover a broad range of important aspects, including accessibility, efficiency, quality, and ethics.
+-   Novel and ambitious multi-agent architecture for academic writing.
+-   Clear articulation of the system's design principles (modularity, interoperability, etc.).
+-   Robust API-backed citation discovery methodology, a critical feature for AI-assisted academic writing.
+-   Comprehensive set of evaluation criteria for "democratization," highlighting a broad understanding of impact.
 
-**Critical Issues:** 5 major, 10 moderate, 15 minor
-**Recommendation:** This methodology section lays out an exciting vision, but it suffers from a significant lack of concrete detail regarding implementation, specific AI capabilities, and rigorous evaluation methods. Major revisions are needed to make the proposed system and its evaluation scientifically sound and replicable.
+**Critical Issues:** 3 major, 3 moderate, 3 minor
+**Recommendation:** Significant revisions are needed to temper overclaims, provide necessary methodological detail, and strengthen the evaluation framework before the paper can be considered for publication.
 
 ---
 
 ## MAJOR ISSUES (Must Address)
 
-### Issue 1: Lack of LLM and Implementation Specificity
-**Location:** Throughout Section 2.2 and 2.1
-**Problem:** The methodology describes a complex AI system but completely omits details about the underlying Large Language Models (LLMs) used for each agent (e.g., GPT-4, Claude Opus, custom fine-tuned models), their versions, specific prompt engineering strategies, or technical communication mechanisms. This is critical for understanding the system's actual capabilities, limitations, and for any attempt at replication.
-**Evidence:** No mention of specific LLM models, API calls (beyond citation discovery), or how agents *technically* communicate or store state.
-**Fix:** Specify the LLM used for each agent (or agent type), describe the general approach to prompt engineering (e.g., few-shot, chain-of-thought), and outline the technical stack/communication protocols between agents.
-**Severity:** 🔴 High - fundamentally compromises replicability and scientific rigor.
+### Issue 1: Overclaims of Proven Performance and Effectiveness
+**Location:** Widespread throughout the Methodology section (e.g., initial paragraph, Framework, 14-Agent Workflow, Citation Methodology, Evaluation Introduction).
+**Problem:** The language frequently asserts the system's *effectiveness*, *efficiency*, *precision*, *enhancement*, *ensurance* of quality, and *prevention* of issues as if these are already proven facts, rather than stated *aims*, *hypotheses*, or *design objectives* to be tested by the methodology described. A methodology section should describe *how* these claims *will be measured*, not present them as inherent, verified properties of the system.
+**Examples:**
+-   "its profound implications for the democratization" (initial paragraph)
+-   "This modular approach ensures precision, depth, and coherence" (14-Agent Workflow)
+-   "This parallel processing capability significantly accelerates the writing process" (Crafter Agents)
+-   "ensures that OpenDraft produces high-quality academic prose" (end of 14-Agent Workflow)
+-   "thereby preventing hallucinated citations" (API-Backed Citation Discovery)
+-   "ensuring that increased access does not come at the expense of quality" (Quality Improvement criterion)
+**Fix:** Rephrase these statements using hedging language appropriate for a methodology section that describes a system *under development* or *to be evaluated*. Use phrases like "aims to," "is designed to," "is expected to," "contributes to," "mitigates against," "seeks to achieve."
+**Severity:** 🔴 High - affects the fundamental academic integrity and tone of the paper, making it sound more like a marketing pitch than a scientific methodology.
 
-### Issue 2: Overclaims of AI Agent Capabilities Without Mechanisms
-**Location:** Section 2.2.3 (Skeptic, Enhancer, Abstract Generator) and 2.2.1 (Signal)
-**Claim:** Agents are described with highly sophisticated reasoning and creative capabilities (e.g., Skeptic identifies logical fallacies, potential biases; Enhancer suggests innovative perspectives, deepens analysis; Signal identifies factual inconsistencies).
-**Problem:** These claims attribute advanced cognitive functions to LLM-based agents without describing the underlying mechanisms, algorithms, or specialized training that would enable such capabilities. Current general-purpose LLMs, while powerful, do not inherently possess robust logical fallacy detection, bias mitigation, or true "originality" generation in a rigorous academic sense without highly specific, detailed engineering.
-**Evidence:** The descriptions lack any "how" for these complex tasks, making them aspirational rather than methodological.
-**Fix:** Either temper these claims significantly (e.g., "highlights potential areas for human review regarding logical fallacies") or provide detailed, specific methodological descriptions of how these agents are engineered to perform such advanced tasks (e.g., specific rules engines, external knowledge graphs, advanced prompting techniques, fine-tuning on specific datasets for fallacy detection).
-**Severity:** 🔴 High - misrepresents the current state of AI capabilities and risks misinforming readers about the system's actual functions.
+### Issue 2: Insufficient Methodological Detail for Complex Agent Functions
+**Location:** Descriptions of Scout Agent, Scribe Agent, Signal Agent, Skeptic Agent.
+**Problem:** Several agents are assigned highly sophisticated and difficult AI tasks (e.g., identifying "high-impact studies," ensuring "factual accuracy," identifying "gaps in argumentation," "inconsistencies in data," "logical fallacies," "potential biases"). The methodology *describes what these agents do* but largely omits *how they achieve these tasks*. Without details on the underlying algorithms, heuristics, models, or specific technical approaches, the claims of their capabilities remain unsubstantiated and the methodology is not replicable.
+**Examples:**
+-   **Scout Agent:** "It prioritizes high-impact studies, seminal works..." (How is "high-impact" or "seminal" defined algorithmically?)
+-   **Scribe Agent:** "focusing on factual accuracy..." (How is factual accuracy *ensured* or checked by an LLM-based agent?)
+-   **Signal Agent:** "identify gaps in argumentation, inconsistencies in data, areas requiring further elaboration..." (What specific metrics, rules, or models are used for these complex detections?)
+-   **Skeptic Agent:** "critically reviewing... challenges claims, identifies potential biases, points out logical fallacies..." (This is an extremely challenging AI task. What specific frameworks, models, or techniques are employed?)
+**Fix:** For each agent performing a complex cognitive task, briefly describe the technical approach. For example, specify if it uses specific NLP models (e.g., BERT-based for relevance, fine-tuned LLM for fallacy detection), rule-based systems, knowledge graphs, or other computational methods.
+**Severity:** 🔴 High - compromises the methodological rigor and replicability of the proposed system.
 
-### Issue 3: Missing Methodology for Semantic Citation Accuracy
-**Location:** Section 2.3 (API-Backed Citation Discovery Methodology)
-**Problem:** The methodology rigorously describes how to *find* citations and ensure their *formal accuracy* (existence, formatting) but entirely omits how the system ensures that the retrieved citation *semantically supports the specific claim* it is attached to. Generative AI is prone to "hallucination," and a verified source might still be irrelevant or misrepresent the claim it's meant to support.
-**Evidence:** "ensuring that only verified and existing sources are referenced" – this focuses on existence, not relevance or accuracy of support.
-**Fix:** Introduce a methodological step where an agent (or human-in-the-loop) specifically evaluates the semantic alignment between a factual claim and the content (e.g., abstract, key sentences) of the retrieved source. This could involve similarity metrics, keyword matching within context, or explicit human review for flagged instances.
-**Severity:** 🔴 High - a critical gap for academic integrity, as an existing but irrelevant citation is almost as problematic as a hallucinated one.
-
-### Issue 4: "Framework for Analyzing" Is a Scope, Not a Methodology
-**Location:** Section 2.1 Framework for Analyzing the Academic-Thesis-AI System Architecture
-**Problem:** This section describes *what* dimensions of the system will be examined (technological, agentic, ethical, user experience) rather than outlining a concrete *methodology* for how this analysis will be performed using the framework. It lists questions to be addressed but doesn't explain the *analytical methods* (e.g., specific qualitative analysis techniques, quantitative metrics, audit procedures) that will be applied to each dimension.
-**Evidence:** Phrases like "examines the technological infrastructure," "evaluates how individual agents are designed," "assesses the system's adherence," "examines how the system facilitates" are descriptive of scope, not method.
-**Fix:** Reframe this section to detail the *methods of analysis* for each dimension. For example, under "Technological Infrastructure," specify how robustness will be assessed (e.g., stress testing, error logging analysis), or how LLM integration points will be evaluated (e.g., API call success rates, latency metrics).
-**Severity:** 🔴 High - a core section titled "Framework for Analyzing" lacks the actual analytical methodology.
-
-### Issue 5: Vague Evaluation Methodology for Complex Criteria
-**Location:** Section 2.4.2 Key Evaluation Criteria (especially for "Originality and Depth of Analysis," "Bias Mitigation," "Reduction of Resource Dependency," "Plagiarism Detection," "Data Security")
-**Problem:** While the criteria are well-chosen, the proposed methods for assessing complex, qualitative aspects are often too vague. For instance, how will "originality and depth of analysis" be *quantitatively* or *qualitatively* measured and attributed to the *system's support* vs. human input? How will "bias mitigation" be assessed beyond a general statement?
-**Evidence:** "evaluated qualitatively by expert reviewers, focusing on the system's capacity to support the human author..." is insufficient without specifying rubrics or specific methods for attribution. "Assessment of how the system identifies and mitigates biases" needs concrete metrics.
-**Fix:** For each complex criterion, provide specific, measurable indicators or detailed qualitative methodologies. For "originality," describe specific rubrics for expert reviewers. For "bias mitigation," specify datasets for testing, bias metrics, and mitigation strategies to be evaluated. For "resource dependency," detail how cost savings or accessibility improvements will be quantified (e.g., comparative cost analysis, user surveys on perceived affordability).
-**Severity:** 🔴 High - without concrete methods, the evaluation becomes subjective and its findings difficult to validate.
+### Issue 3: Lack of Specificity in Evaluation Metrics and Methods
+**Location:** "Evaluation Criteria for Measuring Democratization Impact" section.
+**Problem:** While the evaluation criteria are well-chosen, the section largely lists *what* will be assessed but lacks specific, measurable metrics and detailed descriptions of *how* these will be assessed. Stating "qualitative analysis," "comparative studies," "user feedback surveys," and "expert reviews" is a good start, but insufficient for a methodology section.
+**Examples:**
+-   **Cost-Effectiveness:** "evaluates whether OpenDraft significantly reduces the financial barriers..." (How will this be measured? Specific cost comparisons? User reported savings?)
+-   **Quality Improvement and Academic Rigor:** "assesses whether OpenDraft consistently produces academic prose that meets high standards..." (What are the specific metrics for "high standards"? Readability scores? Coherence metrics? Blinded expert review rubrics? Quantitative measures of citation quality?)
+-   **Ethical Considerations and Bias Mitigation:** "rigorously evaluates OpenDraft for potential biases..." (What specific bias detection frameworks, datasets, or metrics will be used? How will "stylistic choices" be evaluated for bias?)
+-   **Overall Assessment Methods:** "combination of qualitative analysis... comparative studies... user feedback surveys... expert reviews." (What *kind* of qualitative analysis? What *specific metrics* in comparative studies? What *questions* in user surveys? What *expertise* and *rubrics* for expert reviews?)
+**Fix:** For each evaluation criterion, elaborate on the specific quantitative and/or qualitative metrics that will be used, and detail the experimental setup for their measurement (e.g., participant recruitment, survey design, statistical tests, expert review protocols).
+**Severity:** 🔴 High - without concrete evaluation methods, the claims of assessing "democratization impact" remain aspirational rather than methodologically sound.
 
 ---
 
 ## MODERATE ISSUES (Should Address)
 
-### Issue 6: Unspecified Inter-Agent Communication and Conflict Resolution
-**Location:** Section 2.2 (14-Agent Workflow Design)
-**Problem:** The paper mentions "iterative phases" and "feedback loops" but lacks detail on how agents technically communicate, pass information, or resolve conflicts/inconsistencies when their outputs diverge. For a MAS, this is a fundamental design aspect.
-**Fix:** Describe the communication protocols (e.g., shared memory, message passing, API calls), the data structures for inter-agent information exchange, and explicit mechanisms for conflict resolution (e.g., a "consensus agent," weighted voting, human arbitration).
+### Issue 4: Vague Definition of "High-Impact" / "Seminal" Sources
+**Location:** Scout Agent description within "14-Agent Workflow Design."
+**Problem:** The Scout Agent is tasked with prioritizing "high-impact studies, seminal works, and recent advancements." The methodology does not explain *how* "high-impact" or "seminal" are algorithmically defined or identified within the system (e.g., based on citation counts, journal impact factor, specific keywords, network centrality, or a combination). This detail is crucial for understanding the quality of the foundational research gathered.
+**Fix:** Specify the criteria or algorithms used to define and prioritize "high-impact" or "seminal" literature within the Scout Agent's functionality.
 
-### Issue 7: Lack of Human-in-the-Loop Detail
-**Location:** Section 2.1 (Agentic autonomy), 2.2 (workflow), 2.3 (cite_MISSING)
-**Problem:** While the paper mentions balancing automation with human control and human oversight, the specific points of human intervention, review, override, or input within the 14-agent workflow are not clearly delineated.
-**Fix:** Explicitly map out the human-in-the-loop points for each stage of the workflow (e.g., "After Scribe's draft, human user reviews and edits before Crafters begin," or "Skeptic agent flags issues for human decision").
+### Issue 5: Unsubstantiated Claims about AI "Understanding"
+**Location:** "Semantic Scholar API Utilization" within "API-Backed Citation Discovery Methodology."
+**Problem:** The text states that Semantic Scholar's use allows the system "to not only find sources but also to understand their relevance and impact within the scholarly landscape." The term "understand" for an AI system is often an anthropomorphism that requires careful definition or rephrasing to describe *how* this "understanding" is operationalized through computational means.
+**Fix:** Rephrase to describe *how* this "understanding" is computationally achieved (e.g., "to infer relevance and impact based on citation networks, co-citation analysis, semantic similarity scores, or other graph-based metrics").
 
-### Issue 8: Unjustified Number and Breakdown of Agents
-**Location:** Section 2.2 (14-Agent Workflow Design)
-**Problem:** The paper presents a specific 14-agent architecture without providing a clear theoretical or empirical justification for this particular number or the division of labor. Could it be 10, or 20? Is this an arbitrary choice or based on a recognized framework?
-**Fix:** Briefly explain the rationale behind the 14-agent structure. Is it mapped to a standard academic writing process model? Was it derived from an iterative design process?
-
-### Issue 9: Undefined Stopping Conditions for Iterative Agents
-**Location:** Section 2.2.2 (Crafter Agents)
-**Problem:** The Crafter agents "operate in concert, iterating on the content until it meets the highest academic standards." The "highest academic standards" is subjective, and there's no defined stopping condition for this iteration. This could lead to infinite loops or arbitrary termination.
-**Fix:** Define clear stopping conditions for iterative processes. This could be a fixed number of iterations, a convergence metric (e.g., no further grammatical errors detected, stylistic score plateaus), or a human review gate.
-
-### Issue 10: Missing Details for Comparative Evaluation
-**Location:** Section 2.4.2 (Language Support Effectiveness)
-**Problem:** The evaluation proposes comparing system output to "output using traditional methods" for non-native speakers, but it doesn't specify *how* this "traditional methods" output will be obtained or controlled for.
-**Fix:** Describe the baseline for "traditional methods." Will it involve a control group, self-reported data, or pre-existing drafts? Ensure the comparison is fair and methodologically sound.
+### Issue 6: Ambiguity in Iteration and Feedback Mechanisms
+**Location:** End of "14-Agent Workflow Design."
+**Problem:** The text mentions the "iterative nature" of the workflow and agents providing "feedback to one another," leading to "multiple cycles of refinement and improvement." However, it lacks specifics on the feedback loop's structure, the precise criteria for triggering new cycles, the types of feedback provided (e.g., structured prompts, numerical scores), or how the system determines convergence (i.e., when a section or the overall draft is "complete" or sufficiently refined).
+**Fix:** Add details on the feedback protocols between agents, the conditions for re-evaluation (e.g., specific thresholds or agent responses), and how the system decides when a task or the entire document is considered sufficiently refined.
 
 ---
 
 ## MINOR ISSUES
 
-1.  **Overly Confident Language:** Phrases like "meticulously engineered," "ensures a rigorous and transparent investigation," "highest academic standards," "significantly streamlining" are common. While aspirational, in a methodology section, they should be tempered with more objective language or hedging (e.g., "aims to ensure," "designed to streamline").
-2.  **Scout Agent Overclaim:** "minimizing the risk of overlooking critical prior work." No system can fully minimize this risk without external human validation; "reducing the likelihood" is more accurate.
-3.  **Signal Agent Factual Consistency:** "identifies factual inconsistencies." This implies access to a factual knowledge base or external verification mechanism not described as part of the Signal agent's explicit function.
-4.  **Architect Agent Conformity:** "ensures that the paper conforms to the specified IMRaD... and maintains a logical progression." How does it *know* IMRaD standards or assess "logical progression" in a robust way? Requires more detail on its internal logic/prompts.
-5.  **Abstract Generator Accuracy:** "ensuring the abstract accurately represents the core contributions." How does the agent measure "accuracy" of representation? This is a human judgment call.
-6.  **Vague Claim Strength:** "substantially better" (Minor Issue 1 in example) - Similar general claims without specific metrics occur.
-7.  **Unsubstantiated Claims:** "widely recognized" (Minor Issue 4 in example) - There are a few instances of strong, general claims that could benefit from a specific citation or rephrasing (e.g., "This balance between automation and human control is crucial for maintaining academic integrity and fostering genuine learning" – while true, could be cited or framed as an assumption).
-8.  **Redundant Phrasing:** Some sentences or phrases are slightly repetitive in their emphasis on rigor or comprehensiveness.
-9.  **Citation Placement:** Some citations appear at the end of long paragraphs, making it unclear which specific claim they support. More precise placement would be beneficial.
-10. **"Democratization" Definition:** While well-defined in 2.4.1, the opening paragraph of 2.4 uses "democratize access to high-quality academic output" as a given without immediately linking to the nuanced definition.
+1.  **"Author Name Sanity Checks" Undefined:** In the "Verification and Hallucination Prevention" sub-section, "author name sanity checks" are mentioned without explanation.
+    **Fix:** Briefly explain what these checks entail (e.g., "cross-referencing author names with established researcher profiles, common name variations, or institutional affiliations").
+2.  **"Open-source nature... further enhances its potential for community-driven scalability" is a prediction, not methodology:** While a reasonable and positive aspiration, this statement describes a future potential or hope rather than a current methodological step or an attribute being analyzed within the system's design.
+    **Fix:** Move or rephrase this statement to indicate it's a future potential or a goal for community engagement, rather than a methodological claim about the current system's scalability.
+3.  **Repetitive Use of "Ensures":** The word "ensures" is used frequently across the document, implying absolute certainty of outcomes. While a system *aims* to ensure, absolute guarantees are rarely achievable, especially in AI.
+    **Fix:** Review all instances of "ensures" and replace with more appropriate hedging language such as "aims to ensure," "contributes to," "is designed to promote," "mitigates against," or "is expected to lead to."
 
 ---
 
 ## Logical Gaps
 
-### Gap 1: Capability-to-Mechanism Discrepancy
-**Location:** Throughout Section 2.2 (Agent Descriptions)
-**Logic:** The paper claims agents perform highly complex tasks (e.g., identifying logical fallacies, suggesting innovative perspectives).
-**Missing:** A clear explanation of the *mechanisms* (specific algorithms, prompt engineering techniques, external tools, fine-tuning data) by which an LLM-based agent achieves these advanced capabilities. Without this, the claims are unsupported logical leaps.
-**Fix:** For each high-level agent capability, bridge the gap by describing the specific methods employed.
-
-### Gap 2: Operationalization of Abstract Concepts
-**Location:** Section 2.1 (Framework for Analyzing), Section 2.4 (Evaluation Criteria)
-**Logic:** The paper defines abstract concepts (e.g., "technological infrastructure," "agentic autonomy," "originality," "bias mitigation").
-**Missing:** A clear methodology for *operationalizing* these concepts into measurable variables or concrete analytical steps. The framework describes *what* to look at, but not *how* to look at it, and the evaluation criteria often state *what* will be assessed, but not *how* it will be measured.
-**Fix:** For each abstract concept, explicitly state how it will be measured, observed, or analyzed (e.g., specific metrics, survey questions, qualitative coding schemes, audit procedures).
+### Gap 1: Disconnect Between Framework and System Capabilities
+**Location:** "Framework for Analyzing the OpenDraft System Architecture" vs. "14-Agent Workflow Design."
+**Logic:** The "Framework" section correctly states that the analysis *examines how* certain design principles (modularity, interoperability, etc.) *contribute* to the system's robustness or adaptability. However, the subsequent "14-Agent Workflow" section often leaps to claiming that the *system already inherently possesses* or *ensures* these robust qualities (e.g., "This modular approach ensures precision, depth, and coherence").
+**Missing:** A clear distinction between the analytical framework (how the system *will be studied*) and the system's *current, proven capabilities*.
+**Fix:** Maintain consistency by framing the workflow descriptions in terms of *design goals* and *intended effects* that the evaluation framework will then measure and verify, rather than presenting them as already achieved outcomes.
 
 ---
 
 ## Methodological Concerns
 
-### Concern 1: Replicability
-**Issue:** The lack of specificity regarding LLM models, prompt engineering, and inter-agent communication makes it impossible for another researcher to replicate the system or its workflow.
-**Risk:** The entire methodology becomes a conceptual blueprint rather than a scientific design.
-**Reviewer Question:** "What specific LLM (e.g., GPT-4, Claude Opus, custom fine-tuned) powers each agent, and what were the key prompt engineering strategies?"
-**Suggestion:** Provide technical specifications for each agent's LLM, example prompts, and details on how agents interact.
+### Concern 1: "Black Box" Functionality for Critical Agents
+**Issue:** While the overall multi-agent workflow is clearly described, the lack of technical detail on *how* agents like the Skeptic or Signal agents perform their highly cognitive and subjective tasks raises concerns about the transparency, verifiability, and replicability of their core functions.
+**Risk:** Without this detail, these crucial agents could be perceived as "black boxes," making it difficult for reviewers and future researchers to assess the rigor and validity of their contributions to the generated content.
+**Reviewer Question:** "How can the claimed capabilities of agents like the Skeptic Agent (e.g., identifying logical fallacies, biases) be verified or replicated without a more detailed description of their internal workings or the specific models/heuristics they employ?"
+**Suggestion:** Provide a high-level technical overview of the models, algorithms, or frameworks used by these complex agents.
 
-### Concern 2: Validity of Evaluation Metrics
-**Issue:** For highly subjective criteria like "Originality and Depth of Analysis" or "Bias Mitigation," the proposed evaluation methods are too high-level. It's difficult to ensure that expert reviewers can consistently and reliably measure these aspects, especially when trying to attribute them to the AI system's "support."
-**Risk:** Evaluation results may lack objectivity and validity.
-**Question:** "What specific, detailed rubrics or guidelines will expert reviewers use to assess 'originality' and 'depth of analysis,' and how will the contribution of the AI system vs. the human author be disentangled?"
-**Suggestion:** Develop and present detailed rubrics, potentially with inter-rater reliability studies, and consider methods to isolate the AI's contribution (e.g., A/B testing with/without the system, or specific prompts for reviewers to attribute impact).
-
-### Concern 3: Potential for Confounding Variables in Evaluation
-**Issue:** When comparing "linguistic quality metrics" for non-native speakers, or "time savings," without strict controls, other factors (e.g., user's prior experience, topic complexity, motivation) could confound the results.
-**Risk:** Attributing improvements solely to the AI system may be inaccurate.
-**Question:** "How will confounding variables be controlled for in the evaluation, particularly when assessing time savings or linguistic improvements?"
-**Suggestion:** Implement a rigorous experimental design (e.g., randomized control trials, pre/post designs, matched-pair comparisons) and clearly describe how participant characteristics and task variables will be managed.
+### Concern 2: Generalizability of "Democratization Impact" Evaluation
+**Issue:** The evaluation criteria for "democratization" are comprehensive, but the methodology doesn't discuss the scope of the evaluation in terms of user demographics, disciplinary contexts, or types of academic papers. "Democratization" implies broad applicability and benefit.
+**Risk:** If the evaluation is conducted on a narrow user group or specific discipline, the generalizability of the "democratization" claims could be limited.
+**Reviewer Question:** "Will the evaluation include a diverse range of user groups (e.g., non-native English speakers, early career researchers, researchers from various disciplines, institutions with differing resource levels) to truly assess the system's impact on 'democratization'?"
+**Suggestion:** Specify the demographic and disciplinary scope of planned user studies, comparative analyses, and expert reviews to ensure a robust assessment of democratization.
 
 ---
 
 ## Missing Discussions
 
-1.  **Computational Cost and Resource Requirements:** The methodology describes a complex multi-agent system. No mention of the computational resources, API call costs, or processing time required to run such a system, which is crucial for practical feasibility and democratization.
-2.  **Scalability:** How is the system designed to scale to handle multiple users, larger documents, or different academic disciplines?
-3.  **Failure Modes and Limitations:** What are the expected failure cases of the system (e.g., agents getting stuck, generating conflicting advice, producing incorrect information despite citation discovery)? What are the inherent limitations of an LLM-based approach for academic writing?
-4.  **Ethical Oversight Body/Protocol:** Beyond general principles, how will the ethical considerations be *managed* throughout the system's development and deployment? Is there an ethics committee or a specific protocol for handling ethical dilemmas identified by the system or users?
-5.  **Data Governance and Model Drift:** How will the system's knowledge base and agent behaviors be maintained over time? How will potential model drift or outdated information be handled?
+1.  **Computational Cost and Resource Implications:** A system with 14 interacting agents making multiple API calls will have significant computational costs (processing time, API usage fees). This is highly relevant for "democratization" (affordability) and "scalability."
+    **Fix:** Add a section or subsection discussing the expected computational resources required, potential optimization strategies, and how these factors relate to the cost-effectiveness and accessibility for users.
+2.  **Inherent Limitations of AI in Academic Writing:** While the system aims to augment and enhance, it's crucial for academic rigor to acknowledge the inherent limitations of current AI in performing highly nuanced academic tasks (e.g., truly novel conceptual innovation, deep subjective interpretation, handling ethical dilemmas not explicitly coded, generating truly original research questions).
+    **Fix:** Include a brief discussion on the inherent limitations of AI in fully replicating human academic prowess and where human oversight remains indispensable for the highest levels of intellectual contribution.
+3.  **Potential for "Groupthink" or Bias Reinforcement in Multi-Agent Feedback:** The iterative feedback loop between agents, while beneficial, could potentially lead to reinforcement of initial biases or "groupthink" if not carefully designed.
+    **Fix:** Briefly discuss how the system is designed to prevent agents from simply reinforcing each other's errors or biases, particularly highlighting the Skeptic Agent's role in challenging internal consistency.
 
 ---
 
 ## Tone & Presentation Issues
 
-1.  **Overly Confident/Aspirational:** The language frequently expresses certainty and high aspiration ("ensures," "significantly streamlines," "elevating scholarly standards") rather than the more cautious and objective tone typically expected in a methodology section describing a system yet to be fully evaluated.
-2.  **Dismissive of Prior Work (Implicit):** By emphasizing the "novelty" and "enhancement" without deeply engaging with the technical limitations of existing AI in these specific tasks, it can implicitly dismiss the challenges faced by prior work.
+1.  **Overly Confident/Assertive Tone:** The repeated use of strong, definitive verbs ("ensures," "solves," "prevents," "guarantees") contributes to an overly confident tone that should be tempered for academic writing, especially in a methodology section describing a system yet to be fully evaluated.
+    **Fix:** Adopt a more cautious, evidence-based tone, using words like "aims to," "is designed to," "contributes to," "mitigates," "suggests," "is expected to."
 
 ---
 
 ## Questions a Reviewer Will Ask
 
-1.  "What specific LLM models (e.g., GPT-4, Claude Opus, custom fine-tuned) are utilized for each agent, and what were the key parameters or fine-tuning strategies employed?"
-2.  "Can you provide concrete examples of the prompts or instruction sets given to the Skeptic Agent to enable it to identify logical fallacies or biases?"
-3.  "How is human intervention integrated into the 14-agent workflow? At what specific points can a human user override, refine, or provide new input to the agents?"
-4.  "What are the precise technical mechanisms for inter-agent communication, data sharing, and resolution of conflicting agent outputs or recommendations?"
-5.  "How does the system ensure that a discovered citation not only exists but also *semantically supports* the specific claim it is attributed to, mitigating the risk of contextually irrelevant but formally correct citations?"
-6.  "What are the estimated computational costs (e.g., API calls, processing time, energy consumption) associated with generating a typical thesis section or a full thesis draft using this multi-agent system?"
-7.  "What specific rubrics, tools, or methodologies will be used by expert reviewers to objectively assess 'originality' and 'depth of analysis' of the AI-assisted output, and how will the AI's contribution be isolated?"
+1.  "How are 'high-impact' and 'seminal' papers algorithmically defined and prioritized by the Scout Agent?"
+2.  "What are the specific algorithms, models, or heuristics employed by the Signal Agent to identify gaps, inconsistencies, and opportunities for stronger transitions?"
+3.  "Can you provide a more detailed technical explanation of how the Skeptic Agent identifies potential biases, logical fallacies, and suggests counter-arguments?"
+4.  "What are the concrete, measurable metrics that will be used for each of the 'Democratization Impact' evaluation criteria (e.g., for Quality Improvement, Bias Mitigation, Cost-Effectiveness, Time Efficiency)?"
+5.  "What is the expected computational cost (e.g., processing time, API costs) and resource footprint per paper generated by the 14-agent workflow?"
+6.  "How is the iterative feedback loop between agents managed, and what specific criteria or mechanisms determine when a section or the overall draft is considered complete or sufficiently refined?"
+7.  "What measures are in place to prevent agents from reinforcing each other's errors or biases during the iterative refinement process?"
+8.  "Will the evaluation of 'democratization impact' include a diverse user base (e.g., non-native English speakers, early career researchers, researchers from various disciplines/institutions) to ensure broad applicability of the findings?"
+9.  "How will the 'factual accuracy' of the content generated by the Scribe and Crafter agents be verified or ensured, beyond just synthesizing information?"
 
 **Prepare answers or add to paper**
 
@@ -174,14 +150,13 @@
 ## Revision Priority
 
 **Before resubmission:**
-1.  🔴 **Fix Issue 1 (LLM/Implementation Specificity)** - Fundamental for replicability.
-2.  🔴 **Address Issue 2 (Overclaims of AI Agent Capabilities)** - Needs tempering or detailed mechanism explanation.
-3.  🔴 **Resolve Issue 3 (Missing Semantic Citation Accuracy)** - Critical for academic integrity.
-4.  🔴 **Improve Issue 4 (Framework for Analyzing)** - Needs to describe *how* analysis is done.
-5.  🔴 **Detail Vague Evaluation Methods (Issue 5)** - For complex criteria.
-6.  🟡 **Add Missing Discussions:** Computational cost, failure modes, prompt engineering, ethical management.
-7.  🟡 **Specify Inter-Agent Communication and Human-in-the-Loop Details (Issues 6 & 7).**
+1.  🔴 Fix Issue 1 (Overclaims) - paramount for academic tone and integrity.
+2.  🔴 Address Issue 2 (Detail on Complex Agents) - crucial for methodological rigor and replicability.
+3.  🔴 Resolve Issue 3 (Specific Evaluation Metrics) - essential for validating the system's impact.
+4.  🟡 Add details for Issue 4 (Vague "High-Impact" Definition).
+5.  🟡 Clarify Issue 5 (AI "Understanding").
+6.  🟡 Elaborate on Issue 6 (Iteration and Feedback Mechanisms).
 
 **Can defer:**
--   Minor wording issues (fix in final revision).
--   Further theoretical justification for agent count (if it's an empirical design choice).
+-   Minor wording issues (fix in revision).
+-   Additional experiments (suggest as future work, if space is constrained).

@@ -8,111 +8,128 @@
 ## Summary
 
 **Strengths:**
-- Comprehensive coverage of the topic, balancing the potential benefits and inherent challenges of emissions trading.
-- Clear, well-structured discussion with a logical flow between sections (implications, challenges, improvements, global role, recommendations).
-- Generally well-supported claims, drawing on a broad range of cited literature.
-- Identifies critical challenges such as price volatility, carbon leakage, and distributional effects, and proposes relevant solutions.
-- Provides actionable and differentiated recommendations for both policy-makers and the business sector.
+-   **Umfassende Abdeckung:** Die Diskussion beleuchtet systematisch verschiedene Facetten von CO2-Märkten, von Implikationen und Herausforderungen bis hin zu Verbesserungsvorschlägen und globaler Rolle.
+-   **Strukturierte Argumentation:** Der Text ist logisch gegliedert und führt den Leser klar durch die verschiedenen Themenbereiche.
+-   **Gute Literaturbasis:** Es werden zahlreiche Zitate verwendet, die die Argumente untermauern (angenommen, die Referenzen sind relevant und korrekt).
+-   **Anerkennung von Herausforderungen:** Ein eigener Abschnitt widmet sich den Grenzen und Herausforderungen, was zu einer ausgewogenen Darstellung beiträgt.
 
-**Critical Issues:** 2 major, 1 moderate, 2 minor
-**Recommendation:** Revisions needed before publication, particularly addressing missing citations for key claims.
+**Critical Issues:** 3 major, 3 moderate, several minor
+**Recommendation:** Revisions needed before publication
 
 ---
 
 ## MAJOR ISSUES (Must Address)
 
-### Issue 1: Missing Citation for Price Collar Mechanisms
-**Location:** Section 3, paragraph 1 ("Optimierung der Marktstabilität und Preisvorhersehbarkeit")
-**Claim:** "Um die Preisvorhersehbarkeit weiter zu verbessern und extreme Volatilität zu vermeiden, könnten Mechanismen wie Preisunter- und -obergrenzen (Price Collars) oder ein dynamisches Cap in Betracht gezogen werden {cite_MISSING: Diskussion über Preiscollars und dynamisches Cap in der Literatur}."
-**Problem:** This is a direct placeholder indicating a missing citation for a crucial proposed improvement mechanism. The discussion of price collars and dynamic caps is a significant point for market stability, and its theoretical or empirical basis must be clearly referenced.
-**Evidence:** The explicit `cite_MISSING` tag in the text.
-**Fix:** Provide specific academic literature, policy reports, or economic analyses that discuss the implementation, effectiveness, and potential trade-offs of price collars or dynamic caps in emissions trading systems. If the idea is more speculative, rephrase to reflect that and cite general economic principles if applicable.
-**Severity:** 🔴 High - directly impacts the evidentiary basis for a key improvement suggestion.
+### Issue 1: Fehlende Detailinformationen zu Zitaten
+**Location:** Durchgehend im gesamten Text
+**Problem:** Die Zitate sind als `cite_XXX` Platzhalter angegeben. Für eine wissenschaftliche Publikation sind vollständige und überprüfbare Referenzen mit allen notwendigen Angaben (Autor, Jahr, Titel, Journal/Konferenz, DOI/arXiv ID/URL) unerlässlich. Ohne diese Informationen ist die Nachvollziehbarkeit und wissenschaftliche Überprüfung der Aussagen nicht möglich.
+**Evidence:** Alle verwendeten Zitate sind in diesem Format.
+**Fix:** Ersetzen Sie alle `cite_XXX` Platzhalter durch vollständige, standardisierte Referenzen, die mindestens Autor, Jahr, Titel und Publikationsort sowie idealerweise einen DOI oder eine URL enthalten.
+**Severity:** 🔴 High - betrifft die akademische Integrität und Überprüfbarkeit des gesamten Papiers.
 
-### Issue 2: Missing Citation for EU-Switzerland ETS Linking Example
-**Location:** Section 3, paragraph 3 ("Harmonisierung und Verknüpfung (Linking) verschiedener CO2-Märkte")
-**Claim:** "Die Erfahrungen mit der Verknüpfung des EU ETS mit anderen Systemen, wie dem Schweizer ETS, zeigen die Machbarkeit solcher Ansätze {cite_MISSING: Beispiel für EU-Schweiz ETS Linking}."
-**Problem:** A concrete, real-world example used to demonstrate the feasibility of linking different ETS systems is uncited. This factual claim is central to the argument for international harmonization.
-**Evidence:** The explicit `cite_MISSING` tag in the text.
-**Fix:** Add the precise citation(s) for official documents, academic papers, or reports that detail the linking of the EU ETS with the Swiss ETS, confirming its establishment and initial experiences.
-**Severity:** 🔴 High - a critical factual example used to support an argument lacks verification.
+### Issue 2: Unzureichende kritische Reflexion globaler Marktlimitierungen
+**Location:** Abschnitt 4: "Rolle im globalen Klimaschutz"
+**Claim:** Dieser Abschnitt ist überwiegend positiv und betont die Vorteile von CO2-Märkten für den globalen Klimaschutz (Effizienz, Zusammenarbeit, Innovation, Investitionen).
+**Problem:** Es fehlt eine tiefere Auseinandersetzung mit den inhärenten Grenzen und potenziellen negativen Auswirkungen von CO2-Märkten auf globaler Ebene, insbesondere im Hinblick auf Gerechtigkeitsfragen, die unterschiedlichen Kapazitäten von Industrie- und Entwicklungsländern zur effektiven Teilnahme oder die Gefahr einer Verwässerung von Klimazielen durch internationale Mechanismen (z.B. bei unzureichender Additionality von Offsets). Es wird zwar erwähnt, dass Entwicklungsländer "oft mit höheren Minderungskosten und technologischen Lücken konfrontiert sind", dies wird aber eher als Chance für Handel denn als systemische Herausforderung des Marktansatzes diskutiert.
+**Missing:** Eine kritische Betrachtung, wie CO2-Märkte globale Ungleichheiten verstärken könnten oder welche spezifischen Governance-Herausforderungen auf globaler Ebene bestehen, die über die reine Harmonisierung hinausgehen.
+**Fix:** Ergänzen Sie eine ausgewogenere Diskussion, die die potenziellen Fallstricke und Herausforderungen von CO2-Märkten im globalen Kontext kritisch beleuchtet und mögliche Gegenmaßnahmen oder Kompromisse diskutiert.
+**Severity:** 🔴 High - beeinflusst die Ausgewogenheit und Tiefe der Analyse.
+
+### Issue 3: Mangel an spezifischen quantitativen Belegen bei starken Behauptungen
+**Location:** Abschnitt 1.1 "Implikationen für die Klimapolitik", z.B. "signifikanten Emissionsminderungen", "kausalen Effekte... nachgewiesen".
+**Problem:** Der Text macht starke Aussagen über die Wirksamkeit von CO2-Märkten ("signifikanten Emissionsminderungen", "kausalen Effekte... nachgewiesen"), ohne spezifische quantitative Daten (z.B. Prozentsätze der Reduktion, konkrete Effekte) aus den zitierten Studien zu nennen. Auch wenn es sich um eine Diskussionssektion handelt, würde die Nennung konkreter Zahlen (z.B. "Studie X zeigte eine Reduktion von Y% im Sektor Z") die Argumente erheblich stärken und die Nachvollziehbarkeit erhöhen.
+**Evidence:** Formulierungen wie "gut konzipierter CO2-Preis zu signifikanten Emissionsminderungen führen kann" {cite_069} oder "kausalen Effekte der CO2-Bepreisung auf Emissionen wurden in verschiedenen Kontexten nachgewiesen" {cite_079} sind zu allgemein.
+**Fix:** Fügen Sie, wo möglich und relevant, konkrete quantitative Ergebnisse (z.B. Reduktionsprozentsätze, Kosteneinsparungen) aus den zitierten Studien hinzu, um die Behauptungen zu untermauern.
+**Severity:** 🔴 High - schwächt die Überzeugungskraft der Hauptargumente.
 
 ---
 
 ## MODERATE ISSUES (Should Address)
 
-### Issue 3: Vague Statement on Blockchain Technology
-**Location:** Section 3, paragraph 5 ("Transparenz und Datenintegrität")
-**Claim:** "Die Nutzung fortschrittlicher Technologien wie Blockchain für die Zertifikatsverwaltung könnte die Sicherheit und Nachvollziehbarkeit erhöhen, obwohl dies noch Gegenstand der Forschung ist."
-**Problem:** While correctly hedging that it's a research topic, the statement is somewhat generic. It does not elaborate on *why* Blockchain specifically would be advantageous over existing, presumably secure, centralized registry systems for ETS certificates. The terms "Sicherheit und Nachvollziehbarkeit" are often used broadly and lack specific analytical depth here.
-**Evidence:** The general phrasing of the sentence.
-**Fix:** Briefly expand on the specific benefits that Blockchain's characteristics (e.g., immutability of the distributed ledger, enhanced transparency of transactions, reduced risk of double-counting, decentralized trust) could offer for ETS certificate management. Alternatively, if this is a highly speculative idea, rephrase it to clearly position it as a conceptual future possibility for research rather than a direct "improvement suggestion" based on current understanding.
-**Severity:** 🟡 Medium - lacks specificity and deeper justification for a proposed technological improvement.
+### Issue 4: Fehlende Diskussion von Trade-offs bei Verbesserungsvorschlägen
+**Location:** Abschnitt 3: "Verbesserungsvorschläge für CO2-Märkte"
+**Problem:** Die vorgeschlagenen Verbesserungen (Marktstabilität, Sektorerweiterung, CBAM, Linking) werden als weitgehend vorteilhaft dargestellt. Es fehlt jedoch eine Diskussion über potenzielle Nachteile, Kompromisse (Trade-offs) oder neue Herausforderungen, die mit der Implementierung dieser Vorschläge einhergehen könnten. Zum Beispiel könnten Preisober- und -untergrenzen die Flexibilität des Marktes einschränken oder CBAM zu internationalen Handelskonflikten führen.
+**Missing:** Eine ausgewogene Betrachtung der Vor- und Nachteile der vorgeschlagenen Verbesserungen.
+**Fix:** Ergänzen Sie für jeden wichtigen Verbesserungsvorschlag eine kurze Diskussion über dessen potenzielle Schattenseiten oder die damit verbundenen Herausforderungen bei der Umsetzung.
+
+### Issue 5: Redundante Formulierungen und mangelnde Variation
+**Location:** Durchgehend
+**Problem:** Einige Formulierungen und Satzstrukturen wiederholen sich häufig, z.B. "Die Implementierung von CO2-Märkten ist jedoch keine triviale Aufgabe und erfordert eine sorgfältige politische Steuerung...", "Ein weiterer wichtiger Hebel ist...", "Ein zentraler Aspekt ist...". Auch die Einleitung von Abschnitten mit "Die Analyse der CO2-Märkte... offenbart...", "Ein weiterer entscheidender Aspekt ist..." oder "Die Diskussion der makroökonomischen Auswirkungen... ist ebenfalls von großer Bedeutung..." könnte variiert werden.
+**Impact:** Beeinträchtigt den Lesefluss und die sprachliche Eleganz.
+**Fix:** Überarbeiten Sie den Text, um redundante Formulierungen und Satzanfänge zu variieren.
+
+### Issue 6: Fehlende Referenz für `cite_057`
+**Location:** Abschnitt 5.1, Empfehlung 2
+**Problem:** `cite_057` wird hier zum ersten Mal verwendet, ohne dass die zugehörige Studie vorher eingeführt oder in den allgemeinen Kontext der Diskussion eingebettet wurde. Dies wirkt etwas abrupt.
+**Fix:** Stellen Sie sicher, dass alle neuen Zitate entweder im Fließtext kurz kontextualisiert werden oder dass ihre Relevanz bereits früher in der Diskussion klar wird. Alternativ könnte die Aussage umformuliert werden, um die spezifische Referenz weniger isoliert erscheinen zu lassen.
 
 ---
 
 ## MINOR ISSUES
 
-1.  **Nuance in "Pionierarbeit":** In Section 1, paragraph 1, the statement "Die Europäische Union hat mit ihrem Emissionshandelssystem (EU ETS) seit 2005 Pionierarbeit geleistet..." is generally accepted. However, for utmost precision, it could be qualified slightly, e.g., "Pionierarbeit für ein umfassendes, supranationales Multi-Sektor-System," as smaller-scale cap-and-trade systems (like the US Acid Rain Program) pre-existed. This is a very minor point and the current phrasing is acceptable in most contexts.
-2.  **Repetitive Citations in Summary:** The final concluding paragraph re-cites `cite_028`, `cite_014`, `cite_019`. While not incorrect, summary paragraphs often synthesize previously cited information without needing to re-cite every point unless a direct quote or a very specific, new claim is made. This can make the text appear slightly over-cited in the conclusion.
+1.  **Vage Behauptung:** "Die politische Herausforderung besteht darin, diesen optimalen Preiskorridor zu finden" (Abschnitt 1.1) – Was genau ist dieser "optimale" Korridor? Eine kurze Präzisierung wäre hilfreich.
+2.  **Unsubstanziiert:** "Die ökonomische Theorie und empirische Evidenz legen nahe, dass die Internaliserung externer Kosten langfristig zu einer effizienteren Ressourcenallokation und nachhaltigeren Entwicklung führt" (Abschnitt 1.1) – Diese grundlegende ökonomische Aussage könnte, obwohl weithin akzeptiert, mit einer klassischen Referenz (z.B. Pigou oder Coase Theorem) gestützt werden, wenn sie so prominent platziert wird. Aktuell ist sie nicht zitiert. [NEEDS CITATION]
+3.  **Wiederholung:** Der Satz "Zusammenfassend lässt sich sagen, dass CO2-Märkte ein mächtiges Instrument im klimapolitischen Werkzeugkasten sind, deren Erfolg jedoch von einer klugen und adaptiven politischen Gestaltung abhängt." wird in Abschnitt 1.1 und im Gesamtfazit des Abschnitts verwendet. Eine leichte Variation wäre besser.
+4.  **Wortwahl:** "Allheilmittel" (Abschnitt 2. Schluss) ist eine umgangssprachliche Formulierung; "Patentrezept" oder "universelle Lösung" wäre akademischer.
 
 ---
 
 ## Logical Gaps
 
-### Gap 1: Deeper Analysis of Policy Mix Interactions
-**Location:** General throughout Section 1 ("Implikationen") and Section 2 ("Grenzen")
-**Logic:** The paper correctly emphasizes that ETS needs to be part of a "breiteren Policy-Mix" (Section 1) and that "der Emissionshandel allein nicht ausreicht" (Section 2). However, it primarily lists other policies (subsidies, regulations) without delving into the *complex interactions* between these instruments.
-**Missing:** A discussion on the potential synergies and, crucially, potential conflicts or inefficiencies that can arise when different climate policy instruments operate simultaneously. For example, how do renewable energy subsidies affect the CO2 price signal? Do they dilute the incentive for abatement within the ETS, or do they accelerate technological diffusion in a complementary way?
-**Fix:** Add a brief discussion point, perhaps in Section 2 or 3, acknowledging that while a policy mix is necessary, careful design is required to ensure instruments are complementary and avoid unintended consequences or reduced overall efficiency. This would add a more sophisticated layer to the argument.
+### Gap 1: Annahme der Umsetzbarkeit ohne weitere Kontextualisierung
+**Location:** Abschnitt 5 "Empfehlungen für Politik und Wirtschaft"
+**Logic:** Die Empfehlungen sind klar und wünschenswert.
+**Missing:** Es wird nicht explizit diskutiert, *warum* diese Empfehlungen (die zum Teil sehr anspruchsvoll sind, z.B. "Festlegung ambitionierter und stabiler CO2-Preispfade" oder "Umfassende Sektorintegration") unter den aktuellen politischen und wirtschaftlichen Rahmenbedingungen tatsächlich umsetzbar sind. Die Herausforderungen wurden zwar in Abschnitt 2 diskutiert, aber die Empfehlungen in Abschnitt 5 könnten noch stärker aufzeigen, *wie* diese Hürden konkret überwunden werden können, statt sie nur als Ziele zu formulieren.
+**Fix:** Fügen Sie bei den Empfehlungen kurze Hinweise hinzu, wie die zuvor diskutierten Herausforderungen bei der Umsetzung der jeweiligen Empfehlung angegangen werden können, oder welche Voraussetzungen dafür geschaffen werden müssen.
 
 ---
 
-## Methodological Concerns
+## Methodological Concerns (Applied to the Discussion's Argumentation)
 
-### Concern 1: Scope of Literature Review (Implicit)
-**Issue:** The presence of two explicit `cite_MISSING` tags in key areas of the discussion suggests that the "umfassenden Literaturrecherche" mentioned in the introduction might have overlooked critical literature on specific mechanisms (price collars) or important factual examples (EU-Switzerland linking).
-**Risk:** If the literature review itself did not cover these points, the claim of "umfassend" might be weakened, or the discussion might be presenting ideas not fully grounded in the preceding review.
-**Reviewer Question:** "Were these specific topics (price collars, EU-Switzerland linking) intentionally outside the scope of the comprehensive literature review, or were they genuinely missed? If missed, the comprehensiveness of the review might need re-evaluation."
-**Suggestion:** Ensure that the underlying literature review indeed covers these aspects and that the missing citations are not indicative of a gap in the foundational research. If they were outside the scope, this should be explicitly stated, or the claims should be rephrased as theoretical considerations.
+### Concern 1: Einseitige Betonung der Effizienz
+**Issue:** Die Diskussion betont stark die Effizienz und Kosteneffizienz von CO2-Märkten als Hauptvorteil.
+**Risk:** Obwohl dies ein Hauptargument ist, könnte eine stärkere Betonung anderer Kriterien, wie z.B. die ökologische Wirksamkeit (direkte Emissionsreduktion unabhängig von Kosten) oder die soziale Gerechtigkeit (über die reine Kompensation hinaus), eine ausgewogenere Perspektive bieten.
+**Reviewer Question:** "Werden CO2-Märkte primär als Effizienz- oder als Gerechtigkeitsinstrument betrachtet? Wie balanciert der Text diese Aspekte?"
+**Suggestion:** Reflektieren Sie expliziter über die Gewichtung von Effizienz, ökologischer Wirksamkeit und sozialer Gerechtigkeit in der Diskussion und den Empfehlungen.
 
 ---
 
 ## Missing Discussions
 
-1.  **Political Economy of ETS Design and Implementation:** While "Lobbyinteressen" are briefly mentioned (Section 2), a more explicit discussion on the political feasibility, challenges, and trade-offs involved in implementing proposed improvements (e.g., stricter caps, CBAM, linking, phase-out of free allocation) would be valuable. The "Fit for 55" package is cited, but the political negotiations and compromises behind such comprehensive changes are complex and could be contextualized.
-2.  **Role of Offsets/Carbon Credits within Regulated Markets:** The discussion focuses on regulated ETS and briefly mentions voluntary carbon markets. However, the specific role of carbon offsets (e.g., from international mechanisms like CDM or other project-based credits) within regulated ETS (e.g., allowing their use for compliance) and the associated integrity concerns, especially in the context of Article 6 of the Paris Agreement, could be further explored.
-3.  **Future of Free Allocation of Certificates:** Section 2 mentions "Zuteilung von Zertifikaten (kostenlos oder über Auktionen)." Given the global trend towards increased auctioning and the gradual phase-out of free allocation (e.g., in the EU ETS, especially with CBAM), a dedicated discussion on the implications of this shift for industry competitiveness, innovation incentives, and carbon leakage would be highly relevant.
+1.  **Konkrete Fallstudien zu Misserfolgen/unerwünschten Effekten:** Während Abschnitt 2 Herausforderungen nennt, könnten konkrete Beispiele, wo diese Herausforderungen zu signifikanten Misserfolgen oder unerwünschten Effekten geführt haben (außer der Überallokation im EU-ETS), die Argumentation stärken.
+2.  **Rolle nicht-staatlicher Akteure/Zivilgesellschaft:** Die Diskussion konzentriert sich stark auf Politik und Wirtschaft. Die Rolle von NGOs, Zivilgesellschaft oder wissenschaftlichen Institutionen bei der Gestaltung, Überwachung und Akzeptanz von CO2-Märkten könnte stärker beleuchtet werden.
+3.  **Technologische Grenzen der MRV:** Während Digitalisierung als Lösung für MRV erwähnt wird, könnten auch die Grenzen aktueller MRV-Technologien oder die Herausforderungen bei der Überwachung diffuser Emissionen (z.B. in der Landwirtschaft) diskutiert werden.
 
 ---
 
 ## Tone & Presentation Issues
 
-1.  **Slightly Declarative Tone for Theoretical Claims:** While the overall tone is balanced, some statements, such as "Ein Mindestpreis würde Investitionssicherheit bieten, während ein Höchstpreis vor extremen Kostenbelastungen schützen könnte" (Section 3), are presented as declarative facts. While theoretically sound, the practical implementation of such mechanisms is complex and can introduce its own market distortions or political challenges. The subsequent hedging ("müssen jedoch sorgfältig kalibriert werden") helps, but a slightly more cautious or attributed phrasing (e.g., "Es wird argumentiert, dass ein Mindestpreis...") could enhance scholarly precision. This is a minor stylistic suggestion.
+1.  **Leicht didaktischer Ton:** Besonders in den Empfehlungen (Abschnitt 5) klingt der Text stellenweise etwas didaktisch ("Regierungen sollten...", "Unternehmen sollten..."). Eine etwas indirektere oder reflektierendere Sprache könnte den akademischen Ton stärken.
+2.  **Wiederholte Betonung von "wichtig" / "entscheidend":** Diese Adjektive werden häufig verwendet. Eine Variation im Vokabular würde den Text lebendiger machen.
 
 ---
 
 ## Questions a Reviewer Will Ask
 
-1.  "Please provide the specific academic references for the discussion of price collars and dynamic caps as mechanisms to improve ETS market stability." (Directly from Major Issue 1)
-2.  "What are the authoritative sources or reports that detail the linking of the EU ETS with the Swiss ETS, which you refer to as an example of feasibility?" (Directly from Major Issue 2)
-3.  "Can you elaborate on the specific technical or operational advantages that Blockchain technology offers for ETS certificate management, beyond general terms like 'security and traceability'?" (Related to Moderate Issue 3)
-4.  "How does the paper account for potential unintended consequences or market distortions that might arise from implementing explicit price controls (like price collars) in an emissions trading system?" (Related to Logical Gap 1 and general nuance)
-5.  "Could you expand on the political economy aspects of expanding ETS to new sectors or harmonizing systems internationally, considering potential resistance from vested interests or national sovereignty concerns?" (Related to Missing Discussion 1)
-6.  "What are the key interaction effects (synergies or conflicts) between a carbon pricing mechanism like ETS and other common climate policy instruments, such as direct subsidies for renewable energy or energy efficiency regulations?" (Related to Logical Gap 1)
+1.  "Können Sie die spezifischen Studien hinter den `cite_XXX`-Platzhaltern bereitstellen und deren Relevanz für die jeweiligen Behauptungen kurz erläutern?"
+2.  "Welche konkreten Zahlen oder Prozentsätze belegen die 'signifikanten Emissionsminderungen' oder die 'kausalen Effekte' der CO2-Bepreisung, die Sie zitieren?"
+3.  "Wie adressiert der vorgeschlagene globale CO2-Markt (Linking, Artikel 6) die Bedenken hinsichtlich globaler Gerechtigkeit und die unterschiedlichen Kapazitäten von Industrie- und Entwicklungsländern, die Sie in Abschnitt 2 angesprochen haben?"
+4.  "Welche potenziellen Nachteile oder unerwünschten Nebeneffekte könnten die von Ihnen vorgeschlagenen Verbesserungen (z.B. Preisobergrenzen, CBAM) mit sich bringen, und wie könnten diese gemindert werden?"
+5.  "Wie realistisch ist die Umsetzung der Empfehlungen für Politik und Wirtschaft angesichts der in Abschnitt 2 genannten politischen und administrativen Hürden?"
 
-**Prepare answers or add to paper.**
+**Prepare answers or add to paper**
 
 ---
 
 ## Revision Priority
 
 **Before resubmission:**
-1.  🔴 **Fix Issue 1 (Missing Citation: Price Collars):** This is a fundamental gap in evidence for a key proposed solution.
-2.  🔴 **Fix Issue 2 (Missing Citation: EU-Switzerland Linking):** A critical factual example used to support an argument needs proper verification.
-3.  🟡 **Address Issue 3 (Vague Blockchain Claim):** Enhance the specificity and depth of this suggestion.
-4.  🟡 **Address Logical Gap 1 (Policy Mix Interaction):** Add a more nuanced discussion of how different policy instruments interact.
+1.  🔴 **Fix Issue 1 (Fehlende Detailinformationen zu Zitaten)** - Absolut kritisch für jede wissenschaftliche Veröffentlichung.
+2.  🔴 **Address Issue 2 (Unzureichende kritische Reflexion globaler Marktlimitierungen)** - Verbessert die wissenschaftliche Tiefe und Ausgewogenheit.
+3.  🔴 **Resolve Issue 3 (Mangel an spezifischen quantitativen Belegen)** - Stärkt die Überzeugungskraft der Argumente.
+4.  🟡 **Address Issue 4 (Fehlende Diskussion von Trade-offs)** - Zeigt ein tieferes Verständnis der Komplexität.
+5.  🟡 **Add missing citation for "ökonomische Theorie"** (Minor Issue 2) - Wichtig für akademische Präzision.
 
 **Can defer:**
-- Minor wording or hedging adjustments (e.g., "Pionierarbeit" nuance).
-- Integration of additional discussion points (e.g., offsets, free allocation) can be suggested as avenues for future research or a more extensive review, depending on the scope of the overall paper.
+-   Minor wording issues (Issue 5, Tone & Presentation Issues) - können in einer späteren Überarbeitungsrunde angegangen werden, sobald die Hauptinhalte gefestigt sind.
+-   Hinzufügen weiterer Fallstudien oder Akteure (Missing Discussions) - könnte die Länge überschreiten und ist weniger kritisch als die oben genannten Punkte.

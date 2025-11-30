@@ -21,7 +21,7 @@ from utils.citation_database import (
     CitationStyle,
     save_citation_database
 )
-from tests.test_utils import setup_model, load_prompt
+from utils.agent_runner import setup_model, load_prompt
 
 # Use centralized logging system
 from utils.logging_config import get_logger

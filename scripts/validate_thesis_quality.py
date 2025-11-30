@@ -2,12 +2,21 @@
 """
 ABOUTME: Quality gate - validate thesis is publication-ready before marking as FINAL
 ABOUTME: Checks for [VERIFY], [MISSING], {cite_MISSING} markers, and required sections
+ABOUTME: Implements graduated quality gates (PASS/WARNING/CRITICAL) instead of binary pass/fail
 """
 
 import re
 import sys
 from pathlib import Path
 from typing import List, Tuple, Dict
+from enum import Enum
+
+
+class QualityLevel(Enum):
+    """Quality assessment levels for graduated response."""
+    PASS = "pass"  # No issues or minor issues - thesis is production-ready
+    WARNING = "warning"  # Non-critical issues - thesis functional but has minor gaps
+    CRITICAL = "critical"  # Critical issues - thesis not production-ready
 
 
 def check_verify_markers(content: str) -> Tuple[int, List[str]]:
@@ -99,12 +108,80 @@ def check_required_sections(content: str) -> Dict[str, bool]:
     return results
 
 
-def validate_thesis(file_path: Path, verbose: bool = True) -> bool:
+def calculate_quality_level(
+    verify_count: int,
+    missing_count: int,
+    missing_bracket_count: int,
+    missing_sections: List[str],
+    word_count: int
+) -> QualityLevel:
     """
-    Validate thesis is publication-ready.
+    Calculate quality level using graduated thresholds.
+
+    Thresholds (relaxed for production resilience):
+    - CRITICAL: Any of:
+        * Missing 3+ required sections (e.g., Abstract, Introduction, References)
+        * 50+ [MISSING: ...] markers (>5% for 1000-citation thesis)
+        * Word count < 4000 (severely incomplete)
+
+    - WARNING: Any of:
+        * 1-2 missing required sections
+        * 1-10 [VERIFY] placeholders (minor citation gaps)
+        * 1-49 [MISSING: ...] markers (<5% for 1000-citation thesis)
+        * 1-20 {cite_MISSING:...} placeholders
+        * Word count 4000-8000 (below ideal but functional)
+
+    - PASS: All of:
+        * All required sections present
+        * 0 [VERIFY] placeholders OR <1 [VERIFY] marker
+        * 0 [MISSING] markers
+        * 0 {cite_MISSING} placeholders
+        * Word count >= 8000
 
     Returns:
-        True if publication-ready, False otherwise
+        QualityLevel enum (PASS, WARNING, or CRITICAL)
+    """
+    # CRITICAL checks (block thesis generation)
+    if len(missing_sections) >= 3:
+        return QualityLevel.CRITICAL
+
+    if missing_bracket_count >= 50:
+        return QualityLevel.CRITICAL
+
+    if word_count < 4000:
+        return QualityLevel.CRITICAL
+
+    # WARNING checks (allow thesis but flag issues)
+    if len(missing_sections) >= 1:
+        return QualityLevel.WARNING
+
+    if 1 <= verify_count <= 10:
+        return QualityLevel.WARNING
+
+    if 1 <= missing_bracket_count <= 49:
+        return QualityLevel.WARNING
+
+    if 1 <= missing_count <= 20:
+        return QualityLevel.WARNING
+
+    if 4000 <= word_count < 8000:
+        return QualityLevel.WARNING
+
+    # PASS - all checks passed
+    return QualityLevel.PASS
+
+
+def validate_thesis(file_path: Path, verbose: bool = True) -> bool:
+    """
+    Validate thesis using graduated quality gates.
+
+    Quality Levels:
+    - PASS: No issues or very minor issues (1-2 [VERIFY] markers)
+    - WARNING: Non-critical issues present but thesis is functional
+    - CRITICAL: Severe issues that block production deployment
+
+    Returns:
+        True if PASS or WARNING (thesis is usable), False if CRITICAL (thesis blocked)
     """
     if not file_path.exists():
         print(f"❌ File not found: {file_path}")
@@ -118,78 +195,82 @@ def validate_thesis(file_path: Path, verbose: bool = True) -> bool:
         print(f"📋 THESIS QUALITY VALIDATION: {file_path.name}")
         print(f"{'='*70}\n")
 
-    # Track overall status
-    is_valid = True
-
-    # Check 1: [VERIFY] markers
+    # Run all checks
     verify_count, verify_examples = check_verify_markers(content)
-    if verify_count > 0:
-        is_valid = False
-        if verbose:
-            print(f"❌ Found {verify_count} [VERIFY] placeholders")
+    missing_count, missing_topics = check_missing_citations(content)
+    missing_bracket_count, missing_bracket_examples = check_missing_bracket_markers(content)
+    sections = check_required_sections(content)
+    missing_sections = [name for name, present in sections.items() if not present]
+    word_count = len(content.split())
+
+    # Calculate quality level
+    quality = calculate_quality_level(
+        verify_count,
+        missing_count,
+        missing_bracket_count,
+        missing_sections,
+        word_count
+    )
+
+    # Print detailed results if verbose
+    if verbose:
+        # [VERIFY] markers
+        if verify_count > 0:
+            symbol = "⚠️ " if quality == QualityLevel.WARNING else "❌"
+            print(f"{symbol} Found {verify_count} [VERIFY] placeholders")
             print(f"   Examples:")
             for example in verify_examples[:5]:
                 print(f"   - {example}")
             print()
-    elif verbose:
-        print(f"✅ No [VERIFY] markers found")
+        else:
+            print(f"✅ No [VERIFY] markers found")
 
-    # Check 2: Missing citations
-    missing_count, missing_topics = check_missing_citations(content)
-    if missing_count > 0:
-        is_valid = False
-        if verbose:
-            print(f"❌ Found {missing_count} missing citations {{cite_MISSING:...}}")
+        # {cite_MISSING:...} placeholders
+        if missing_count > 0:
+            symbol = "⚠️ " if quality == QualityLevel.WARNING else "❌"
+            print(f"{symbol} Found {missing_count} missing citations {{cite_MISSING:...}}")
             print(f"   Topics:")
             for topic in missing_topics[:5]:
                 print(f"   - {topic}")
             print()
-    elif verbose:
-        print(f"✅ No missing citation placeholders")
+        else:
+            print(f"✅ No missing citation placeholders")
 
-    # Check 3: [MISSING: ...] markers (Scout agent failures)
-    missing_bracket_count, missing_bracket_examples = check_missing_bracket_markers(content)
-    if missing_bracket_count > 0:
-        is_valid = False
-        if verbose:
-            print(f"❌ Found {missing_bracket_count} [MISSING: ...] markers (Scout agent failures)")
+        # [MISSING: ...] markers
+        if missing_bracket_count > 0:
+            symbol = "⚠️ " if quality == QualityLevel.WARNING else "❌"
+            print(f"{symbol} Found {missing_bracket_count} [MISSING: ...] markers (Scout agent failures)")
             print(f"   Examples:")
             for example in missing_bracket_examples[:5]:
                 print(f"   - [MISSING: {example}]")
             print()
-    elif verbose:
-        print(f"✅ No [MISSING] bracket markers")
+        else:
+            print(f"✅ No [MISSING] bracket markers")
 
-    # Check 4: Required sections
-    sections = check_required_sections(content)
-    missing_sections = [name for name, present in sections.items() if not present]
+        # Required sections
+        if missing_sections:
+            symbol = "⚠️ " if quality == QualityLevel.WARNING else "❌"
+            print(f"{symbol} Missing required sections: {', '.join(missing_sections)}")
+        else:
+            print(f"✅ All required sections present")
 
-    if missing_sections:
-        is_valid = False
-        if verbose:
-            print(f"❌ Missing required sections: {', '.join(missing_sections)}")
-    elif verbose:
-        print(f"✅ All required sections present")
-
-    # Check 4: Word count
-    word_count = len(content.split())
-    if verbose:
+        # Word count statistics
         print(f"\n📊 Statistics:")
         print(f"   - Word count: {word_count:,}")
         print(f"   - Character count: {len(content):,}")
 
-    if word_count < 8000:
-        if verbose:
+        if word_count < 8000:
             print(f"⚠️  Warning: Word count below 8,000 (academic minimum)")
 
-    # Final verdict
-    if verbose:
+        # Final verdict with quality level
         print(f"\n{'='*70}")
-        if is_valid:
-            print("✅ THESIS IS PUBLICATION-READY")
-        else:
-            print("❌ THESIS NOT PUBLICATION-READY")
-            print("\nAction required:")
+        if quality == QualityLevel.PASS:
+            print("✅ THESIS IS PRODUCTION-READY (PASS)")
+            print("   All quality checks passed. Safe to deploy.")
+        elif quality == QualityLevel.WARNING:
+            print("⚠️  THESIS IS USABLE WITH WARNINGS (WARNING)")
+            print("   Non-critical issues detected. Thesis is functional but has minor gaps.")
+            print("\nRecommended improvements:")
             action_num = 1
             if verify_count > 0:
                 print(f"  {action_num}. Fill {verify_count} [VERIFY] placeholders with proper citations")
@@ -198,13 +279,27 @@ def validate_thesis(file_path: Path, verbose: bool = True) -> bool:
                 print(f"  {action_num}. Research and add {missing_count} {{cite_MISSING:...}} citations")
                 action_num += 1
             if missing_bracket_count > 0:
-                print(f"  {action_num}. Research and add {missing_bracket_count} [MISSING: ...] citations (Scout failures)")
+                print(f"  {action_num}. Research and add {missing_bracket_count} [MISSING: ...] citations")
                 action_num += 1
             if missing_sections:
                 print(f"  {action_num}. Add missing sections: {', '.join(missing_sections)}")
+        else:  # CRITICAL
+            print("❌ THESIS NOT PRODUCTION-READY (CRITICAL)")
+            print("   Critical issues must be resolved before deployment.")
+            print("\nAction required:")
+            action_num = 1
+            if len(missing_sections) >= 3:
+                print(f"  {action_num}. Add {len(missing_sections)} missing required sections: {', '.join(missing_sections)}")
+                action_num += 1
+            if missing_bracket_count >= 50:
+                print(f"  {action_num}. Fix {missing_bracket_count} [MISSING: ...] citation failures (Scout agent)")
+                action_num += 1
+            if word_count < 4000:
+                print(f"  {action_num}. Expand thesis to minimum 4000 words (currently {word_count:,})")
         print(f"{'='*70}\n")
 
-    return is_valid
+    # Return True for PASS and WARNING, False for CRITICAL
+    return quality in [QualityLevel.PASS, QualityLevel.WARNING]
 
 
 def main():

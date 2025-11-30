@@ -5,15 +5,12 @@ CITATION VALIDATION REPORT: Open Source Thesis
 
 
 
-⚠️  WARNINGS (2):
+⚠️  WARNINGS (1):
 --------------------------------------------------------------------------------
 
-[cite_002] Could not verify URL (Timeout): https://doi.org/10.46754/jmsi.2023.12.006
-  Hassri, Man (2023) - The Impact of Open-Source Software on Artificial Intelligenc...
-
-[cite_022] Could not verify URL (Timeout): https://doi.org/10.26794/2226-7867-2024-14-2-60-65
-  Sperkach (2024) - The image of the Soviet Union in the context of the modern c...
+[cite_020] Could not verify URL (Connection failed): https://doi.org/10.9734/ajrcos/2025/v18i1554
+  Kolade, Obioha-Val et al. (2025) - AI-Driven Open Source Intelligence in Cyber Defense: A Doubl...
 
 ================================================================================
-TOTAL ISSUES: 2 (0 critical, 2 warnings)
+TOTAL ISSUES: 1 (0 critical, 1 warnings)
 ================================================================================

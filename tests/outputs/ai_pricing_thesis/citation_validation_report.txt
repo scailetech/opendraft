@@ -8,8 +8,8 @@ CITATION VALIDATION REPORT: AI Pricing Thesis
 ⚠️  WARNINGS (1):
 --------------------------------------------------------------------------------
 
-[cite_002] Generic title pattern: 'A Systematic Review'
-  Preckler, Espín (2022) - The Role of Indication-Based Pricing in Future Pricing and R...
+[cite_003] Could not verify URL (Request error: Exceeded 30 redirects.): https://doi.org/10.64823/ijter.2507003
+  Patil, Khairnar (2025) - Reimagining Library Services through AI-Driven Strategies fo...
 
 ================================================================================
 TOTAL ISSUES: 1 (0 critical, 1 warnings)
