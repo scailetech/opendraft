@@ -54,7 +54,7 @@ def has_placeholder_abstract(thesis_content: str) -> bool:
         True if placeholder found, False if real abstract exists
     """
     placeholders = [
-        '[Abstract will be automatically generated',
+        '[Abstract will be generated',
         '[Zusammenfassung wird während der PDF-Generierung',
         '[Zusammenfassung wird automatisch'
     ]
@@ -153,7 +153,7 @@ def replace_placeholder_with_abstract(thesis_content: str, generated_abstract: s
         placeholder_pattern = r'## Zusammenfassung\n+\[Zusammenfassung wird.*?\]\n+\\newpage'
         replacement = f"## Zusammenfassung\n\n{generated_abstract}\n\n\\newpage"
     else:
-        placeholder_pattern = r'## Abstract\n+\[Abstract will be automatically generated.*?\]\n+\\newpage'
+        placeholder_pattern = r'## Abstract\n+\[Abstract will be generated.*?\]\n+\\newpage'
         replacement = f"## Abstract\n\n{generated_abstract}\n\n\\newpage"
 
     # Replace placeholder
@@ -302,7 +302,7 @@ def main():
     sys.path.insert(0, str(project_root))
 
     from config import get_config
-    from tests.test_utils import setup_model, run_agent
+    from utils.agent_runner import setup_model, run_agent
 
     config = get_config()
     model = setup_model()
