@@ -10,6 +10,7 @@ that can be called from Modal workers or other automated systems.
 import sys
 import time
 from pathlib import Path
+import re
 from typing import Tuple, Optional
 
 # Add project root to path
@@ -26,7 +27,7 @@ from utils.scrape_citation_metadata import MetadataScraper
 from utils.citation_quality_filter import CitationQualityFilter
 from utils.citation_compiler import CitationCompiler
 from utils.abstract_generator import generate_abstract_for_thesis
-from utils.export import export_thesis_to_pdf, export_thesis_to_docx
+from utils.export_professional import export_pdf, export_docx
 
 
 def generate_thesis(
@@ -160,7 +161,7 @@ def generate_thesis(
         model=model,
         name="Architect - Design Structure",
         prompt_path="prompts/02_structure/architect.md",
-        user_input=f"Create thesis outline for: {topic}\n\nResearch gaps:\n{signal_output[:2000]}\n\nLength: 8,000-10,000 words",
+        user_input=f"Create thesis outline for: {topic}\n\nResearch gaps:\n{signal_output[:2000]}\n\nLength: 25,000-30,000 words (comprehensive master thesis)",
         save_to=output_dir / "04_architect.md",
         skip_validation=skip_validation,
         verbose=verbose
@@ -249,7 +250,7 @@ def generate_thesis(
         model=model,
         name="Crafter - Introduction",
         prompt_path="prompts/03_compose/crafter.md",
-        user_input=f"Write Introduction:\n\nTopic: {topic}\n\nOutline:\n{formatter_output[:2000]}{citation_summary}",
+        user_input=f"Write Introduction:\n\nTopic: {topic}\n\nOutline:\n{formatter_output[:2000]}{citation_summary}\n\n**CRITICAL: Write 2,500-3,000 words minimum.**",
         save_to=output_dir / "06_introduction.md",
         skip_validation=skip_validation,
         verbose=verbose
@@ -262,7 +263,7 @@ def generate_thesis(
         model=model,
         name="Crafter - Main Body",
         prompt_path="prompts/03_compose/crafter.md",
-        user_input=f"Write main body (Literature Review, Methods, Analysis):\n\nTopic: {topic}\n\nResearch:\n{scribe_output[:3000]}{citation_summary}",
+        user_input=f"Write main body (Literature Review, Methods, Analysis):\n\nTopic: {topic}\n\nResearch:\n{scribe_output[:3000]}{citation_summary}\n\n**CRITICAL: Write 18,000-22,000 words total (Lit Review: 6000+, Methods: 3000+, Analysis: 6000+, Discussion: 3000+).**",
         save_to=output_dir / "07_main_body.md",
         skip_validation=skip_validation,
         verbose=verbose
@@ -275,7 +276,7 @@ def generate_thesis(
         model=model,
         name="Crafter - Conclusion",
         prompt_path="prompts/03_compose/crafter.md",
-        user_input=f"Write Conclusion:\n\nTopic: {topic}\n\nMain findings:\n{body_output[:2000]}",
+        user_input=f"Write Conclusion:\n\nTopic: {topic}\n\nMain findings:\n{body_output[:2000]}\n\n**CRITICAL: Write 1,500-2,000 words minimum.**",
         save_to=output_dir / "08_conclusion.md",
         skip_validation=skip_validation,
         verbose=verbose
@@ -289,20 +290,44 @@ def generate_thesis(
     if verbose:
         print("\n🔧 PHASE 4: COMPILE")
 
-    # Combine all sections
-    full_thesis = f"""# {topic}
+    # Strip headers from section outputs (they already contain # headers from agents)
+    def strip_first_header(text: str) -> str:
+        """Remove first line if it's a markdown header."""
+        lines = text.strip().split('\n')
+        if lines and lines[0].startswith('#'):
+            return '\n'.join(lines[1:]).strip()
+        return text.strip()
+
+    intro_clean = strip_first_header(intro_output)
+    body_clean = strip_first_header(body_output)
+    conclusion_clean = strip_first_header(conclusion_output)
+
+    # Generate current date for cover page
+    from datetime import datetime
+    current_date = datetime.now().strftime("%B %Y")
+
+    # Combine all sections with YAML frontmatter for cover page
+    full_thesis = f"""---
+title: "{topic}"
+author: "Academic Thesis Generator"
+date: "{current_date}"
+institution: "AI-Generated Academic Thesis"
+project_type: "Thesis"
+---
+
+# {topic}
 
 ## Abstract
 [Abstract will be generated]
 
 ## Introduction
-{intro_output}
+{intro_clean}
 
 ## Main Body
-{body_output}
+{body_clean}
 
 ## Conclusion
-{conclusion_output}
+{conclusion_clean}
 
 ## References
 [Citations will be compiled]
@@ -310,20 +335,40 @@ def generate_thesis(
 
     # Citation Compiler - Replace {cite_XXX} with formatted citations
     compiler = CitationCompiler(
-        citation_database=citation_database,
-        citation_style="APA 7th"
+        database=citation_database,
+        model=model
     )
-    compiled_thesis, compile_stats = compiler.compile_thesis(full_thesis)
 
-    # Generate abstract
-    abstract = generate_abstract_for_thesis(
-        thesis_markdown=compiled_thesis,
+    # Generate reference list BEFORE compile_citations (while {cite_XXX} patterns still exist)
+    reference_list = compiler.generate_reference_list(full_thesis)
+
+    # Now compile citations (replaces {cite_XXX} with (Author et al., Year) format)
+    compiled_thesis, replaced_ids, failed_ids = compiler.compile_citations(full_thesis, research_missing=True, verbose=verbose)
+
+    # Remove the entire template References section (header + placeholder) to avoid duplication
+    compiled_thesis = re.sub(r'## References\s*\n\[Citations will be compiled\]\s*', '', compiled_thesis)
+    # Append the generated reference list with citations
+    compiled_thesis = compiled_thesis + reference_list
+
+    # Save intermediate thesis for abstract generation
+    intermediate_md_path = output_dir / "INTERMEDIATE_THESIS.md"
+    intermediate_md_path.write_text(compiled_thesis, encoding='utf-8')
+
+    # Generate abstract using the agent
+    abstract_success, abstract_updated_content = generate_abstract_for_thesis(
+        thesis_path=intermediate_md_path,
         model=model,
-        max_words=300
+        run_agent_func=run_agent,
+        output_dir=output_dir,
+        verbose=verbose
     )
 
-    # Insert abstract
-    final_thesis = compiled_thesis.replace("[Abstract will be generated]", abstract)
+    # Read updated thesis with abstract
+    if abstract_success and abstract_updated_content:
+        final_thesis = abstract_updated_content
+    else:
+        # Fallback: use compiled thesis without abstract
+        final_thesis = compiled_thesis
 
     # Save final markdown
     final_md_path = output_dir / "FINAL_THESIS.md"
@@ -340,20 +385,16 @@ def generate_thesis(
 
     # Export to PDF
     pdf_path = output_dir / "FINAL_THESIS.pdf"
-    export_thesis_to_pdf(
-        markdown_path=final_md_path,
-        output_path=pdf_path,
-        title=topic,
-        author="OpenDraft AI"
+    export_pdf(
+        md_file=final_md_path,
+        output_pdf=pdf_path
     )
 
     # Export to DOCX
     docx_path = output_dir / "FINAL_THESIS.docx"
-    export_thesis_to_docx(
-        markdown_path=final_md_path,
-        output_path=docx_path,
-        title=topic,
-        author="OpenDraft AI"
+    export_docx(
+        md_file=final_md_path,
+        output_docx=docx_path
     )
 
     if verbose:
