@@ -307,18 +307,33 @@ def generate_thesis(
     current_date = datetime.now().strftime("%B %Y")
 
     # Combine all sections with YAML frontmatter for cover page
-    full_thesis = f"""---
-title: "{topic}"
-author: "Academic Thesis Generator"
-date: "{current_date}"
-institution: "AI-Generated Academic Thesis"
-project_type: "Thesis"
----
+    # Calculate word count for cover page
+    thesis_text = f"{intro_clean}\n{body_clean}\n{conclusion_clean}"
+    word_count = len(thesis_text.split())
 
-# {topic}
+    full_thesis = f"""# {topic}
+
+**Author:** OpenDraft AI
+**Institution:** AI-Generated Academic Thesis
+**Date:** {current_date}
+**Thesis Type:** {'PhD Dissertation' if level == 'phd' else 'Master Thesis'}
+**Word Count:** {word_count:,} words
+
+---
 
 ## Abstract
 [Abstract will be generated]
+
+---
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Main Body](#main-body)
+3. [Conclusion](#conclusion)
+4. [References](#references)
+
+---
 
 ## Introduction
 {intro_clean}

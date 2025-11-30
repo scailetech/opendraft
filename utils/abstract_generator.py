@@ -153,8 +153,8 @@ def replace_placeholder_with_abstract(thesis_content: str, generated_abstract: s
         placeholder_pattern = r'## Zusammenfassung\n+\[Zusammenfassung wird.*?\]\n+\\newpage'
         replacement = f"## Zusammenfassung\n\n{generated_abstract}\n\n\\newpage"
     else:
-        placeholder_pattern = r'## Abstract\n+\[Abstract will be generated.*?\](?:\n*\\newpage)?\n*'
-        replacement = f"## Abstract\n\n{generated_abstract}\n"
+        placeholder_pattern = r'## Abstract\n+\[Abstract will be generated.*?\]\n*---?\n*'
+        replacement = f"## Abstract\n\n{generated_abstract}\n\n---\n"
 
     # Replace placeholder
     updated_content = re.sub(placeholder_pattern, replacement, thesis_content, flags=re.DOTALL)
