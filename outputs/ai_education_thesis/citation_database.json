@@ -1,0 +1,634 @@
+{
+  "citations": [
+    {
+      "id": "cite_002",
+      "authors": [
+        "Rizvi",
+        "Waite",
+        "Sentance"
+      ],
+      "year": 2023,
+      "title": "Artificial Intelligence teaching and learning in K-12 from 2019 to 2022: A systematic literature review",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Computers and Education: Artificial Intelligence",
+      "publisher": "Elsevier BV",
+      "volume": "4",
+      "pages": "100145",
+      "doi": "10.1016/j.caeai.2023.100145",
+      "url": "https://doi.org/10.1016/j.caeai.2023.100145",
+      "api_source": "Crossref"
+    },
+    {
+      "id": "cite_003",
+      "authors": [
+        "Divjak",
+        "Svetec",
+        "Aničić"
+      ],
+      "year": 2025,
+      "title": "PBL Meets AI: Innovating Assessment in Higher Education",
+      "source_type": "conference",
+      "language": "english",
+      "journal": "Proceedings of the 17th International Conference on Computer Supported Education",
+      "publisher": "SCITEPRESS - Science and Technology Publications",
+      "pages": "120-130",
+      "doi": "10.5220/0013331700003932",
+      "url": "https://doi.org/10.5220/0013331700003932",
+      "api_source": "Crossref"
+    },
+    {
+      "id": "cite_004",
+      "authors": [
+        "Alawneh",
+        "Sleema",
+        "Salman",
+        "Alshammat",
+        "Oteer",
+        "Alrashidi"
+      ],
+      "year": 2024,
+      "title": "Adaptive Learning Systems: Revolutionizing Higher Education through AI-Driven Curricula",
+      "source_type": "conference",
+      "language": "english",
+      "journal": "2024 International Conference on Knowledge Engineering and Communication Systems (ICKECS)",
+      "doi": "10.1109/ICKECS61492.2024.10616675",
+      "url": "https://doi.org/10.1109/ICKECS61492.2024.10616675",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_005",
+      "authors": [
+        "Hooshyar",
+        "Weng",
+        "Sillat",
+        "Tammets",
+        "Wang",
+        "Hämäläinen"
+      ],
+      "year": 2024,
+      "title": "The effectiveness of personalized technology-enhanced learning in higher education: A meta-analysis with association rule mining",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Comput. Educ.",
+      "doi": "10.1016/j.compedu.2024.105169",
+      "url": "https://doi.org/10.1016/j.compedu.2024.105169",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_006",
+      "authors": [
+        "Hamadeh"
+      ],
+      "year": 2024,
+      "title": "Exploring the Utilisation of Generative AI Tools by Undergraduate First-Year Mechanical Engineering Students in Programming Assessments.",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "SEFI Journal of Engineering Education Advancement",
+      "doi": "10.62492/sefijeea.v1i1.20",
+      "url": "https://doi.org/10.62492/sefijeea.v1i1.20",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_007",
+      "authors": [
+        "Jackson"
+      ],
+      "year": 2025,
+      "title": "“Who's Doing the Thinking Here?”: A Pedagogy-First Approach to Integrating Large Language Models in Higher Education",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "IEEE Global Engineering Education Conference",
+      "doi": "10.1109/EDUCON62633.2025.11016560",
+      "url": "https://doi.org/10.1109/EDUCON62633.2025.11016560",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_010",
+      "authors": [
+        "Kim",
+        "Lee"
+      ],
+      "year": 2025,
+      "title": "AI ethics education needs assessment for university students in the generative AI era: Applying the borich model and locus for focus analysis",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Korean Association for Educational Information and Media",
+      "doi": "10.15833/kafeiam.31.4.1279",
+      "url": "https://doi.org/10.15833/kafeiam.31.4.1279",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_011",
+      "authors": [
+        "Gander",
+        "Harris"
+      ],
+      "year": 2024,
+      "title": "Understanding AI Literacy for Higher Education Students: Implications for Assessment",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "He Rourou",
+      "doi": "10.54474/herourou.v1i1.10579",
+      "url": "https://doi.org/10.54474/herourou.v1i1.10579",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_012",
+      "authors": [
+        "Hao",
+        "Kee"
+      ],
+      "year": 2025,
+      "title": "Assessing Faculty and Administrative Preparedness for AI Integration in Chinese Higher Education",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Academic Research in Business and Social Sciences",
+      "doi": "10.6007/ijarbss/v15-i3/25113",
+      "url": "https://doi.org/10.6007/ijarbss/v15-i3/25113",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_013",
+      "authors": [
+        "Vargas-Murillo",
+        "Pari-Bedoya",
+        "Guevara-Soto"
+      ],
+      "year": 2023,
+      "title": "Challenges and Opportunities of AI-Assisted Learning: A Systematic Literature Review on the Impact of ChatGPT Usage in Higher Education",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Learning, Teaching and Educational Research",
+      "doi": "10.26803/ijlter.22.7.7",
+      "url": "https://doi.org/10.26803/ijlter.22.7.7",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_014",
+      "authors": [
+        "Karataş",
+        "Yüce"
+      ],
+      "year": 2024,
+      "title": "AI and the Future of Teaching: Preservice Teachers’ Reflections on the Use of Artificial Intelligence in Open and Distributed Learning",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Review of Research in Open and Distance Learning",
+      "doi": "10.19173/irrodl.v25i3.7785",
+      "url": "https://doi.org/10.19173/irrodl.v25i3.7785",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_015",
+      "authors": [
+        "education.illinois.edu"
+      ],
+      "year": 2024,
+      "title": "AI in Schools: Pros and Cons | Illinois",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://education.illinois.edu/about/news-events/news/article/2024/10/24/ai-in-schools--pros-and-cons",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_016",
+      "authors": [
+        "Suazo-Galdamés",
+        "Chaple-Gil"
+      ],
+      "year": 2025,
+      "title": "AI-Powered Adaptive Learning Systems in Higher Education: A Scoping Review of Implementation and Impact on Academic Performance",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Data and Metadata",
+      "doi": "10.56294/dm2025981",
+      "url": "https://doi.org/10.56294/dm2025981",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_018",
+      "authors": [
+        "Stanley",
+        "Stephen",
+        "Iorember"
+      ],
+      "year": 2024,
+      "title": "Awareness and Utilization of Artificial Intelligence (AI) Tools for Enhanced Research among Postgraduate Students in Universities in Benue State",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Innovative Science and Research Technology",
+      "doi": "10.38124/ijisrt/ijisrt24sep852",
+      "url": "https://doi.org/10.38124/ijisrt/ijisrt24sep852",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_019",
+      "authors": [
+        "Horvat",
+        "Havaš",
+        "Valdec",
+        "Crcic"
+      ],
+      "year": 2025,
+      "title": "THE USE OF AI CHATBOTS IN STEM EDUCATION: A STUDY ON UNIVERSITY NORTH STUDENTS IN CROATIA",
+      "source_type": "conference",
+      "language": "english",
+      "journal": "EDULEARN Proceedings",
+      "doi": "10.21125/edulearn.2025.0848",
+      "url": "https://doi.org/10.21125/edulearn.2025.0848",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_020",
+      "authors": [
+        "Seo",
+        "Kim",
+        "Choi",
+        "Cho"
+      ],
+      "year": 2024,
+      "title": "A Preliminary Discussion on Revitalizing Humanities Based General Education in the Era of Generative AI",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "The Korean Association of General Education",
+      "doi": "10.46392/kjge.2024.18.3.27",
+      "url": "https://doi.org/10.46392/kjge.2024.18.3.27",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_021",
+      "authors": [
+        "Rabadi",
+        "Bernard"
+      ],
+      "year": 2024,
+      "title": "AI & technology in Languages, Humanities, Social sciences and Education",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Al-Noor Journal for Humanities",
+      "doi": "10.69513/jnfh.v2.n4.en10",
+      "url": "https://doi.org/10.69513/jnfh.v2.n4.en10",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_024",
+      "authors": [
+        "Almutairi",
+        "Alamry",
+        "Rahman",
+        "Mudhsh"
+      ],
+      "year": 2025,
+      "title": "The role of AI-powered learning analytics in enhancing EFL curriculum design and learning outcomes in higher education",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International journal of innovative research and scientific studies",
+      "doi": "10.53894/ijirss.v8i7.10480",
+      "url": "https://doi.org/10.53894/ijirss.v8i7.10480",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_028",
+      "authors": [
+        "Huang"
+      ],
+      "year": 2025,
+      "title": "Designing Human-AI Orchestrated Classrooms: Mechanisms, Protocols, and Governance for Competency-Based Education",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Artificial Intelligence Education Studies",
+      "doi": "10.6914/aiese.010302",
+      "url": "https://doi.org/10.6914/aiese.010302",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_029",
+      "authors": [
+        "QuadC"
+      ],
+      "year": 2025,
+      "title": "AI In Higher Education: Does It Compromise Academic Integrity?",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.quadc.io/blog/ai-in-higher-education-does-it-compromise-academic-integrity",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_031",
+      "authors": [
+        "learnworkecosystemlibrary.com"
+      ],
+      "year": 2025,
+      "title": "AI Literacy Framework for Primary & Secondary Education— OECD-EC | Learn & Work Ecosystem Library",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://learnworkecosystemlibrary.com/initiatives/ai-literacy-framework-for-primary-secondary-education-oecd-ec/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_032",
+      "authors": [
+        "Simone Wiedemann"
+      ],
+      "year": 2025,
+      "title": "kpmg-law.de",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://kpmg-law.de/en/ai-act-this-applies-to-ai-in-universities-and-research/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_033",
+      "authors": [
+        "abradley"
+      ],
+      "year": 2025,
+      "title": "Navigating the AI Frontier: Key Takeaways from Gartner’s Education Report - Ativion",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.ativion.com/navigating-the-ai-frontier-key-takeaways-from-gartners-education-report/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_034",
+      "authors": [
+        "media-publications.bcg.com"
+      ],
+      "year": 2025,
+      "title": "The Future Of Corporate Learning And Skills Bcg Whitepaper.Pdf",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://media-publications.bcg.com/The-Future-of-Corporate-Learning-and-Skills-BCG-Whitepaper.pdf",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_035",
+      "authors": [
+        "brookings.edu"
+      ],
+      "year": 2025,
+      "title": "Using AI to predict student success in higher education | Brookings",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.brookings.edu/articles/using-ai-to-predict-student-success-in-higher-education/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_036",
+      "authors": [
+        "standards.ieee.org"
+      ],
+      "year": 2025,
+      "title": "IEEE SA - Autonomous and Intelligent Systems (AIS)",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://standards.ieee.org/initiatives/autonomous-intelligence-systems/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_038",
+      "authors": [
+        "whitehouse.gov"
+      ],
+      "year": 2025,
+      "title": "Americas Ai Action Plan.Pdf",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/07/Americas-AI-Action-Plan.pdf",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_040",
+      "authors": [
+        "deloitte.com"
+      ],
+      "year": 2024,
+      "title": "How higher education can realize the potential of gen AI | Deloitte Insights",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.deloitte.com/us/en/insights/industry/articles-on-higher-education/generative-ai-higher-education.html",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_041",
+      "authors": [
+        "Sir",
+        "Timana",
+        "Cava",
+        "Reategui",
+        "Revilla",
+        "Burga"
+      ],
+      "year": 2024,
+      "title": "The Rising Influence of AI in Higher Education: Trends and Insights from a Bibliometric Analysis",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Journal of Educational and Social Research",
+      "doi": "10.36941/jesr-2024-0121",
+      "url": "https://doi.org/10.36941/jesr-2024-0121",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_044",
+      "authors": [
+        "insightintoacademia.com"
+      ],
+      "year": 2025,
+      "title": "IBM Launches AI Skills Program to Bridge University Talent Gap | Insight Into Academia",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://insightintoacademia.com/ibm-ai-skills-program/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_046",
+      "authors": [
+        "Johnson,"
+      ],
+      "year": 2025,
+      "title": "Responsible AI for Measurement and Learning: Principles and Practices",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "ETS Research Report Series",
+      "doi": "10.64634/4ftg8n64",
+      "url": "https://doi.org/10.64634/4ftg8n64",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_047",
+      "authors": [
+        "Fathurrachman",
+        "Saputri"
+      ],
+      "year": 2025,
+      "title": "Teacher’s Perceptions and Institutional Preparedness For Implementing AI in Learning Assessment at The Elementary School Level",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "IQRO: Journal of Islamic Education",
+      "doi": "10.24256/iqro.v8i1.6484",
+      "url": "https://doi.org/10.24256/iqro.v8i1.6484",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_048",
+      "authors": [
+        "Shimizu",
+        "Hautz",
+        "Sassen",
+        "Zwaan"
+      ],
+      "year": 2025,
+      "title": "The global progress for improving diagnosis: what we’ve learned, what comes next",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Diagnosis",
+      "doi": "10.1515/dx-2025-0109",
+      "url": "https://doi.org/10.1515/dx-2025-0109",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_049",
+      "authors": [
+        "Microsoft Education Team"
+      ],
+      "year": 2025,
+      "title": "AI-ready campuses: Strategies from higher education frontlines | Microsoft Education Blog",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.microsoft.com/en-us/education/blog/2025/06/ai-strategies-from-the-frontlines-of-higher-education/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_050",
+      "authors": [
+        "Shengelia"
+      ],
+      "year": 2024,
+      "title": "THE ROLE OF ARTIFICIAL INTELLIGENCE IN THE FUTURE OF BUSINESS EDUCATION",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Economics",
+      "doi": "10.36962/ecs106/1-2/2024-22",
+      "url": "https://doi.org/10.36962/ecs106/1-2/2024-22",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_051",
+      "authors": [
+        "Liao",
+        "Syed-Abdullah"
+      ],
+      "year": 2024,
+      "title": "Urban vs. Rural Pathways to Higher Education: Analyzing Post-2020 Educational Inequity through Family Backgrounds and Resource Allocation in Guangdong",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Academic Research in Progressive Education and Development",
+      "doi": "10.6007/ijarped/v13-i3/21679",
+      "url": "https://doi.org/10.6007/ijarped/v13-i3/21679",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_052",
+      "authors": [
+        "edu.google.com"
+      ],
+      "year": 2025,
+      "title": "Advancing Education Using Google AI - Google for Education",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://edu.google.com/intl/ALL_uk/ai/education/",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_054",
+      "authors": [
+        "Rousi",
+        "Alanen",
+        "Wilson"
+      ],
+      "year": 2024,
+      "title": "Data Privacy, Ethics and Education in the Era of AI - A University Student Perspective",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "Conference on Technology Ethics",
+      "url": "https://www.semanticscholar.org/paper/88a310957f56cd160516e1cc8353a87b8e23c8d8",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_056",
+      "authors": [
+        "mordorintelligence.com"
+      ],
+      "year": 2024,
+      "title": "AI in Education Market Size & Industry Trends Report 2030",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.mordorintelligence.com/industry-reports/ai-in-education-market",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_057",
+      "authors": [
+        "Walter"
+      ],
+      "year": 2024,
+      "title": "Embracing the future of Artificial Intelligence in the classroom: the relevance of AI literacy, prompt engineering, and critical thinking in modern education",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Journal of Educational Technology in Higher Education",
+      "doi": "10.1186/s41239-024-00448-3",
+      "url": "https://doi.org/10.1186/s41239-024-00448-3",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_058",
+      "authors": [
+        "Xiao",
+        "Alibakhshi",
+        "Zamanpour",
+        "Zarei",
+        "Sherafat",
+        "Behzadpoor"
+      ],
+      "year": 2024,
+      "title": "How AI Literacy Affects Students’ Educational Attainment in Online Learning: Testing a Structural Equation Model in Higher Education Context",
+      "source_type": "journal",
+      "language": "english",
+      "journal": "International Review of Research in Open and Distance Learning",
+      "doi": "10.19173/irrodl.v25i3.7720",
+      "url": "https://doi.org/10.19173/irrodl.v25i3.7720",
+      "api_source": "Semantic Scholar"
+    },
+    {
+      "id": "cite_059",
+      "authors": [
+        "unesco.org"
+      ],
+      "year": 2025,
+      "title": "Ethics of Artificial Intelligence | UNESCO",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://www.unesco.org/en/artificial-intelligence/recommendation-ethics",
+      "api_source": "Gemini Grounded"
+    },
+    {
+      "id": "cite_060",
+      "authors": [
+        "rsisinternational.org"
+      ],
+      "year": 2025,
+      "title": "Artificial Intelligence Empowering Higher Education: Exploration of Teaching Mode Innovation and Quality - International Journal of Research and Innovation in Social Science",
+      "source_type": "website",
+      "language": "english",
+      "url": "https://rsisinternational.org/journals/ijriss/articles/artificial-intelligence-empowering-higher-education-exploration-of-teaching-mode-innovation-and-quality/",
+      "api_source": "Gemini Grounded"
+    }
+  ],
+  "metadata": {
+    "total_citations": 43,
+    "citation_style": "APA 7th",
+    "thesis_language": "english",
+    "extracted_date": "2025-11-30T22:37:32.718906"
+  }
+}

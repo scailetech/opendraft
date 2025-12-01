@@ -6,8 +6,9 @@ ABOUTME: Coordinates Crossref → Semantic Scholar → Gemini Grounded → Gemin
 
 import logging
 import json
-from typing import Optional, Dict, Any, Tuple
+from typing import Optional, Dict, Any, Tuple, List
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from .crossref import CrossrefClient
 from .semantic_scholar import SemanticScholarClient
@@ -96,6 +97,13 @@ class CitationResearcher:
 
         # Load persistent cache (or initialize empty if file doesn't exist)
         self.cache: Dict[str, Optional[Tuple[Dict[str, Any], str]]] = self._load_cache()
+        
+        # Track source usage for round-robin variety (reset each session)
+        self.source_usage_count: Dict[str, int] = {
+            "Semantic Scholar": 0,
+            "Crossref": 0,
+            "Gemini Grounded": 0,
+        }
 
     def _load_cache(self) -> Dict[str, Optional[Tuple[Dict[str, Any], str]]]:
         """
@@ -204,64 +212,109 @@ class CitationResearcher:
         if self.verbose and api_chain:
             print(f"    🔀 API chain: {' → '.join(api_chain)}")
 
-        # Try API chain
+        # Try API chain - use parallel queries for academic sources
         metadata: Optional[Dict[str, Any]] = None
         source: Optional[str] = None
-
-        for api_name in api_chain:
+        
+        # Determine if we should use parallel queries
+        # Use parallel for academic/journal queries where both CrossRef and Semantic Scholar are in chain
+        use_parallel = (
+            'crossref' in api_chain 
+            and 'semantic_scholar' in api_chain
+            and self.enable_crossref 
+            and self.enable_semantic_scholar
+        )
+        
+        if use_parallel:
+            # Query ALL 3 APIs in parallel for maximum source diversity
+            parallel_apis = ['crossref', 'semantic_scholar']
+            if self.enable_gemini_grounded:
+                parallel_apis.append('gemini_grounded')
+            
+            if self.verbose:
+                apis_str = " + ".join([a.replace("_", " ").title() for a in parallel_apis])
+                print(f"    → Querying {apis_str} in parallel...", end=" ", flush=True)
+            results: List[Tuple[Optional[Dict[str, Any]], str]] = []
+            
+            with ThreadPoolExecutor(max_workers=3) as executor:
+                futures = {
+                    executor.submit(self._search_api, api, topic): api 
+                    for api in parallel_apis
+                }
+                for future in as_completed(futures, timeout=90):
+                    try:
+                        result = future.result()
+                        results.append(result)
+                    except Exception as e:
+                        api = futures[future]
+                        logger.debug(f"Parallel {api} error: {e}")
+                        results.append((None, api))
+            
+            # Pick best result from parallel queries
+            metadata, source = self._pick_best_result(results)
+            
             if metadata:
-                break  # Already found citation
-
-            if api_name == 'crossref' and self.enable_crossref:
                 if self.verbose:
-                    print(f"    → Trying Crossref API...", end=" ", flush=True)
-                try:
-                    metadata = self.crossref.search_paper(topic)
-                    if metadata:
-                        source = "Crossref"
-                        if self.verbose:
-                            print(f"✓")
-                    else:
-                        if self.verbose:
-                            print(f"✗")
-                except Exception as e:
-                    if self.verbose:
-                        print(f"✗ Error: {e}")
-                    logger.error(f"Crossref error: {e}")
-
-            elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
+                    print(f"✓ ({source})")
+            else:
                 if self.verbose:
-                    print(f"    → Trying Semantic Scholar API...", end=" ", flush=True)
-                try:
-                    metadata = self.semantic_scholar.search_paper(topic)
-                    if metadata:
-                        source = "Semantic Scholar"
-                        if self.verbose:
-                            print(f"✓")
-                    else:
-                        if self.verbose:
-                            print(f"✗")
-                except Exception as e:
-                    if self.verbose:
-                        print(f"✗ Error: {e}")
-                    logger.error(f"Semantic Scholar error: {e}")
+                    print(f"✗")
+        else:
+            # Sequential fallback for industry queries or when parallel not applicable
+            for api_name in api_chain:
+                if metadata:
+                    break  # Already found citation
 
-            elif api_name == 'gemini_grounded' and self.enable_gemini_grounded:
-                if self.verbose:
-                    print(f"    → Trying Gemini Grounded (Google Search)...", end=" ", flush=True)
-                try:
-                    metadata = self.gemini_grounded.search_paper(topic)
-                    if metadata:
-                        source = "Gemini Grounded"
-                        if self.verbose:
-                            print(f"✓")
-                    else:
-                        if self.verbose:
-                            print(f"✗")
-                except Exception as e:
+                if api_name == 'crossref' and self.enable_crossref:
                     if self.verbose:
-                        print(f"✗ Error: {e}")
-                    logger.error(f"Gemini Grounded error: {e}")
+                        print(f"    → Trying Crossref API...", end=" ", flush=True)
+                    try:
+                        metadata = self.crossref.search_paper(topic)
+                        if metadata:
+                            source = "Crossref"
+                            if self.verbose:
+                                print(f"✓")
+                        else:
+                            if self.verbose:
+                                print(f"✗")
+                    except Exception as e:
+                        if self.verbose:
+                            print(f"✗ Error: {e}")
+                        logger.error(f"Crossref error: {e}")
+
+                elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
+                    if self.verbose:
+                        print(f"    → Trying Semantic Scholar API...", end=" ", flush=True)
+                    try:
+                        metadata = self.semantic_scholar.search_paper(topic)
+                        if metadata:
+                            source = "Semantic Scholar"
+                            if self.verbose:
+                                print(f"✓")
+                        else:
+                            if self.verbose:
+                                print(f"✗")
+                    except Exception as e:
+                        if self.verbose:
+                            print(f"✗ Error: {e}")
+                        logger.error(f"Semantic Scholar error: {e}")
+
+                elif api_name == 'gemini_grounded' and self.enable_gemini_grounded:
+                    if self.verbose:
+                        print(f"    → Trying Gemini Grounded (Google Search)...", end=" ", flush=True)
+                    try:
+                        metadata = self.gemini_grounded.search_paper(topic)
+                        if metadata:
+                            source = "Gemini Grounded"
+                            if self.verbose:
+                                print(f"✓")
+                        else:
+                            if self.verbose:
+                                print(f"✗")
+                    except Exception as e:
+                        if self.verbose:
+                            print(f"✗ Error: {e}")
+                        logger.error(f"Gemini Grounded error: {e}")
 
         # Try Gemini LLM as absolute last resort (not part of smart routing)
         if not metadata and self.enable_llm_fallback:
@@ -374,6 +427,88 @@ class CitationResearcher:
         except Exception as e:
             logger.error(f"Error creating citation: {e}")
             return None
+    def _search_api(self, api_name: str, topic: str) -> Tuple[Optional[Dict[str, Any]], str]:
+        """
+        Search a single API for citations.
+        
+        Args:
+            api_name: Name of the API ('crossref', 'semantic_scholar', 'gemini_grounded')
+            topic: Topic to search for
+            
+        Returns:
+            Tuple of (metadata, source_name) or (None, api_name)
+        """
+        try:
+            if api_name == 'crossref' and self.enable_crossref:
+                metadata = self.crossref.search_paper(topic)
+                if metadata:
+                    return (metadata, "Crossref")
+            elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
+                metadata = self.semantic_scholar.search_paper(topic)
+                if metadata:
+                    return (metadata, "Semantic Scholar")
+            elif api_name == 'gemini_grounded' and self.enable_gemini_grounded:
+                metadata = self.gemini_grounded.search_paper(topic)
+                if metadata:
+                    return (metadata, "Gemini Grounded")
+        except Exception as e:
+            logger.debug(f"{api_name} error: {e}")
+        return (None, api_name)
+
+    def _pick_best_result(
+        self, 
+        results: List[Tuple[Optional[Dict[str, Any]], str]]
+    ) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+        """
+        Pick the best result from multiple API responses with source variety.
+        
+        Uses round-robin source selection to ensure variety:
+        - If multiple sources return valid results, prefer the least-used source
+        - Still requires minimum quality (DOI or URL)
+        
+        Args:
+            results: List of (metadata, source) tuples
+            
+        Returns:
+            Best (metadata, source) tuple, or (None, None) if all failed
+        """
+        valid_results = [(m, s) for m, s in results if m is not None]
+        
+        if not valid_results:
+            return (None, None)
+        
+        if len(valid_results) == 1:
+            # Update usage count
+            _, source = valid_results[0]
+            self.source_usage_count[source] = self.source_usage_count.get(source, 0) + 1
+            return valid_results[0]
+        
+        # Filter to only results with acceptable quality (DOI or URL)
+        quality_results = [
+            (m, s) for m, s in valid_results 
+            if m.get('doi') or m.get('url')
+        ]
+        
+        # If no quality results, fall back to any valid result
+        if not quality_results:
+            quality_results = valid_results
+        
+        # Sort by source usage count (ascending) to prefer least-used sources
+        # This creates round-robin variety across all sources
+        sorted_by_variety = sorted(
+            quality_results,
+            key=lambda x: self.source_usage_count.get(x[1], 0)
+        )
+        
+        # Pick the least-used source
+        metadata, source = sorted_by_variety[0]
+        
+        # Update usage count
+        self.source_usage_count[source] = self.source_usage_count.get(source, 0) + 1
+        
+        return (metadata, source)
+
+
 
     def _llm_research(self, topic: str) -> Optional[Dict[str, Any]]:
         """

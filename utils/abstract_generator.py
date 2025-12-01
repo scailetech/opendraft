@@ -151,7 +151,7 @@ def replace_placeholder_with_abstract(thesis_content: str, generated_abstract: s
     # Define placeholder patterns
     if language == 'german':
         placeholder_pattern = r'## Zusammenfassung\n+\[Zusammenfassung wird.*?\]\n+\\newpage'
-        replacement = f"## Zusammenfassung\n\n{generated_abstract}\n\n\\newpage"
+        replacement = f"## Zusammenfassung\n\n{generated_abstract}\n\n\\\\newpage"
     else:
         placeholder_pattern = r'## Abstract\n+\[Abstract will be generated.*?\]\n*---?\n*'
         replacement = f"## Abstract\n\n{generated_abstract}\n\n---\n"
@@ -165,8 +165,8 @@ def replace_placeholder_with_abstract(thesis_content: str, generated_abstract: s
 
         # Try alternative patterns
         alt_patterns = [
-            (r'## Abstract\n+\[.*?\]\n+\\newpage', f"## Abstract\n\n{generated_abstract}\n\n\\newpage"),
-            (r'## Zusammenfassung\n+\[.*?\]\n+\\newpage', f"## Zusammenfassung\n\n{generated_abstract}\n\n\\newpage")
+            (r'## Abstract\n+\[.*?\]\n+\\newpage', f"## Abstract\n\n{generated_abstract}\n\n\\\\newpage"),
+            (r'## Zusammenfassung\n+\[.*?\]\n+\\newpage', f"## Zusammenfassung\n\n{generated_abstract}\n\n\\\\newpage")
         ]
 
         for pattern, repl in alt_patterns:

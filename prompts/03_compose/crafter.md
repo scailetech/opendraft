@@ -123,8 +123,150 @@ Use proper markdown table syntax:
 - ✅ Tables improve thesis quality score
 
 **FAILURE TO INCLUDE TABLES WILL RESULT IN AN INCOMPLETE THESIS.**
+---
+
+## ⚠️ CRITICAL: HEADING HIERARCHY REQUIREMENTS
+
+**Academic theses REQUIRE proper heading structure with 4 levels of depth for comprehensive organization.**
+
+### Required Heading Levels
+
+Use ALL 4 levels of markdown headings throughout your sections:
+
+```markdown
+# 1. Main Section Title (Chapter Level)
+## 1.1 Major Subsection
+### 1.1.1 Topic
+#### 1.1.1.1 Subtopic or Specific Point
+```
+
+### Example Structure
+
+**Literature Review Example:**
+```markdown
+# 2. Literature Review
+
+## 2.1 Theoretical Framework
+### 2.1.1 Foundational Theories
+#### 2.1.1.1 Classical Approaches
+#### 2.1.1.2 Modern Developments
+### 2.1.2 Conceptual Models
+#### 2.1.2.1 Model A: Description
+#### 2.1.2.2 Model B: Description
+
+## 2.2 Empirical Studies
+### 2.2.1 Quantitative Research
+#### 2.2.1.1 Survey Studies
+#### 2.2.1.2 Experimental Designs
+### 2.2.2 Qualitative Research
+#### 2.2.2.1 Case Studies
+#### 2.2.2.2 Interview-Based Research
+
+## 2.3 Research Gaps
+### 2.3.1 Theoretical Gaps
+### 2.3.2 Methodological Gaps
+```
+
+### Numbering Convention
+
+- **Level 1 (#):** `1.`, `2.`, `3.` (main chapters)
+- **Level 2 (##):** `1.1`, `1.2`, `2.1`, `2.2` (major sections)
+- **Level 3 (###):** `1.1.1`, `1.1.2`, `2.1.1` (subsections)
+- **Level 4 (####):** `1.1.1.1`, `1.1.1.2` (specific points)
+
+### Why Deep Hierarchy Matters
+
+- ✅ Shows comprehensive coverage of topics
+- ✅ Improves navigation and readability
+- ✅ Demonstrates academic rigor
+- ✅ Helps readers locate specific content
+- ✅ Required for professional academic documents
+
+### Minimum Requirements
+
+- **Literature Review:** At least 3 level-2 sections, each with 2+ level-3 subsections
+- **Methodology:** At least 2 level-2 sections, each with level-3 subsections
+- **Analysis/Results:** At least 3 level-2 sections with level-3 and level-4 headings
+- **Discussion:** At least 2 level-2 sections with level-3 subsections
+
+**FAILURE TO USE PROPER HEADING HIERARCHY WILL RESULT IN A FLAT, UNPROFESSIONAL THESIS.**
+
+
 
 ---
+
+---
+
+## ⚠️ CRITICAL: THESIS SECTION STRUCTURE
+
+**The thesis has a FIXED chapter structure. You MUST follow this exact layout:**
+
+### Master Thesis Structure (5 Main Chapters)
+
+```
+# 1. Introduction          ← Chapter 1 (written separately)
+# 2. Main Body             ← Chapter 2 (YOU write this with subsections below)
+  ## 2.1 Literature Review
+  ## 2.2 Methodology  
+  ## 2.3 Analysis and Results
+  ## 2.4 Discussion
+# 3. Conclusion            ← Chapter 3 (written separately)
+# 4. Appendices            ← Chapter 4 (written separately)
+# 5. References            ← Chapter 5 (auto-generated)
+```
+
+### When Writing "Main Body"
+
+**When asked to write the Main Body, you MUST:**
+
+1. **DO NOT use `# 3.`, `# 4.`, etc.** - Those chapter numbers are reserved!
+2. **Use `## 2.1`, `## 2.2`, etc.** for major sections within Main Body
+3. **Use `### 2.1.1`, `### 2.2.1`, etc.** for subsections
+4. **Use `#### 2.1.1.1`, etc.** for detailed points
+
+### ✅ CORRECT Main Body Structure
+
+```markdown
+## 2.1 Literature Review
+### 2.1.1 Theoretical Framework
+#### 2.1.1.1 Classical Theories
+#### 2.1.1.2 Modern Developments
+### 2.1.2 Empirical Studies
+### 2.1.3 Research Gaps
+
+## 2.2 Methodology
+### 2.2.1 Research Design
+### 2.2.2 Data Collection
+### 2.2.3 Analysis Approach
+
+## 2.3 Analysis and Results
+### 2.3.1 Key Findings
+### 2.3.2 Data Interpretation
+### 2.3.3 Statistical Results
+
+## 2.4 Discussion
+### 2.4.1 Interpretation of Results
+### 2.4.2 Comparison with Literature
+### 2.4.3 Limitations
+```
+
+### ❌ WRONG Structure (DO NOT DO THIS)
+
+```markdown
+# 3. Methodology       ← WRONG! Should be ## 2.2
+# 4. Analysis          ← WRONG! Should be ## 2.3
+# Literature Review    ← WRONG! Missing number, should be ## 2.1
+```
+
+### Why This Matters
+
+- The template places your content under `# 2. Main Body`
+- If you use `# 3. Methodology`, it conflicts with `# 3. Conclusion`
+- The PDF will have broken chapter numbering
+- This is a CRITICAL structural requirement
+
+**Remember: Introduction = 1, Main Body = 2, Conclusion = 3, Appendices = 4, References = 5**
+
 
 ## ⚠️ CRITICAL: CITATION FORMAT - USE CITATION IDS
 

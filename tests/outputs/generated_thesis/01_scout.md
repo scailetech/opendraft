@@ -2,551 +2,484 @@
 
 ## Summary
 
-**Total Valid Citations**: 88
-**Success Rate**: 100.0%
-**Failed Topics**: 0
+**Total Valid Citations**: 75
+**Success Rate**: 94.9%
+**Failed Topics**: 4
 
 ### Sources Breakdown
 
-- **Crossref**: 6 (6.8%)
-- **Semantic Scholar**: 55 (62.5%)
-- **Gemini Grounded**: 27 (30.7%)
+- **Crossref**: 25 (33.3%)
+- **Semantic Scholar**: 24 (32.0%)
+- **Gemini Grounded**: 26 (34.7%)
 - **Gemini LLM**: 0 (0.0%)
 
 ---
 
 ## Citations Found
 
-### From Crossref (6 citations)
+### From Crossref (25 citations)
 
-#### 1. Using AI to improve physician documentation and quality
-**Authors**: Clark,
-**Year**: 2019
-**DOI**: 10.69554/htyl5316
-**URL**: https://doi.org/10.69554/htyl5316
+#### 1. Deep Learning Applications in Medical Imaging
+**Authors**: Viswanathan, Saranya, Inbamani
+**Year**: 2021
+**DOI**: 10.4018/978-1-7998-5071-7.ch007
+**URL**: https://doi.org/10.4018/978-1-7998-5071-7.ch007
 
-#### 2. Empirical Analysis of the Nexus between Top Management Team Diversity and Firm Performance: A Study of Chinese Companies
-**Authors**: Hu, Ai
+#### 2. Healthcare Bias in AI: A Systematic Literature Review
+**Authors**: Moldovan, Vescan, Grosan
 **Year**: 2025
-**DOI**: 10.2139/ssrn.5085541
-**URL**: https://doi.org/10.2139/ssrn.5085541
+**DOI**: 10.5220/0013480300003928
+**URL**: https://doi.org/10.5220/0013480300003928
 
-#### 3. Artificial intelligence in depression diagnostics: A systematic review of methodologies and clinical applications
-**Authors**: Ghorbankhani, Safara
+#### 3. Global Integration of AI-Powered Telemedicine: Innovations, Challenges, and the Future of Healthcare Delivery
+**Authors**: Thompson, Walker
 **Year**: 2025
-**DOI**: 10.1016/j.artmed.2025.103320
-**URL**: https://doi.org/10.1016/j.artmed.2025.103320
+**DOI**: 10.20944/preprints202505.0323.v1
+**URL**: https://doi.org/10.20944/preprints202505.0323.v1
 
-#### 4. Transformer Models for Enhanced Natural Language Processing in Medical Records Management
-**Authors**: Vasani, Pawar, P., Ahamad, Sahu, Talele
+#### 4. Explainable biology for improved therapies in precision medicine: AI is not enough
+**Authors**: Jurisica
 **Year**: 2024
-**DOI**: 10.1109/ictacs62700.2024.10840744
-**URL**: https://doi.org/10.1109/ictacs62700.2024.10840744
+**DOI**: 10.1016/j.berh.2024.102006
+**URL**: https://doi.org/10.1016/j.berh.2024.102006
 
-#### 5. Computer Vision in Digital Radiography
-**Authors**: Conners
-**Year**: 1985
-**DOI**: 10.1007/978-3-642-52247-5_71
-**URL**: https://doi.org/10.1007/978-3-642-52247-5_71
+#### 5. Ensuring data privacy and security in federated learning for healthcare data
+**Authors**: Reddi Umarani, Naskath, Karthikeyan, Manickam
+**Year**: 2025
+**DOI**: 10.1201/9781003591085-8
+**URL**: https://doi.org/10.1201/9781003591085-8
 
-#### 6. Vitamin E and Healthcare Costs: Models to Assess the Impact
-**Authors**: Nuijten
-**Year**: 2019
-**DOI**: 10.1007/978-3-030-05315-4_29
-**URL**: https://doi.org/10.1007/978-3-030-05315-4_29
+#### 6. Resubmission : Epidemic Analysis and Prediction of COVID-19 Using a Gaussian Doubling Times (Preprint)
+**Authors**: Albahli, Albattah, Shah
+**Year**: 2020
+**DOI**: 10.2196/23673
+**URL**: https://doi.org/10.2196/23673
 
-### From Semantic Scholar (55 citations)
+#### 7. Connected Health: Transforming Remote Patient Care with Wearable Device Applications
+**Authors**: Shafik
+**Year**: 2025
+**DOI**: 10.1007/978-3-031-98897-4_2
+**URL**: https://doi.org/10.1007/978-3-031-98897-4_2
 
-#### 1. An updated research focus on the employment of computer-aided drug discovery and repurposing techniques for the identification and evaluation of SARS-CoV-2 Main protease inhibitors: A protocol for a systematic review and meta-analysis
-**Authors**: Mushebenge, Ugbaja, Mbatha, Riziki, Muzumbukilwa, Kadima, Nlooto, Kumalo
+#### 8. Welcome to <i>Future Medicine AI</i>
+**Authors**: Hall
 **Year**: 2023
-**DOI**: 10.1101/2023.07.28.23293282
-**URL**: https://doi.org/10.1101/2023.07.28.23293282
+**DOI**: 10.2217/fmai-2023-0015
+**URL**: https://doi.org/10.2217/fmai-2023-0015
 
-#### 2. Deep Medicine: How Artificial Intelligence Can Make Healthcare Human Again
-**Authors**: Atkinson
-**Year**: 2019
-**DOI**: 
-**URL**: https://www.semanticscholar.org/paper/e8f834463b7540a3db591a19c1025f89d1a1be1d
-
-#### 3. Technology-enhanced telerehabilitation for post-stroke recovery: A literature review of digital platforms and patient outcomes
-**Authors**: Virani
+#### 9. National Framework for Agentic Generative AI in Cancer Care: Policy Recommendations and System Architecture
+**Authors**: Joshi
 **Year**: 2025
-**DOI**: 10.30574/wjarr.2025.25.2.0526
-**URL**: https://doi.org/10.30574/wjarr.2025.25.2.0526
+**DOI**: 10.2139/ssrn.5472286
+**URL**: https://doi.org/10.2139/ssrn.5472286
 
-#### 4. Should Artificial Intelligence be used to support clinical ethical decision-making? A systematic review of reasons
-**Authors**: Benzinger, Ursin, Balke, Kacprowski, Salloch
+#### 10. Response to the UK White Paper: A pro-innovation approach to AI regulation
+**Authors**: Reed, Grieman
 **Year**: 2023
-**DOI**: 10.1186/s12910-023-00929-6
-**URL**: https://doi.org/10.1186/s12910-023-00929-6
+**DOI**: 10.2139/ssrn.4478556
+**URL**: https://doi.org/10.2139/ssrn.4478556
 
-#### 5. The Economic Impact of AI-Driven Remote Patient Monitoring: A Business Intelligence Perspective on Healthcare Cost Optimization.
-**Authors**: Hossain, Arafat, Desai, Akter, Asha
+#### 11. Year One of the IBM Watson AI XPRIZE: Case Studies in “AI for Good”
+**Authors**: McGregor, Banifatemi
+**Year**: 2018
+**DOI**: 10.1609/aimag.v39i3.2812
+**URL**: https://doi.org/10.1609/aimag.v39i3.2812
+
+#### 12. Google AI Approach and Statistical Results of Using Google Applications in Mobile Learning
+**Authors**: Bicen, Arnavut
+**Year**: 2020
+**DOI**: 10.18662/brain/11.1/18
+**URL**: https://doi.org/10.18662/brain/11.1/18
+
+#### 13. Healthcare Data Exchange Standards
+**Authors**: Oemig, Snelick
+**Year**: 2016
+**DOI**: 10.1007/978-3-319-44839-8_4
+**URL**: https://doi.org/10.1007/978-3-319-44839-8_4
+
+#### 14. Transforming Healthcare Through Digital Patient Engagement
+**Authors**: Oldenburg
+**Year**: 2020
+**DOI**: 10.4324/9780367648015-1
+**URL**: https://doi.org/10.4324/9780367648015-1
+
+#### 15. Training the future healthcare workforce for AI integration
+**Authors**: Khan
 **Year**: 2025
-**DOI**: 10.55640/business/volume06issue05-03
-**URL**: https://doi.org/10.55640/business/volume06issue05-03
+**DOI**: 10.1016/b978-0-443-33584-6.00020-7
+**URL**: https://doi.org/10.1016/b978-0-443-33584-6.00020-7
 
-#### 6. Artificial intelligence for tuberculosis control: a scoping review of applications in public health
-**Authors**: Menon, Koura
+#### 16. Early diagnosis of systemic lupus erythematosus
+**Authors**: Aringer, Bertsias
 **Year**: 2025
-**DOI**: 10.7189/jogh.15.04192
-**URL**: https://doi.org/10.7189/jogh.15.04192
+**DOI**: 10.20517/rdodj.2024.59
+**URL**: https://doi.org/10.20517/rdodj.2024.59
 
-#### 7. AI Integration in PACS: Advancing Medical Imaging and Healthcare Delivery
-**Authors**: Joy
+#### 17. AI-driven robotic surgery in oncology: advancing precision, personalization, and patient outcomes
+**Authors**: Kok Wah
 **Year**: 2025
-**DOI**: 10.71097/ijsat.v16.i1.2930
-**URL**: https://doi.org/10.71097/ijsat.v16.i1.2930
+**DOI**: 10.1007/s11701-025-02555-3
+**URL**: https://doi.org/10.1007/s11701-025-02555-3
 
-#### 8. Predictive Analytics in Healthcare: Leveraging AI to Anticipate Disease Outbreaks and Enhance Patient Outcomes
-**Authors**: Kosaraju
-**Year**: 2024
-**DOI**: 10.52403/gijhsr.20230312
-**URL**: https://doi.org/10.52403/gijhsr.20230312
+#### 18. AI-powered Imaging for Early Skin Cancer Detection
+**Authors**: Sharma, Sharma, Sharma, Fuloria, Sunita
+**Year**: 2025
+**DOI**: 10.2174/9798898811952125010006
+**URL**: https://doi.org/10.2174/9798898811952125010006
 
-#### 9. The role of AI for developing digital twins in healthcare: The case of cancer care
-**Authors**: Kaul, Ossai, Forkan, Jayaraman, Zelcer, Vaughan, Wickramasinghe
+#### 19. Sudden cardiac death risk prediction - As easy as ECG?
+**Authors**: Lambiase, Young
+**Year**: 2019
+**DOI**: 10.1016/j.ijcard.2018.10.100
+**URL**: https://doi.org/10.1016/j.ijcard.2018.10.100
+
+#### 20. AI-Enhanced assistive interventions for adolescent cyberbullying: a gender-sensitive moderated mediation approach
+**Authors**: Xiao, Lin, Yu, Li, Li
+**Year**: 2025
+**DOI**: 10.1080/17483107.2025.2570890
+**URL**: https://doi.org/10.1080/17483107.2025.2570890
+
+#### 21. Adoption of AI-Enabled Solutions for Patient Recruitment Process in Clinical Trials
+**Authors**: BHANDE
+**Year**: 2020
+**DOI**: 10.31234/osf.io/xhyms
+**URL**: https://doi.org/10.31234/osf.io/xhyms
+
+#### 22. AI in Insurance Fraud Detection in Insurance Claims
+**Authors**: Thiruvarutselvi, Sathiya
+**Year**: 2025
+**DOI**: 10.34293/commerce.v13is1-i2.8776
+**URL**: https://doi.org/10.34293/commerce.v13is1-i2.8776
+
+#### 23. AI: An essential tool for managing the burgeoning complexity of clinical development in pharmaceutical R&amp;D
+**Authors**: Madhavan, Shaywitz
+**Year**: 2025
+**DOI**: 10.1016/j.drudis.2024.104271
+**URL**: https://doi.org/10.1016/j.drudis.2024.104271
+
+#### 24. Harnessing the Power of AI and Big Data in Supply Chain Resilience and Efficiency
+**Authors**: Khalfi, Akhlaffou
+**Year**: 2025
+**DOI**: 10.1109/logistiqua66323.2025.11122754
+**URL**: https://doi.org/10.1109/logistiqua66323.2025.11122754
+
+#### 25. Public Perception and Trust: The Critical Foundation for AI Adoption in Healthcare
+**Authors**: Baikadolla
+**Year**: 2025
+**DOI**: 10.59573/emsj.9(3).2025.44
+**URL**: https://doi.org/10.59573/emsj.9(3).2025.44
+
+### From Semantic Scholar (24 citations)
+
+#### 1. Medical Ethics in Terminal Patients: Dilemmas in the Use of AI for End-of-Life Decisions
+**Authors**: Cano
 **Year**: 2022
-**DOI**: 10.1002/widm.1480
-**URL**: https://doi.org/10.1002/widm.1480
+**DOI**: 10.56294/ai202222
+**URL**: https://doi.org/10.56294/ai202222
 
-#### 10. Federated Learning with Homomorphic Encryption for Ensuring Privacy in Medical Data
-**Authors**: Mohandas, Veena, Kirubasri, Mary, Udayakumar
-**Year**: 2024
-**DOI**: 10.51983/ijiss-2024.14.2.03
-**URL**: https://doi.org/10.51983/ijiss-2024.14.2.03
+#### 2. Using Deep Learning Based Natural Language Processing Techniques for Clinical Decision-Making with EHRs
+**Authors**: Zhu, Tu, Huang
+**Year**: 2019
+**DOI**: 10.1007/978-3-030-33966-1_13
+**URL**: https://doi.org/10.1007/978-3-030-33966-1_13
 
-#### 11. Explainable AI in Diagnostic Radiology for Neurological Disorders: A Systematic Review, and What Doctors Think About It
-**Authors**: Hafeez, Memon, Al-Quraishi, Yahya, Elferik, Ali
-**Year**: 2025
-**DOI**: 10.3390/diagnostics15020168
-**URL**: https://doi.org/10.3390/diagnostics15020168
-
-#### 12. Integration of Artificial Intelligence and Smart Technology: AI-Driven Robotics in Surgery: Precision and Efficiency
-**Authors**: Abbasi, Hussain
-**Year**: 2024
-**DOI**: 10.60087/jaigs.v5i1.207
-**URL**: https://doi.org/10.60087/jaigs.v5i1.207
-
-#### 13. The Application and Ethical Implication of Generative AI in Mental Health: Systematic Review
-**Authors**: Wang, Zhou, Zhou
-**Year**: 2024
-**DOI**: 10.2196/70610
-**URL**: https://doi.org/10.2196/70610
-
-#### 14. Toward a framework of ambiguity: a qualitative understanding of healthcare policy design and governance mechanism in China
-**Authors**: Qi, Hu, Huang
-**Year**: 2025
-**DOI**: 10.3389/fpubh.2025.1666193
-**URL**: https://doi.org/10.3389/fpubh.2025.1666193
-
-#### 15. Can OpenEHR, ISO 13606, and HL7 FHIR Work Together? An Agnostic Approach for the Selection and Application of Electronic Health Record Standards to the Next-Generation Health Data Spaces
-**Authors**: Pedrera-Jiménez, García-Barrio, Frid, Moner, Boscá-Tomás, Lozano-Rubí, Kalra, Beale, Muñoz-Carrero, Serrano-Balazote
+#### 3. Ethical implications of AI and robotics in healthcare: A review
+**Authors**: Elendu, Amaechi, Elendu, Jingwa, Okoye, Okah, Ladele, Farah, Alimi
 **Year**: 2023
-**DOI**: 10.2196/48702
-**URL**: https://doi.org/10.2196/48702
+**DOI**: 10.1097/MD.0000000000036671
+**URL**: https://doi.org/10.1097/MD.0000000000036671
 
-#### 16. Implementation challenges of artificial intelligence (AI) in primary care: Perspectives of general practitioners in London UK
-**Authors**: Razai, Al-Bedaery, Bowen, Yahia, Chandrasekaran, Oakeshott
+#### 4. Deployment of in-body wearable devices in healthcare and at work: closing the EU regulatory gap
+**Authors**: Foldes, Marassi, Hughes
 **Year**: 2024
-**DOI**: 10.1371/journal.pone.0314196
-**URL**: https://doi.org/10.1371/journal.pone.0314196
+**DOI**: 10.1093/eurpub/ckae144.1109
+**URL**: https://doi.org/10.1093/eurpub/ckae144.1109
 
-#### 17. Applications of Generative AI in Healthcare: algorithmic, ethical, legal and societal considerations
-**Authors**: Okonji, Yunusov, Gordon
+#### 5. Deep learning-enabled medical computer vision
+**Authors**: Esteva, Chou, Yeung, Naik, Madani, Mottaghi, Liu, Topol, Dean, Socher
+**Year**: 2021
+**DOI**: 10.1038/s41746-020-00376-2
+**URL**: https://doi.org/10.1038/s41746-020-00376-2
+
+#### 6. The Arrival of Robotics in Spine Surgery: A Review of the Literature
+**Authors**: Ghasem, Sharma, Greif, Alam, Maaieh
+**Year**: 2018
+**DOI**: 10.1097/BRS.0000000000002695
+**URL**: https://doi.org/10.1097/BRS.0000000000002695
+
+#### 7. The Dual Impact of Artificial Intelligence in Healthcare: Balancing Advancements with Ethical and Operational Challenges
+**Authors**: Ingole, Ramineni, Pulipeta, Kathiriya, Krishnappa, Jayaram
 **Year**: 2024
-**DOI**: 10.36227/techrxiv.171527587.75649430/v1
-**URL**: https://doi.org/10.36227/techrxiv.171527587.75649430/v1
+**DOI**: 10.37745/ejcsit.2013/vol12n63545
+**URL**: https://doi.org/10.37745/ejcsit.2013/vol12n63545
 
-#### 18. AI Implementation in U.S. Hospitals: Regional Disparities and Health Equity Implications
-**Authors**: Hwang, Ng, Pillai, Sahai, Hernandez-Boussard
-**Year**: 2025
-**DOI**: 10.1101/2025.06.27.25330441
-**URL**: https://doi.org/10.1101/2025.06.27.25330441
-
-#### 19. Long noncoding RNAs in familial hypercholesterolemia: biomarkers, therapeutics, and AI in precision medicine
-**Authors**: Daghistani, Hegazy, Alkhalofah, Alsobeihy, Nasser, Gad, Shamrani, Mufrrih, Alyousfi
-**Year**: 2025
-**DOI**: 10.1186/s12944-025-02605-7
-**URL**: https://doi.org/10.1186/s12944-025-02605-7
-
-#### 20. Public sector replacement of privately funded pharmaceutical R&D: cost and efficiency considerations
-**Authors**: Proudman, Desai, Gomes, Khomenko, Martin, Nellesen, Neumann, Grabowski
+#### 8. Critical Review of “Ethics & Governance of Artificial Intelligence for Health” by the World Health Organization (WHO)
+**Authors**: Berger
 **Year**: 2024
-**DOI**: 10.1080/13696998.2024.2405407
-**URL**: https://doi.org/10.1080/13696998.2024.2405407
+**DOI**: 10.17160/josha.11.1.956
+**URL**: https://doi.org/10.17160/josha.11.1.956
 
-#### 21. AI-Induced Cybersecurity Risks in Healthcare: A Narrative Review of Blockchain-Based Solutions Within a Clinical Risk Management Framework
-**Authors**: Palma, Scendoni, Ferorelli, Benedictis, Tambone, Micco
+#### 9. Evaluating the Impact of the EU AI Act on Medical Device Regulation.
+**Authors**: Kalodanis, Feretzakis, Rizomiliotis, Verykios, Papapavlou, Skrekas, Anagnostopoulos
 **Year**: 2025
-**DOI**: 10.2147/RMHP.S544523
-**URL**: https://doi.org/10.2147/RMHP.S544523
+**DOI**: 10.3233/SHTI250045
+**URL**: https://doi.org/10.3233/SHTI250045
 
-#### 22. AI in Healthcare: Revolutionizing Patient Care with Predictive Analytics and Decision Support Systems
-**Authors**: Ramírez
-**Year**: 2024
-**DOI**: 10.60087/jaigs.v1i1.p37
-**URL**: https://doi.org/10.60087/jaigs.v1i1.p37
-
-#### 23. The Effectiveness of a Community Health Worker Program to Improve Chronic Disease Management in Immigrant and Minority Communities
-**Authors**: Smith, Washburn
+#### 10. Towards Ensuring Responsible AI for Medical Device Certification
+**Authors**: Mallardi, Quaranta, Calefato, Lanubile
 **Year**: 2025
-**DOI**: 10.1353/hpu.2025.a959109
-**URL**: https://doi.org/10.1353/hpu.2025.a959109
+**DOI**: 10.1109/RAIE66699.2025.00009
+**URL**: https://doi.org/10.1109/RAIE66699.2025.00009
 
-#### 24. The Reality of the Right to Refuse Treatment : Focusing on the Life-Sustaining Treatment Decision Act
-**Authors**: Kim, Kim
+#### 11. From AI to the Era of Explainable AI in Healthcare 5.0: Current State and Future Outlook
+**Authors**: Rahman, Kundu, Debnath, Rahman, Das, Miah, Ghulam
+**Year**: 2025
+**DOI**: 10.1111/exsy.70060
+**URL**: https://doi.org/10.1111/exsy.70060
+
+#### 12. A Review of Biomedical Devices: Classification, Regulatory Guidelines, Human Factors, Software as a Medical Device, and Cybersecurity
+**Authors**: Tettey, Parupelli, Desai
 **Year**: 2023
-**DOI**: 10.24324/kiacl.2024.30.2.273
-**URL**: https://doi.org/10.24324/kiacl.2024.30.2.273
+**DOI**: 10.1007/s44174-023-00113-9
+**URL**: https://doi.org/10.1007/s44174-023-00113-9
 
-#### 25. Transforming Healthcare with Artificial Intelligence: Innovations, Applications, and Future Challenges
-**Authors**: Rahman
-**Year**: 2022
-**DOI**: 10.25163/primeasia.319802
-**URL**: https://doi.org/10.25163/primeasia.319802
+#### 13. Venture Capital Investment Decisions in Artificial Intelligence: Opportunities, Trends, and Challenges
+**Authors**: Du
+**Year**: 2024
+**DOI**: 10.54254/2754-1169/2024.ga18968
+**URL**: https://doi.org/10.54254/2754-1169/2024.ga18968
 
-#### 26. Accessible and Adaptable Faculty Development to Support Curriculum Reform in Medical Education.
+#### 14. The Use of AI in Enhancing Cybersecurity and Personal Data Protection in the Oman Healthcare System
+**Authors**: Hasani
+**Year**: 2024
+**DOI**: 10.1109/ICoCSIM65098.2024.00039
+**URL**: https://doi.org/10.1109/ICoCSIM65098.2024.00039
+
+#### 15. Accessible and Adaptable Faculty Development to Support Curriculum Reform in Medical Education.
 **Authors**: Schaik
 **Year**: 2020
 **DOI**: 10.1097/ACM.0000000000003804
 **URL**: https://doi.org/10.1097/ACM.0000000000003804
 
-#### 27. Precision Nutrition: Leveraging Machine Learning for Personalized Dietary Recommendations and Health Outcomes
-**Authors**: Rojanaphan
+#### 16. Blockchain-Enabled Security Solutions for Medical Device Integrity and Provenance in Cloud Environments
+**Authors**: Akinola, Akinola, Oyekan, Oyerinde, Adebiyi, Sulaimon
 **Year**: 2024
-**DOI**: 10.18535/ijsrm/v12i11.ec08
-**URL**: https://doi.org/10.18535/ijsrm/v12i11.ec08
+**DOI**: 10.38124/ijisrt/ijisrt24apr225
+**URL**: https://doi.org/10.38124/ijisrt/ijisrt24apr225
 
-#### 28. Establishing methodological standards for the development of artificial intelligence-based Clinical Decision Support in emergency medicine
-**Authors**: Kareemi, Li, Rajaram, Holodinsky, Hall, Grant, Goel, Hayward, Mehta, Ben-Yakov, Pelletier, Scheuermeyer, Ho
-**Year**: 2025
-**DOI**: 10.1007/s43678-024-00826-w
-**URL**: https://doi.org/10.1007/s43678-024-00826-w
-
-#### 29. Interests and Side Effects in the Technicization of Geriatric Care
-**Authors**: Hergesell, Maibaum
-**Year**: 2018
-**DOI**: 10.1007/978-3-030-01836-8_16
-**URL**: https://doi.org/10.1007/978-3-030-01836-8_16
-
-#### 30. Enhancing Equitable Access to Rare Disease Diagnosis and Treatment around the World: A Review of Evidence, Policies, and Challenges
-**Authors**: Adachi, El-Hattab, Jain, Crespo, Lazo, Scarpa, Summar, Wattanasirichaigoon
-**Year**: 2023
-**DOI**: 10.3390/ijerph20064732
-**URL**: https://doi.org/10.3390/ijerph20064732
-
-#### 31. Leveraging Artificial Intelligence for Enhanced Efficiency in Clinical Trial Budgeting and Grant Optimization
-**Authors**: Mutharaju
-**Year**: 2025
-**DOI**: 10.32996/jcsts.2025.7.8.11
-**URL**: https://doi.org/10.32996/jcsts.2025.7.8.11
-
-#### 32. AI-driven digital merchandising: Optimizing retail healthcare platforms for improved patient outcomes
-**Authors**: Babalola
-**Year**: 2025
-**DOI**: 10.30574/ijsra.2025.15.2.1180
-**URL**: https://doi.org/10.30574/ijsra.2025.15.2.1180
-
-#### 33. Integrating NLP into Radiation Oncology: A Practical Guide to Transformer Architecture and Large Language Models
-**Authors**: Mohammadi, Ghassemi, Verdecchia, Ghanem, Luo, Chetty, Bagher-Ebadian, Siddiqui, Elshaikh, Movsas, Thind
-**Year**: 2025
-**DOI**: 10.1093/bjrai/ubaf010
-**URL**: https://doi.org/10.1093/bjrai/ubaf010
-
-#### 34. Measuring and optimizing the spatial accessibility of primary health care in remote and rural areas: a case study of Liannan Yao Autonomous County in China
-**Authors**: Liu, Chen, Xiang, Zhong, Zhou, Xiao, Wang, Sun
+#### 17. Application of deep learning methods for automated analysis of retinal structures in ophthalmology
+**Authors**: Kassymova, Konyrkhanova, Issembayeva, Saimanova, Saltayev, Ongarbayeva, Issakova
 **Year**: 2024
-**DOI**: 10.1186/s12913-024-11556-1
-**URL**: https://doi.org/10.1186/s12913-024-11556-1
+**DOI**: 10.11591/ijece.v14i2.pp1987-1995
+**URL**: https://doi.org/10.11591/ijece.v14i2.pp1987-1995
 
-#### 35. Utilizing Artificial Intelligence (AI) in Healthcare Insurance to Transform Risk Assessment, Claims Processing, and Fraud Detection
-**Authors**: Kumar
-**Year**: 2024
-**DOI**: 10.55041/isjem01324
-**URL**: https://doi.org/10.55041/isjem01324
-
-#### 36. Reconciling privacy and accuracy in AI for medical imaging
-**Authors**: Ziller, Mueller, Stieger, Feiner, Brandt, Braren, Rueckert, Kaissis
-**Year**: 2024
-**DOI**: 10.1038/s42256-024-00858-y
-**URL**: https://doi.org/10.1038/s42256-024-00858-y
-
-#### 37. Do Regulatory Factors Explain China’s Increasing Attractivity for Medical Device Development? A Comparison of the EU and Chinese Medical Device Landscapes
-**Authors**: Su, Li, Yao, Quinn
-**Year**: 2025
-**DOI**: 10.1017/err.2025.10063
-**URL**: https://doi.org/10.1017/err.2025.10063
-
-#### 38. Development and Evaluation of the DMIND Questionnaire: Preparing for AI Integration into an Effective Depression Screening Tool
-**Authors**: Hemrungrojn, Saengsai, Jakkrawankult, Kiattiporn-Opas, Chaichareenon, Amrapala, Lapanan, Hengprapom, Hiransuthikul, Achakulvisut, Nupairoj, Phutrakool, Yodlorchai, Vateekul
-**Year**: 2024
-**DOI**: 10.1101/2024.06.07.24308625
-**URL**: https://doi.org/10.1101/2024.06.07.24308625
-
-#### 39. QualDash: Adaptable Generation of Visualisation Dashboards for Healthcare Quality Improvement
-**Authors**: Elshehaly, Randell, Brehmer, Mcvey, Alvarado, Gale, Ruddle
-**Year**: 2020
-**DOI**: 10.1109/TVCG.2020.3030424
-**URL**: https://doi.org/10.1109/TVCG.2020.3030424
-
-#### 40. Artificial intelligence in neuro-oncology: advances and challenges in brain tumor diagnosis, prognosis, and precision treatment
-**Authors**: Khalighi, Reddy, Midya, Pandav, Madabhushi, Abedalthagafi
-**Year**: 2024
-**DOI**: 10.1038/s41698-024-00575-0
-**URL**: https://doi.org/10.1038/s41698-024-00575-0
-
-#### 41. Impact of Primary Health Care Data Quality on Infectious Disease Surveillance in Brazil: Case Study
-**Authors**: Florentino, Junior, Barbosa, Cerqueira-Silva, Oliveira, Garcia, Penna, Boaventura, Ramos, Barral-Netto, Marcilio
-**Year**: 2024
-**DOI**: 10.2196/67050
-**URL**: https://doi.org/10.2196/67050
-
-#### 42. Future horizons in diabetes: integrating AI and personalized care
-**Authors**: Zhang, Qi, Wang, Tian, Wang, Xu, Zhai
-**Year**: 2025
-**DOI**: 10.3389/fendo.2025.1583227
-**URL**: https://doi.org/10.3389/fendo.2025.1583227
-
-#### 43. AI in Pathology: What could possibly go wrong?
-**Authors**: Nakagawa, Moukheiber, Celi, Patel, Mahmood, Gondim, Hogarth, Levenson
-**Year**: 2023
-**DOI**: 10.1053/j.semdp.2023.02.006
-**URL**: https://doi.org/10.1053/j.semdp.2023.02.006
-
-#### 44. Ethical Implications of AI in Neuroscience-Discussing the Challenges and Responsibilities of using AI in Brain Disease Research
-**Authors**: Merlin, Siby, Abraham, Biji, Joseph
-**Year**: 2024
-**DOI**: 10.47392/irjaem.2024.0531
-**URL**: https://doi.org/10.47392/irjaem.2024.0531
-
-#### 45. Inpatients’ Experiences with Pharmacist-Led Pain Management Programs: Exploring Patients’ Perspectives on the Effectiveness and Impact of Pharmacist-Managed Pain Management Plans During Their Hospital Stay
-**Authors**: Helman, Alrufaiq, Alsahli, Alzahrani
-**Year**: 2024
-**DOI**: 10.37082/ijirmps.v12.i2.230813
-**URL**: https://doi.org/10.37082/ijirmps.v12.i2.230813
-
-#### 46. AI-Driven Innovations in Healthcare: Bridging Imaging and Genomics for Advanced Disease Insights
-**Authors**: Adornetto, Bruno, Calimeri, Rose, Greco, Quarta
+#### 18. Zogala D. Artificial intelligence in medical imaging.
+**Authors**: Zogala
 **Year**: 2024
 **DOI**: 
-**URL**: https://www.semanticscholar.org/paper/c37659a4bcd0d36205144bffd707707ef49e51ab
+**URL**: https://www.semanticscholar.org/paper/1215194e6236774aa92bb1d34ef06c2b69550e39
 
-#### 47. Synergy between artificial intelligence and precision medicine for computer-assisted oral and maxillofacial surgical planning
-**Authors**: Shujaat, Riaz, Jacobs
-**Year**: 2022
-**DOI**: 10.1007/s00784-022-04706-4
-**URL**: https://doi.org/10.1007/s00784-022-04706-4
+#### 19. Digital pathology and image analysis of p53 biomarker in lymphomas using two algorithms: correlation with genotype and visual inspection
+**Authors**: Naik, Kanzaria, Chen, Kaur, Ho, Smith, Gopal, Shadman, Naresh
+**Year**: 2025
+**DOI**: 10.1136/jcp-2025-210280
+**URL**: https://doi.org/10.1136/jcp-2025-210280
 
-#### 48. The impact of AI-based decision support systems on nursing workflows in critical care units.
-**Authors**: Almagharbeh
+#### 20. Assessment of Icu Admission and Length of Intensive Care Unit Stay in Acute Medical Presentations to the Emergency Department Using the Rapid Emergency Medicine Score (Rems)
+**Authors**: Sivakumar, R, J, Ramakrishnan
+**Year**: 2025
+**DOI**: 10.64252/01yvxf26
+**URL**: https://doi.org/10.64252/01yvxf26
+
+#### 21. Artificial Intelligence and Patient Support Models for Enhanced Chronic Disease Management and Adherence
+**Authors**: Anthony
+**Year**: 2025
+**DOI**: 10.54660/ijfei.2025.2.5.65-82
+**URL**: https://doi.org/10.54660/ijfei.2025.2.5.65-82
+
+#### 22. Practical Design and Benchmarking of Generative AI Applications for Surgical Billing and Coding
+**Authors**: Rollman, Rogers, Zaribafzadeh, Buckland, Rogers, Gagnon, Meireles, Jennings, Bennett, Nicholson, Lad, Cendales, Seas, Martinino, Hwang, Kirk
+**Year**: 2025
+**DOI**: 10.48550/arXiv.2501.05479
+**URL**: https://doi.org/10.48550/arXiv.2501.05479
+
+#### 23. Patents vs. Patients: Prioritizing Equitable Access Over Intellectual Property Rights
+**Authors**: Aiyer, Ratnani, Surani
+**Year**: 2025
+**DOI**: 10.71189/jim/2025/v01n02a01
+**URL**: https://doi.org/10.71189/jim/2025/v01n02a01
+
+#### 24. Robotics and AI into healthcare from the perspective of European regulation: who is responsible for medical malpractice?
+**Authors**: Micco, Grassi, Tomassini, Palma, Ricchezze, Scendoni
 **Year**: 2024
-**DOI**: 10.1111/inr.13011
-**URL**: https://doi.org/10.1111/inr.13011
+**DOI**: 10.3389/fmed.2024.1428504
+**URL**: https://doi.org/10.3389/fmed.2024.1428504
 
-#### 49. Evaluation of a Game-Based Mechatronic Device for Rehabilitation of Hand-Arm Function in Children With Cerebral Palsy: Feasibility Randomized Controlled Trial
-**Authors**: Peramalaiah, Parmar, Sepehri, Muthukumarana, Kanitkar, Hin, Szturm
-**Year**: 2024
-**DOI**: 10.2196/65358
-**URL**: https://doi.org/10.2196/65358
+### From Gemini Grounded (26 citations)
 
-#### 50. Nutrition in Wound Care Management: A Comprehensive Overview.
-**Authors**: Quain, Khardori
-**Year**: 2015
-**DOI**: 
-**URL**: https://www.semanticscholar.org/paper/b9e53ab9ce132379dcd8c464067cc7fe4afed600
-
-#### 51. Demand response-fuzzy inference system controller in the multi-objective optimization design of a photovoltaic/wind turbine/battery/supercapacitor and diesel system: Case of healthcare facility
-**Authors**: Megaptche, Musau, Tjahè, Kim, Waita, Aduda
-**Year**: 2023
-**DOI**: 10.1016/j.enconman.2023.117245
-**URL**: https://doi.org/10.1016/j.enconman.2023.117245
-
-#### 52. Exploring the dynamics of ultrasound training in medical education: current trends, debates, and approaches to didactics and hands-on learning
-**Authors**: Recker, Neubauer, Dong, Gschmack, Jenssen, Moeller, Blaivas, Ignacio, Lucius, Ruppert, Sänger, Șirli, Weimer, Westerway, Zervides, Dietrich
-**Year**: 2024
-**DOI**: 10.1186/s12909-024-06092-9
-**URL**: https://doi.org/10.1186/s12909-024-06092-9
-
-#### 53. Public Health Crisis Management and Emergency Preparedness: Strengthening Healthcare Infrastructure against Pandemics and Bioterrorism Threats
-**Authors**: Soyege, Nwokedi, Tomoh, Mustapha, Mbata, Balogun, Forkuo, Imohiosen
-**Year**: 2024
-**DOI**: 10.54660/.ijfmr.2024.5.2.52-68
-**URL**: https://doi.org/10.54660/.ijfmr.2024.5.2.52-68
-
-#### 54. AI in Communication: Theoretical Perspectives, Ethical Implications, and Emerging Competencies
-**Authors**: Mirek-Rogowska, Kucza, Gajdka
-**Year**: 2024
-**DOI**: 10.34135/communicationtoday.2024.vol.15.no.2.2
-**URL**: https://doi.org/10.34135/communicationtoday.2024.vol.15.no.2.2
-
-#### 55. Assessing the challenges to medical waste management during the COVID-19 pandemic: Implications for the environmental sustainability in the emerging economies
-**Authors**: Tushar, Alam, Bari, Karmaker
-**Year**: 2023
-**DOI**: 10.1016/j.seps.2023.101513
-**URL**: https://doi.org/10.1016/j.seps.2023.101513
-
-### From Gemini Grounded (27 citations)
-
-#### 1. Source
-**Authors**: mckinsey.com
-**Year**: 2025
-**DOI**: 
-**URL**: https://www.mckinsey.com/industries/healthcare/our-insights/generative-ai-in-healthcare-current-trends-and-future-outlook
-
-#### 2. persivia.com
-**Authors**: persivia.com
-**Year**: 2025
-**DOI**: 
-**URL**: https://persivia.com/gartners-prediction-for-ai-in-healthcare-2024/
-
-#### 3. aihealthcarecompliance.com
-**Authors**: aihealthcarecompliance.com
-**Year**: 2025
-**DOI**: 
-**URL**: https://aihealthcarecompliance.com/resources/applicable-laws/oecd-ai-principles/
-
-#### 4. who.int
-**Authors**: who.int
-**Year**: 2025
-**DOI**: 
-**URL**: https://www.who.int/publications/i/item/9789240029200
-
-#### 5. bcg.com
-**Authors**: web-assets.bcg.com
-**Year**: 2025
-**DOI**: 
-**URL**: https://web-assets.bcg.com/8c/f8/ae51ffb44ca59cb8abd751940441/bcg-how-digital-and-ai-solutions-will-reshape-health-care-in-2025.pdf
-
-#### 6. europa.eu
-**Authors**: health.ec.europa.eu
-**Year**: 2025
-**DOI**: 
-**URL**: https://health.ec.europa.eu/ehealth-digital-health-and-care/artificial-intelligence-healthcare_en
-
-#### 7. nist.gov
-**Authors**: nist.gov
-**Year**: 2025
-**DOI**: 
-**URL**: https://www.nist.gov/itl/ssd/systems-interoperability-group/health-it-testing-infrastructure/health-it-testing-1
-
-#### 8. ieee.org
-**Authors**: ieeexplore.ieee.org
-**Year**: 2025
-**DOI**: 
-**URL**: https://ieeexplore.ieee.org/document/10549909
-
-#### 9. nih.gov
+#### 1. nih.gov
 **Authors**: pmc.ncbi.nlm.nih.gov
 **Year**: 2025
 **DOI**: 
-**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC10804900/
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC12274247/
 
-#### 10. arxiv.org
-**Authors**: arxiv.org
+#### 2. Unveiling the Influence of AI Predictive Analytics on Patient Outcomes: A Comprehensive Narrative Review
+**Authors**: D, i, x, o, n,  , e, t,  , a, l, .
+**Year**: 2024
+**DOI**: 10.7759/cureus.59954
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC11161909/
+
+#### 3. acs.org
+**Authors**: pubs.acs.org
 **Year**: 2025
 **DOI**: 
-**URL**: https://arxiv.org/pdf/2501.01639
+**URL**: https://pubs.acs.org/doi/10.1021/acsomega.5c00549
 
-#### 11. fda.gov
-**Authors**: fda.gov
+#### 4. AI Quality Standards in Health Care: Rapid Umbrella Review
+**Authors**: K, u, z, i, e, m, s, k, y,  , e, t,  , a, l, .
+**Year**: 2024
+**DOI**: 10.2196/54705
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC11153979/
+
+#### 5. Artificial intelligence (AI) in personalized medicine: AI-generated personalized therapy regimens based on genetic and medical history: short communication
+**Authors**: P, a, r, e, k, h,  , e, t,  , a, l, .
+**Year**: 2023
+**DOI**: 10.1097/MS9.0000000000001320
+**URL**: https://pubmed.ncbi.nlm.nih.gov/37915639/
+
+#### 6. counseling.org
+**Authors**: counseling.org
 **Year**: 2025
 **DOI**: 
-**URL**: https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-software-medical-device
+**URL**: https://www.counseling.org/resources/research-reports/artificial-intelligence-counseling
 
-#### 12. brookings.edu
-**Authors**: brookings.edu
+#### 7. Systematic review of cost effectiveness and budget impact of artificial intelligence in healthcare
+**Authors**: E, l,  , e, t,  , a, l, .
+**Year**: 2025
+**DOI**: 10.1038/s41746-025-01722-y
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC12381244/
+
+#### 8. Artificial Intelligence and Healthcare: A Journey through History, Present Innovations, and Future Possibilities
+**Authors**: H, i, r, a, n, i,  , e, t,  , a, l, .
+**Year**: 2024
+**DOI**: 10.3390/life14050557
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC11122160/
+
+#### 9. imc.ac.at
+**Authors**: research.imc.ac.at
 **Year**: 2025
 **DOI**: 
-**URL**: https://www.brookings.edu/articles/generative-ai-in-health-care-opportunities-challenges-and-policy/
+**URL**: https://research.imc.ac.at/en/publications/hype-cycle-assessment-of-ai-applications-in-the-public-healthcare/
 
-#### 13. europa.eu
-**Authors**: ema.europa.eu
+#### 10. skywork.ai
+**Authors**: skywork.ai
 **Year**: 2025
 **DOI**: 
-**URL**: https://www.ema.europa.eu/en/about-us/how-we-work/data-regulation-big-data-other-sources/artificial-intelligence
+**URL**: https://skywork.ai/skypage/en/The-AI-Job-Boom:-Growth,-Trends,-and-Future-Projections-for-the-U.S.-Labor-Market/1950091780397285376
 
-#### 14. rand.org
+#### 11. pwc.com
+**Authors**: pwc.com
+**Year**: 2025
+**DOI**: 
+**URL**: https://www.pwc.com/us/en/industries/health-industries/library/ai-and-healthcare-emerging-technologies.html
+
+#### 12. mayoclinicplatform.org
+**Authors**: mayoclinicplatform.org
+**Year**: 2025
+**DOI**: 
+**URL**: https://www.mayoclinicplatform.org/2023/02/14/nist-provides-much-needed-ai-guardrails/
+
+#### 13. rand.org
 **Authors**: rand.org
 **Year**: 2025
 **DOI**: 
 **URL**: https://www.rand.org/pubs/research_reports/RRA3888-1.html
 
-#### 15. intertek.com
-**Authors**: assuranceinaction.intertek.com
+#### 14. ardengemcsu.nhs.uk
+**Authors**: ardengemcsu.nhs.uk
 **Year**: 2025
 **DOI**: 
-**URL**: https://assuranceinaction.intertek.com/post/102l0gy/iso-42001-the-medical-sector-where-innovation-meets-trust
+**URL**: https://www.ardengemcsu.nhs.uk/showcase/news-events/news-events/evaluation-report-launched-for-the-nhs-ai-lab/
 
-#### 16. nih.gov
-**Authors**: pmc.ncbi.nlm.nih.gov
+#### 15. bmj.com
+**Authors**: bmj.com
 **Year**: 2025
 **DOI**: 
-**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC11393514/
+**URL**: https://www.bmj.com/content/387/bmj.q2194.full.pdf
 
-#### 17. who.int
+#### 16. Quantum Computing in Medicine
+**Authors**: C, h, o, w
+**Year**: 2024
+**DOI**: 10.3390/medsci12040067
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC11586987/
+
+#### 17. futurehealthcaretoday.com
+**Authors**: futurehealthcaretoday.com
+**Year**: 2025
+**DOI**: 
+**URL**: https://futurehealthcaretoday.com/a-guide-to-ai-in-healthcare-resource-management-from-burnout-to-efficiency/
+
+#### 18. researchgate.net
+**Authors**: researchgate.net
+**Year**: 2025
+**DOI**: 
+**URL**: https://www.researchgate.net/publication/385280599_A_prospective_multicenter_randomized_controlled_trial_on_artificial_intelligence_assisted_colonoscopy_for_enhanced_polyp_detection
+
+#### 19. Using AI in Optimizing Oral and Dental Diagnoses—A Narrative Review
+**Authors**: S, u, r, d, u,  , e, t,  , a, l, .
+**Year**: 2024
+**DOI**: 10.3390/diagnostics14242804
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC11674583/
+
+#### 20. eurekalert.org
+**Authors**: eurekalert.org
+**Year**: 2025
+**DOI**: 
+**URL**: https://www.eurekalert.org/news-releases/1070834
+
+#### 21. Artificial intelligence in pharmacovigilance: a narrative review and practical experience with an expert-defined Bayesian network tool
+**Authors**: A, l, g, a, r, v, i, o,  , e, t,  , a, l, .
+**Year**: 2025
+**DOI**: 10.1007/s11096-025-01975-3
+**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC12335403/
+
+#### 22. openaccessgovernment.org
+**Authors**: openaccessgovernment.org
+**Year**: 2025
+**DOI**: 
+**URL**: https://www.openaccessgovernment.org/ai-health-startups-drive-europes-push-for-healthcare-innovation/197101/
+
+#### 23. contemporaryhealth.co.uk
+**Authors**: contemporaryhealth.co.uk
+**Year**: 2025
+**DOI**: 
+**URL**: https://www.contemporaryhealth.co.uk/digital-health/healthcare-ai-drives-nearly-4-billion-in-venture-funding-powering-digital-healths-strong-momentum-in-2025/
+
+#### 24. who.int
 **Authors**: who.int
 **Year**: 2025
 **DOI**: 
-**URL**: https://www.who.int/teams/digital-health-and-innovation/harnessing-artificial-intelligence-for-health
+**URL**: https://www.who.int/news/item/18-01-2024-who-releases-ai-ethics-and-governance-guidance-for-large-multi-modal-models
 
-#### 18. menlovc.com
-**Authors**: menlovc.com
+#### 25. wipo.int
+**Authors**: wipo.int
 **Year**: 2025
 **DOI**: 
-**URL**: https://menlovc.com/perspective/2025-the-state-of-ai-in-healthcare/
+**URL**: https://www.wipo.int/en/web/global-health/w/news/2023/news_0021
 
-#### 19. nih.gov
-**Authors**: commonfund.nih.gov
+#### 26. semanticscholar.org
+**Authors**: semanticscholar.org
 **Year**: 2025
 **DOI**: 
-**URL**: https://commonfund.nih.gov/bridge2ai
+**URL**: https://www.semanticscholar.org/paper/Healthcare-Data-Governance%2C-Privacy%2C-and-Security-A-Faridoon-Kechadi/a00a4609e5c350a2ff21aa9c4e555d4a603c672e
 
-#### 20. mdpi.com
-**Authors**: mdpi.com
-**Year**: 2025
-**DOI**: 
-**URL**: https://www.mdpi.com/2227-9032/13/18/2340
+---
 
-#### 21. ijsr.net
-**Authors**: ijsr.net
-**Year**: 2025
-**DOI**: 
-**URL**: https://www.ijsr.net/archive/v13i2/SR24201070211.pdf
+## Failed Topics
 
-#### 22. udel.edu
-**Authors**: udspace.udel.edu
-**Year**: 2025
-**DOI**: 
-**URL**: https://udspace.udel.edu/items/b2011659-e067-40c6-b03e-5dc61c55aa9d
+The following topics did not return valid citations:
 
-#### 23. nih.gov
-**Authors**: pmc.ncbi.nlm.nih.gov
-**Year**: 2025
-**DOI**: 
-**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC12400513/
-
-#### 24. nih.gov
-**Authors**: pmc.ncbi.nlm.nih.gov
-**Year**: 2025
-**DOI**: 
-**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC9615212/
-
-#### 25. ophthalmology24.com
-**Authors**: ophthalmology24.com
-**Year**: 2025
-**DOI**: 
-**URL**: https://www.ophthalmology24.com/ai-in-ophthalmology
-
-#### 26. frontiersin.org
-**Authors**: frontiersin.org
-**Year**: 2025
-**DOI**: 
-**URL**: https://www.frontiersin.org/journals/medicine/articles/10.3389/fmed.2024.1331895/full
-
-#### 27. nih.gov
-**Authors**: pmc.ncbi.nlm.nih.gov
-**Year**: 2025
-**DOI**: 
-**URL**: https://pmc.ncbi.nlm.nih.gov/articles/PMC11185868/
+- "AI in healthcare" McKinsey report
+- "AI in healthcare explainability transparency" black box problem
+- "AI in healthcare regulatory sandboxes" innovation policy
+- "AI in healthcare international collaboration" global initiatives

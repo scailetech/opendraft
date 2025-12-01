@@ -1,0 +1,330 @@
+{
+  "stats": {
+    "total_original": 60,
+    "total_filtered": 43,
+    "total_removed": 17,
+    "removal_reasons": {
+      "invalid_url": 9,
+      "invalid_metadata": 2,
+      "invalid_author": 6
+    }
+  },
+  "removed_citations": [
+    {
+      "citation": {
+        "id": "cite_001",
+        "authors": [
+          "Masukume"
+        ],
+        "year": 2020,
+        "title": "Why and how medical schools, peer-reviewed journals, and research funders should promote Wikipedia editing",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Studies in Higher Education",
+        "publisher": "Informa UK Limited",
+        "volume": "45",
+        "issue": "5",
+        "pages": "984-989",
+        "doi": "10.1080/03075079.2020.1749796",
+        "url": "https://doi.org/10.1080/03075079.2020.1749796",
+        "api_source": "Crossref"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1080/03075079.2020.1749796",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_008",
+        "authors": [
+          "Quy",
+          "Thanh",
+          "Chehri",
+          "Linh",
+          "Tuan"
+        ],
+        "year": 2023,
+        "title": "AI and Digital Transformation in Higher Education: Vision and Approach of a Specific University in Vietnam",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Sustainability",
+        "doi": "10.3390/su151411093",
+        "url": "https://doi.org/10.3390/su151411093",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/su151411093",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_009",
+        "authors": [
+          "Blair"
+        ],
+        "year": 2017,
+        "title": "Understanding first-year students’ transition to university: A pilot study with implications for student engagement, assessment, and feedback",
+        "source_type": "journal",
+        "language": "english",
+        "doi": "10.1177/0263395716633904",
+        "url": "https://doi.org/10.1177/0263395716633904",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1177/0263395716633904",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_017",
+        "authors": [
+          "Adewojo",
+          "Olatunji",
+          "Olalere"
+        ],
+        "year": 2025,
+        "title": "Effects of AI-driven tools on reference services and staff roles in academic libraries",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Reference Services Review",
+        "doi": "10.1108/rsr-02-2025-0008",
+        "url": "https://doi.org/10.1108/rsr-02-2025-0008",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/rsr-02-2025-0008",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_022",
+        "authors": [
+          "Asad",
+          "Ajaz"
+        ],
+        "year": 2024,
+        "title": "Impact of ChatGPT and generative AI on lifelong learning and upskilling learners in higher education: unveiling the challenges and opportunities globally",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "The international journal of information and learning technology",
+        "doi": "10.1108/ijilt-06-2024-0103",
+        "url": "https://doi.org/10.1108/ijilt-06-2024-0103",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/ijilt-06-2024-0103",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_023",
+        "authors": [
+          "Amjad",
+          "Aslam",
+          "Tabassum",
+          "Sial",
+          "Shafqat"
+        ],
+        "year": 2024,
+        "title": "Digital Equity and Accessibility in Higher Education: Reaching the Unreached",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "European Journal of Education",
+        "doi": "10.1111/ejed.12795",
+        "url": "https://doi.org/10.1111/ejed.12795",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1111/ejed.12795",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_025",
+        "authors": [
+          "Suleiman",
+          "Akanbi",
+          "Ibrahim",
+          "Emeruem"
+        ],
+        "year": 2025,
+        "title": "Stakeholders' Views on Ai-Powered Chatbots for Enhancing Student Support Services in Nigerian Universities: A Case Study of Al-Hikmah University",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Journal of Management Matters",
+        "doi": "10.4038/jmm.v11i2.74",
+        "url": "https://doi.org/10.4038/jmm.v11i2.74",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL contains error keyword: 'https://doi.org/10.4038/jmm.v11i2.74'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_026",
+        "authors": [
+          "Wu",
+          "Zhang",
+          "Carroll"
+        ],
+        "year": 2024,
+        "title": "AI Governance in Higher Education: Case Studies of Guidance at Big Ten Universities",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Future Internet",
+        "doi": "10.3390/fi16100354",
+        "url": "https://doi.org/10.3390/fi16100354",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.3390/fi16100354",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_027",
+        "authors": [
+          "library.educause.edu"
+        ],
+        "year": 2025,
+        "title": "educause.edu",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://library.educause.edu/resources/2024/4/higher-education-generative-ai-readiness-assessment",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'educause.edu'",
+      "issues": 3
+    },
+    {
+      "citation": {
+        "id": "cite_030",
+        "authors": [
+          "mdpi.com"
+        ],
+        "year": 2025,
+        "title": "mdpi.com",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.mdpi.com/2076-3417/15/15/8679",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'mdpi.com'",
+      "issues": 4
+    },
+    {
+      "citation": {
+        "id": "cite_037",
+        "authors": [
+          "weforum.org"
+        ],
+        "year": 2025,
+        "title": "weforum.org",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.weforum.org/videos/reskilling-revolution-ai-education-4-0/",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'weforum.org'",
+      "issues": 4
+    },
+    {
+      "citation": {
+        "id": "cite_039",
+        "authors": [
+          "rand.edu"
+        ],
+        "year": 2025,
+        "title": "rand.edu",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.rand.edu/research-impact/policy-areas/science-technology-innovation.html",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'rand.edu'",
+      "issues": 4
+    },
+    {
+      "citation": {
+        "id": "cite_042",
+        "authors": [
+          "educ-ai-tion.eu"
+        ],
+        "year": 2025,
+        "title": "educ-ai-tion.eu",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://educ-ai-tion.eu/educaitionpolicy/ai-in-education-guidance-for-policy-makers-unesco-2021/",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Author duplicates title: 'educ-ai-tion.eu'",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_043",
+        "authors": [
+          "pwc.com"
+        ],
+        "year": 2025,
+        "title": "pwc.com",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://www.pwc.com/gx/en/issues/technology/next-tech-agenda/learning-ai-driven-world.html",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "Domain name as title: 'pwc.com'",
+      "issues": 3
+    },
+    {
+      "citation": {
+        "id": "cite_045",
+        "authors": [
+          "vertexaisearch.cloud.google.com"
+        ],
+        "year": 2025,
+        "title": "Source",
+        "source_type": "website",
+        "language": "english",
+        "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEdHrGR6cuyStuX7m8z1RM_0hIof9Cw_fnUZISazwBywfRA8fGlH2868e14NWYrf_yuGBej68RIQVmARO3TOLE3xxU0QaartxuFfssKptXxwXPnyJ-MRyepNavfDfZ931tmiyxuS_fuuKCE4vVWdmWTcIbQkAz0UjnPrZjLW6L3X72o6RK8BXg3BX-6omAYMFUm08dSK2sOId7mmCBFYfcnMJe8qM_p6p3oFngUljWgGhkOXhhlgXy-S8w==%5D(https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEdHrGR6cuyStuX7m8z1RM_0hIof9Cw_fnUZISazwBywfRA8fGlH2868e14NWYrf_yuGBej68RIQVmARO3TOLE3xxU0QaartxuFfssKptXxwXPnyJ-MRyepNavfDfZ931tmiyxuS_fuuKCE4vVWdmWTcIbQkAz0UjnPrZjLW6L3X72o6RK8BXg3BX-6omAYMFUm08dSK2sOId7mmCBFYfcnMJe8qM_p6p3oFngUljWgGhkOXhhlgXy-S8w==",
+        "api_source": "Gemini Grounded"
+      },
+      "reason": "URL returns HTTP 404: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEdHrGR6cuyStuX7m8z1RM_0hIof9Cw_fnUZISazwBywfRA8fGlH2868e14NWYrf_yuGBej68RIQVmARO3TOLE3xxU0QaartxuFfssKptXxwXPnyJ-MRyepNavfDfZ931tmiyxuS_fuuKCE4vVWdmWTcIbQkAz0UjnPrZjLW6L3X72o6RK8BXg3BX-6omAYMFUm08dSK2sOId7mmCBFYfcnMJe8qM_p6p3oFngUljWgGhkOXhhlgXy-S8w==%5D(https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEdHrGR6cuyStuX7m8z1RM_0hIof9Cw_fnUZISazwBywfRA8fGlH2868e14NWYrf_yuGBej68RIQVmARO3TOLE3xxU0QaartxuFfssKptXxwXPnyJ-MRyepNavfDfZ931tmiyxuS_fuuKCE4vVWdmWTcIbQkAz0UjnPrZjLW6L3X72o6RK8BXg3BX-6omAYMFUm08dSK2sOId7mmCBFYfcnMJe8qM_p6p3oFngUljWgGhkOXhhlgXy-S8w==",
+      "issues": 2
+    },
+    {
+      "citation": {
+        "id": "cite_053",
+        "authors": [
+          "Moore",
+          "Lookadoo"
+        ],
+        "year": 2024,
+        "title": "Communicating Clear Guidance: Advice for Generative AI Policy Development in Higher Education",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Business and Professional Communication Quarterly",
+        "doi": "10.1177/23294906241254786",
+        "url": "https://doi.org/10.1177/23294906241254786",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1177/23294906241254786",
+      "issues": 1
+    },
+    {
+      "citation": {
+        "id": "cite_055",
+        "authors": [
+          "Ashraf",
+          "Ratan",
+          "Amir",
+          "Joarder",
+          "Osman"
+        ],
+        "year": 2024,
+        "title": "Faculty perspectives on accreditation, academic freedom and quality learning in private higher education institutes: empirical evidence",
+        "source_type": "journal",
+        "language": "english",
+        "journal": "Quality Assurance in Education",
+        "doi": "10.1108/qae-12-2023-0200",
+        "url": "https://doi.org/10.1108/qae-12-2023-0200",
+        "api_source": "Semantic Scholar"
+      },
+      "reason": "URL returns HTTP 403: https://doi.org/10.1108/qae-12-2023-0200",
+      "issues": 1
+    }
+  ]
+}

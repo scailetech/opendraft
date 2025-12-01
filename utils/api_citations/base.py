@@ -6,11 +6,54 @@ ABOUTME: Provides production-grade HTTP request infrastructure for academic APIs
 
 import time
 import logging
+import random
 import requests
 from typing import Optional, Dict, Any
 from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
+
+# Browser User-Agent pool for rotation (reduces rate limiting)
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+]
+
+# Optional proxy configuration (set via environment or directly)
+# Format: "host:port:username:password" or "host:port" for unauthenticated
+# Example: PROXY_LIST = ["geo.iproyal.com:12321:user:pass"]
+PROXY_LIST: list = [
+    # Webshare datacenter proxies (30% success rate)
+    "***REMOVED***",
+    "***REMOVED***",
+    "***REMOVED***",
+    # IPRoyal rotating residential (higher success, use sparingly)
+    "***REMOVED***",
+]
+
+def parse_proxy(proxy_str: str) -> dict:
+    """Parse proxy string to requests-compatible dict."""
+    parts = proxy_str.split(":")
+    if len(parts) == 4:
+        host, port, user, password = parts
+        proxy_url = f"http://{user}:{password}@{host}:{port}"
+    elif len(parts) == 2:
+        host, port = parts
+        proxy_url = f"http://{host}:{port}"
+    else:
+        return {}
+    return {"http": proxy_url, "https": proxy_url}
+
+# Standard browser headers
+BROWSER_HEADERS = {
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+}
 
 
 class BaseAPIClient(ABC):
@@ -54,7 +97,8 @@ class BaseAPIClient(ABC):
 
         # Session for connection pooling
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": "OpenDraft/1.3 (https://github.com/federicodeponte/opendraft)"})
+        # Apply browser headers (User-Agent rotated per request)
+        self.session.headers.update(BROWSER_HEADERS)
 
     def _rate_limit_wait(self) -> None:
         """Wait if necessary to respect rate limit."""
@@ -97,12 +141,17 @@ class BaseAPIClient(ABC):
                 # Make request
                 logger.debug(f"Request: {method} {url} (attempt {attempt + 1}/{self.max_retries})")
 
+                # Rotate User-Agent for each request to avoid rate limiting
+                headers = {"User-Agent": random.choice(USER_AGENTS)}
+                
                 response = self.session.request(
                     method=method,
                     url=url,
                     params=params,
                     json=json_data,
+                    headers=headers,
                     timeout=self.timeout,
+                    proxies=parse_proxy(random.choice(PROXY_LIST)) if PROXY_LIST else None,
                 )
 
                 # Check status code

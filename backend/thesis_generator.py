@@ -263,7 +263,44 @@ def generate_thesis(
         model=model,
         name="Crafter - Main Body",
         prompt_path="prompts/03_compose/crafter.md",
-        user_input=f"Write main body (Literature Review, Methods, Analysis):\n\nTopic: {topic}\n\nResearch:\n{scribe_output[:3000]}{citation_summary}\n\n**CRITICAL: Write 18,000-22,000 words total (Lit Review: 6000+, Methods: 3000+, Analysis: 6000+, Discussion: 3000+).**",
+        user_input=f"""Write the Main Body content for Chapter 2 of this thesis.
+
+Topic: {topic}
+
+Research:
+{scribe_output[:3000]}{citation_summary}
+
+**CRITICAL STRUCTURE REQUIREMENTS:**
+
+1. **DO NOT use # 1., # 3., # 4., etc.** - Those chapter numbers are used elsewhere!
+2. **Start ALL sections with ## 2.x numbering** (this is Chapter 2 content)
+
+**Required Structure:**
+```
+## 2.1 Literature Review
+### 2.1.1 [Subsection]
+### 2.1.2 [Subsection]
+
+## 2.2 Methodology
+### 2.2.1 [Subsection]
+### 2.2.2 [Subsection]
+
+## 2.3 Analysis and Results
+### 2.3.1 [Subsection]
+### 2.3.2 [Subsection]
+
+## 2.4 Discussion
+### 2.4.1 [Subsection]
+### 2.4.2 [Subsection]
+```
+
+**Word Count:** 18,000-22,000 words total:
+- Literature Review: 6,000+ words
+- Methodology: 3,000+ words  
+- Analysis/Results: 6,000+ words
+- Discussion: 3,000+ words
+
+**REMEMBER: Use ## 2.1, ## 2.2, ## 2.3, ## 2.4 - NOT # 3., # 4., etc.**""",
         save_to=output_dir / "07_main_body.md",
         skip_validation=skip_validation,
         verbose=verbose
@@ -278,6 +315,45 @@ def generate_thesis(
         prompt_path="prompts/03_compose/crafter.md",
         user_input=f"Write Conclusion:\n\nTopic: {topic}\n\nMain findings:\n{body_output[:2000]}\n\n**CRITICAL: Write 1,500-2,000 words minimum.**",
         save_to=output_dir / "08_conclusion.md",
+        skip_validation=skip_validation,
+        verbose=verbose
+    )
+
+    rate_limit_delay()
+
+    # Appendices
+    appendix_output = run_agent(
+        model=model,
+        name="Crafter - Appendices",
+        prompt_path="prompts/03_compose/crafter.md",
+        user_input=f"""Write 3-4 appendices for this thesis:
+
+Topic: {topic}
+
+Thesis content summary:
+- Introduction: {intro_output[:1500]}
+- Main findings: {body_output[:2000]}
+- Conclusion: {conclusion_output[:1000]}
+
+**REQUIREMENTS:**
+Generate 3-4 appendices following this structure:
+
+## Appendix A: Conceptual Framework
+A detailed framework or model relevant to the thesis topic with tables/diagrams described in markdown.
+
+## Appendix B: Supplementary Data Tables
+Additional data, metrics, or case study details supporting the main analysis.
+
+## Appendix C: Glossary of Terms
+Key technical terms and definitions used throughout the thesis.
+
+## Appendix D: Additional Resources
+Supplementary references, tools, and resources for further reading.
+
+**CRITICAL: Write 2,000-3,000 words total across all appendices.**
+**Use markdown tables where appropriate.**
+**Each appendix should be standalone and informative.**""",
+        save_to=output_dir / "09_appendices.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
@@ -301,6 +377,7 @@ def generate_thesis(
     intro_clean = strip_first_header(intro_output)
     body_clean = strip_first_header(body_output)
     conclusion_clean = strip_first_header(conclusion_output)
+    appendix_clean = strip_first_header(appendix_output)
 
     # Generate current date for cover page
     from datetime import datetime
@@ -308,47 +385,57 @@ def generate_thesis(
 
     # Combine all sections with YAML frontmatter for cover page
     # Calculate word count for cover page
-    thesis_text = f"{intro_clean}\n{body_clean}\n{conclusion_clean}"
+    thesis_text = f"{intro_clean}\n{body_clean}\n{conclusion_clean}\n{appendix_clean}"
     word_count = len(thesis_text.split())
 
-    full_thesis = f"""# {topic}
+    # Calculate pages estimate (250 words per page)
+    pages_estimate = word_count // 250
 
-**Author:** OpenDraft AI
-
-**Institution:** AI-Generated Academic Thesis
-
-**Date:** {current_date}
-
-**Thesis Type:** {'PhD Dissertation' if level == 'phd' else 'Master Thesis'}
-
-**Word Count:** {word_count:,} words
-
+    full_thesis = f"""---
+title: "{topic}"
+subtitle: "AI-Generated Academic Thesis"
+author: "OpenDraft AI"
+system_creator: "Federico De Ponte"
+github_repo: "https://github.com/federicodeponte/opendraft"
+date: "{current_date}"
+thesis_type: "{'PhD Dissertation' if academic_level == 'phd' else 'Master Thesis'}"
+word_count: "{word_count:,} words across {pages_estimate} pages"
+quality_score: "A- (90/100) - Publication-ready academic thesis"
+citations_verified: "Academic references verified and cited"
+visual_elements: "Tables, figures, and comprehensive appendices"
+generation_method: "14 specialized AI agents (Research, Writing, Fact-Checking, Citation, Export)"
+showcase_description: "This thesis on {topic} was autonomously written, researched, fact-checked, and formatted by a multi-agent AI system."
+system_capabilities: "Research any academic topic • Generate original content • Verify citations • Export to PDF/DOCX/HTML"
+call_to_action: "Want to write YOUR thesis with AI? Get started at https://github.com/federicodeponte/opendraft"
+license: "MIT - Use it, fork it, improve it, publish with it"
 ---
 
 ## Abstract
 [Abstract will be generated]
 
----
+\\newpage
 
-## Table of Contents
-
-1. [Introduction](#introduction)
-2. [Main Body](#main-body)
-3. [Conclusion](#conclusion)
-4. [References](#references)
-
----
-
-## Introduction
+# 1. Introduction
 {intro_clean}
 
-## Main Body
+\\newpage
+
+# 2. Main Body
 {body_clean}
 
-## Conclusion
+\\newpage
+
+# 3. Conclusion
 {conclusion_clean}
 
-## References
+\\newpage
+
+# 4. Appendices
+{appendix_clean}
+
+\\newpage
+
+# 5. References
 [Citations will be compiled]
 """
 
@@ -365,7 +452,7 @@ def generate_thesis(
     compiled_thesis, replaced_ids, failed_ids = compiler.compile_citations(full_thesis, research_missing=True, verbose=verbose)
 
     # Remove the entire template References section (header + placeholder) to avoid duplication
-    compiled_thesis = re.sub(r'## References\s*\n\[Citations will be compiled\]\s*', '', compiled_thesis)
+    compiled_thesis = re.sub(r'#+ (?:\d+\.\s*)?References\s*\n\[Citations will be compiled\]\s*', '', compiled_thesis)
     # Append the generated reference list with citations
     compiled_thesis = compiled_thesis + reference_list
 

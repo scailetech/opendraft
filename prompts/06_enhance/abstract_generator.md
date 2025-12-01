@@ -48,14 +48,16 @@ The abstract section will contain a placeholder like:
 
 **Output ONLY the abstract content - nothing else.**
 
+**IMPORTANT: Use bold section headers for each paragraph!**
+
 ```markdown
-[Research Problem and Approach - 2-3 sentences explaining what problem this thesis addresses and why it matters]
+**Research Problem and Approach:** [2-3 sentences explaining what problem this thesis addresses and why it matters]
 
-[Methodology and Findings - 2-3 sentences describing how the research was conducted and what was discovered]
+**Methodology and Findings:** [2-3 sentences describing how the research was conducted and what was discovered]
 
-[Key Contributions - 2-3 sentences with numbered points (1), (2), (3) listing the main contributions]
+**Key Contributions:** [2-3 sentences with numbered points (1), (2), (3) listing the main contributions]
 
-[Implications - 2-3 sentences explaining what this means for theory and practice]
+**Implications:** [2-3 sentences explaining what this means for theory and practice]
 
 **Keywords:** [12-15 relevant keywords, comma-separated]
 ```
@@ -212,11 +214,11 @@ Start directly with the first sentence of the Research Problem paragraph and end
 
 **Example of what to output:**
 ```
-Open source software (OSS) has transcended its origins as a software development methodology to become a potentially transformative force for addressing complex global challenges. This research investigates the multifaceted impact of OSS, arguing that its collaborative ethos and decentralized structure offer a powerful framework for fostering innovation, promoting equitable access to technology, and advancing sustainability initiatives.
+**Research Problem and Approach:** Open source software (OSS) has transcended its origins as a software development methodology to become a potentially transformative force for addressing complex global challenges. This research investigates the multifaceted impact of OSS, arguing that its collaborative ethos and decentralized structure offer a powerful framework for fostering innovation, promoting equitable access to technology, and advancing sustainability initiatives.
 
-By examining the historical evolution, economic underpinnings, and social implications of OSS, this study demonstrates its critical role in creating inclusive technological ecosystems and sustainable development pathways. The research employs a comprehensive literature review and synthesis to analyze OSS's contributions across diverse domains including environmental sustainability, economic development, and social equity.
+**Methodology and Findings:** By examining the historical evolution, economic underpinnings, and social implications of OSS, this study demonstrates its critical role in creating inclusive technological ecosystems and sustainable development pathways. The research employs a comprehensive literature review and synthesis to analyze OSS contributions across diverse domains including environmental sustainability, economic development, and social equity.
 
-This thesis makes three primary contributions: (1) A comprehensive historical overview of OSS evolution from niche movement to mainstream paradigm, (2) An analysis of the economic benefits and sustainability advantages of collaborative development models, and (3) A framework for understanding OSS's role in addressing global challenges through transparency, accessibility, and community-driven innovation.
+**Key Contributions:** This thesis makes three primary contributions: (1) A comprehensive historical overview of OSS evolution from niche movement to mainstream paradigm, (2) An analysis of the economic benefits and sustainability advantages of collaborative development models, and (3) A framework for understanding OSS's role in addressing global challenges through transparency, accessibility, and community-driven innovation.
 
 The findings suggest that OSS principles can be strategically leveraged to address pressing global challenges, from climate change to economic inequality. This research provides guidance for policymakers, technologists, and civil society organizations seeking to harness collaborative models for sustainable development and social impact.
 

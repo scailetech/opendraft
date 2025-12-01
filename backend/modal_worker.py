@@ -1,13 +1,11 @@
 """
 Modal.com worker for automated thesis generation
-Runs daily at 9am UTC, processes 100 waiting users from Supabase
+Runs daily at 9am UTC, processes 100 waiting users from Supabase IN PARALLEL
 """
 
 import modal
 import os
 from datetime import datetime
-from supabase import create_client
-import resend
 
 # Create Modal app
 app = modal.App("thesis-generator")
@@ -25,7 +23,7 @@ image = (modal.Image.debian_slim()
     # Python packages
     .pip_install(
         # Infrastructure
-        "supabase>=2.10.0",  # Supports new sb_secret/sb_publishable key format
+        "supabase>=2.24.0",
         "resend==0.7.0",
         "python-dotenv>=1.0.0",
         # LLM APIs
@@ -48,212 +46,225 @@ image = (modal.Image.debian_slim()
         "rich>=13.0.0"
     )
     # Add entire codebase into image
-    .add_local_dir("../opendraft", "/root/opendraft/opendraft")
-    .add_local_dir("../utils", "/root/opendraft/utils")
-    .add_local_dir("../prompts", "/root/opendraft/prompts")
-    .add_local_dir("../concurrency", "/root/opendraft/concurrency")
-    .add_local_dir("../backend", "/root/opendraft/backend")
-    .add_local_file("../config.py", "/root/opendraft/config.py")
+    .add_local_dir("./opendraft", "/root/opendraft/opendraft")
+    .add_local_dir("./utils", "/root/opendraft/utils")
+    .add_local_dir("./prompts", "/root/opendraft/prompts")
+    .add_local_dir("./concurrency", "/root/opendraft/concurrency")
+    .add_local_dir("./backend", "/root/opendraft/backend")
+    .add_local_dir("./tests", "/root/opendraft/tests")
+    .add_local_file("./config.py", "/root/opendraft/config.py")
 )
 
 # Persistent volume for temporary thesis files
 volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
 
+
 @app.function(
-    schedule=modal.Cron("0 9 * * *"),  # Daily at 9am UTC (cron format)
-    timeout=3600,  # 1 hour max (60 minutes for thesis generation)
+    timeout=3600,  # 1 hour max per thesis
     volumes={"/tmp/thesis": volume},
     secrets=[
-        modal.Secret.from_name("supabase-credentials"),  # SUPABASE_URL, SUPABASE_SERVICE_KEY
-        modal.Secret.from_name("gemini-api-key"),  # GOOGLE_API_KEY (renamed for consistency)
-        modal.Secret.from_name("resend-api-key"),  # RESEND_API_KEY
+        modal.Secret.from_name("supabase-credentials"),
+        modal.Secret.from_name("gemini-api-key"),
+        modal.Secret.from_name("resend-api-key"),
     ],
     image=image,
+    retries=2,  # Auto-retry on failure
 )
-def daily_thesis_batch():
+def process_single_user(user: dict) -> dict:
     """
-    Main scheduled function - processes 100 waiting users daily
+    Process a single user thesis - runs in its own container.
+    Modal will spin up 100 of these in parallel!
     """
-    print(f"[{datetime.now()}] Starting daily thesis batch...")
-
-    # Initialize clients
+    import resend
+    from supabase import create_client
+    
     supabase = create_client(
         os.environ["SUPABASE_URL"],
         os.environ["SUPABASE_SERVICE_KEY"]
     )
     resend.api_key = os.environ["RESEND_API_KEY"]
+    
+    user_id = user["id"]
+    email = user["email"]
+    pdf_url = None
+    docx_url = None
+    thesis_generated = False
+    
+    try:
+        print(f"🚀 Starting thesis for {email}...")
+        
+        # Update status to processing
+        supabase.table("waitlist").update({
+            "status": "processing",
+            "processing_started_at": datetime.now().isoformat()
+        }).eq("id", user_id).execute()
+        
+        # Generate thesis
+        pdf_path, docx_path = generate_thesis_real(
+            topic=user["thesis_topic"],
+            language=user["language"],
+            academic_level=user["academic_level"],
+            user_id=user_id  # For unique output paths
+        )
+        
+        # Upload to Supabase Storage
+        with open(pdf_path, "rb") as pdf_file:
+            supabase.storage.from_("thesis-files").upload(
+                f"{user_id}/thesis.pdf",
+                pdf_file.read(),
+                file_options={"content-type": "application/pdf", "upsert": "true"}
+            )
+        
+        with open(docx_path, "rb") as docx_file:
+            supabase.storage.from_("thesis-files").upload(
+                f"{user_id}/thesis.docx",
+                docx_file.read(),
+                file_options={"content-type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "upsert": "true"}
+            )
+        
+        # Get signed URLs (7-day expiry)
+        pdf_signed = supabase.storage.from_("thesis-files").create_signed_url(
+            f"{user_id}/thesis.pdf", expires_in=604800
+        )
+        docx_signed = supabase.storage.from_("thesis-files").create_signed_url(
+            f"{user_id}/thesis.docx", expires_in=604800
+        )
+        
+        pdf_url = pdf_signed["signedURL"]
+        docx_url = docx_signed["signedURL"]
+        thesis_generated = True
+        
+        # Update status to completed
+        supabase.table("waitlist").update({
+            "status": "completed",
+            "completed_at": datetime.now().isoformat(),
+            "pdf_url": pdf_url,
+            "docx_url": docx_url
+        }).eq("id", user_id).execute()
+        
+        print(f"✅ Thesis generated and uploaded for {email}")
+        
+    except Exception as e:
+        print(f"❌ Failed thesis generation for {email}: {e}")
+        # Only mark as failed if thesis wasn't generated
+        if not thesis_generated:
+            supabase.table("waitlist").update({
+                "status": "failed",
+                "error_message": str(e)[:500]  # Truncate long errors
+            }).eq("id", user_id).execute()
+            return {"email": email, "status": "failed", "error": str(e)}
+    
+    # Send completion email (separate try/except - don't fail if email fails)
+    if thesis_generated and pdf_url and docx_url:
+        try:
+            send_completion_email(
+                email,
+                user["full_name"],
+                pdf_url,
+                docx_url
+            )
+            print(f"📧 Email sent to {email}")
+        except Exception as e:
+            print(f"⚠️ Email failed for {email} (thesis still completed): {e}")
+            # Don't mark as failed - thesis was generated successfully
+    
+    print(f"✅ Completed thesis for {email}")
+    return {"email": email, "status": "success"}
 
+
+@app.function(
+    schedule=modal.Cron("0 9 * * *"),  # Daily at 9am UTC
+    timeout=7200,  # 5 min to orchestrate (actual work is parallel)
+    secrets=[modal.Secret.from_name("supabase-credentials")],
+    image=image,
+)
+def daily_thesis_batch():
+    """
+    Main scheduled function - fetches users and spawns parallel processing.
+    """
+    from supabase import create_client
+    
+    print(f"[{datetime.now()}] Starting daily thesis batch...")
+    
+    supabase = create_client(
+        os.environ["SUPABASE_URL"],
+        os.environ["SUPABASE_SERVICE_KEY"]
+    )
+    
     # Get next 100 waiting users (FIFO, email verified)
-    response = supabase.table('waitlist') \
-        .select('*') \
-        .eq('status', 'waiting') \
-        .eq('email_verified', True) \
-        .order('position', desc=False) \
+    response = supabase.table("waitlist") \
+        .select("*") \
+        .eq("status", "waiting") \
+        .eq("email_verified", True) \
+        .order("position", desc=False) \
         .limit(100) \
         .execute()
-
+    
     users = response.data
     print(f"Found {len(users)} users to process")
-
-    success_count = 0
-    failed_count = 0
-
-    # Process each thesis
-    for user in users:
-        max_retries = 3
-        retry_count = 0
-        success = False
-
-        while retry_count < max_retries and not success:
-            try:
-                if retry_count > 0:
-                    print(f"Retry {retry_count}/{max_retries} for {user['email']}...")
-                else:
-                    print(f"Processing thesis for {user['email']}...")
-
-                # Update status to processing (only on first attempt)
-                if retry_count == 0:
-                    supabase.table('waitlist').update({
-                        'status': 'processing',
-                        'processing_started_at': datetime.now().isoformat()
-                    }).eq('id', user['id']).execute()
-
-                # Generate thesis using real AI framework
-                pdf_path, docx_path = generate_thesis_real(
-                    topic=user['thesis_topic'],
-                    language=user['language'],
-                    academic_level=user['academic_level']
-                )
-
-                # Upload to Supabase Storage (overwrite if retrying)
-                with open(pdf_path, 'rb') as pdf_file:
-                    supabase.storage.from_('thesis-files').upload(
-                        f"{user['id']}/thesis.pdf",
-                        pdf_file.read(),
-                        file_options={"content-type": "application/pdf", "upsert": "true"}
-                    )
-
-                with open(docx_path, 'rb') as docx_file:
-                    supabase.storage.from_('thesis-files').upload(
-                        f"{user['id']}/thesis.docx",
-                        docx_file.read(),
-                        file_options={"content-type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "upsert": "true"}
-                    )
-
-                # Get signed URLs (7-day expiry)
-                pdf_signed = supabase.storage.from_('thesis-files').create_signed_url(
-                    f"{user['id']}/thesis.pdf",
-                    expires_in=604800  # 7 days
-                )
-                docx_signed = supabase.storage.from_('thesis-files').create_signed_url(
-                    f"{user['id']}/thesis.docx",
-                    expires_in=604800
-                )
-
-                # Update status to completed
-                supabase.table('waitlist').update({
-                    'status': 'completed',
-                    'completed_at': datetime.now().isoformat(),
-                    'pdf_url': pdf_signed['signedURL'],
-                    'docx_url': docx_signed['signedURL']
-                }).eq('id', user['id']).execute()
-
-                # Send completion email
-                send_completion_email(
-                    user['email'],
-                    user['full_name'],
-                    pdf_signed['signedURL'],
-                    docx_signed['signedURL']
-                )
-
-                success_count += 1
-                success = True
-                print(f"✅ Completed thesis for {user['email']}")
-
-            except Exception as e:
-                retry_count += 1
-                print(f"❌ Error processing {user['email']} (attempt {retry_count}/{max_retries}): {e}")
-
-                if retry_count >= max_retries:
-                    # Mark as failed only after all retries exhausted
-                    supabase.table('waitlist').update({
-                        'status': 'failed'
-                    }).eq('id', user['id']).execute()
-                    failed_count += 1
-                    print(f"💀 Permanently failed thesis for {user['email']} after {max_retries} attempts")
-                else:
-                    # Wait before retrying (exponential backoff: 5s, 10s, 20s)
-                    import time
-                    wait_time = 5 * (2 ** (retry_count - 1))
-                    print(f"⏳ Waiting {wait_time}s before retry...")
-                    time.sleep(wait_time)
-
+    
+    if not users:
+        print("No users to process today!")
+        return
+    
+    # 🚀 PARALLEL PROCESSING - spawn all at once!
+    # Modal will create up to 100 containers simultaneously
+    print(f"Spawning {len(users)} parallel thesis generations...")
+    
+    results = list(process_single_user.map(users))
+    
+    # Count results
+    success_count = sum(1 for r in results if r["status"] == "success")
+    failed_count = sum(1 for r in results if r["status"] == "failed")
+    
     print(f"[{datetime.now()}] Batch complete: {success_count} success, {failed_count} failed")
+    
+    # Log daily stats (upsert to handle reruns)
+    try:
+        supabase.table("daily_processing_log").upsert({
+            "date": datetime.now().date().isoformat(),
+            "processed_count": success_count,
+            "failed_count": failed_count,
+            "completed_at": datetime.now().isoformat()
+        }, on_conflict="date").execute()
+    except:
+        pass  # Ignore logging errors
 
-    # Log daily stats
-    supabase.table('daily_processing_log').insert({
-        'date': datetime.now().date().isoformat(),
-        'processed_count': success_count,
-        'failed_count': failed_count,
-        'completed_at': datetime.now().isoformat()
-    }).execute()
 
-
-def generate_thesis_real(topic: str, language: str, academic_level: str):
-    """
-    Real thesis generation using Academic Thesis AI framework.
-
-    Integrates the standalone thesis_generator.py module with 15+ AI agents.
-
-    Args:
-        topic: Thesis topic (e.g., "Machine Learning for Climate Prediction")
-        language: 'en' or 'de' (English/German)
-        academic_level: 'bachelor', 'master', or 'phd'
-
-    Returns:
-        tuple: (pdf_path, docx_path) - Paths to generated PDF and DOCX files
-
-    Raises:
-        Exception: If thesis generation fails
-    """
+def generate_thesis_real(topic: str, language: str, academic_level: str, user_id: str = "test"):
+    """Generate thesis using the AI framework."""
     import sys
     from pathlib import Path
-
-    # Add mounted codebase to Python path
+    
     sys.path.insert(0, "/root/opendraft")
-
-    # Set environment variable for API key (Modal secret → env var)
-    import os
+    
     if "GOOGLE_API_KEY" not in os.environ and "GEMINI_API_KEY" in os.environ:
         os.environ["GOOGLE_API_KEY"] = os.environ["GEMINI_API_KEY"]
-
-    # Import thesis generator
+    
     from backend.thesis_generator import generate_thesis
-
-    # Generate thesis with automated settings
-    try:
-        pdf_path, docx_path = generate_thesis(
-            topic=topic,
-            language=language,
-            academic_level=academic_level,
-            output_dir=Path("/tmp/thesis"),
-            skip_validation=True,  # Skip strict validation for automated runs
-            verbose=True
-        )
-
-        return str(pdf_path), str(docx_path)
-
-    except Exception as e:
-        print(f"❌ Thesis generation failed: {str(e)}")
-        raise
+    
+    # Each user gets their own output directory
+    output_dir = Path(f"/tmp/thesis/{user_id}")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    pdf_path, docx_path = generate_thesis(
+        topic=topic,
+        language=language,
+        academic_level=academic_level,
+        output_dir=output_dir,
+        skip_validation=True,
+        verbose=True
+    )
+    
+    return str(pdf_path), str(docx_path)
 
 
 def send_completion_email(email: str, name: str, pdf_url: str, docx_url: str):
-    """Send thesis completion notification email using React Email template"""
-    # Note: Python backend uses simple HTML for now
-    # For proper React Email templates, integrate with Next.js API route
+    """Send thesis completion notification email."""
+    import resend
+    
     resend.Emails.send({
-        "from": "Academic Thesis AI <hello@academic-thesis.ai>",
+        "from": "OpenDraft <hello@opendraft.io>",
         "to": email,
         "subject": "Your AI-Generated Thesis is Ready! 🎓",
         "html": f"""
@@ -262,31 +273,29 @@ def send_completion_email(email: str, name: str, pdf_url: str, docx_url: str):
             <head>
                 <meta charset="utf-8">
                 <style>
-                    body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif; background-color: #f6f9fc; margin: 0; padding: 0; }}
-                    .container {{ background-color: #ffffff; margin: 0 auto; padding: 20px 0 48px; max-width: 600px; }}
-                    .header {{ color: #26251e; font-size: 24px; font-weight: bold; margin: 40px 0; padding: 0 40px; text-align: center; }}
-                    .content {{ color: #4b5563; font-size: 16px; line-height: 24px; margin: 16px 0; padding: 0 40px; }}
-                    .button-container {{ padding: 27px 40px; text-align: center; }}
-                    .button-pdf {{ background-color: #8B5CF6; border-radius: 8px; color: #fff; font-size: 16px; font-weight: bold; text-decoration: none; padding: 12px 24px; margin: 8px 8px 8px 0; display: inline-block; }}
-                    .button-docx {{ background-color: #6366f1; border-radius: 8px; color: #fff; font-size: 16px; font-weight: bold; text-decoration: none; padding: 12px 24px; margin: 8px 0; display: inline-block; }}
-                    .alert-box {{ background-color: #fef3c7; border-radius: 8px; margin: 24px 40px; padding: 16px; border: 1px solid #fbbf24; }}
-                    .alert-text {{ color: #26251e; font-size: 14px; line-height: 20px; margin: 0 0 8px 0; }}
-                    .footer {{ color: #6b7280; font-size: 14px; line-height: 24px; margin: 32px 0; padding: 0 40px; }}
+                    body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #0a0a0a; color: #fafafa; margin: 0; padding: 0; }}
+                    .container {{ background-color: #0a0a0a; margin: 0 auto; padding: 40px; max-width: 600px; }}
+                    .header {{ font-size: 28px; font-weight: bold; margin-bottom: 24px; }}
+                    .content {{ font-size: 16px; line-height: 1.6; color: #a1a1aa; margin-bottom: 32px; }}
+                    .button-container {{ margin: 32px 0; }}
+                    .button {{ background-color: #3b82f6; border-radius: 8px; color: #fff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 28px; display: inline-block; margin-right: 12px; }}
+                    .button-secondary {{ background-color: #27272a; }}
+                    .footer {{ color: #71717a; font-size: 14px; margin-top: 48px; padding-top: 24px; border-top: 1px solid #27272a; }}
                 </style>
             </head>
             <body>
                 <div class="container">
                     <h1 class="header">Your Thesis is Ready, {name}! 🎓</h1>
-                    <p class="content">We've generated your thesis using our 15 AI agents. Download it now:</p>
+                    <p class="content">Great news! Our 19 AI agents have finished generating your thesis. Download it now:</p>
                     <div class="button-container">
-                        <a href="{pdf_url}" class="button-pdf">Download PDF</a>
-                        <a href="{docx_url}" class="button-docx">Download Word</a>
+                        <a href="{pdf_url}" class="button">Download PDF</a>
+                        <a href="{docx_url}" class="button button-secondary">Download Word</a>
                     </div>
-                    <div class="alert-box">
-                        <p class="alert-text"><strong>⏰ These links expire in 7 days.</strong><br/>Make sure to download your thesis files before they expire.</p>
-                    </div>
-                    <p class="content">Love your thesis? Star us on <a href="https://github.com/federicodeponte/opendraft" style="color: #8B5CF6; text-decoration: underline;">GitHub</a>!</p>
-                    <p class="footer">Thanks,<br/>OpenDraft Team</p>
+                    <p class="content" style="font-size: 14px;">⏰ These links expire in 7 days. Make sure to download your files!</p>
+                    <p class="footer">
+                        Love your thesis? Star us on <a href="https://github.com/federicodeponte/opendraft" style="color: #3b82f6;">GitHub</a>!<br/>
+                        — The OpenDraft Team
+                    </p>
                 </div>
             </body>
             </html>
@@ -294,8 +303,7 @@ def send_completion_email(email: str, name: str, pdf_url: str, docx_url: str):
     })
 
 
-# For manual testing
 @app.local_entrypoint()
 def main():
-    """Test function locally"""
+    """Test function - triggers the batch."""
     daily_thesis_batch.remote()
