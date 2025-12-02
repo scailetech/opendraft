@@ -36,7 +36,7 @@ export default function CompleteGuideAIThesisWriting() {
       <h1>Complete Guide to AI-Assisted Thesis Writing in 2025</h1>
 
       <p className="text-xl text-muted-foreground">
-        Learn how to leverage AI to <strong>generate thesis drafts in 20-30 minutes</strong> while maintaining academic integrity. This comprehensive guide covers 15 specialized AI agents, real-world examples, ethical considerations, and step-by-step workflows.
+        Learn how to leverage AI to <strong>generate thesis drafts in 20-30 minutes</strong> while maintaining academic integrity. This comprehensive guide covers 19 specialized AI agents, real-world examples, ethical considerations, and step-by-step workflows.
       </p>
 
       <h2>Introduction: The AI Revolution in Academic Writing</h2>
@@ -51,7 +51,7 @@ export default function CompleteGuideAIThesisWriting() {
 
       <h3>What You&apos;ll Learn</h3>
       <ul>
-        <li>How to use 15 specialized AI agents for different writing phases</li>
+        <li>How to use 19 specialized AI agents for different writing phases</li>
         <li>A proven 10-day workflow from research to final submission</li>
         <li>How to maintain academic integrity while using AI</li>
         <li>Real examples with actual 67-page thesis generated in 20 minutes</li>
@@ -92,7 +92,7 @@ export default function CompleteGuideAIThesisWriting() {
       <h2>The 15 Specialized AI Agents</h2>
 
       <p>
-        Unlike general-purpose AI chatbots, OpenDraft uses <strong>15 specialized agents</strong>, each expert in one phase of academic writing. This multi-agent approach produces significantly better results than asking ChatGPT to &quot;write my thesis.&quot;
+        Unlike general-purpose AI chatbots, OpenDraft uses <strong>19 specialized agents</strong>, each expert in one phase of academic writing. This multi-agent approach produces significantly better results than asking ChatGPT to &quot;write my thesis.&quot;
       </p>
 
       <h3>Research Phase (Agents #1-3)</h3>

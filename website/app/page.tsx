@@ -15,13 +15,13 @@ import { WaitlistCTASection } from "@/components/layout/sections/waitlist-cta";
 
 export const metadata = {
   title: "OpenDraft - Free AI Thesis Writing Tool | Generate Drafts in Minutes",
-  description: "Free open-source AI thesis writing tool with 15 specialized agents. Generate master's thesis, PhD dissertation & research papers in 20-30 minutes. Database-validated citations from 200M+ academic papers. See our real 104-page, 30,000+ word example.",
+  description: "Free open-source AI thesis writing tool with 19 specialized agents. Generate master's thesis, PhD dissertation & research papers in 20-30 minutes. Database-validated citations from 200M+ academic papers. See our real 104-page, 30,000+ word example.",
   keywords: "thesis writing AI, academic thesis generator, AI thesis assistant, free thesis tool, dissertation AI, research paper generator, master thesis AI",
   openGraph: {
     type: "website",
     url: "https://opendraft-landing.vercel.app",
     title: "OpenDraft - Free AI Thesis Writing Tool",
-    description: "Free open-source AI tool with 15 specialized agents. Generate 20k-word thesis drafts in 20-30 minutes with database-validated citations from 200M+ papers. See our real 104-page master's thesis example. FREE tier available.",
+    description: "Free open-source AI tool with 19 specialized agents. Generate 20k-word thesis drafts in 20-30 minutes with database-validated citations from 200M+ papers. See our real 104-page master's thesis example. FREE tier available.",
     images: [
       {
         url: "https://opendraft-landing.vercel.app/og-image.png",
@@ -35,7 +35,7 @@ export const metadata = {
     card: "summary_large_image",
     site: "@AcademicThesisAI",
     title: "OpenDraft - Free AI Thesis Writing Tool",
-    description: "Free open-source AI thesis writing tool. 15 AI agents, 200M+ papers, database-validated citations. Generate drafts in minutes. See our 104-page example.",
+    description: "Free open-source AI thesis writing tool. 19 AI agents, 200M+ papers, database-validated citations. Generate drafts in minutes. See our 104-page example.",
     images: [
       "https://opendraft-landing.vercel.app/og-image.png",
     ],

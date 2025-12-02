@@ -4,7 +4,7 @@
 
 ### AI-Powered Academic Writing Framework
 
-**Generate publication-ready theses with 15 specialized AI agents and access to 200M+ research papers** via academic APIs (Semantic Scholar, arXiv, PubMed, Crossref)
+**Generate publication-ready theses with 19 specialized AI agents and access to 200M+ research papers** via academic APIs (Semantic Scholar, arXiv, PubMed, Crossref)
 
 ![OpenDraft Generated Thesis](docs/assets/screenshots/thesis_title.png)
 
@@ -89,7 +89,7 @@ while maintaining quality and academic integrity
 - 🚀 **20-25 minutes** to generate a 20,000-word thesis
 - 📚 **50+ citations** automatically researched and verified
 - 📄 **Publication-ready** PDF, DOCX, or LaTeX output
-- ✅ **100% tested** - All 15 agents validated in production
+- ✅ **100% tested** - All 19 agents validated in production
 
 ---
 
@@ -144,7 +144,7 @@ while maintaining quality and academic integrity
   </tr>
   <tr>
     <td><strong>🤖 Specialized Agents</strong></td>
-    <td align="center">✅ <code>15 agents</code></td>
+    <td align="center">✅ <code>19 agents</code></td>
     <td align="center">❌ Generic</td>
     <td align="center">❌ Grammar only</td>
     <td align="center">❌ 1 model</td>
@@ -183,7 +183,7 @@ while maintaining quality and academic integrity
 
 | Metric | Value |
 |--------|-------|
-| 🤖 **AI Agents** | 15 specialized agents |
+| 🤖 **AI Agents** | 19 specialized agents |
 | 📚 **Research Papers** | 200M+ accessible |
 | ✅ **Citation Success** | 95%+ accuracy |
 | ⚡ **Generation Speed** | 20-25 min (20k words) |
@@ -229,7 +229,7 @@ python tests/scripts/test_ai_pricing_thesis.py
 - ✅ 95%+ citation success rate
 - 🔄 4-tier API fallback (Crossref → Semantic Scholar → Gemini → LLM)
 
-### ✍️ 15 Specialized AI Agents
+### ✍️ 19 Specialized AI Agents
 1. **Scout** - Research planning
 2. **Scribe** - Literature review
 3. **Signal** - Citation discovery
@@ -383,7 +383,7 @@ python tests/scripts/test_ai_pricing_thesis.py
 ## 🛠️ How It Works
 
 ```
-Your Topic → Deep Research → 15 AI Agents → Publication-Ready Thesis
+Your Topic → Deep Research → 19 AI Agents → Publication-Ready Thesis
               (2-3 min)      (15-20 min)     (PDF/Word/LaTeX)
 ```
 

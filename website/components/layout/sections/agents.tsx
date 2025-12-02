@@ -58,6 +58,12 @@ const researchAgents: AgentProps[] = [
     description: "Gap Analysis",
     capability: "Analyzes existing research to identify gaps, novel angles, and opportunities for original contribution to your field.",
   },
+  {
+    icon: Search,
+    name: "Deep Research Agent",
+    description: "Autonomous Literature Review",
+    capability: "Creates comprehensive research strategies with 50+ queries to gather dissertation-grade literature reviews from interdisciplinary sources.",
+  },
 ];
 
 const structureAgents: AgentProps[] = [
@@ -144,7 +150,7 @@ const refinementAgents: AgentProps[] = [
   },
   {
     icon: FileCheck,
-    name: "Citation Compiler Agent",
+    name: "Citation Verifier Agent",
     description: "Citation Formatting",
     capability: "Transforms citation IDs into formatted citations and generates the reference list using the specified citation style (APA, MLA, Chicago, IEEE).",
   },
@@ -153,6 +159,12 @@ const refinementAgents: AgentProps[] = [
     name: "Enhancer Agent",
     description: "Quality Enhancement",
     capability: "Elevates overall thesis quality through advanced linguistic improvements, clarity enhancements, and academic tone refinement.",
+  },
+  {
+    icon: FileText,
+    name: "Abstract Generator Agent",
+    description: "Academic Summary",
+    capability: "Generates publication-quality abstracts (250-300 words) with structured paragraphs and relevant keywords from completed thesis content.",
   },
 ];
 

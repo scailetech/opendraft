@@ -188,7 +188,7 @@ export default function AIToolsAcademicResearch() {
       <p><strong>What it does:</strong></p>
       <ul>
         <li>End-to-end thesis generation (research → writing → citations)</li>
-        <li>15 specialized AI agents for different phases</li>
+        <li>19 specialized AI agents for different phases</li>
         <li>Automated literature review from 200M+ papers</li>
         <li>Citation verification against CrossRef/arXiv</li>
         <li>Export to PDF, Word, LaTeX</li>
