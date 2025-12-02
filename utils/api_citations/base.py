@@ -22,19 +22,19 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
 ]
 
-# Optional proxy configuration (set via environment or directly)
-# Format: "host:port:username:password" or "host:port" for unauthenticated
-# Example: PROXY_LIST = ["geo.iproyal.com:12321:user:pass"]
-PROXY_LIST: list = [
-    # Evomi datacenter (TESTED WORKING - high capacity)
-    "***REMOVED***",
-    # Webshare datacenter proxies (backup)
-    "***REMOVED***",
-    "***REMOVED***",
-    "***REMOVED***",
-    # IPRoyal rotating residential (backup)
-    "***REMOVED***",
-]
+# Optional proxy configuration loaded from environment
+# Format: comma-separated "host:port:username:password" strings
+# Example: PROXY_LIST_ENV="proxy1.com:8080:user:pass,proxy2.com:8080:user:pass"
+import os
+
+def _load_proxy_list() -> list:
+    """Load proxy list from PROXY_LIST environment variable."""
+    proxy_env = os.getenv('PROXY_LIST', '')
+    if not proxy_env:
+        return []
+    return [p.strip() for p in proxy_env.split(',') if p.strip()]
+
+PROXY_LIST: list = _load_proxy_list()
 
 def parse_proxy(proxy_str: str) -> dict:
     """Parse proxy string to requests-compatible dict."""
