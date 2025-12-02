@@ -84,6 +84,13 @@ export const FooterSection = () => {
             >
               ⭐ Star on GitHub
             </Link>
+            <Link
+              target="_blank"
+              href="https://www.linkedin.com/in/federicodeponte/"
+              className="opacity-60 hover:opacity-100"
+            >
+              LinkedIn
+            </Link>
           </div>
         </section>
       </div>

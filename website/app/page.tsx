@@ -27,13 +27,13 @@ export const metadata = {
         url: "https://opendraft-landing.vercel.app/og-image.png",
         width: 1200,
         height: 630,
-        alt: "OpenDraft - Free AI Thesis Writing Tool with 15 Specialized Agents",
+        alt: "OpenDraft - Free AI Thesis Writing Tool with 19 Specialized Agents",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@AcademicThesisAI",
+    site: undefined,
     title: "OpenDraft - Free AI Thesis Writing Tool",
     description: "Free open-source AI thesis writing tool. 19 AI agents, 200M+ papers, database-validated citations. Generate drafts in minutes. See our 104-page example.",
     images: [
