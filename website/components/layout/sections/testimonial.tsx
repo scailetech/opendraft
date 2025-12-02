@@ -58,7 +58,7 @@ export const CommunitySection = () => {
         </h2>
 
         <p className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground">
-          OpenDraft is 100% free and open source. See a 67-page example thesis on GitHub.
+          OpenDraft is 100% free and open source. See a 104-page, 27,500+ word example thesis on GitHub.
         </p>
       </div>
 

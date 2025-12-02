@@ -25,7 +25,7 @@ const allFeatures: FeaturesProps[] = [
     title: "19 Specialized AI Agents",
     description:
       "From Scout (research) to Enhancer (final polish), each agent is an expert in one specific phase of academic writing.",
-    tooltip: "19 agents across 5 phases: Research (Scout, Scribe, Signal, Deep Research), Structure (Architect, Citation Manager, Formatter), Compose (Crafter, Narrator, Thread), Validate (Skeptic, Verifier, Referee), Refine (Voice, Entropy, Polish, Citation Compiler, Enhancer, Abstract Generator). Mix and match based on your needs.",
+    tooltip: "19 agents across 5 phases: Research (Scout, Scribe, Signal, Deep Research), Structure (Architect, Citation Manager, Formatter), Compose (Crafter, Narrator, Thread), Validate (Skeptic, Verifier, Referee), Refine (Voice, Entropy, Polish, Citation Verifier, Enhancer, Abstract Generator). Mix and match based on your needs.",
   },
   {
     icon: "Database",
