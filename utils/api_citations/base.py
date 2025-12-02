@@ -26,9 +26,7 @@ USER_AGENTS = [
 # Format: "host:port:username:password" or "host:port" for unauthenticated
 # Example: PROXY_LIST = ["geo.iproyal.com:12321:user:pass"]
 PROXY_LIST: list = [
-    # Evomi datacenter proxies (primary - high capacity)
-    "***REMOVED***",
-    # Evomi core residential (premium - rotating IPs)
+    # Evomi datacenter (TESTED WORKING - high capacity)
     "***REMOVED***",
     # Webshare datacenter proxies (backup)
     "***REMOVED***",
