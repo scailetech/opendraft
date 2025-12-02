@@ -9,6 +9,19 @@ import logging
 import random
 import requests
 from typing import Optional, Dict, Any
+
+# Backpressure integration for cross-container rate limit coordination
+_backpressure_manager = None
+def get_backpressure_manager():
+    """Lazy-load backpressure manager to avoid circular imports."""
+    global _backpressure_manager
+    if _backpressure_manager is None:
+        try:
+            from utils.backpressure import BackpressureManager
+            _backpressure_manager = BackpressureManager()
+        except ImportError:
+            pass
+    return _backpressure_manager
 from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
@@ -156,6 +169,7 @@ class BaseAPIClient(ABC):
         rate_limit_per_second: float = 10.0,
         timeout: int = 10,
         max_retries: int = 3,
+        api_type: Optional[str] = None,
     ):
         """
         Initialize API client.
@@ -172,6 +186,7 @@ class BaseAPIClient(ABC):
         self.rate_limit_per_second = rate_limit_per_second
         self.timeout = timeout
         self.max_retries = max_retries
+        self.api_type = api_type  # For backpressure signaling
 
         # Rate limiting state
         self.last_request_time: float = 0.0
@@ -245,9 +260,21 @@ class BaseAPIClient(ABC):
                     return None  # Not found is not an error, just no result
 
                 elif response.status_code == 429:
-                    # Rate limited - wait longer
+                    # Rate limited - signal backpressure and wait longer
+                    bp = get_backpressure_manager()
+                    if bp and self.api_type:
+                        from utils.backpressure import APIType
+                        try:
+                            api_enum = APIType(self.api_type)
+                            bp.signal_429(api_enum, proxy_id=proxy_str if proxy_str else None)
+                        except ValueError:
+                            pass  # Unknown API type
+
                     wait_time = 2**attempt  # Exponential backoff
-                    logger.warning(f"Rate limited (429), waiting {wait_time}s before retry")
+                    # Add backpressure delay on top of exponential backoff
+                    if bp:
+                        wait_time += bp.get_recommended_delay()
+                    logger.warning(f"Rate limited (429), waiting {wait_time:.1f}s before retry")
                     time.sleep(wait_time)
                     continue
 

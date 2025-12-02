@@ -68,6 +68,8 @@ volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
         modal.Secret.from_name("supabase-credentials"),
         modal.Secret.from_name("gemini-api-key"),
         modal.Secret.from_name("gemini-api-key-fallback"),
+        modal.Secret.from_name("gemini-api-key-fallback-2"),
+        modal.Secret.from_name("gemini-api-key-fallback-3"),
         modal.Secret.from_name("resend-api-key"),
         modal.Secret.from_name("proxy-credentials"),
     ],
@@ -227,33 +229,83 @@ def daily_thesis_batch():
         print("No users to process today!")
         return
 
-    # Process in batches of 20 to avoid API rate limits
-    BATCH_SIZE = 20
+    # ADAPTIVE BATCH PROCESSING with backpressure
+    import sys
+    import time as time_module
+    sys.path.insert(0, "/root/opendraft")
+
+    from utils.backpressure import BackpressureManager, print_backpressure_stats
+
+    bp = BackpressureManager()
     total_success = 0
     total_failed = 0
-    
-    for batch_num in range(0, len(users), BATCH_SIZE):
-        batch = users[batch_num:batch_num + BATCH_SIZE]
-        print(f"Processing batch {batch_num // BATCH_SIZE + 1}: {len(batch)} users (jobs {batch_num + 1}-{batch_num + len(batch)} of {len(users)})")
-        
+    users_remaining = list(users)
+    batch_num = 0
+    pause_count = 0
+
+    print(f"\n{'='*50}")
+    print(f"ADAPTIVE CONCURRENCY ENGINE STARTED")
+    print(f"Total users to process: {len(users_remaining)}")
+    print(f"{'='*50}\n")
+
+    while users_remaining:
+        # Check backpressure before spawning
+        if bp.should_pause_spawning():
+            pause_count += 1
+            print(f"\n⚠️ BACKPRESSURE HIGH - pausing spawning (pause #{pause_count})")
+            print_backpressure_stats(bp)
+
+            # Wait until pressure drops
+            while not bp.can_resume_spawning():
+                time_module.sleep(10)
+                print(f"Waiting for pressure to drop... ({bp.get_global_pressure():.2f})")
+
+            print("✅ Pressure dropped, resuming spawning")
+            continue
+
+        # Get adaptive batch size based on current pressure
+        batch_size = bp.get_adaptive_batch_size()
+        batch = users_remaining[:batch_size]
+        users_remaining = users_remaining[batch_size:]
+        batch_num += 1
+
+        print(f"\n--- Batch {batch_num} ---")
+        print(f"Batch size: {batch_size} (adaptive)")
+        print(f"Processing: {len(batch)} users")
+        print(f"Remaining: {len(users_remaining)} users")
+        print_backpressure_stats(bp)
+
         results = []
         for result in process_single_user.map(batch, return_exceptions=True):
             if isinstance(result, Exception):
-                print(f"Job failed with: {result}")
+                print(f"❌ Job failed: {result}")
                 results.append({"status": "failed", "error": str(result)})
             else:
                 results.append(result)
                 email = result.get("email", "unknown")
-                print(f"Job completed: {email}")
-        
+                print(f"✅ Job completed: {email}")
+
         batch_success = sum(1 for r in results if r.get("status") == "success")
         batch_failed = sum(1 for r in results if r.get("status") == "failed")
         total_success += batch_success
         total_failed += batch_failed
-        
-        print(f"Batch {batch_num // BATCH_SIZE + 1} complete: {batch_success} success, {batch_failed} failed")
-    
-    print(f"All batches complete: {total_success} success, {total_failed} failed out of {len(users)}")
+
+        print(f"Batch {batch_num} complete: {batch_success} success, {batch_failed} failed")
+
+        # Cooldown between batches based on pressure
+        cooldown = bp.get_recommended_delay() * 2
+        if cooldown > 0.5:
+            print(f"Cooling down for {cooldown:.1f}s before next batch...")
+            time_module.sleep(cooldown)
+
+    print(f"\n{'='*50}")
+    print(f"ADAPTIVE CONCURRENCY ENGINE COMPLETE")
+    print(f"Total: {total_success} success, {total_failed} failed out of {len(users)}")
+    print(f"Batches: {batch_num}")
+    print(f"Pauses: {pause_count}")
+    print_backpressure_stats(bp)
+    print(f"{'='*50}\n")
+
     return {"success": total_success, "failed": total_failed, "total": len(users)}
 
 
@@ -264,19 +316,36 @@ def generate_thesis_real(topic: str, language: str, academic_level: str, user_id
 
     sys.path.insert(0, "/root/opendraft")
 
-    # Set up API keys with fallback for rate limiting
+    # Set up API keys with INTELLIGENT rotation based on 429 pressure
+    # Now supports 4 Gemini keys for maximum rate limit resilience!
     primary_key = os.environ.get("GEMINI_API_KEY", "")
     fallback_key = os.environ.get("GEMINI_API_KEY_FALLBACK", "")
-    
-    # Use both keys via round-robin based on user_id hash
-    if primary_key and fallback_key:
-        # Distribute load across keys based on user_id
-        key_index = hash(user_id) % 2
-        api_key = primary_key if key_index == 0 else fallback_key
-        print(f"Using API key {'primary' if key_index == 0 else 'fallback'} for {user_id}")
+    fallback_key_2 = os.environ.get("GEMINI_API_KEY_FALLBACK_2", "")
+    fallback_key_3 = os.environ.get("GEMINI_API_KEY_FALLBACK_3", "")
+
+    available_keys = [k for k in [primary_key, fallback_key, fallback_key_2, fallback_key_3] if k]
+    print(f"🔑 {len(available_keys)} Gemini API keys available")
+
+    if len(available_keys) >= 2:
+        try:
+            from utils.backpressure import BackpressureManager
+            bp = BackpressureManager()
+            api_key, key_type = bp.get_best_gemini_key(
+                primary_key,
+                fallback_key,
+                fallback_2=fallback_key_2 if fallback_key_2 else None,
+                fallback_3=fallback_key_3 if fallback_key_3 else None,
+            )
+            print(f"🔑 Using Gemini key: {key_type.value} (intelligent selection from {len(available_keys)} keys for {user_id})")
+        except Exception as e:
+            # Fallback to round-robin if backpressure fails
+            key_index = hash(user_id) % len(available_keys)
+            api_key = available_keys[key_index]
+            print(f"🔑 Using API key #{key_index + 1} for {user_id} (round-robin fallback: {e})")
     else:
-        api_key = primary_key or fallback_key
-    
+        api_key = primary_key or fallback_key or fallback_key_2 or fallback_key_3
+        print(f"🔑 Using single API key for {user_id}")
+
     os.environ["GOOGLE_API_KEY"] = api_key
 
     from backend.thesis_generator import generate_thesis
