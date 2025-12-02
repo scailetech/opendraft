@@ -22,6 +22,127 @@ except ImportError:
 
 from .base import BaseAPIClient
 
+# =========================================================================
+# Domain Quality Filtering for Source Validation
+# =========================================================================
+
+# Trusted industry domains (accepted without DOI)
+TRUSTED_INDUSTRY_DOMAINS = [
+    # Consulting firms
+    'mckinsey.com', 'bcg.com', 'bain.com', 'deloitte.com', 'pwc.com', 'kpmg.com', 'ey.com', 'accenture.com',
+    # International organizations
+    'who.int', 'oecd.org', 'worldbank.org', 'un.org', 'imf.org', 'wto.org', 'unesco.org',
+    # Industry analysts
+    'gartner.com', 'forrester.com', 'idc.com', 'statista.com',
+    # Government/academic TLDs
+    '.gov', '.edu', '.ac.uk', '.gov.uk', '.edu.au', '.ac.jp', '.edu.cn',
+    # News/quality journalism
+    'reuters.com', 'bbc.com', 'nytimes.com', 'ft.com', 'economist.com', 'wsj.com',
+    # Tech giants (official docs/research)
+    'research.google', 'ai.google', 'research.microsoft.com', 'research.ibm.com', 'research.facebook.com',
+    'openai.com', 'deepmind.com', 'anthropic.com',
+]
+
+# Blocked domains (never accept)
+BLOCKED_DOMAINS = [
+    # Blog indicators
+    '/blog/', '/blogs/', 'blog.', 'medium.com', 'substack.com', 'dev.to', 'hashnode.dev',
+    # AI startup marketing blogs (low quality)
+    'private-ai.com', 'thoughtful.ai', 'skywork.ai', 'copy.ai', 'jasper.ai',
+    # Social media
+    'linkedin.com', 'twitter.com', 'facebook.com', 'instagram.com', 'tiktok.com',
+    # Video platforms
+    'youtube.com', 'vimeo.com',
+    # Q&A sites (not primary sources)
+    'quora.com', 'reddit.com', 'stackoverflow.com',
+    # Wikipedia (not primary source)
+    'wikipedia.org',
+    # Generic content farms
+    'hubspot.com/blog', 'forbes.com/sites', 'entrepreneur.com',
+    # User-generated hosting platforms (Fix 2) - anyone can publish, no editorial review
+    'github.io', 'gitlab.io', 'netlify.app', 'vercel.app', 'herokuapp.com',
+    'pages.dev', 'surge.sh', 'firebaseapp.com', 'web.app', 'github.com',
+    # Academic aggregators (need to enrich via DOI, not cite directly)
+    'semanticscholar.org', 'researchgate.net',
+    # Document publishing/sharing platforms (user-generated content)
+    'issuu.com', 'scribd.com', 'slideshare.net', 'academia.edu',
+    # Law firm blogs/marketing (not academic)
+    'cooley.com', 'linklaters.com', 'cliffordchance.com', 'dlapiper.com',
+]
+
+def is_trusted_domain(url: str) -> bool:
+    """Check if URL is from a trusted industry domain."""
+    url_lower = url.lower()
+    return any(domain in url_lower for domain in TRUSTED_INDUSTRY_DOMAINS)
+
+def is_blocked_domain(url: str) -> bool:
+    """Check if URL is from a blocked domain (blogs, social, etc.)."""
+    url_lower = url.lower()
+    return any(blocked in url_lower for blocked in BLOCKED_DOMAINS)
+
+def validate_source_domain(url: str, has_doi: bool = False) -> tuple:
+    """
+    Validate source domain for academic quality.
+    
+    Args:
+        url: Source URL
+        has_doi: Whether source has a valid DOI
+        
+    Returns:
+        Tuple of (is_valid, reason)
+    """
+    if not url:
+        return (False, "no_url")
+    
+    # Always accept if has DOI (academic quality guaranteed)
+    if has_doi:
+        return (True, "has_doi")
+    
+    # Block known bad domains
+    if is_blocked_domain(url):
+        return (False, "blocked_domain")
+    
+    # Accept trusted industry domains
+    if is_trusted_domain(url):
+        return (True, "trusted_domain")
+    
+    # For unknown domains without DOI, reject
+    # This prevents random websites from being cited
+    return (False, "unknown_domain_no_doi")
+
+
+
+def extract_year_from_url(url: str) -> int:
+    """
+    Extract publication year from URL path patterns.
+    
+    Many URLs contain publication year in path, e.g.:
+    - /2023/05/article-title
+    - /publications/2024/report.pdf
+    - /news-events/news/2023/announcement
+    
+    Args:
+        url: Source URL
+        
+    Returns:
+        Extracted year (2010-2025 range) or None
+    """
+    import re
+    if not url:
+        return None
+    
+    # Match /20XX/ patterns in URL (years 2010-2025)
+    match = re.search(r'/20(1[0-9]|2[0-5])/', url)
+    if match:
+        return int(f"20{match.group(1)}")
+    
+    # Also try ?year=20XX or &year=20XX query params
+    match = re.search(r'[?&]year=(20(?:1[0-9]|2[0-5]))', url)
+    if match:
+        return int(match.group(1))
+    
+    return None
+
 
 class GeminiGroundedClient(BaseAPIClient):
     """
@@ -84,6 +205,10 @@ class GeminiGroundedClient(BaseAPIClient):
 
         # Use Gemini 2.5 Flash for fast grounded search (Pro is too slow)
         self.model_name = 'gemini-2.5-flash'
+        
+        # Fallback API key for 429 rate limit handling
+        self.fallback_api_key = os.getenv('GOOGLE_API_KEY_FALLBACK')
+        self._using_fallback = False
 
         self.forbidden_domains = forbidden_domains or []
         self.validate_urls = validate_urls
@@ -188,6 +313,26 @@ class GeminiGroundedClient(BaseAPIClient):
 
             if not response.ok:
                 error_text = response.text[:500]
+                
+                # Handle 429 rate limit with fallback key
+                if response.status_code == 429 and self.fallback_api_key and not self._using_fallback:
+                    print(f"Gemini API rate limit (429) - switching to fallback key")
+                    self._using_fallback = True
+                    # Retry with fallback key
+                    fallback_url = f"{self.base_url}/{self.model_name}:generateContent?key={self.fallback_api_key}"
+                    response = self.session.post(
+                        fallback_url,
+                        json=body,
+                        headers={"Content-Type": "application/json"},
+                        timeout=self.timeout
+                    )
+                    if response.ok:
+                        data = response.json()
+                        if data.get('candidates'):
+                            return data
+                    # If fallback also fails, log and return None
+                    print(f"Fallback key also failed: {response.status_code}")
+                
                 print(f"Gemini API error {response.status_code}: {error_text}")
                 return None
 
@@ -335,6 +480,15 @@ Provide the source title, URL, and a brief snippet explaining relevance."""
                 # Use URL as-is (no unwrapping, no validation)
                 final_url = url
 
+            # Validate domain quality (Fix 1 from devil's advocate analysis)
+            has_doi = bool(self._extract_doi_from_academic_url(final_url) or 
+                          self._extract_doi_from_doi_url(final_url) if 'doi.org' in final_url else None)
+            is_valid, reason = validate_source_domain(final_url, has_doi)
+            
+            if not is_valid:
+                # Skip blocked/untrusted sources
+                continue
+            
             # Build validated source metadata
             valid_source = {
                 'title': source.get('title', 'Source'),
@@ -342,7 +496,7 @@ Provide the source title, URL, and a brief snippet explaining relevance."""
                 'snippet': source.get('snippet'),
                 'authors': None,  # Not available from grounding
                 'date': None,  # Not available from grounding
-                'source_type': 'website',  # Industry sources are websites/reports
+                'source_type': 'report' if is_trusted_domain(final_url) else 'website',
             }
             
             # Enrich metadata for academic URLs

@@ -108,6 +108,10 @@ class PandocLatexEngine(PDFEngine):
             # Code blocks cause massive verbatim sections in LaTeX that truncate documents
             # (e.g., 122 pages → 39 pages due to unbreakable monospace text)
             md_content = self._strip_code_blocks(md_content)
+            
+            # BUG #6 FIX: Normalize bullet list formatting for consistent PDF rendering
+            # Converts `*   ` and `* ` variations to standard `- ` format
+            md_content = self._normalize_bullet_lists(md_content)
 
             # Note: XeLaTeX handles Unicode natively, no sanitization needed
             # (Previous pdflatex required _sanitize_unicode_for_latex)
@@ -741,12 +745,18 @@ class PandocLatexEngine(PDFEngine):
         - Document truncation (e.g., 122 pages → 39 pages)
         - Missing citations and content
 
+        Also handles orphaned code fences (opening fence with no closing fence)
+        by removing just the orphaned fence line instead of all content after it.
+
         Args:
             md_content: Markdown content potentially containing code blocks
 
         Returns:
             Markdown content with all code blocks removed
         """
+        import logging
+        logger = logging.getLogger(__name__)
+
         # Separate YAML frontmatter from body to avoid processing YAML fences
         if md_content.strip().startswith('---'):
             parts = md_content.split('---', 2)
@@ -761,14 +771,34 @@ class PandocLatexEngine(PDFEngine):
             yaml_section = ""
             body_content = md_content
 
-        # Remove code blocks from body only
+        # First pass: find orphaned code fences (opening with no closing)
         lines = body_content.split('\n')
+        fence_stack = []  # Track line indices of opening fences
+
+        for i, line in enumerate(lines):
+            if line.strip().startswith('```'):
+                if fence_stack:
+                    # This closes the most recent opening fence
+                    fence_stack.pop()
+                else:
+                    # This is an opening fence
+                    fence_stack.append(i)
+
+        # Any remaining fences in the stack are orphaned (no closing fence)
+        orphaned_fence_lines = set(fence_stack)
+        if orphaned_fence_lines:
+            logger.warning(f"Found {len(orphaned_fence_lines)} orphaned code fence(s) at lines: {list(orphaned_fence_lines)}")
+
+        # Second pass: remove code blocks but preserve content after orphaned fences
         result = []
         in_code_block = False
 
-        for line in lines:
+        for i, line in enumerate(lines):
             if line.strip().startswith('```'):
-                # Toggle code block state
+                if i in orphaned_fence_lines:
+                    # Skip orphaned fence line but don't enter code block mode
+                    continue
+                # Toggle code block state for properly paired fences
                 in_code_block = not in_code_block
                 continue  # Skip the fence line itself
 
@@ -779,6 +809,59 @@ class PandocLatexEngine(PDFEngine):
 
         # Reconstruct with YAML intact
         return yaml_section + cleaned_body if yaml_section else cleaned_body
+
+
+    def _normalize_bullet_lists(self, md_content: str) -> str:
+        """
+        Normalize markdown bullet list formatting for consistent PDF rendering.
+        
+        Fixes BUG #6: Bullet points (`*   ...`) not rendering as proper lists.
+        
+        The AI agents sometimes use inconsistent bullet formatting:
+        - `*   ` (asterisk with multiple spaces)
+        - `* ` (asterisk with one space)
+        - `-  ` (hyphen with multiple spaces)
+        
+        Pandoc/LaTeX may not recognize these variations as proper lists,
+        rendering them as literal asterisks instead of bullet characters.
+        
+        This method normalizes all bullet variations to the standard format:
+        `- ` (hyphen with single space)
+        
+        Args:
+            md_content: Markdown content with potential bullet formatting issues
+            
+        Returns:
+            Markdown content with normalized bullet formatting
+        """
+        import re
+        
+        # Separate YAML frontmatter from body to avoid processing YAML
+        if md_content.strip().startswith('---'):
+            parts = md_content.split('---', 2)
+            if len(parts) >= 3:
+                yaml_section = f"---{parts[1]}---"
+                body_content = parts[2]
+            else:
+                yaml_section = ""
+                body_content = md_content
+        else:
+            yaml_section = ""
+            body_content = md_content
+        
+        # Normalize bullet patterns in body only
+        # Pattern 1: `*   ` or `*  ` or `* ` at start of line -> `- `
+        body_content = re.sub(r'^\*\s+', '- ', body_content, flags=re.MULTILINE)
+        
+        # Pattern 2: Multiple spaces after hyphen -> single space
+        body_content = re.sub(r'^-\s{2,}', '- ', body_content, flags=re.MULTILINE)
+        
+        # Pattern 3: Nested bullets with inconsistent spacing
+        # `  *   ` -> `  - ` (preserve indentation)
+        body_content = re.sub(r'^(\s+)\*\s+', r'\1- ', body_content, flags=re.MULTILINE)
+        body_content = re.sub(r'^(\s+)-\s{2,}', r'\1- ', body_content, flags=re.MULTILINE)
+        
+        return yaml_section + body_content if yaml_section else body_content
 
     def _sanitize_unicode_for_latex(self, md_content: str) -> str:
         """

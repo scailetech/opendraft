@@ -30,6 +30,107 @@ from utils.abstract_generator import generate_abstract_for_thesis
 from utils.export_professional import export_pdf, export_docx
 
 
+
+
+def fix_single_line_tables(content: str) -> str:
+    """
+    Fix tables that LLM outputs on a single line.
+    
+    BUG #15: LLM sometimes generates tables as single concatenated lines:
+    | Col1 | Col2 | | Row1 | Data | | Row2 | Data |
+    
+    This breaks markdown rendering. This function splits them into proper rows.
+    """
+    lines = content.split('\n')
+    fixed_lines = []
+    
+    for line in lines:
+        # Check if this line looks like a single-line table (has ' | | ' pattern)
+        if line.strip().startswith('|') and re.search(r'\|\s*\|[:\w*]', line):
+            # Split on ' | | ' which indicates row boundary
+            parts = re.split(r'\| \|(?=\s*[:*\w-])', line)
+            for part in parts:
+                if part.strip():
+                    fixed_part = part.strip()
+                    if not fixed_part.startswith('|'):
+                        fixed_part = '| ' + fixed_part
+                    if not fixed_part.endswith('|'):
+                        fixed_part = fixed_part + ' |'
+                    fixed_lines.append(fixed_part)
+        else:
+            fixed_lines.append(line)
+    
+    return '\n'.join(fixed_lines)
+
+
+
+
+def deduplicate_appendices(content: str) -> str:
+    """
+    Remove duplicate appendix sections from thesis content.
+    
+    BUG: LLM sometimes generates duplicate appendix sections when
+    generating long-form content across multiple agent calls.
+    """
+    # Find all appendix headers and track which ones we have seen
+    appendix_pattern = re.compile(r"(## Appendix [A-Z]:.*?)(?=## Appendix [A-Z]:|## References|# \d+\.|$)", re.DOTALL)
+    
+    seen_headers = set()
+    matches = list(appendix_pattern.finditer(content))
+    
+    # Process in reverse order to preserve first occurrence
+    for match in reversed(matches):
+        appendix_text = match.group(1)
+        # Extract just the header (first line)
+        header_match = re.match(r"## Appendix ([A-Z]):", appendix_text)
+        if header_match:
+            header = header_match.group(1)
+            if header in seen_headers:
+                # This is a duplicate - remove it
+                start, end = match.span()
+                content = content[:start] + content[end:]
+            else:
+                seen_headers.add(header)
+    
+    return content
+
+
+def clean_malformed_markdown(content: str) -> str:
+    """
+    Clean up common markdown formatting issues.
+    
+    Fixes:
+    - Orphaned code fences (``` not paired)
+    - Multiple consecutive blank lines
+    - Stray markdown characters
+    """
+    # Fix orphaned code fences (``` without matching pair)
+    lines = content.split("\n")
+    fence_count = 0
+    fence_positions = []
+    
+    for i, line in enumerate(lines):
+        if line.strip() == "```":
+            fence_count += 1
+            fence_positions.append(i)
+    
+    # If odd number of fences, remove the last orphaned one
+    if fence_count % 2 == 1 and fence_positions:
+        # Find and remove the last orphaned fence
+        last_fence = fence_positions[-1]
+        lines[last_fence] = ""
+    
+    content = "\n".join(lines)
+    
+    # Clean up multiple consecutive blank lines (more than 2)
+    content = re.sub(r"\n{4,}", "\n\n\n", content)
+    
+    # Clean up trailing whitespace on lines
+    content = re.sub(r"[ \t]+$", "", content, flags=re.MULTILINE)
+    
+    return content
+
+
 def generate_thesis(
     topic: str,
     language: str = "en",
@@ -478,6 +579,10 @@ license: "MIT - Use it, fork it, improve it, publish with it"
 
     # Save final markdown
     final_md_path = output_dir / "FINAL_THESIS.md"
+    # Fix single-line tables before saving
+    final_thesis = fix_single_line_tables(final_thesis)
+    final_thesis = deduplicate_appendices(final_thesis)
+    final_thesis = clean_malformed_markdown(final_thesis)
     final_md_path.write_text(final_thesis, encoding='utf-8')
 
     if verbose:

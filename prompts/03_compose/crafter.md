@@ -448,6 +448,168 @@ grep "Draft v1" output.md          # FAIL - should be "Borrador v1"
 
 ---
 
+
+---
+
+## ⚠️ CRITICAL: PROSE-FIRST ACADEMIC WRITING
+
+**Academic theses are PROSE documents, NOT bullet-point presentations.**
+
+### The Problem
+
+AI models naturally gravitate toward bullet points and lists. However, academic theses should be primarily flowing prose paragraphs with occasional lists for genuine enumeration.
+
+### Writing Style Requirements
+
+1. **Write in flowing prose paragraphs** - Each paragraph should be 4-6 sentences minimum
+2. **Limit bullet points STRICTLY** - Maximum 2-3 bullet lists per major section (##)
+3. **Convert potential bullets to prose** - Don't list; explain in connected sentences
+4. **Tables are acceptable** - Use tables for data comparison, but NOT as a replacement for prose
+
+### ❌ WRONG - Bullet-Heavy (AI Default)
+
+```markdown
+The benefits of machine learning include:
+*   Improved accuracy
+*   Faster processing
+*   Cost reduction
+*   Scalability
+
+Key challenges are:
+*   Data quality
+*   Model interpretability
+*   Computational resources
+```
+
+### ✅ CORRECT - Prose-First
+
+```markdown
+Machine learning offers several significant benefits for organizational adoption. First, these systems demonstrate improved accuracy compared to traditional rule-based approaches, particularly in tasks involving pattern recognition and prediction {cite_001}. Additionally, once trained, ML models can process data substantially faster than manual analysis, enabling real-time decision making in time-sensitive applications {cite_002}. Organizations also report meaningful cost reductions after implementing ML solutions, with some studies indicating up to 30% operational savings {cite_003}. Furthermore, modern ML architectures scale efficiently, allowing organizations to process increasing data volumes without proportional increases in computational resources.
+
+Despite these advantages, implementing machine learning systems presents notable challenges. Data quality remains a primary concern, as ML models are highly sensitive to biased, incomplete, or noisy training data {cite_004}. Model interpretability poses another significant barrier, particularly in regulated industries where "black box" predictions may not meet compliance requirements. Finally, the computational resources required for training large models can be prohibitive for smaller organizations, though cloud computing options have begun to address this limitation.
+```
+
+### Self-Check Before Submitting
+
+Count your bullet points:
+- If a section has **more than 5 bullet points**, you MUST convert most to prose
+- If bullet points appear on **consecutive lines for 10+ items**, rewrite as paragraphs
+- If you see `* ` or `- ` appearing more than once every 200 words, reduce bullets
+
+### Acceptable Uses of Bullets
+
+✅ **Acceptable:**
+- Brief enumeration of 3-5 specific items (e.g., methodology steps)
+- Lists of specific technical requirements or criteria
+- Table of contents or navigation aids
+
+❌ **Unacceptable:**
+- Explaining concepts through bullet points
+- Summarizing literature as bullet lists
+- Presenting findings as bulleted items
+- Using bullets to avoid writing proper transitions
+
+
+---
+
+## ⚠️ CRITICAL: MATHEMATICAL NOTATION FOR STEM THESES
+
+**Technical and STEM-focused theses MUST include equations and mathematical notation where appropriate.**
+
+### When to Include Equations
+
+For theses involving AI, ML, statistics, physics, engineering, or quantitative methods, include LaTeX math notation for:
+
+1. **Loss functions and objectives**
+2. **Algorithm descriptions**
+3. **Statistical formulas and tests**
+4. **Metrics and evaluation criteria**
+5. **Mathematical models and relationships**
+
+### LaTeX Math Syntax
+
+**Inline math** (within text): Use `$...$`
+```markdown
+The model minimizes the mean squared error $L = \frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2$.
+```
+
+**Display equations** (centered, standalone): Use `$$...$$`
+```markdown
+The cross-entropy loss is defined as:
+
+$$L_{CE} = -\sum_{i=1}^{C} y_i \log(\hat{y}_i)$$
+
+where $C$ is the number of classes.
+```
+
+### Common Equations to Include
+
+**Machine Learning:**
+```markdown
+$$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+
+$$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
+
+$$\text{F1} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
+```
+
+**Deep Learning:**
+```markdown
+$$\sigma(x) = \frac{1}{1 + e^{-x}}$$
+
+$$\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{K} e^{x_j}}$$
+
+$$\nabla_{\theta} J(\theta) = \mathbb{E}[\nabla_{\theta} \log \pi_{\theta}(a|s) R]$$
+```
+
+**Statistics:**
+```markdown
+$$t = \frac{\bar{x} - \mu}{s / \sqrt{n}}$$
+
+$$r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}$$
+```
+
+### Minimum Equation Requirements
+
+For STEM theses, include at minimum:
+
+| Section | Minimum Equations |
+|---------|-------------------|
+| Methodology | 2-3 (model architecture, loss function) |
+| Analysis/Results | 2-3 (evaluation metrics, statistical tests) |
+| Literature Review | 1-2 (foundational formulas) |
+
+### Example Integration
+
+**WRONG (no equations):**
+```markdown
+The model uses mean squared error as its loss function. The accuracy is calculated by 
+dividing correct predictions by total predictions.
+```
+
+**CORRECT (with equations):**
+```markdown
+The model minimizes the mean squared error (MSE) loss function:
+
+$$L_{MSE} = \frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2$$
+
+where $y_i$ represents the true value and $\hat{y}_i$ the predicted value for each of the $N$ samples.
+
+Model performance is evaluated using accuracy:
+
+$$\text{Accuracy} = \frac{|\{i : \hat{y}_i = y_i\}|}{N}$$
+
+This metric provides a straightforward measure of correct classifications relative to total predictions.
+```
+
+### Non-STEM Theses
+
+For humanities, social sciences, or qualitative research theses without mathematical components:
+- Equations are NOT required
+- Focus on proper citation formatting instead
+- Statistical tests (if any) should still use proper notation
+
+
 ## Section-Specific Guidance
 
 ### Introduction

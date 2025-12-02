@@ -6,7 +6,7 @@ ABOUTME: Primary citation source with 50M+ papers and guaranteed metadata qualit
 
 import logging
 from typing import Optional, Dict, Any, List
-from .base import BaseAPIClient
+from .base import BaseAPIClient, validate_author_name
 
 logger = logging.getLogger(__name__)
 
@@ -136,6 +136,11 @@ class CrossrefClient(BaseAPIClient):
                     family = author.get("family", "")
                     given = author.get("given", "")
                     if family:
+                        # Validate author name (Fix 2 - reject single-letter authors)
+                        is_valid, reason = validate_author_name(family)
+                        if not is_valid:
+                            logger.debug(f"Invalid author name '{family}': {reason}")
+                            continue  # Skip invalid author, try next
                         # Store as "Family" only (consistent with existing format)
                         authors.append(family)
 

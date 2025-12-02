@@ -8,12 +8,35 @@ import logging
 import json
 from typing import Optional, Dict, Any, Tuple, List
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
 from .crossref import CrossrefClient
 from .semantic_scholar import SemanticScholarClient
 from .gemini_grounded import GeminiGroundedClient
 from .query_router import QueryRouter, QueryClassification
+from .base import validate_publication_year, validate_author_name
+
+# =========================================================================
+# Preprint Detection (Fix 3 from devil's advocate analysis)
+# =========================================================================
+
+# DOI prefixes that indicate preprints (not peer-reviewed)
+PREPRINT_DOI_PREFIXES = [
+    '10.2139/ssrn',       # SSRN
+    '10.48550/arxiv',     # arXiv
+    '10.1101/',           # bioRxiv/medRxiv
+    '10.20944/preprints', # Preprints.org
+    '10.31219/osf',       # OSF Preprints
+    '10.21203/rs',        # Research Square
+    '10.26434/chemrxiv',  # ChemRxiv
+]
+
+def is_preprint_doi(doi: str) -> bool:
+    """Check if DOI indicates a preprint (not peer-reviewed)."""
+    if not doi:
+        return False
+    doi_lower = doi.lower()
+    return any(doi_lower.startswith(prefix) for prefix in PREPRINT_DOI_PREFIXES)
 
 # Import existing Citation dataclass
 import sys
@@ -85,7 +108,7 @@ class CitationResearcher:
             try:
                 self.gemini_grounded = GeminiGroundedClient(
                     validate_urls=False,  # Disable URL validation to prevent timeouts
-                    timeout=60  # Flash model is fast (~15s per query)
+                    timeout=45  # Reduced to fit within as_completed timeout
                 )
             except Exception as e:
                 logger.warning(f"Gemini Grounded client unavailable: {e}")
@@ -177,7 +200,7 @@ class CitationResearcher:
             cached_metadata, cached_source = cached
             if self.verbose:
                 print(
-                    f"    ✓ Cached: {cached_metadata['authors'][0]} et al. ({cached_metadata['year']}) [from {cached_source}]"
+                    f"    ✓ Cached: {cached_metadata.get('authors', ['Unknown'])[0] if cached_metadata.get('authors') else 'Unknown'} et al. ({cached_metadata.get('year', 'n.d.')}) [from {cached_source}]"
                 )
             citation = self._create_citation(cached_metadata, cached_source)
             return citation
@@ -241,14 +264,27 @@ class CitationResearcher:
                     executor.submit(self._search_api, api, topic): api 
                     for api in parallel_apis
                 }
-                for future in as_completed(futures, timeout=90):
-                    try:
-                        result = future.result()
-                        results.append(result)
-                    except Exception as e:
-                        api = futures[future]
-                        logger.debug(f"Parallel {api} error: {e}")
-                        results.append((None, api))
+                try:
+                    for future in as_completed(futures, timeout=60):  # Reduced from 90
+                        try:
+                            result = future.result()
+                            results.append(result)
+                        except Exception as e:
+                            api = futures[future]
+                            logger.debug(f"Parallel {api} error: {e}")
+                            results.append((None, api))
+                except (TimeoutError, FuturesTimeoutError):
+                    # Graceful degradation: use whatever results we have
+                    logger.warning(f"Parallel query timeout - {len(results)} of {len(futures)} APIs responded")
+                    # Collect any completed futures
+                    for future, api in futures.items():
+                        if future.done():
+                            try:
+                                result = future.result(timeout=0)
+                                if result not in results:
+                                    results.append(result)
+                            except Exception:
+                                pass
             
             # Pick best result from parallel queries
             metadata, source = self._pick_best_result(results)
@@ -348,7 +384,9 @@ class CitationResearcher:
         if metadata:
             citation = self._create_citation(metadata, source)
             if self.verbose and citation:
-                print(f"    ✓ Found: {citation.authors[0]} et al. ({citation.year}) [from {source}]")
+                # Check if preprint and show visible marker (Fix 3)
+                preprint_marker = " ⚠️ [PREPRINT]" if citation.source_type == "preprint" else ""
+                print(f"    ✓ Found: {citation.authors[0]} et al. ({citation.year}) [from {source}]{preprint_marker}")
                 if citation.doi:
                     print(f"      DOI: {citation.doi}")
                 elif citation.url:
@@ -386,13 +424,114 @@ class CitationResearcher:
                     return None
                 # Fill in missing academic fields for web sources
                 if not metadata.get("authors"):
-                    # Extract domain as author for web sources
+                    # Extract organization name for web sources (better than domain)
                     url = metadata.get("url", "")
                     if url:
                         from urllib.parse import urlparse
-                        domain = urlparse(url).netloc
-                        domain = domain.replace('www.', '')  # Clean up domain
-                        metadata["authors"] = [domain]
+                        domain = urlparse(url).netloc.lower().replace('www.', '')
+                        
+                        # Map known domains to proper organization names
+                        DOMAIN_TO_ORG = {
+                            # Consulting firms
+                            'mckinsey.com': 'McKinsey & Company',
+                            'bcg.com': 'Boston Consulting Group',
+                            'bain.com': 'Bain & Company',
+                            'deloitte.com': 'Deloitte',
+                            'pwc.com': 'PwC',
+                            'kpmg.com': 'KPMG',
+                            'ey.com': 'Ernst & Young',
+                            'accenture.com': 'Accenture',
+                            # Industry analysts
+                            'gartner.com': 'Gartner',
+                            'forrester.com': 'Forrester',
+                            'idc.com': 'IDC',
+                            'statista.com': 'Statista',
+                            # International organizations
+                            'who.int': 'World Health Organization',
+                            'oecd.org': 'OECD',
+                            'worldbank.org': 'World Bank',
+                            'un.org': 'United Nations',
+                            'imf.org': 'IMF',
+                            'wto.org': 'World Trade Organization',
+                            'unesco.org': 'UNESCO',
+                            # US Government agencies
+                            'nist.gov': 'NIST',
+                            'nih.gov': 'NIH',
+                            'cdc.gov': 'CDC',
+                            'fda.gov': 'FDA',
+                            'epa.gov': 'EPA',
+                            'nasa.gov': 'NASA',
+                            'nsf.gov': 'NSF',
+                            'energy.gov': 'U.S. Department of Energy',
+                            'state.gov': 'U.S. Department of State',
+                            'whitehouse.gov': 'White House',
+                            'congress.gov': 'U.S. Congress',
+                            'gao.gov': 'GAO',
+                            'cbo.gov': 'CBO',
+                            # EU institutions
+                            'europa.eu': 'European Commission',
+                            'europarl.europa.eu': 'European Parliament',
+                            'ecb.europa.eu': 'European Central Bank',
+                            # Think tanks & research institutes
+                            'brookings.edu': 'Brookings Institution',
+                            'rand.org': 'RAND Corporation',
+                            'cfr.org': 'Council on Foreign Relations',
+                            'carnegieendowment.org': 'Carnegie Endowment',
+                            'csis.org': 'CSIS',
+                            'heritage.org': 'Heritage Foundation',
+                            'aei.org': 'American Enterprise Institute',
+                            'pewresearch.org': 'Pew Research Center',
+                            'urban.org': 'Urban Institute',
+                            'cato.org': 'Cato Institute',
+                            # AI research centers
+                            'cset.georgetown.edu': 'Georgetown CSET',
+                            'hai.stanford.edu': 'Stanford HAI',
+                            'ainowinstitute.org': 'AI Now Institute',
+                            # Top universities (research centers)
+                            'mit.edu': 'MIT',
+                            'stanford.edu': 'Stanford University',
+                            'harvard.edu': 'Harvard University',
+                            'berkeley.edu': 'UC Berkeley',
+                            'ox.ac.uk': 'University of Oxford',
+                            'cam.ac.uk': 'University of Cambridge',
+                            'princeton.edu': 'Princeton University',
+                            'yale.edu': 'Yale University',
+                            'columbia.edu': 'Columbia University',
+                            'cmu.edu': 'Carnegie Mellon University',
+                            # News & journalism
+                            'reuters.com': 'Reuters',
+                            'bbc.com': 'BBC',
+                            'nytimes.com': 'New York Times',
+                            'ft.com': 'Financial Times',
+                            'economist.com': 'The Economist',
+                            'wsj.com': 'Wall Street Journal',
+                            # Tech giants (official research)
+                            'openai.com': 'OpenAI',
+                            'deepmind.com': 'DeepMind',
+                            'anthropic.com': 'Anthropic',
+                            'research.google': 'Google Research',
+                            'ai.google': 'Google AI',
+                            'research.microsoft.com': 'Microsoft Research',
+                            'research.ibm.com': 'IBM Research',
+                            'research.facebook.com': 'Meta AI',
+                        }
+                        
+                        # Try exact match first, then suffix match for subdomains
+                        org_name = DOMAIN_TO_ORG.get(domain)
+                        if not org_name:
+                            # Suffix match: energy.ec.europa.eu -> europa.eu -> European Commission
+                            for known_domain, org in DOMAIN_TO_ORG.items():
+                                if domain.endswith('.' + known_domain) or domain == known_domain:
+                                    org_name = org
+                                    break
+                        
+                        if org_name:
+                            metadata["authors"] = [org_name]
+                        else:
+                            # REJECT unknown domains - don't use domain as author
+                            # This prevents "issuu.com et al." citations
+                            logger.debug(f"Rejecting web source: unknown org for domain '{domain}'")
+                            return None
                     else:
                         metadata["authors"] = ["Web Source"]
                 if not metadata.get("year"):
@@ -405,19 +544,45 @@ class CitationResearcher:
                     logger.debug(f"Invalid metadata: missing required fields")
                     return None
 
+            # Fix 4: Validate publication year
+            year = metadata.get("year")
+            if year:
+                is_valid_year, year_reason, is_recent = validate_publication_year(year)
+                if not is_valid_year:
+                    logger.debug(f"Rejecting citation: invalid year {year} ({year_reason})")
+                    return None
+            
+            # Fix 7: Validate author names for ALL sources (catches single-letter and generic names)
+            authors = metadata.get("authors", [])
+            if authors:
+                first_author = authors[0] if authors else ""
+                is_valid_author, author_reason = validate_author_name(first_author)
+                if not is_valid_author:
+                    logger.debug(f"Rejecting citation: invalid author '{first_author}' ({author_reason})")
+                    return None
+            
+            # Check if this is a preprint (Fix 3)
+            doi = metadata.get("doi", "")
+            is_preprint = is_preprint_doi(doi)
+            
+            # Determine source_type (preprint overrides other types)
+            source_type = metadata.get("source_type", "website")
+            if is_preprint:
+                source_type = "preprint"
+            
             citation = Citation(
                 citation_id="temp_id",  # Will be assigned by CitationCompiler
                 authors=metadata["authors"],
                 year=int(metadata["year"]),
                 title=metadata["title"],
-                source_type=metadata.get("source_type", "website"),
+                source_type=source_type,
                 language="english",  # Assume English for API results
                 journal=metadata.get("journal", ""),
                 publisher=metadata.get("publisher", ""),
                 volume=metadata.get("volume"),
                 issue=metadata.get("issue"),
                 pages=metadata.get("pages", ""),
-                doi=metadata.get("doi", ""),
+                doi=doi,
                 url=metadata.get("url", ""),
                 api_source=source,  # Track which API found this citation
             )

@@ -26,11 +26,15 @@ USER_AGENTS = [
 # Format: "host:port:username:password" or "host:port" for unauthenticated
 # Example: PROXY_LIST = ["geo.iproyal.com:12321:user:pass"]
 PROXY_LIST: list = [
-    # Webshare datacenter proxies (30% success rate)
+    # Evomi datacenter proxies (primary - high capacity)
+    "***REMOVED***",
+    # Evomi core residential (premium - rotating IPs)
+    "***REMOVED***",
+    # Webshare datacenter proxies (backup)
     "***REMOVED***",
     "***REMOVED***",
     "***REMOVED***",
-    # IPRoyal rotating residential (higher success, use sparingly)
+    # IPRoyal rotating residential (backup)
     "***REMOVED***",
 ]
 
@@ -54,6 +58,86 @@ BROWSER_HEADERS = {
     "Accept-Encoding": "gzip, deflate, br",
     "Connection": "keep-alive",
 }
+
+# =========================================================================
+# Citation Quality Validation Functions (Fix 2 & Fix 5)
+# =========================================================================
+
+import datetime
+
+CURRENT_YEAR = datetime.datetime.now().year
+
+def validate_author_name(author_name: str) -> tuple:
+    """
+    Validate author name is academically acceptable.
+    
+    Args:
+        author_name: Author name string
+        
+    Returns:
+        Tuple of (is_valid, reason)
+    """
+    if not author_name:
+        return (False, "empty")
+    
+    name = author_name.strip()
+    
+    # Reject single-character authors (e.g., "R et al.")
+    if len(name) <= 2:
+        return (False, "too_short")
+    
+    # Reject domain-like authors (e.g., "education.illinois.edu")
+    domain_tlds = ['.com', '.org', '.net', '.edu', '.gov', '.io', '.ai', '.int']
+    if '.' in name and any(tld in name.lower() for tld in domain_tlds):
+        return (False, "domain_as_author")
+    
+    # Reject URLs as authors
+    if name.startswith('http://') or name.startswith('https://'):
+        return (False, "url_as_author")
+    
+    # Reject generic/institutional author names (metadata pollution)
+    generic_terms = [
+        'working paper', 'discussion paper', 'technical report', 'staff report',
+        'research paper', 'policy brief', 'white paper', 'occasional paper',
+        'series', 'anonymous', 'unknown', 'author', 'authors', 'editor', 'editors',
+        'committee', 'commission', 'group', 'team', 'staff', 'admin', 'administrator'
+    ]
+    name_lower = name.lower()
+    if any(term in name_lower for term in generic_terms):
+        return (False, "generic_author")
+    
+    return (True, "valid")
+
+def validate_publication_year(year: int) -> tuple:
+    """
+    Validate publication year is reasonable.
+    
+    Args:
+        year: Publication year
+        
+    Returns:
+        Tuple of (is_valid, reason, is_recent)
+    """
+    if not year:
+        return (False, "no_year", False)
+    
+    try:
+        year_int = int(year)
+    except (ValueError, TypeError):
+        return (False, "invalid_year", False)
+    
+    # Future years are impossible
+    if year_int > CURRENT_YEAR:
+        return (False, "future_year", False)
+    
+    # Very old papers (pre-1900) are suspicious
+    if year_int < 1900:
+        return (False, "ancient_year", False)
+    
+    # Current year papers might be preprints
+    is_recent = (year_int == CURRENT_YEAR)
+    
+    return (True, "valid", is_recent)
 
 
 class BaseAPIClient(ABC):
