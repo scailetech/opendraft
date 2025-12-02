@@ -52,6 +52,10 @@ export const CompletionEmail = ({
       <SecondaryButton href={docxUrl}>Download Word</SecondaryButton>
     </ButtonGroup>
 
+    <Text style={styles.smallText} className="email-text-muted">
+      <em>Note: Word may show a dialog about updating fields when opening - click "Yes" to enable the table of contents with page numbers.</em>
+    </Text>
+
     <AlertBox type="warning" title="Download links expire in 7 days">
       Make sure to download your thesis files before they expire.
     </AlertBox>
