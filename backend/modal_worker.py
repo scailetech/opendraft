@@ -69,6 +69,7 @@ volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
         modal.Secret.from_name("gemini-api-key"),
         modal.Secret.from_name("gemini-api-key-fallback"),
         modal.Secret.from_name("resend-api-key"),
+        modal.Secret.from_name("proxy-credentials"),
     ],
     image=image,
     retries=2,  # Auto-retry on failure
