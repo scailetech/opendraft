@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin';
 import { WAITLIST_CONFIG } from '@/lib/config/waitlist';
 import { checkRateLimit } from '@/lib/utils/rate-limit';
 import { getClientIP } from '@/lib/utils/validation';
+import { replaceEmailPlaceholders } from '@/lib/utils/email';
 
 export async function GET(request: NextRequest) {
   try {
@@ -59,12 +60,51 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to verify email' }, { status: 500 });
     }
 
-    // 3. If user was referred, process referral reward
+    // 3. Send welcome email
+    try {
+      if (process.env.RESEND_API_KEY) {
+        const { WelcomeEmail } = await import('@/emails/WelcomeEmail');
+        const { render } = await import('@react-email/render');
+        const { Resend } = await import('resend');
+
+        const resendClient = new Resend(process.env.RESEND_API_KEY);
+        const dashboardUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/waitlist/${user.id}`;
+
+        // Calculate estimated wait (100 theses/day processing rate)
+        const estimatedDays = Math.ceil(user.position / WAITLIST_CONFIG.DAILY_THESIS_LIMIT);
+        const estimatedWait = estimatedDays === 1 ? '~1 day' : `~${estimatedDays} days`;
+
+        const welcomeHtml = await render(
+          WelcomeEmail({
+            fullName: user.full_name,
+            position: user.position,
+            thesisTopic: user.thesis_topic,
+            referralCode: user.referral_code,
+            referralCount: 0, // Fresh signup has no referrals yet
+            estimatedWait,
+            dashboardUrl,
+          })
+        );
+
+        await resendClient.emails.send({
+          from: WAITLIST_CONFIG.FROM_EMAIL,
+          reply_to: WAITLIST_CONFIG.REPLY_TO_EMAIL,
+          to: user.email,
+          subject: 'Welcome to OpenDraft! Your spot is confirmed',
+          html: replaceEmailPlaceholders(welcomeHtml, user.email),
+        });
+      }
+    } catch (emailError) {
+      // Welcome email failed - continue (don't block verification)
+      console.error('Welcome email failed:', emailError);
+    }
+
+    // 4. If user was referred, process referral reward
     if (user.referred_by_code) {
       await processReferralReward(user.referred_by_code, user.email);
     }
 
-    // 4. Redirect to success page
+    // 5. Redirect to success page
     return NextResponse.redirect(new URL(`/waitlist/${user.id}?verified=true`, request.url));
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -144,19 +184,23 @@ async function processReferralReward(referrerCode: string, refereeEmail: string)
           const resendClient = new Resend(process.env.RESEND_API_KEY);
           const dashboardUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/waitlist/${referrer.id}`;
 
+          const rewardHtml = await render(
+            ReferralRewardEmail({
+              fullName: referrer.full_name,
+              newPosition,
+              oldPosition: referrer.position,
+              referralCount,
+              dashboardUrl,
+              referralCode: referrerCode,
+            })
+          );
+
           await resendClient.emails.send({
             from: WAITLIST_CONFIG.FROM_EMAIL,
+            reply_to: WAITLIST_CONFIG.REPLY_TO_EMAIL,
             to: referrer.email,
-            subject: `You skipped 100 positions! Now at #${newPosition} 🎉`,
-            html: render(
-              ReferralRewardEmail({
-                fullName: referrer.full_name,
-                newPosition,
-                oldPosition: referrer.position,
-                referralCount,
-                dashboardUrl,
-              })
-            ),
+            subject: `You skipped 100 positions! Now at #${newPosition}`,
+            html: replaceEmailPlaceholders(rewardHtml, referrer.email),
           });
         }
       } catch (emailError) {

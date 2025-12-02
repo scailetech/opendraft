@@ -1,15 +1,19 @@
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Preview,
-  Section,
-  Text,
-} from '@react-email/components';
+/**
+ * ABOUTME: Email sent when user signs up for waitlist
+ * ABOUTME: Prompts user to verify their email address
+ */
+
+import { Heading, Text, Section } from '@react-email/components';
 import * as React from 'react';
+import { styles, colors, spacing } from './styles';
+import {
+  EmailWrapper,
+  PrimaryButton,
+  ButtonGroup,
+  Card,
+  CodeBox,
+  StatBox,
+} from './components';
 
 interface VerificationEmailProps {
   fullName: string;
@@ -20,131 +24,57 @@ interface VerificationEmailProps {
 
 export const VerificationEmail = ({
   fullName = 'Student',
-  verificationUrl = 'https://opendraft.ai/waitlist/verify?token=abc123',
+  verificationUrl = 'https://opendraft.io/waitlist/verify?token=abc123',
   position = 42,
   referralCode = 'ABC123XYZ',
 }: VerificationEmailProps) => (
-  <Html>
-    <Head />
-    <Preview>Verify your OpenDraft waitlist spot</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Welcome to OpenDraft Waitlist!</Heading>
+  <EmailWrapper preview="Verify your OpenDraft waitlist spot">
+    <Heading style={styles.h1} className="email-text">Verify Your Email</Heading>
 
-        <Text style={text}>Hi {fullName},</Text>
+    <Text style={styles.text} className="email-text-muted">Hi {fullName},</Text>
 
-        <Text style={text}>
-          You're <strong>#{position}</strong> in line for a free AI-generated thesis (20,000+ words).
-        </Text>
+    <Text style={styles.text} className="email-text-muted">
+      Thanks for joining the OpenDraft waitlist! Please verify your email to
+      secure your spot.
+    </Text>
 
-        <Section style={buttonContainer}>
-          <Button style={button} href={verificationUrl}>
-            Verify Email
-          </Button>
-        </Section>
+    <Card>
+      <table width="100%" cellPadding={0} cellSpacing={0}>
+        <tbody>
+          <tr>
+            <td style={{ textAlign: 'center' as const }}>
+              <StatBox value={position} label="Your Position" prefix="#" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </Card>
 
-        <Text style={text}>
-          Or copy this link:<br />
-          <span style={code}>{verificationUrl}</span>
-        </Text>
+    <ButtonGroup>
+      <PrimaryButton href={verificationUrl}>Verify Email Address</PrimaryButton>
+    </ButtonGroup>
 
-        <Section style={ctaSection}>
-          <Text style={ctaText}>
-            <strong>Want to skip ahead?</strong>
-          </Text>
-          <Text style={text}>
-            Share your referral link with 3 friends to jump <strong>100 positions</strong>!
-          </Text>
-          <Text style={text}>
-            Your referral code: <span style={code}>{referralCode}</span>
-          </Text>
-        </Section>
+    <Text style={styles.textSmall} className="email-text-muted">
+      This link expires in 7 days. If the button doesn't work, copy and paste
+      this URL into your browser:
+    </Text>
+    <Text style={{
+      ...styles.textSmall,
+      wordBreak: 'break-all' as const,
+      color: colors.primary,
+    }}>
+      {verificationUrl}
+    </Text>
 
-        <Text style={footer}>
-          Thanks,
-          <br />
-          OpenDraft Team
-        </Text>
-      </Container>
-    </Body>
-  </Html>
+    <Section style={{ marginTop: spacing[8] }}>
+      <Heading style={styles.h2} className="email-text">Want to Skip the Line?</Heading>
+      <Text style={styles.text} className="email-text-muted">
+        Share your referral code with friends. Every 3 verified referrals moves
+        you up <strong style={styles.strong}>100 positions</strong>!
+      </Text>
+      <CodeBox label="Your Referral Code" value={referralCode} />
+    </Section>
+  </EmailWrapper>
 );
 
 export default VerificationEmail;
-
-const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
-
-const container = {
-  backgroundColor: '#ffffff',
-  margin: '0 auto',
-  padding: '20px 0 48px',
-  marginBottom: '64px',
-  maxWidth: '600px',
-};
-
-const h1 = {
-  color: '#26251e',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  margin: '40px 0',
-  padding: '0 40px',
-  textAlign: 'center' as const,
-};
-
-const text = {
-  color: '#4b5563',
-  fontSize: '16px',
-  lineHeight: '24px',
-  margin: '16px 0',
-  padding: '0 40px',
-};
-
-const buttonContainer = {
-  padding: '27px 40px',
-  textAlign: 'center' as const,
-};
-
-const button = {
-  backgroundColor: '#8B5CF6',
-  borderRadius: '8px',
-  color: '#fff',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  textAlign: 'center' as const,
-  display: 'inline-block',
-  padding: '12px 24px',
-};
-
-const code = {
-  fontFamily: 'monospace',
-  backgroundColor: '#f3f4f6',
-  padding: '4px 8px',
-  borderRadius: '4px',
-  fontSize: '14px',
-};
-
-const ctaSection = {
-  backgroundColor: '#f9fafb',
-  borderRadius: '8px',
-  margin: '32px 40px',
-  padding: '20px',
-};
-
-const ctaText = {
-  color: '#26251e',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  margin: '0 0 8px 0',
-};
-
-const footer = {
-  color: '#6b7280',
-  fontSize: '14px',
-  lineHeight: '24px',
-  margin: '32px 0',
-  padding: '0 40px',
-};

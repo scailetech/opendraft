@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { generateReferralCode } from '@/lib/utils/referral';
 import { validateEmail, validateThesisTopic, validateFullName, getClientIP } from '@/lib/utils/validation';
+import { replaceEmailPlaceholders } from '@/lib/utils/email';
 import { WAITLIST_CONFIG } from '@/lib/config/waitlist';
 import { Resend } from 'resend';
 import crypto from 'crypto';
@@ -152,18 +153,21 @@ export async function POST(request: NextRequest) {
         const { VerificationEmail } = await import('@/emails/VerificationEmail');
         const { render } = await import('@react-email/render');
 
+        const renderedHtml = await render(
+          VerificationEmail({
+            fullName,
+            verificationUrl,
+            position,
+            referralCode,
+          })
+        );
+
         await resendClient.emails.send({
           from: WAITLIST_CONFIG.FROM_EMAIL,
+          reply_to: WAITLIST_CONFIG.REPLY_TO_EMAIL,
           to: email,
           subject: 'Verify your OpenDraft waitlist spot',
-          html: render(
-            VerificationEmail({
-              fullName,
-              verificationUrl,
-              position,
-              referralCode,
-            })
-          ),
+          html: replaceEmailPlaceholders(renderedHtml, email),
         });
       }
     } catch (emailError) {
