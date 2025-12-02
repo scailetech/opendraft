@@ -1,5 +1,5 @@
 // ABOUTME: How It Works section explaining the 4-step workflow for using OpenDraft
-// ABOUTME: Setup (10 min) → Choose Agents → AI Processing → Review & Export
+// ABOUTME: Setup (10 min) → Choose Agents → AI Processing (70-84 queries) → Review & Export
 
 import {
   Card,
@@ -15,6 +15,7 @@ interface StepProps {
   icon: LucideIcon;
   title: string;
   description: string;
+  stats?: string;
 }
 
 const stepsList: StepProps[] = [
@@ -30,21 +31,23 @@ const stepsList: StepProps[] = [
     icon: Sparkles,
     title: "Choose Your Agents",
     description:
-      "Select from 19 specialized agents: Scout for research, Architect for structure, Crafter for content, or use them all.",
+      "Select from 19 specialized agents across 6 phases: Research, Structure, Compose, Validate, Refine, Enhance.",
   },
   {
     step: 3,
     icon: FileSearch,
-    title: "AI Does the Heavy Lifting",
+    title: "AI Researches & Writes",
     description:
-      "Each agent searches academic databases, generates content, validates citations, and structures your thesis automatically.",
+      "Each thesis generates 70-84 targeted queries, screening 300-600 sources to find 50+ validated citations.",
+    stats: "95%+ citation accuracy",
   },
   {
     step: 4,
     icon: FileCheck,
     title: "Review & Export",
     description:
-      "Review the output, make your edits, and export to PDF, Word, or LaTeX. Complete drafts in hours, refine in days.",
+      "Export to PDF, Word, or LaTeX with APA/MLA/Chicago/IEEE citations. Tables, equations, and appendices included.",
+    stats: "3 export formats • 4 citation styles",
   },
 ];
 
@@ -61,12 +64,12 @@ export const HowItWorksSection = () => {
         </h2>
 
         <p className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground">
-          No coding skills required. Just run simple commands and let AI handle the research and writing.
+          No coding skills required. Generate a 20,000-word thesis draft in 20-25 minutes.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stepsList.map(({ step, icon: Icon, title, description }) => {
+        {stepsList.map(({ step, icon: Icon, title, description, stats }) => {
           const progress = (step / stepsList.length) * 100;
           return (
             <Card key={step} className="relative bg-background">
@@ -91,8 +94,13 @@ export const HowItWorksSection = () => {
                 <CardTitle className="text-center">{title}</CardTitle>
               </CardHeader>
 
-              <CardContent className="text-center text-muted-foreground">
-                {description}
+              <CardContent className="text-center">
+                <p className="text-muted-foreground mb-2">{description}</p>
+                {stats && (
+                  <p className="text-xs font-medium text-primary bg-primary/10 rounded-full px-3 py-1 inline-block">
+                    {stats}
+                  </p>
+                )}
               </CardContent>
             </Card>
           );
