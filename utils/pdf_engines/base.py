@@ -44,11 +44,16 @@ class PDFGenerationOptions:
     date: Optional[str] = None
     institution: Optional[str] = None
     department: Optional[str] = None
+    faculty: Optional[str] = None  # Faculty/School name
     course: Optional[str] = None  # Maps to 'degree' in YAML
     instructor: Optional[str] = None  # Maps to 'advisor' in YAML
+    second_examiner: Optional[str] = None  # Second examiner/reviewer
     student_id: Optional[str] = None
+    matriculation_number: Optional[str] = None  # Alternative to student_id
     project_type: Optional[str] = None
     system_credit: Optional[str] = None
+    location: Optional[str] = None  # City of submission
+    submission_date: Optional[str] = None  # Full submission date
 
     # Table of contents
     enable_toc: bool = True  # Changed from False - academic papers need TOC by default

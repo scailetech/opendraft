@@ -7,6 +7,7 @@ ABOUTME: Professional typesetting using LaTeX with proper font rendering
 import subprocess
 import shutil
 import yaml
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, Any
 
@@ -265,85 +266,114 @@ class PandocLatexEngine(PDFEngine):
         if any([options.title, options.author, options.institution,
                 options.course, options.instructor]):
             preamble += r'''
-% Professional Academic Title Page
+% Professional Academic Title Page - Balanced Layout
 \usepackage{titling}
 \renewcommand{\maketitle}{%
   \begin{titlepage}
     \centering
-    \vspace*{1in}
-
-    % Institution and Department
+    % Institution Block - top
+    \vspace*{0.5in}
 '''
             # Add institution if provided
             if options.institution:
-                preamble += f'''    {{\\large {options.institution}\\par}}
-    \\vspace{{0.3cm}}
+                preamble += f'''    {{\\normalsize\\scshape {options.institution}\\par}}
+'''
+            # Add faculty if provided
+            if hasattr(options, 'faculty') and options.faculty:
+                preamble += f'''    \\vspace{{0.08cm}}
+    {{\\small {options.faculty}\\par}}
 '''
             if options.department:
-                preamble += f'''    {{\\normalsize {options.department}\\par}}
-    \\vspace{{1.5cm}}
+                preamble += f'''    \\vspace{{0.08cm}}
+    {{\\small\\itshape {options.department}\\par}}
 '''
 
-            # Add title and subtitle
             preamble += r'''
-    % Title
+    \vfill
+    % Title Block - center
 '''
             if options.title:
-                preamble += f'''    {{\\LARGE\\bfseries {options.title}\\par}}
-    \\vspace{{0.5cm}}
+                preamble += f'''    {{\\Large\\bfseries {options.title}\\par}}
 '''
             if options.subtitle:
-                preamble += f'''    {{\\Large {options.subtitle}\\par}}
-    \\vspace{{1cm}}
+                preamble += f'''    \\vspace{{0.25cm}}
+    {{\\normalsize\\itshape {options.subtitle}\\par}}
 '''
 
             # Add project type descriptor
             if options.project_type:
-                preamble += f'''
-    {{\\normalsize {options.project_type}\\par}}
-    \\vspace{{1cm}}
-'''
-
-            # Add author and student ID
-            preamble += r'''
-    % Author Information
-'''
-            if options.author:
-                preamble += f'''    {{\\large {options.author}\\par}}
-'''
-            if options.student_id:
-                preamble += f'''    {{\\normalsize {options.student_id}\\par}}
-    \\vspace{{0.5cm}}
+                preamble += f'''    \\vspace{{0.5cm}}
+    {{\\small\\scshape {options.project_type}\\par}}
 '''
 
             # Add degree
             if options.course:  # course field holds degree info
-                preamble += f'''
-    {{\\normalsize {options.course}\\par}}
-    \\vspace{{0.5cm}}
+                preamble += f'''    \\vspace{{0.2cm}}
+    {{\\small submitted in partial fulfillment of the requirements for the degree of\\par}}
+    \\vspace{{0.1cm}}
+    {{\\normalsize\\bfseries {options.course}\\par}}
 '''
 
-            # Add advisor
-            if options.instructor:  # instructor field holds advisor info
-                preamble += f'''
-    {{\\normalsize {options.instructor}\\par}}
-    \\vspace{{1cm}}
+            preamble += r'''
+    \vfill
+    % Author Block
+    {\small submitted by\par}
+    \vspace{0.15cm}
+'''
+            if options.author:
+                preamble += f'''    {{\\normalsize\\bfseries {options.author}\\par}}
+'''
+            # Student ID or Matriculation number
+            if options.student_id:
+                preamble += f'''    \\vspace{{0.08cm}}
+    {{\\small Matriculation No.: {options.student_id}\\par}}
+'''
+            if hasattr(options, 'matriculation_number') and options.matriculation_number:
+                preamble += f'''    \\vspace{{0.08cm}}
+    {{\\small Matriculation No.: {options.matriculation_number}\\par}}
+'''
+
+            preamble += r'''
+    \vfill
+    % Supervision Block
+'''
+            # Add advisor/supervisor
+            if options.instructor:
+                preamble += f'''    {{\\small\\bfseries First Supervisor:}} {{\\small {options.instructor}\\par}}
+'''
+            # Add second examiner if provided
+            if hasattr(options, 'second_examiner') and options.second_examiner:
+                preamble += f'''    \\vspace{{0.08cm}}
+    {{\\small\\bfseries Second Examiner:}} {{\\small {options.second_examiner}\\par}}
 '''
 
             # Add system credit
             if options.system_credit:
-                preamble += f'''
-    {{\\normalsize\\itshape {options.system_credit}\\par}}
-    \\vspace{{0.5cm}}
-'''
-
-            # Add date
-            if options.date:
-                preamble += f'''
-    {{\\normalsize {options.date}\\par}}
+                preamble += f'''    \\vspace{{0.2cm}}
+    {{\\footnotesize\\itshape {options.system_credit}\\par}}
 '''
 
             preamble += r'''
+    \vfill
+    % Bottom section - Location and Date
+'''
+            # Add location if provided
+            if hasattr(options, 'location') and options.location:
+                preamble += f'''    {{\\small {options.location}\\par}}
+'''
+            # Add submission date, regular date, or default to today
+            if hasattr(options, 'submission_date') and options.submission_date:
+                display_date = options.submission_date
+            elif options.date:
+                display_date = options.date
+            else:
+                display_date = datetime.now().strftime('%B %d, %Y')
+            preamble += f'''    \\vspace{{0.08cm}}
+    {{\\small {display_date}\\par}}
+'''
+
+            preamble += r'''
+    \vspace{0.5in}
   \end{titlepage}
 }
 
@@ -402,7 +432,7 @@ class PandocLatexEngine(PDFEngine):
                 '-o', str(output_pdf.resolve()),
                 '--pdf-engine=xelatex',  # Use XeLaTeX for full Unicode support
                 '--include-in-header', str(preamble_path.resolve()),
-                '--from', 'markdown+autolink_bare_uris',
+                '--from', 'markdown+autolink_bare_uris+raw_tex',
                 '--variable', f'geometry:margin={margin}',
                 '--variable', f'fontsize={options.font_size}',
                 '--variable', 'papersize:letter',
@@ -721,14 +751,15 @@ class PandocLatexEngine(PDFEngine):
         yaml_part = parts[1]
         body_part = parts[2]
 
-        # Remove first level-1 heading from body (# Title...)
-        # Pattern: Optional \newpage, whitespace, then first # heading until next line
-        # The title is typically one long line like "# Why This... : Subtitle..."
+        # Remove first level-1 heading from body ONLY if it's a title (not a chapter)
+        # Pattern: # heading that does NOT start with a number (chapter headings like "# 1. Introduction")
+        # Title headings look like: "# Why OpenDraft..." or "# The Impact of..."
+        # Chapter headings look like: "# 1. Introduction" or "# 2. Main Body"
         body_part = re.sub(
-            r'(?:\\newpage\s*\n+)?\s*^#\s+[^\n]+\n+',  # \newpage (optional) + # heading + trailing newlines
+            r'^\s*#\s+(?!\d+\.)[^\n]+\n+',  # # heading NOT starting with digit+period
             r'',  # Remove it completely
             body_part,
-            count=1,  # Only remove first # heading
+            count=1,  # Only remove first matching # heading
             flags=re.MULTILINE
         )
 

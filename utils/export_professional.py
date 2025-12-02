@@ -453,7 +453,7 @@ def export_docx(
         if reference_doc:
             cmd.extend(['--reference-doc', str(reference_doc)])
 
-        # Add table of contents
+        # Add table of contents (Pandoc generates a proper Word TOC field)
         if options.enable_toc:
             cmd.append('--toc')
             cmd.extend(['--toc-depth', str(options.toc_depth)])
@@ -488,11 +488,35 @@ def export_docx(
         logger.info(f"DOCX created successfully: {output_docx}")
         logger.info("Tables, formatting, and styling preserved from markdown")
 
-        # Post-process DOCX to add academic structure (title page + TOC)
+        # Post-process DOCX to add academic structure (title page + TOC + page breaks)
         # Fixes Pandoc's inline title block by inserting professional page breaks
         from utils.docx_post_processor import insert_academic_structure
 
-        if not insert_academic_structure(output_docx, verbose=True):
+        # Build options dict from PDFGenerationOptions for cover page enhancement
+        post_options = {}
+        if options:
+            if options.institution:
+                post_options['institution'] = options.institution
+            if hasattr(options, 'faculty') and options.faculty:
+                post_options['faculty'] = options.faculty
+            if options.department:
+                post_options['department'] = options.department
+            if options.course:
+                post_options['course'] = options.course
+            if options.instructor:
+                post_options['instructor'] = options.instructor
+            if hasattr(options, 'second_examiner') and options.second_examiner:
+                post_options['second_examiner'] = options.second_examiner
+            if options.student_id:
+                post_options['student_id'] = options.student_id
+            if hasattr(options, 'project_type') and options.project_type:
+                post_options['project_type'] = options.project_type
+            if hasattr(options, 'system_credit') and options.system_credit:
+                post_options['system_credit'] = options.system_credit
+            if hasattr(options, 'location') and options.location:
+                post_options['location'] = options.location
+
+        if not insert_academic_structure(output_docx, verbose=True, options=post_options if post_options else None):
             logger.warning("Post-processing failed - DOCX created but may lack page structure")
             logger.warning("DOCX will have inline title block instead of standalone pages")
             return True  # Still return True since basic DOCX was created
