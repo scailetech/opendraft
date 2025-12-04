@@ -81,13 +81,13 @@ export function PositionTracker({ userId, initialPosition }: PositionTrackerProp
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <TrendingDown className="h-5 w-5 text-primary" />
+          <TrendingDown className="h-5 w-5 text-accent" />
           Your Position in Queue
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="text-center">
-          <div className="text-6xl font-bold text-primary dark:text-border">
+          <div className="text-6xl font-bold text-accent">
             #{position}
           </div>
           <p className="text-muted-foreground mt-2">
@@ -106,10 +106,10 @@ export function PositionTracker({ userId, initialPosition }: PositionTrackerProp
         </div>
 
         {position > WAITLIST_CONFIG.DAILY_THESIS_LIMIT && (
-          <div className="bg-border dark:bg-border p-4 rounded-lg">
-            <p className="text-sm text-border dark:text-border">
-              <strong>Want to skip ahead?</strong> Share your referral link with 3 friends to jump
-              100 positions!
+          <div className="bg-accent/10 p-4 rounded-lg">
+            <p className="text-sm text-accent">
+              <strong>Want to skip ahead?</strong> Each referral skips you
+              20 positions.
             </p>
           </div>
         )}

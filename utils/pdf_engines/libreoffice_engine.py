@@ -4,6 +4,7 @@ ABOUTME: LibreOffice-based PDF generation engine using headless conversion
 ABOUTME: Generates DOCX first, then converts to PDF via LibreOffice CLI
 """
 
+import re
 import subprocess
 import shutil
 from pathlib import Path

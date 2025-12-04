@@ -56,6 +56,43 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
           hover: "hsl(var(--card-hover))",
         },
+        /* Cursor-inspired warm palette */
+        cursor: {
+          cream: "#f7f7f4",
+          brown: "#26251e",
+          orange: "#f54e00",
+          "card-1": "#f2f1ed",
+          "card-2": "#f0efeb",
+          "card-3": "#ebeae5",
+          "card-4": "#e6e5e0",
+        },
+        /* OpenDraft brand palette */
+        brand: {
+          purple: {
+            50: "#eff6ff",
+            100: "#dbeafe",
+            200: "#bfdbfe",
+            300: "#93c5fd",
+            400: "#60a5fa",
+            500: "#3b82f6", // Primary brand color
+            600: "#2563eb",
+            700: "#1d4ed8",
+            800: "#1e40af",
+            900: "#1e3a8a",
+          },
+          cyan: {
+            50: "#eff6ff",
+            100: "#dbeafe",
+            200: "#bfdbfe",
+            300: "#93c5fd",
+            400: "#60a5fa",
+            500: "#3b82f6", // Accent color
+            600: "#2563eb",
+            700: "#1d4ed8",
+            800: "#1e40af",
+            900: "#1e3a8a",
+          },
+        },
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

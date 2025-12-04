@@ -1,110 +1,114 @@
-// ABOUTME: How It Works section explaining the 4-step workflow for using OpenDraft
-// ABOUTME: Setup (10 min) → Choose Agents → AI Processing (70-84 queries) → Review & Export
+// ABOUTME: How It Works - card-based design with icons
+// ABOUTME: Visual step progression with connectors
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { FileCode, Sparkles, FileSearch, FileCheck, type LucideIcon } from "lucide-react";
+import { Settings, Sliders, Sparkles, Download, ArrowRight } from "lucide-react";
 
-interface StepProps {
-  step: number;
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  stats?: string;
-}
-
-const stepsList: StepProps[] = [
+const steps = [
   {
-    step: 1,
-    icon: FileCode,
-    title: "Set Up in 10 Minutes",
-    description:
-      "Install Python dependencies, add your AI API key (free Gemini tier available), and you're ready to write.",
+    num: "01",
+    icon: Settings,
+    title: "Setup",
+    time: "10 min",
+    desc: "Clone the repo, install dependencies, and add your API key.",
+    details: ["Git clone", "npm install", "Add API key"],
   },
   {
-    step: 2,
+    num: "02",
+    icon: Sliders,
+    title: "Configure",
+    time: "2 min",
+    desc: "Choose your AI model and customize agent settings.",
+    details: ["Pick LLM", "Set topic", "Choose format"],
+  },
+  {
+    num: "03",
     icon: Sparkles,
-    title: "Choose Your Agents",
-    description:
-      "Select from 19 specialized agents across 6 phases: Research, Structure, Compose, Validate, Refine, Enhance.",
+    title: "Generate",
+    time: "15-25 min",
+    desc: "AI researches, writes, and verifies citations automatically.",
+    details: ["70-84 queries", "600+ sources", "50+ citations"],
   },
   {
-    step: 3,
-    icon: FileSearch,
-    title: "AI Researches & Writes",
-    description:
-      "Each thesis generates 70-84 targeted queries, screening 300-600 sources to find 50+ validated citations.",
-    stats: "95%+ citation accuracy",
-  },
-  {
-    step: 4,
-    icon: FileCheck,
-    title: "Review & Export",
-    description:
-      "Export to PDF, Word, or LaTeX with APA/MLA/Chicago/IEEE citations. Tables, equations, and appendices included.",
-    stats: "3 export formats • 4 citation styles",
+    num: "04",
+    icon: Download,
+    title: "Export",
+    time: "5 min",
+    desc: "Review your thesis and export to PDF, Word, or LaTeX.",
+    details: ["Review draft", "Make edits", "Download files"],
   },
 ];
 
 export const HowItWorksSection = () => {
   return (
-    <section id="how-it-works" className="container py-24 sm:py-32 bg-muted/50">
-      <div className="text-center mb-12">
-        <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-          How It Works
-        </h2>
+    <section id="how-it-works" className="py-24 sm:py-32 border-t border-border/50">
+      <div className="container">
+        <div className="max-w-2xl mx-auto text-center mb-16">
+          <p className="text-sm font-medium text-accent mb-3">How It Works</p>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+            Four simple steps
+          </h2>
+          <p className="text-muted-foreground">
+            No coding experience required. From setup to thesis in under an hour.
+          </p>
+        </div>
 
-        <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
-          From Zero to Draft in 4 Steps
-        </h2>
-
-        <p className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground">
-          No coding skills required. Generate a 20,000-word thesis draft in 20-25 minutes.
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stepsList.map(({ step, icon: Icon, title, description, stats }) => {
-          const progress = (step / stepsList.length) * 100;
-          return (
-            <Card key={step} className="relative bg-background">
-              <div className="absolute -top-4 -left-4 w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold shadow-lg">
-                {step}
-              </div>
-              <CardHeader className="pt-8">
-                <div className="flex items-center justify-between mb-4 w-full">
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Step {step} of {stepsList.length}
-                  </span>
-                  <span className="text-sm font-medium text-primary">
-                    {progress}%
-                  </span>
-                </div>
-                <Progress value={progress} className="h-2 mb-6" />
-                <div className="flex items-center justify-center mb-4">
-                  <div className="bg-primary/20 p-3 rounded-full ring-8 ring-primary/10">
-                    <Icon className="size-6 text-primary" />
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-6">
+            {steps.map((step, index) => (
+              <div key={step.num} className="relative">
+                {/* Connector arrow */}
+                {index < steps.length - 1 && (
+                  <div className="hidden md:flex absolute top-12 -right-3 z-10">
+                    <ArrowRight className="w-6 h-6 text-border" />
                   </div>
-                </div>
-                <CardTitle className="text-center">{title}</CardTitle>
-              </CardHeader>
-
-              <CardContent className="text-center">
-                <p className="text-muted-foreground mb-2">{description}</p>
-                {stats && (
-                  <p className="text-xs font-medium text-primary bg-primary/10 rounded-full px-3 py-1 inline-block">
-                    {stats}
-                  </p>
                 )}
-              </CardContent>
-            </Card>
-          );
-        })}
+
+                {/* Card */}
+                <div className="bg-card border border-border rounded-xl p-6 h-full hover:border-accent/50 transition-colors">
+                  {/* Icon and number */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+                      <step.icon className="w-6 h-6 text-accent" />
+                    </div>
+                    <span className="font-mono text-2xl font-bold text-muted-foreground/30">
+                      {step.num}
+                    </span>
+                  </div>
+
+                  {/* Title and time */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-semibold text-lg">{step.title}</h3>
+                    <span className="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-mono">
+                      {step.time}
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground mb-4">{step.desc}</p>
+
+                  {/* Details list */}
+                  <ul className="space-y-1">
+                    {step.details.map((detail) => (
+                      <li key={detail} className="text-xs text-muted-foreground flex items-center gap-2">
+                        <div className="w-1 h-1 rounded-full bg-accent" />
+                        {detail}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Total time */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-accent/10 border border-accent/20">
+            <span className="text-sm text-muted-foreground">Total time:</span>
+            <span className="font-mono text-lg font-semibold text-accent">~45 minutes</span>
+            <span className="text-sm text-muted-foreground">for a complete thesis draft</span>
+          </div>
+        </div>
       </div>
     </section>
   );

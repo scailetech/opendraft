@@ -1,5 +1,4 @@
 // Email and input validation utilities
-import DOMPurify from 'isomorphic-dompurify';
 
 /**
  * List of disposable/temporary email domains to block
@@ -45,20 +44,15 @@ export function validateEmail(email: string): { isValid: boolean; error?: string
 }
 
 /**
- * Sanitize user input to prevent XSS attacks
- * Uses DOMPurify to remove all HTML/script tags and malicious content
+ * Sanitize user input to prevent XSS
  * @param input User input string
- * @returns Sanitized string with all HTML stripped
+ * @returns Sanitized string
  */
 export function sanitizeInput(input: string): string {
-  // Sanitize with DOMPurify - removes all HTML tags, scripts, event handlers
-  const clean = DOMPurify.sanitize(input, {
-    ALLOWED_TAGS: [], // Strip all HTML tags
-    ALLOWED_ATTR: [], // Strip all attributes
-    KEEP_CONTENT: true, // Keep text content
-  });
-
-  return clean.trim().substring(0, 1000); // Limit length
+  return input
+    .trim()
+    .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
+    .substring(0, 1000); // Limit length
 }
 
 /**

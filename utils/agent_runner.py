@@ -252,6 +252,7 @@ def run_agent(
 def _is_transient_error(error: Exception) -> bool:
     """
     Check if error is transient and worth retrying.
+    Also signals backpressure system for rate limit errors.
 
     Args:
         error: Exception to check
@@ -271,7 +272,19 @@ def _is_transient_error(error: Exception) -> bool:
         '504',  # Gateway Timeout
     ]
 
-    return any(pattern in error_str for pattern in transient_patterns)
+    is_transient = any(pattern in error_str for pattern in transient_patterns)
+    
+    # Signal backpressure for rate limit errors
+    if is_transient and ('429' in error_str or 'rate limit' in error_str or 'quota' in error_str):
+        try:
+            from utils.backpressure import BackpressureManager, APIType
+            bp = BackpressureManager()
+            bp.signal_429(APIType.GEMINI_PRIMARY)
+            logger.debug("Signaled backpressure for rate limit error")
+        except Exception:
+            pass  # Don't fail on backpressure errors
+    
+    return is_transient
 
 
 def rate_limit_delay(seconds: Optional[float] = None) -> None:

@@ -4,6 +4,7 @@ ABOUTME: Production-grade academic document export utility with strategy pattern
 ABOUTME: Supports multiple PDF engines (LibreOffice, Pandoc, WeasyPrint) with auto-fallback
 """
 
+import re
 import sys
 import argparse
 from pathlib import Path
@@ -79,11 +80,15 @@ def extract_metadata_from_yaml(md_file: Path) -> dict:
             'date': 'date',
             'institution': 'institution',
             'department': 'department',
+            'faculty': 'faculty',
             'degree': 'degree',
             'advisor': 'advisor',
             'student_id': 'student_id',
+            'matriculation_number': 'matriculation_number',
             'project_type': 'project_type',
             'system_credit': 'system_credit',
+            'second_examiner': 'second_examiner',
+            'location': 'location',
         }
 
         normalized = {}
@@ -137,11 +142,15 @@ def export_pdf(
             date=metadata.get('date'),
             institution=metadata.get('institution'),
             department=metadata.get('department'),
+            faculty=metadata.get('faculty'),
             course=metadata.get('degree'),  # Map degree to course field
             instructor=metadata.get('advisor'),  # Map advisor to instructor field
+            second_examiner=metadata.get('second_examiner'),
             student_id=metadata.get('student_id'),
+            matriculation_number=metadata.get('matriculation_number'),
             project_type=metadata.get('project_type'),
-            system_credit=metadata.get('system_credit')
+            system_credit=metadata.get('system_credit'),
+            location=metadata.get('location'),
         )
 
     logger.info("="*70)
@@ -401,8 +410,28 @@ def export_docx(
     import subprocess
     import shutil
 
+    # Extract metadata from YAML frontmatter (same as export_pdf)
+    metadata = extract_metadata_from_yaml(md_file)
+
+    # Create options with metadata if not provided
     if options is None:
-        options = PDFGenerationOptions()
+        options = PDFGenerationOptions(
+            title=metadata.get('title'),
+            subtitle=metadata.get('subtitle'),
+            author=metadata.get('author'),
+            date=metadata.get('date'),
+            institution=metadata.get('institution'),
+            department=metadata.get('department'),
+            faculty=metadata.get('faculty'),
+            course=metadata.get('degree'),  # Map degree to course field
+            instructor=metadata.get('advisor'),  # Map advisor to instructor field
+            second_examiner=metadata.get('second_examiner'),
+            student_id=metadata.get('student_id'),
+            matriculation_number=metadata.get('matriculation_number'),
+            project_type=metadata.get('project_type'),
+            system_credit=metadata.get('system_credit'),
+            location=metadata.get('location'),
+        )
 
     # Try Pandoc method first (best quality)
     if not shutil.which('pandoc'):

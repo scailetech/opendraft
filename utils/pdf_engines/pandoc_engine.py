@@ -4,6 +4,7 @@ ABOUTME: Pandoc/LaTeX-based PDF generation engine for academic papers
 ABOUTME: Professional typesetting using LaTeX with proper font rendering
 """
 
+import re
 import subprocess
 import shutil
 import yaml
@@ -463,6 +464,10 @@ class PandocLatexEngine(PDFEngine):
                 cmd.extend(['--variable', f'toc-depth={options.toc_depth}'])
                 cmd.extend(['--variable', 'toc-title=Table of Contents'])
 
+            # NOTE: Do NOT use --number-sections because thesis markdown files
+            # typically have manual section numbering embedded (e.g., "2.1 The Evolution...")
+            # Using --number-sections would create duplicates like "1.1 2.1 The Evolution..."
+
             # Run Pandoc
             result = subprocess.run(
                 cmd,
@@ -751,15 +756,33 @@ class PandocLatexEngine(PDFEngine):
         yaml_part = parts[1]
         body_part = parts[2]
 
-        # Remove first level-1 heading from body ONLY if it's a title (not a chapter)
-        # Pattern: # heading that does NOT start with a number (chapter headings like "# 1. Introduction")
-        # Title headings look like: "# Why OpenDraft..." or "# The Impact of..."
-        # Chapter headings look like: "# 1. Introduction" or "# 2. Main Body"
+        # NEVER remove standard academic section headings
+        # These are legitimate sections, not duplicate titles
+        protected_headings = [
+            'abstract', 'introduction', 'literature', 'methodology', 'method',
+            'results', 'discussion', 'conclusion', 'references', 'appendix',
+            'background', 'chapter', 'analysis', 'findings'
+        ]
+
+        # Find first level-1 heading
+        match = re.search(r'^\s*#\s+([^\n]+)\n', body_part, flags=re.MULTILINE)
+        if not match:
+            return md_content
+
+        heading_text = match.group(1).strip().lower()
+
+        # Don't remove if it's a protected heading or starts with a number
+        if any(heading_text.startswith(p) for p in protected_headings):
+            return md_content
+        if heading_text and heading_text[0].isdigit():
+            return md_content
+
+        # Remove the title heading (it's a duplicate of the cover page title)
         body_part = re.sub(
-            r'^\s*#\s+(?!\d+\.)[^\n]+\n+',  # # heading NOT starting with digit+period
-            r'',  # Remove it completely
+            r'^\s*#\s+[^\n]+\n+',
+            r'',
             body_part,
-            count=1,  # Only remove first matching # heading
+            count=1,
             flags=re.MULTILINE
         )
 

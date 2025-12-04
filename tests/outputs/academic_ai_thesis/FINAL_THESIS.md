@@ -1,22 +1,21 @@
 ---
-title: "Why This OpenDraft Open Source Project Will Save the World: Democratizing Academic Writing Through Multi-Agent AI"
-subtitle: "AI-Generated Academic Thesis Showcase"
-author: "OpenDraft (Multi-Agent System)"
-system_creator: "Federico De Ponte"
-github_repo: "https://github.com/federicodeponte/opendraft"
-date: "January 2025"
-quality_score: "A- (90/100) - Publication-ready for mid-tier academic journals"
-word_count: "[Calculating...] words across [Calculating...] pages"
-citations_verified: "56 academic references, all verified and cited"
-visual_elements: "4 tables, 2 figures, 4 comprehensive appendices"
-generation_method: "14 specialized AI agents (Research, Writing, Fact-Checking, Citation, Export)"
-showcase_description: "This complete multi-agent AI thesis on democratizing academic writing was autonomously written, researched, fact-checked, and formatted by a multi-agent AI system. From literature review and methodology to performance analysis and ethical considerations—all AI-generated."
-system_capabilities: "Research any academic topic • Generate original frameworks • Create case studies • Verify citations • Export to PDF/DOCX/HTML • Quality gates for academic integrity"
-call_to_action: "Want to write YOUR thesis with AI? This open-source system can generate publication-ready academic work on any topic. Get started at https://github.com/federicodeponte/opendraft"
-license: "MIT - Use it, fork it, improve it, publish with it"
+title: "The Impact of Quantum Computing on Cryptography"
+subtitle: "A Comprehensive Analysis"
+author: "Federico De Ponte"
+date: "December 2025"
+institution: "Technical University of Berlin"
+faculty: "Faculty of Electrical Engineering and Computer Science"
+department: "Department of Security in Telecommunications"
+degree: "Master of Science in Computer Science"
+project_type: "Master Thesis"
+advisor: "Prof. Dr. Maria Schmidt"
+second_examiner: "Prof. Dr. Hans Weber"
+student_id: "123456"
+system_credit: "Generated with OpenDraft AI"
+location: "Berlin"
 ---
 
-## Abstract
+# Abstract
 
 **Research Problem and Approach:** Academic inquiry faces significant barriers, including inequalities in access to resources, linguistic challenges, and time constraints, which limit diverse participation in scholarly communication. This thesis explores how Artificial Intelligence, specifically a multi-agent open-source system like OpenDraft, can address these challenges by democratizing academic writing.
 
@@ -30,11 +29,11 @@ license: "MIT - Use it, fork it, improve it, publish with it"
 
 \newpage
 
-## Introduction
+# Introduction
 
 Academic inquiry and scholarly communication have always demanded rigor. This means intellectual depth, extensive research, careful writing, and thorough peer review. (Arling et al., 2025) While these core tenets uphold quality, they also create significant hurdles for many academics, both aspiring and established. Consider the complexities of academic writing itself. It requires precise language, structured arguments, meticulous referencing, and strict adherence to disciplinary norms. Then there's the substantial time commitment. We're talking comprehensive literature reviews, data collection, analysis, and those endless cycles of drafting and revision (Brien, 2020). Such hurdles often lead to academic inequality. This particularly affects early career researchers, scholars from under-resourced institutions, non-native English speakers, and those with limited research support (Mwangi et al., 2021)(Austin et al., 2021). The 'publish or perish' culture only amplifies these pressures. Researchers must produce a high volume of quality publications under tight deadlines, frequently sacrificing work-life balance and mental well-being (Madhavi, 2025). The net result? A system that, for all its merits, often inadvertently restricts diverse voices from contributing to the global knowledge commons, slowing the democratization of research and scholarly communication (Sarker et al., 2024).
 
-**1.1 Background and Motivation**
+## 1.1 Background and Motivation
 
 In recent years, however, Artificial Intelligence (AI) has advanced rapidly. Large Language Models (LLMs), in particular, are fundamentally reshaping professional domains. This includes academic research and writing (Salman et al., 2025)(Teh & Uwasomba, 2024)(Selim, 2024). Initially, AI-assisted writing...
 

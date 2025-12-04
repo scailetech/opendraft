@@ -41,7 +41,7 @@ class ModelConfig:
     Supports Gemini models with configurable parameters.
     """
     provider: Literal['gemini', 'claude', 'openai'] = 'gemini'
-    model_name: str = field(default_factory=lambda: os.getenv('GEMINI_MODEL', 'gemini-2.5-flash'))
+    model_name: str = field(default_factory=lambda: os.getenv('GEMINI_MODEL', 'gemini-3-pro-preview'))
     temperature: float = 0.7
     max_output_tokens: Optional[int] = None
 

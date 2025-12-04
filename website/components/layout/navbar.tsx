@@ -30,15 +30,15 @@ interface RouteProps {
 
 const routeList: RouteProps[] = [
   {
-    href: "#features",
+    href: "/#features",
     label: "Features",
   },
   {
-    href: "#agents",
+    href: "/#agents",
     label: "AI Agents",
   },
   {
-    href: "#community",
+    href: "/#community",
     label: "Community",
   },
   {
@@ -46,7 +46,7 @@ const routeList: RouteProps[] = [
     label: "Blog",
   },
   {
-    href: "#faq",
+    href: "/#faq",
     label: "FAQ",
   },
 ];
@@ -54,9 +54,9 @@ const routeList: RouteProps[] = [
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <header className="shadow-inner bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-4 mx-auto sticky border border-border/50 dark:border-border/50 z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
+    <header className="shadow-inner bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-4 mx-auto sticky border border-accent/30 z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
       <Link href="/" className="font-bold text-lg flex items-center">
-        <GraduationCap className="bg-gradient-to-tr from-primary to-primary rounded-lg w-9 h-9 mr-2 border border-border text-white p-1.5" />
+        <GraduationCap className="bg-gradient-to-tr border-accent from-accent via-accent/80 to-accent/60 rounded-lg w-9 h-9 mr-2 border text-white p-1.5" />
         OpenDraft
       </Link>
       {/* <!-- Mobile --> */}
@@ -78,7 +78,7 @@ export const Navbar = () => {
               <SheetHeader className="mb-4 ml-4">
                 <SheetTitle className="flex items-center">
                   <Link href="/" className="flex items-center">
-                    <GraduationCap className="bg-gradient-to-tr from-primary to-primary rounded-lg w-9 h-9 mr-2 border border-border text-white p-1.5" />
+                    <GraduationCap className="bg-gradient-to-tr border-accent from-accent via-accent/80 to-accent/60 rounded-lg w-9 h-9 mr-2 border text-white p-1.5" />
                     OpenDraft
                   </Link>
                 </SheetTitle>

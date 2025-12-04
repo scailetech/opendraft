@@ -188,7 +188,7 @@ export default function AIToolsAcademicResearch() {
       <p><strong>What it does:</strong></p>
       <ul>
         <li>End-to-end thesis generation (research → writing → citations)</li>
-        <li>19 specialized AI agents for different phases</li>
+        <li>15 specialized AI agents for different phases</li>
         <li>Automated literature review from 200M+ papers</li>
         <li>Citation verification against CrossRef/arXiv</li>
         <li>Export to PDF, Word, LaTeX</li>
@@ -201,7 +201,7 @@ export default function AIToolsAcademicResearch() {
         <li>✅ Only tool offering full thesis automation</li>
         <li>✅ 100% free and open source</li>
         <li>✅ Includes Scout, Scribe, Signal, Architect, and 11 other agents</li>
-        <li>✅ Database-validated citations (reduced hallucination)</li>
+        <li>✅ Auto-verified citations (no hallucination)</li>
         <li>✅ Tested with real 67-page thesis in 20 minutes</li>
       </ul>
 
@@ -211,7 +211,7 @@ export default function AIToolsAcademicResearch() {
         <li>❌ Not a web app (runs locally)</li>
       </ul>
 
-      <p><strong>Best for:</strong> Students who want to generate a complete thesis draft in 20-30 minutes</p>
+      <p><strong>Best for:</strong> Students who want to write a complete thesis 10x faster</p>
 
       <p>
         <Link href="https://github.com/federicodeponte/opendraft" target="_blank" className="text-primary hover:underline">
@@ -575,9 +575,9 @@ export default function AIToolsAcademicResearch() {
       </p>
 
       <div className="bg-primary text-primary-foreground rounded-lg p-8 text-center my-12 not-prose">
-        <h3 className="text-2xl font-bold mb-4">Generate Your Thesis Draft in Minutes</h3>
+        <h3 className="text-2xl font-bold mb-4">Write Your Thesis 10x Faster</h3>
         <p className="text-lg mb-6 opacity-90">
-          Try the only AI tool with full thesis automation, database-validated citations, and 200M+ research papers.
+          Try the only AI tool with full thesis automation, verified citations, and 200M+ research papers.
         </p>
         <Link
           href="https://github.com/federicodeponte/opendraft#-quick-start-10-minutes"

@@ -18,7 +18,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "complete-guide-ai-thesis-writing",
     title: "Complete Guide to AI-Assisted Thesis Writing in 2025",
-    description: "Learn how to write a master's thesis or PhD dissertation 10x faster using AI. Step-by-step guide with 19 specialized agents, real examples, and best practices.",
+    description: "Learn how to write a master's thesis or PhD dissertation 10x faster using AI. Step-by-step guide with 15 specialized agents, real examples, and best practices.",
     date: "2025-11-03",
     readTime: "15 min read",
     category: "Guide",

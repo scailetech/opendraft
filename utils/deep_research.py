@@ -4,6 +4,7 @@ ABOUTME: Autonomous deep research planner with seed reference expansion
 ABOUTME: Two-phase approach: planning (Gemini) → execution (orchestrator)
 """
 
+import re
 import json
 import logging
 

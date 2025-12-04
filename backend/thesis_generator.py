@@ -5,13 +5,26 @@ ABOUTME: Extracts core logic from test_academic_ai_thesis.py for production use
 
 This module provides a simplified, production-ready thesis generation workflow
 that can be called from Modal workers or other automated systems.
+
+Output Structure:
+    thesis_output/
+    ├── research/           # All research materials
+    │   ├── papers/         # Individual paper summaries
+    │   ├── combined_research.md
+    │   ├── research_gaps.md
+    │   └── bibliography.json
+    ├── drafts/             # Section drafts
+    ├── tools/              # Refinement prompts for Cursor
+    └── exports/            # Final outputs (PDF, DOCX, MD)
 """
 
 import sys
 import time
+import shutil
+import json
 from pathlib import Path
 import re
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List, Dict
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -28,6 +41,152 @@ from utils.citation_quality_filter import CitationQualityFilter
 from utils.citation_compiler import CitationCompiler
 from utils.abstract_generator import generate_abstract_for_thesis
 from utils.export_professional import export_pdf, export_docx
+
+
+def setup_output_folders(output_dir: Path) -> Dict[str, Path]:
+    """
+    Create the organized folder structure for thesis output.
+    
+    Returns dict with paths to all subdirectories.
+    """
+    folders = {
+        'root': output_dir,
+        'research': output_dir / 'research',
+        'papers': output_dir / 'research' / 'papers',
+        'drafts': output_dir / 'drafts',
+        'tools': output_dir / 'tools',
+        'exports': output_dir / 'exports',
+    }
+    
+    for folder in folders.values():
+        folder.mkdir(parents=True, exist_ok=True)
+    
+    return folders
+
+
+def slugify(text: str, max_length: int = 30) -> str:
+    """Convert text to a safe filename slug."""
+    # Remove special characters, lowercase, replace spaces with underscores
+    slug = re.sub(r'[^\w\s-]', '', text.lower())
+    slug = re.sub(r'[\s_]+', '_', slug).strip('_')
+    return slug[:max_length]
+
+
+def split_scribe_to_papers(scribe_output: str, papers_dir: Path, verbose: bool = True) -> List[Path]:
+    """
+    Split the combined scribe output into individual paper files.
+    
+    Parses the scribe markdown to find paper sections and saves each
+    as a separate file in papers_dir.
+    
+    Returns list of created file paths.
+    """
+    created_files = []
+    
+    # Pattern to match paper sections in scribe output
+    # Matches "## Paper N: Title" or "## N. Title" patterns
+    paper_pattern = re.compile(
+        r'^##\s*(?:Paper\s*)?(\d+)[:.]\s*(.+?)$',
+        re.MULTILINE
+    )
+    
+    # Find all paper sections
+    matches = list(paper_pattern.finditer(scribe_output))
+    
+    if not matches:
+        # Try alternative pattern for different scribe output formats
+        alt_pattern = re.compile(
+            r'^##\s+(.+?)$\n\*\*Authors?:\*\*\s*(.+?)$',
+            re.MULTILINE
+        )
+        matches = list(alt_pattern.finditer(scribe_output))
+        
+        if not matches:
+            # If no papers found, save entire output as combined file
+            if verbose:
+                print("   ⚠️  Could not split scribe output into papers")
+            return created_files
+    
+    # Extract each paper section
+    for i, match in enumerate(matches):
+        start = match.start()
+        # End is either start of next paper or end of document
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(scribe_output)
+        
+        paper_content = scribe_output[start:end].strip()
+        
+        # Extract metadata for filename
+        try:
+            paper_num = match.group(1) if match.lastindex >= 1 else str(i + 1)
+            title = match.group(2) if match.lastindex >= 2 else f"paper_{i+1}"
+        except:
+            paper_num = str(i + 1)
+            title = f"paper_{i+1}"
+        
+        # Try to extract author and year from content
+        author_match = re.search(r'\*\*Authors?:\*\*\s*([^*\n]+)', paper_content)
+        year_match = re.search(r'\*\*Year:\*\*\s*(\d{4})', paper_content)
+        
+        author = slugify(author_match.group(1).split(',')[0] if author_match else 'unknown', 15)
+        year = year_match.group(1) if year_match else 'na'
+        title_slug = slugify(title, 40)
+        
+        # Create filename: paper_001_author_year_title.md
+        filename = f"paper_{int(paper_num):03d}_{author}_{year}_{title_slug}.md"
+        file_path = papers_dir / filename
+        
+        # Write paper file
+        file_path.write_text(paper_content, encoding='utf-8')
+        created_files.append(file_path)
+    
+    if verbose and created_files:
+        print(f"   ✅ Split into {len(created_files)} individual paper files")
+    
+    return created_files
+
+
+def copy_tools_to_output(tools_dir: Path, topic: str, academic_level: str, verbose: bool = True):
+    """
+    Copy refinement prompts and create .cursorrules for the output folder.
+    """
+    project_root = Path(__file__).parent.parent
+    
+    # Copy humanizer prompt (voice.md)
+    voice_src = project_root / 'prompts' / '05_refine' / 'voice.md'
+    if voice_src.exists():
+        shutil.copy(voice_src, tools_dir / 'humanizer_prompt.md')
+    
+    # Copy entropy prompt
+    entropy_src = project_root / 'prompts' / '05_refine' / 'entropy.md'
+    if entropy_src.exists():
+        shutil.copy(entropy_src, tools_dir / 'entropy_prompt.md')
+    
+    # Copy style guide from templates
+    style_src = project_root / 'templates' / 'style_guide.md'
+    if style_src.exists():
+        shutil.copy(style_src, tools_dir / 'style_guide.md')
+    
+    # Create .cursorrules with topic-specific content
+    cursorrules_template = project_root / 'templates' / 'cursorrules.md'
+    if cursorrules_template.exists():
+        content = cursorrules_template.read_text(encoding='utf-8')
+        content = content.replace('{topic}', topic)
+        content = content.replace('{academic_level}', academic_level)
+        (tools_dir / '.cursorrules').write_text(content, encoding='utf-8')
+    
+    if verbose:
+        print("   ✅ Copied refinement tools to output")
+
+
+def create_output_readme(output_dir: Path, topic: str, verbose: bool = True):
+    """Create README.md for the output folder."""
+    project_root = Path(__file__).parent.parent
+    readme_template = project_root / 'templates' / 'thesis_readme.md'
+    
+    if readme_template.exists():
+        shutil.copy(readme_template, output_dir / 'README.md')
+        if verbose:
+            print("   ✅ Created README.md")
 
 
 
@@ -137,7 +296,16 @@ def generate_thesis(
     academic_level: str = "master",
     output_dir: Optional[Path] = None,
     skip_validation: bool = True,
-    verbose: bool = True
+    verbose: bool = True,
+    # Academic metadata for professional cover page
+    author_name: Optional[str] = None,
+    institution: Optional[str] = None,
+    department: Optional[str] = None,
+    faculty: Optional[str] = None,
+    advisor: Optional[str] = None,
+    second_examiner: Optional[str] = None,
+    location: Optional[str] = None,
+    student_id: Optional[str] = None,
 ) -> Tuple[Path, Path]:
     """
     Generate a complete academic thesis using 15+ specialized AI agents.
@@ -152,6 +320,14 @@ def generate_thesis(
         output_dir: Custom output directory (default: config.paths.output_dir / "generated_thesis")
         skip_validation: Skip strict quality gates (recommended for automated runs)
         verbose: Print progress messages
+        author_name: Student's full name (for cover page)
+        institution: University/institution name
+        department: Department name
+        faculty: Faculty name
+        advisor: First examiner/advisor name
+        second_examiner: Second examiner name
+        location: City/location for date line
+        student_id: Student matriculation number
 
     Returns:
         Tuple[Path, Path]: (pdf_path, docx_path) - Paths to generated thesis files
@@ -165,6 +341,8 @@ def generate_thesis(
         ...     topic="AI-Assisted Academic Writing",
         ...     language="en",
         ...     academic_level="master",
+        ...     author_name="John Smith",
+        ...     institution="MIT",
         ...     skip_validation=True
         ... )
         >>> print(f"Generated: {pdf} and {docx}")
@@ -185,7 +363,12 @@ def generate_thesis(
     model = setup_model()
     if output_dir is None:
         output_dir = config.paths.output_dir / "generated_thesis"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Create organized folder structure
+    folders = setup_output_folders(output_dir)
+    
+    if verbose:
+        print(f"📁 Output folder: {output_dir}")
 
     # Prepare research topics (simplified for automated runs)
     research_topics = [
@@ -207,7 +390,7 @@ def generate_thesis(
         scout_result = research_citations_via_api(
             model=model,
             research_topics=research_topics,
-            output_path=output_dir / "01_scout.md",
+            output_path=folders['research'] / "scout_raw.md",
             target_minimum=25,  # Minimum citations for automated runs
             verbose=verbose,
             use_deep_research=True,
@@ -218,7 +401,7 @@ def generate_thesis(
         if verbose:
             print(f"✅ Scout: {scout_result['count']} citations found")
 
-        scout_output = (output_dir / "01_scout.md").read_text(encoding='utf-8')
+        scout_output = (folders['research'] / "scout_raw.md").read_text(encoding='utf-8')
 
     except ValueError as e:
         raise ValueError(f"Insufficient citations for thesis generation: {str(e)}")
@@ -231,10 +414,13 @@ def generate_thesis(
         name="Scribe - Summarize Papers",
         prompt_path="prompts/01_research/scribe.md",
         user_input=f"Summarize these research findings:\n\n{smart_truncate(scout_output, max_chars=8000, preserve_json=True)}",
-        save_to=output_dir / "02_scribe.md",
+        save_to=folders['research'] / "combined_research.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
+
+    # Split scribe output into individual paper files
+    split_scribe_to_papers(scribe_output, folders['papers'], verbose=verbose)
 
     rate_limit_delay()
 
@@ -244,7 +430,7 @@ def generate_thesis(
         name="Signal - Research Gaps",
         prompt_path="prompts/01_research/signal.md",
         user_input=f"Analyze research gaps:\n\n{smart_truncate(scribe_output, max_chars=8000)}",
-        save_to=output_dir / "03_signal.md",
+        save_to=folders['research'] / "research_gaps.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
@@ -263,7 +449,7 @@ def generate_thesis(
         name="Architect - Design Structure",
         prompt_path="prompts/02_structure/architect.md",
         user_input=f"Create thesis outline for: {topic}\n\nResearch gaps:\n{signal_output[:2000]}\n\nLength: 25,000-30,000 words (comprehensive master thesis)",
-        save_to=output_dir / "04_architect.md",
+        save_to=folders['drafts'] / "00_outline.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
@@ -276,7 +462,7 @@ def generate_thesis(
         name="Formatter - Apply Style",
         prompt_path="prompts/02_structure/formatter.md",
         user_input=f"Apply academic formatting:\n\n{architect_output[:2500]}\n\nStyle: APA 7th edition",
-        save_to=output_dir / "05_formatter.md",
+        save_to=folders['drafts'] / "00_formatted_outline.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
@@ -315,8 +501,8 @@ def generate_thesis(
     metadata_scraper = MetadataScraper(verbose=False)
     metadata_scraper.scrape_citations(citation_database.citations)
 
-    # Save citation database
-    citation_db_path = output_dir / "citation_database.json"
+    # Save citation database to research folder
+    citation_db_path = folders['research'] / "bibliography.json"
     save_citation_database(citation_database, citation_db_path)
 
     # Quality filtering (auto-fix mode for automated runs)
@@ -352,7 +538,7 @@ def generate_thesis(
         name="Crafter - Introduction",
         prompt_path="prompts/03_compose/crafter.md",
         user_input=f"Write Introduction:\n\nTopic: {topic}\n\nOutline:\n{formatter_output[:2000]}{citation_summary}\n\n**CRITICAL: Write 2,500-3,000 words minimum.**",
-        save_to=output_dir / "06_introduction.md",
+        save_to=folders['drafts'] / "01_introduction.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
@@ -402,7 +588,7 @@ Research:
 - Discussion: 3,000+ words
 
 **REMEMBER: Use ## 2.1, ## 2.2, ## 2.3, ## 2.4 - NOT # 3., # 4., etc.**""",
-        save_to=output_dir / "07_main_body.md",
+        save_to=folders['drafts'] / "02_main_body.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
@@ -415,7 +601,7 @@ Research:
         name="Crafter - Conclusion",
         prompt_path="prompts/03_compose/crafter.md",
         user_input=f"Write Conclusion:\n\nTopic: {topic}\n\nMain findings:\n{body_output[:2000]}\n\n**CRITICAL: Write 1,500-2,000 words minimum.**",
-        save_to=output_dir / "08_conclusion.md",
+        save_to=folders['drafts'] / "03_conclusion.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
@@ -454,12 +640,16 @@ Supplementary references, tools, and resources for further reading.
 **CRITICAL: Write 2,000-3,000 words total across all appendices.**
 **Use markdown tables where appropriate.**
 **Each appendix should be standalone and informative.**""",
-        save_to=output_dir / "09_appendices.md",
+        save_to=folders['drafts'] / "04_appendices.md",
         skip_validation=skip_validation,
         verbose=verbose
     )
 
     rate_limit_delay()
+
+    # Copy refinement tools and create README
+    copy_tools_to_output(folders['tools'], topic, academic_level, verbose)
+    create_output_readme(output_dir, topic, verbose)
 
     # ====================================================================
     # PHASE 4: COMPILE & ENHANCE
@@ -492,23 +682,50 @@ Supplementary references, tools, and resources for further reading.
     # Calculate pages estimate (250 words per page)
     pages_estimate = word_count // 250
 
+    # Determine thesis type label based on academic level
+    thesis_type_labels = {
+        'bachelor': 'Bachelor Thesis',
+        'master': 'Master Thesis',
+        'phd': 'PhD Dissertation'
+    }
+    thesis_type = thesis_type_labels.get(academic_level, 'Master Thesis')
+    
+    # Determine degree label
+    degree_labels = {
+        'bachelor': 'Bachelor of Science',
+        'master': 'Master of Science',
+        'phd': 'Doctor of Philosophy'
+    }
+    degree = degree_labels.get(academic_level, 'Master of Science')
+
+    # Build YAML with proper academic metadata
+    # Use provided values or sensible defaults
+    yaml_author = author_name or "OpenDraft AI"
+    yaml_institution = institution or "OpenDraft University"
+    yaml_department = department or "Department of Computer Science"
+    yaml_faculty = faculty or "Faculty of Engineering"
+    yaml_advisor = advisor or "Prof. Dr. OpenDraft Supervisor"
+    yaml_second_examiner = second_examiner or "Prof. Dr. Second Examiner"
+    yaml_location = location or "Munich"
+    yaml_student_id = student_id or "N/A"
+
     full_thesis = f"""---
 title: "{topic}"
-subtitle: "AI-Generated Academic Thesis"
-author: "OpenDraft AI"
-system_creator: "Federico De Ponte"
-github_repo: "https://github.com/federicodeponte/opendraft"
+subtitle: "{thesis_type}"
+author: "{yaml_author}"
 date: "{current_date}"
-thesis_type: "{'PhD Dissertation' if academic_level == 'phd' else 'Master Thesis'}"
-word_count: "{word_count:,} words across {pages_estimate} pages"
-quality_score: "A- (90/100) - Publication-ready academic thesis"
-citations_verified: "Academic references verified and cited"
-visual_elements: "Tables, figures, and comprehensive appendices"
-generation_method: "14 specialized AI agents (Research, Writing, Fact-Checking, Citation, Export)"
-showcase_description: "This thesis on {topic} was autonomously written, researched, fact-checked, and formatted by a multi-agent AI system."
-system_capabilities: "Research any academic topic • Generate original content • Verify citations • Export to PDF/DOCX/HTML"
-call_to_action: "Want to write YOUR thesis with AI? Get started at https://github.com/federicodeponte/opendraft"
-license: "MIT - Use it, fork it, improve it, publish with it"
+institution: "{yaml_institution}"
+department: "{yaml_department}"
+faculty: "{yaml_faculty}"
+degree: "{degree}"
+advisor: "{yaml_advisor}"
+second_examiner: "{yaml_second_examiner}"
+location: "{yaml_location}"
+student_id: "{yaml_student_id}"
+project_type: "{thesis_type}"
+word_count: "{word_count:,} words"
+pages: "{pages_estimate}"
+generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
 ---
 
 ## Abstract
@@ -558,7 +775,7 @@ license: "MIT - Use it, fork it, improve it, publish with it"
     compiled_thesis = compiled_thesis + reference_list
 
     # Save intermediate thesis for abstract generation
-    intermediate_md_path = output_dir / "INTERMEDIATE_THESIS.md"
+    intermediate_md_path = folders['exports'] / "INTERMEDIATE_THESIS.md"
     intermediate_md_path.write_text(compiled_thesis, encoding='utf-8')
 
     # Generate abstract using the agent
@@ -566,7 +783,7 @@ license: "MIT - Use it, fork it, improve it, publish with it"
         thesis_path=intermediate_md_path,
         model=model,
         run_agent_func=run_agent,
-        output_dir=output_dir,
+        output_dir=folders['exports'],
         verbose=verbose
     )
 
@@ -578,7 +795,7 @@ license: "MIT - Use it, fork it, improve it, publish with it"
         final_thesis = compiled_thesis
 
     # Save final markdown
-    final_md_path = output_dir / "FINAL_THESIS.md"
+    final_md_path = folders['exports'] / "FINAL_THESIS.md"
     # Fix single-line tables before saving
     final_thesis = fix_single_line_tables(final_thesis)
     final_thesis = deduplicate_appendices(final_thesis)
@@ -594,26 +811,35 @@ license: "MIT - Use it, fork it, improve it, publish with it"
     if verbose:
         print("\n📄 PHASE 5: EXPORT")
 
-    # Export to PDF
-    pdf_path = output_dir / "FINAL_THESIS.pdf"
-    export_pdf(
+    # Export to PDF with error handling
+    pdf_path = folders['exports'] / "FINAL_THESIS.pdf"
+    pdf_success = export_pdf(
         md_file=final_md_path,
         output_pdf=pdf_path
     )
+    
+    if not pdf_success or not pdf_path.exists():
+        raise RuntimeError(f"PDF export failed - file not created: {pdf_path}")
 
-    # Export to DOCX
-    docx_path = output_dir / "FINAL_THESIS.docx"
-    export_docx(
+    # Export to DOCX with error handling
+    docx_path = folders['exports'] / "FINAL_THESIS.docx"
+    docx_success = export_docx(
         md_file=final_md_path,
         output_docx=docx_path
     )
+    
+    if not docx_success or not docx_path.exists():
+        raise RuntimeError(f"DOCX export failed - file not created: {docx_path}")
 
     if verbose:
         print(f"✅ Exported PDF: {pdf_path}")
         print(f"✅ Exported DOCX: {docx_path}")
+        print(f"📂 Output folder: {output_dir}")
         print("="*70)
         print("✅ THESIS GENERATION COMPLETE")
         print("="*70)
+        print("\n💡 Open the folder in Cursor to refine your thesis!")
+        print(f"   cursor {output_dir}")
 
     return pdf_path, docx_path
 

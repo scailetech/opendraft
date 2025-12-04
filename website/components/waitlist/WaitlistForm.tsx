@@ -105,11 +105,11 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
           <strong>Position #{success.position}</strong> - Check your email to verify your spot.
         </p>
         <p className="text-sm text-green-600 dark:text-green-400 mb-4">
-          Want to skip ahead? Share your referral link with 3 friends to jump 100 positions!
+          Want to skip ahead? Each referral = 20 positions skipped!
         </p>
         <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-green-300 dark:border-green-700">
           <p className="text-xs text-muted-foreground mb-2">Your referral code:</p>
-          <code className="text-lg font-mono font-bold text-primary dark:text-border">
+          <code className="text-lg font-mono font-bold text-accent">
             {success.referralCode}
           </code>
         </div>
@@ -120,9 +120,9 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto space-y-6">
       {referralCode && (
-        <div className="bg-border dark:bg-border p-4 rounded-lg border border-border dark:border-border">
-          <p className="text-sm text-border dark:text-border">
-            🎁 You were referred! Your friend will skip 100 positions when you verify your email.
+        <div className="bg-accent/10 p-4 rounded-lg border border-accent/20">
+          <p className="text-sm text-accent">
+            🎁 You were referred! Your friend will skip 20 positions when you verify.
           </p>
         </div>
       )}
@@ -210,14 +210,12 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
         </div>
       </div>
 
-      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-        <div className="flex justify-center">
-          <Turnstile
-            sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-            onVerify={setTurnstileToken}
-          />
-        </div>
-      )}
+      <div className="flex justify-center">
+        <Turnstile
+          sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          onVerify={setTurnstileToken}
+        />
+      </div>
 
       {error && (
         <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 p-4 rounded-lg">
@@ -227,8 +225,8 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
 
       <Button
         type="submit"
-        disabled={isSubmitting || (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken)}
-        className="w-full bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-white"
+        disabled={isSubmitting || !turnstileToken}
+        className="w-full bg-accent hover:bg-accent/90 text-white"
         size="lg"
       >
         {isSubmitting ? (

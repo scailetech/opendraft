@@ -3,7 +3,6 @@ import { supabaseAdmin } from '@/lib/supabase/admin';
 import { WAITLIST_CONFIG } from '@/lib/config/waitlist';
 import { checkRateLimit } from '@/lib/utils/rate-limit';
 import { getClientIP } from '@/lib/utils/validation';
-import { replaceEmailPlaceholders } from '@/lib/utils/email';
 
 export async function GET(request: NextRequest) {
   try {
@@ -57,63 +56,26 @@ export async function GET(request: NextRequest) {
       .eq('id', user.id);
 
     if (updateError) {
+      console.error('Verification update error:', updateError);
       return NextResponse.json({ error: 'Failed to verify email' }, { status: 500 });
     }
 
-    // 3. Send welcome email
-    try {
-      if (process.env.RESEND_API_KEY) {
-        const { WelcomeEmail } = await import('@/emails/WelcomeEmail');
-        const { render } = await import('@react-email/render');
-        const { Resend } = await import('resend');
-
-        const resendClient = new Resend(process.env.RESEND_API_KEY);
-        const dashboardUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/waitlist/${user.id}`;
-
-        // Calculate estimated wait (100 theses/day processing rate)
-        const estimatedDays = Math.ceil(user.position / WAITLIST_CONFIG.DAILY_THESIS_LIMIT);
-        const estimatedWait = estimatedDays === 1 ? '~1 day' : `~${estimatedDays} days`;
-
-        const welcomeHtml = await render(
-          WelcomeEmail({
-            fullName: user.full_name,
-            position: user.position,
-            thesisTopic: user.thesis_topic,
-            referralCode: user.referral_code,
-            referralCount: 0, // Fresh signup has no referrals yet
-            estimatedWait,
-            dashboardUrl,
-          })
-        );
-
-        await resendClient.emails.send({
-          from: WAITLIST_CONFIG.FROM_EMAIL,
-          reply_to: WAITLIST_CONFIG.REPLY_TO_EMAIL,
-          to: user.email,
-          subject: 'Welcome to OpenDraft! Your spot is confirmed',
-          html: replaceEmailPlaceholders(welcomeHtml, user.email),
-        });
-      }
-    } catch (emailError) {
-      // Welcome email failed - continue (don't block verification)
-      console.error('Welcome email failed:', emailError);
-    }
-
-    // 4. If user was referred, process referral reward
+    // 3. If user was referred, process referral reward
     if (user.referred_by_code) {
       await processReferralReward(user.referred_by_code, user.email);
     }
 
-    // 5. Redirect to success page
+    // 4. Redirect to success page
     return NextResponse.redirect(new URL(`/waitlist/${user.id}?verified=true`, request.url));
   } catch (error) {
+    console.error('Verification error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 async function processReferralReward(referrerCode: string, refereeEmail: string) {
   try {
-    // 1. Record the referral (this insert is atomic and prevents duplicate referrals via UNIQUE constraint)
+    // 1. Record the referral
     const { error: referralError } = await supabaseAdmin.from('referrals').insert({
       referrer_code: referrerCode,
       referee_email: refereeEmail,
@@ -122,92 +84,89 @@ async function processReferralReward(referrerCode: string, refereeEmail: string)
     if (referralError) {
       // If duplicate referral (UNIQUE constraint violation), silently return
       if (referralError.code === '23505') {
+        console.log('Duplicate referral ignored:', refereeEmail);
         return;
       }
+      console.error('Referral insert error:', referralError);
       return;
     }
 
-    // 2. Get verified referral count for referrer (re-fetch after insert to ensure consistency)
+    // 2. Get referrer user
+    const { data: referrer } = await supabaseAdmin
+      .from('waitlist')
+      .select('*')
+      .eq('referral_code', referrerCode)
+      .single();
+
+    if (!referrer) return;
+
+    // Only reward if user is still waiting
+    if (referrer.status !== 'waiting') {
+      console.log(`Referrer ${referrer.email} is ${referrer.status}, skipping reward`);
+      return;
+    }
+
+    // 3. Each referral = 20 positions skipped (but not below 1)
+    const positionsToSkip = WAITLIST_CONFIG.REFERRAL_REWARD; // 20
+    const newPosition = Math.max(1, referrer.position - positionsToSkip);
+
+    // Update position
+    const { error: updateError } = await supabaseAdmin
+      .from('waitlist')
+      .update({ position: newPosition })
+      .eq('id', referrer.id)
+      .eq('status', 'waiting');
+
+    if (updateError) {
+      console.error('Failed to update referrer position:', updateError);
+      return;
+    }
+
+    // Mark referral as rewarded
+    await supabaseAdmin
+      .from('referrals')
+      .update({ rewarded: true })
+      .eq('referrer_code', referrerCode)
+      .eq('referee_email', refereeEmail);
+
+    // Get updated referral count
     const { count } = await supabaseAdmin
       .from('referrals')
       .select('*', { count: 'exact', head: true })
       .eq('referrer_code', referrerCode);
 
-    const referralCount = count || 0;
+    const referralCount = count || 1;
 
-    // 3. Check if referrer should get reward (every 3 verified referrals)
-    // Using modulo check: rewards happen at count 3, 6, 9, 12, etc.
-    if (referralCount % WAITLIST_CONFIG.REFERRALS_REQUIRED === 0 && referralCount > 0) {
-      // Get referrer user
-      const { data: referrer } = await supabaseAdmin
-        .from('waitlist')
-        .select('*')
-        .eq('referral_code', referrerCode)
-        .single();
+    // Send congratulations email to referrer
+    try {
+      const { ReferralRewardEmail } = await import('@/emails/ReferralRewardEmail');
+      const { render } = await import('@react-email/render');
+      const { Resend } = await import('resend');
 
-      if (!referrer) return;
+      const resendClient = new Resend(process.env.RESEND_API_KEY);
+      const dashboardUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/waitlist/${referrer.id}`;
 
-      // Only reward if user is still waiting (don't reward if already processing/completed)
-      if (referrer.status !== 'waiting') {
-        return;
-      }
-
-      // Skip 100 positions (but not below 1)
-      const newPosition = Math.max(1, referrer.position - WAITLIST_CONFIG.REFERRAL_REWARD);
-
-      // Update position atomically
-      const { error: updateError } = await supabaseAdmin
-        .from('waitlist')
-        .update({ position: newPosition })
-        .eq('id', referrer.id)
-        .eq('status', 'waiting'); // Double-check status hasn't changed
-
-      if (updateError) {
-        return;
-      }
-
-      // Mark these specific referrals as rewarded (mark last 3 verified referrals)
-      await supabaseAdmin
-        .from('referrals')
-        .update({ rewarded: true })
-        .eq('referrer_code', referrerCode)
-        .eq('rewarded', false)
-        .limit(WAITLIST_CONFIG.REFERRALS_REQUIRED);
-
-      // Send congratulations email to referrer (if Resend is configured)
-      try {
-        if (process.env.RESEND_API_KEY) {
-          const { ReferralRewardEmail } = await import('@/emails/ReferralRewardEmail');
-          const { render } = await import('@react-email/render');
-          const { Resend } = await import('resend');
-
-          const resendClient = new Resend(process.env.RESEND_API_KEY);
-          const dashboardUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/waitlist/${referrer.id}`;
-
-          const rewardHtml = await render(
-            ReferralRewardEmail({
-              fullName: referrer.full_name,
-              newPosition,
-              oldPosition: referrer.position,
-              referralCount,
-              dashboardUrl,
-              referralCode: referrerCode,
-            })
-          );
-
-          await resendClient.emails.send({
-            from: WAITLIST_CONFIG.FROM_EMAIL,
-            reply_to: WAITLIST_CONFIG.REPLY_TO_EMAIL,
-            to: referrer.email,
-            subject: `You skipped 100 positions! Now at #${newPosition}`,
-            html: replaceEmailPlaceholders(rewardHtml, referrer.email),
-          });
-        }
-      } catch (emailError) {
-        // Email error - silently continue
-      }
+      await resendClient.emails.send({
+        from: WAITLIST_CONFIG.FROM_EMAIL,
+        to: referrer.email,
+        subject: `You skipped ${positionsToSkip} positions! Now at #${newPosition}`,
+        html: render(
+          ReferralRewardEmail({
+            fullName: referrer.full_name,
+            newPosition,
+            oldPosition: referrer.position,
+            referralCount,
+            dashboardUrl,
+            positionsSkipped: positionsToSkip,
+          })
+        ),
+      });
+    } catch (emailError) {
+      console.error('Failed to send referral reward email:', emailError);
     }
+
+    console.log(`Referral reward: ${referrer.email} skipped ${positionsToSkip} positions to #${newPosition}`);
   } catch (error) {
-    // Referral reward error - silently continue
+    console.error('Process referral reward error:', error);
   }
 }

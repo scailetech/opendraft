@@ -34,8 +34,8 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://opendraft-landing.vercel.app'),
-  title: "OpenDraft - Free AI Thesis Writing Tool | Generate Drafts in Minutes",
-  description: "Free AI thesis writing tool with 19 specialized agents. Generate 20k-word thesis drafts in 20-30 minutes with access to 200M+ research papers. Open source & MIT licensed.",
+  title: "OpenDraft - Free AI Thesis Writing Tool | Write 10x Faster",
+  description: "Free AI thesis writing tool with 19 specialized agents. Write thesis 10x faster with auto-citations from 200M+ papers. Open source & free to use.",
   keywords: [
     "thesis writing AI",
     "academic thesis generator",
@@ -65,12 +65,12 @@ export const metadata: Metadata = {
     url: "https://opendraft-landing.vercel.app",
     siteName: "OpenDraft",
     title: "OpenDraft - Free AI Thesis Writing Tool",
-    description: "Free open-source AI tool with 19 specialized agents. Generate 20k-word thesis drafts in 20-30 minutes with access to 200M+ research papers.",
+    description: "Free open-source AI tool with 19 specialized agents. Write thesis 10x faster with auto-citations from 200M+ papers.",
   },
   twitter: {
     card: "summary_large_image",
     title: "OpenDraft - Free AI Thesis Writing Tool",
-    description: "Free open-source AI thesis writing tool. 19 AI agents, 200M+ papers, database-validated citations. Generate drafts in minutes.",
+    description: "Free open-source AI thesis writing tool. 19 AI agents, 200M+ papers, auto-citations. Write 10x faster.",
   },
   robots: {
     index: true,
@@ -134,8 +134,8 @@ export default function RootLayout({
       )}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <a href="#main-content" className="skip-to-content">

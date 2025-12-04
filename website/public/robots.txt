@@ -1,11 +1,11 @@
-# robots.txt for OpenDraft
+# robots.txt for Academic Thesis AI
 # Allow all search engines to crawl the site
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://opendraft-landing.vercel.app/sitemap.xml
+Sitemap: https://academic-thesis-landing.vercel.app/sitemap.xml
 
 # AI Crawlers - Explicitly allow
 User-agent: GPTBot

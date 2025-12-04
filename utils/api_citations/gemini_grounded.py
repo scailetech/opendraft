@@ -315,23 +315,38 @@ class GeminiGroundedClient(BaseAPIClient):
                 error_text = response.text[:500]
                 
                 # Handle 429 rate limit with fallback key
-                if response.status_code == 429 and self.fallback_api_key and not self._using_fallback:
-                    print(f"Gemini API rate limit (429) - switching to fallback key")
-                    self._using_fallback = True
-                    # Retry with fallback key
-                    fallback_url = f"{self.base_url}/{self.model_name}:generateContent?key={self.fallback_api_key}"
-                    response = self.session.post(
-                        fallback_url,
-                        json=body,
-                        headers={"Content-Type": "application/json"},
-                        timeout=self.timeout
-                    )
-                    if response.ok:
-                        data = response.json()
-                        if data.get('candidates'):
-                            return data
-                    # If fallback also fails, log and return None
-                    print(f"Fallback key also failed: {response.status_code}")
+                if response.status_code == 429:
+                    # Signal backpressure system
+                    try:
+                        from utils.backpressure import BackpressureManager, APIType
+                        bp = BackpressureManager()
+                        api_type = APIType.GEMINI_FALLBACK if self._using_fallback else APIType.GEMINI_PRIMARY
+                        bp.signal_429(api_type)
+                    except Exception as bp_err:
+                        pass  # Don't fail on backpressure errors
+                    
+                    if self.fallback_api_key and not self._using_fallback:
+                        print(f"Gemini API rate limit (429) - switching to fallback key")
+                        self._using_fallback = True
+                        # Retry with fallback key
+                        fallback_url = f"{self.base_url}/{self.model_name}:generateContent?key={self.fallback_api_key}"
+                        response = self.session.post(
+                            fallback_url,
+                            json=body,
+                            headers={"Content-Type": "application/json"},
+                            timeout=self.timeout
+                        )
+                        if response.ok:
+                            data = response.json()
+                            if data.get('candidates'):
+                                return data
+                        # If fallback also fails, signal that too and log
+                        if response.status_code == 429:
+                            try:
+                                bp.signal_429(APIType.GEMINI_FALLBACK)
+                            except:
+                                pass
+                        print(f"Fallback key also failed: {response.status_code}")
                 
                 print(f"Gemini API error {response.status_code}: {error_text}")
                 return None

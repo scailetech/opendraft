@@ -312,7 +312,7 @@ export default function ChatGPTThesisWritingTutorial() {
             <tr>
               <td>Citation Accuracy</td>
               <td>❌ 40-70% fabricated</td>
-              <td>✅ Database-validated</td>
+              <td>✅ Auto-verified</td>
             </tr>
             <tr>
               <td>Full Thesis Generation</td>
@@ -322,7 +322,7 @@ export default function ChatGPTThesisWritingTutorial() {
             <tr>
               <td>Specialized Agents</td>
               <td>❌ General purpose</td>
-              <td>✅ 19 specialized agents</td>
+              <td>✅ 15 specialized agents</td>
             </tr>
             <tr>
               <td>Reference Formatting</td>
@@ -400,7 +400,7 @@ export default function ChatGPTThesisWritingTutorial() {
         <li>Automated literature review (200M+ papers)</li>
         <li>Verified citations with automatic formatting</li>
         <li>End-to-end thesis generation (10 days vs 6 months)</li>
-        <li>19 specialized AI agents for different phases</li>
+        <li>15 specialized AI agents for different phases</li>
       </ul>
 
       <div className="bg-primary text-primary-foreground rounded-lg p-8 text-center my-12 not-prose">

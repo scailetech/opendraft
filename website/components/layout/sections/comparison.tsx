@@ -1,169 +1,85 @@
-// ABOUTME: Comparison section showing OpenDraft vs alternatives (ChatGPT, Claude, Manual writing)
-// ABOUTME: Responsive design - cards on mobile, table on desktop for better UX
+// ABOUTME: Comparison section - enhanced table with icons
+// ABOUTME: Visual check/x indicators and highlighted OpenDraft column
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, X, Minus } from "lucide-react";
 
-interface ComparisonItem {
-  feature: string;
-  academicThesisAI: { icon: "check" | "x" | "minus"; label: string };
-  chatgpt: { icon: "check" | "x" | "minus"; label: string };
-  manual: { icon: "check" | "x" | "minus"; label: string };
-}
-
-const comparisonData: ComparisonItem[] = [
-  {
-    feature: "Research Integration",
-    academicThesisAI: { icon: "check", label: "3 major databases" },
-    chatgpt: { icon: "minus", label: "Manual copy/paste" },
-    manual: { icon: "check", label: "Manual search" },
-  },
-  {
-    feature: "Citation Validation",
-    academicThesisAI: { icon: "check", label: "Database-validated" },
-    chatgpt: { icon: "x", label: "Hallucinations" },
-    manual: { icon: "check", label: "Manual check" },
-  },
-  {
-    feature: "Structured Workflow",
-    academicThesisAI: { icon: "check", label: "19 specialized agents" },
-    chatgpt: { icon: "x", label: "Single prompt" },
-    manual: { icon: "check", label: "Your process" },
-  },
-  {
-    feature: "Academic Quality Review",
-    academicThesisAI: { icon: "check", label: "Skeptic + Referee agents" },
-    chatgpt: { icon: "x", label: "None" },
-    manual: { icon: "minus", label: "Peer review" },
-  },
-  {
-    feature: "Export Formats",
-    academicThesisAI: { icon: "check", label: "PDF, DOCX, LaTeX" },
-    chatgpt: { icon: "minus", label: "Copy/paste only" },
-    manual: { icon: "check", label: "Your software" },
-  },
-  {
-    feature: "Cost (20k words)",
-    academicThesisAI: { icon: "check", label: "FREE (100/day)" },
-    chatgpt: { icon: "minus", label: "$20 (ChatGPT Plus)" },
-    manual: { icon: "x", label: "$0 (+ months of time)" },
-  },
-  {
-    feature: "Time Required",
-    academicThesisAI: { icon: "check", label: "20-30 minutes" },
-    chatgpt: { icon: "minus", label: "40-80 hours" },
-    manual: { icon: "x", label: "2-3 months" },
-  },
-  {
-    feature: "Open Source",
-    academicThesisAI: { icon: "check", label: "MIT License" },
-    chatgpt: { icon: "x", label: "Proprietary" },
-    manual: { icon: "minus", label: "N/A" },
-  },
+const comparisons = [
+  { feature: "Research Database", us: "200M+ papers", usGood: true, them: "Manual search", themGood: false },
+  { feature: "Citations", us: "Auto-verified", usGood: true, them: "Hallucinations", themGood: false },
+  { feature: "Citation Accuracy", us: "95%+ verified", usGood: true, them: "Unverified", themGood: false },
+  { feature: "AI Agents", us: "19 specialized", usGood: true, them: "1 generic", themGood: false },
+  { feature: "Export Formats", us: "PDF, Word, LaTeX", usGood: true, them: "Copy/paste", themGood: false },
+  { feature: "Time to Draft", us: "~45 minutes", usGood: true, them: "2-3 months", themGood: false },
+  { feature: "Cost", us: "$10-50", usGood: true, them: "$20/mo + time", themGood: false },
+  { feature: "Open Source", us: "MIT License", usGood: true, them: "Proprietary", themGood: false },
 ];
-
-const IconDisplay = ({ icon, label, srOnly }: { icon: "check" | "x" | "minus"; label: string; srOnly?: string }) => {
-  const iconMap = {
-    check: <Check className="h-5 w-5 text-green-600" aria-hidden="true" />,
-    x: <X className="h-5 w-5 text-red-600" aria-hidden="true" />,
-    minus: <Minus className="h-5 w-5 text-yellow-600" aria-hidden="true" />,
-  };
-
-  const iconLabel = {
-    check: "Full support",
-    x: "Not supported",
-    minus: "Partial support",
-  };
-
-  return (
-    <div className="flex flex-col items-center gap-1">
-      {iconMap[icon]}
-      <span className="sr-only">{srOnly || iconLabel[icon]}</span>
-      <span className="text-xs text-muted-foreground" aria-hidden="true">{label}</span>
-    </div>
-  );
-};
 
 export const ComparisonSection = () => {
   return (
-    <section id="comparison" className="container py-24 sm:py-32">
-      <div className="text-center mb-12">
-        <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-          Comparison
-        </h2>
+    <section id="comparison" className="py-24 sm:py-32 border-t border-border/50">
+      <div className="container max-w-4xl">
+        <div className="text-center mb-12">
+          <p className="text-sm font-medium text-accent mb-3">Comparison</p>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+            OpenDraft vs ChatGPT
+          </h2>
+          <p className="text-muted-foreground">
+            Purpose-built for academic writing, not general chat
+          </p>
+        </div>
 
-        <h2 className="text-3xl md:text-4xl text-center font-semibold mb-4">
-          Why OpenDraft?
-        </h2>
+        <div className="rounded-xl border border-border overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-muted/50">
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground w-1/3">
+                  Feature
+                </th>
+                <th className="text-left p-4 text-sm font-semibold w-1/3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-accent" />
+                    OpenDraft
+                  </div>
+                </th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground w-1/3">
+                  ChatGPT
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisons.map((row, i) => (
+                <tr
+                  key={row.feature}
+                  className={`border-t border-border/50 hover:bg-muted/30 transition-colors ${
+                    i % 2 === 0 ? "bg-card" : "bg-background"
+                  }`}
+                >
+                  <td className="p-4 text-sm text-muted-foreground">{row.feature}</td>
+                  <td className="p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-3 h-3 text-accent" />
+                      </div>
+                      <span className="text-sm font-medium">{row.us}</span>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                        <X className="w-3 h-3 text-destructive" />
+                      </div>
+                      <span className="text-sm text-muted-foreground">{row.them}</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        <p className="md:w-1/2 mx-auto text-base text-center text-muted-foreground">
-          See how OpenDraft compares to ChatGPT, Claude, and traditional manual writing.
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          ChatGPT is great for many things—academic thesis writing with citations isn't one of them.
         </p>
-      </div>
-
-      {/* Mobile: Card layout */}
-      <div className="md:hidden space-y-6">
-        {comparisonData.map((item) => (
-          <Card key={item.feature} className="border-border">
-            <CardHeader>
-              <CardTitle className="text-base font-medium">{item.feature}</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <p className="text-xs font-semibold text-primary mb-2">OpenDraft</p>
-                <IconDisplay {...item.academicThesisAI} />
-              </div>
-              <div>
-                <p className="text-xs font-semibold mb-2">ChatGPT/Claude</p>
-                <IconDisplay {...item.chatgpt} />
-              </div>
-              <div>
-                <p className="text-xs font-semibold mb-2">Manual</p>
-                <IconDisplay {...item.manual} />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Desktop: Table layout */}
-      <div className="hidden md:block">
-        <Table className="w-full">
-          <TableCaption>Feature comparison updated November 2025</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[200px]" scope="col">Feature</TableHead>
-              <TableHead className="text-center font-bold text-primary" scope="col">OpenDraft</TableHead>
-              <TableHead className="text-center" scope="col">ChatGPT / Claude</TableHead>
-              <TableHead className="text-center" scope="col">Manual Writing</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {comparisonData.map((item) => (
-              <TableRow key={item.feature}>
-                <TableCell className="font-medium">{item.feature}</TableCell>
-                <TableCell className="text-center">
-                  <IconDisplay {...item.academicThesisAI} />
-                </TableCell>
-                <TableCell className="text-center">
-                  <IconDisplay {...item.chatgpt} />
-                </TableCell>
-                <TableCell className="text-center">
-                  <IconDisplay {...item.manual} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
       </div>
     </section>
   );

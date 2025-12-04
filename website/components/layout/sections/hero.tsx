@@ -1,150 +1,125 @@
-// ABOUTME: Hero section - first impression with headline, CTAs, and visual branding
-// ABOUTME: Shows dynamic GitHub stars badge, academic honesty alert, and real thesis screenshot carousel
+// ABOUTME: Hero section - premium design with floating badges
+// ABOUTME: Gradient text, trust badges, and thesis carousel
 
 "use client";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { AlertTriangle, ArrowRight, Github, Star } from "lucide-react";
+import { ArrowRight, Github, Shield, Database, Bot, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGitHubStats, formatNumber } from "@/lib/hooks/useGitHubStats";
 
 const CAROUSEL_ITEMS = [
   { src: "/examples/thesis_page_01.png", alt: "Thesis title page" },
-  { src: "/examples/thesis_page_02.png", alt: "Abstract and table of contents" },
+  { src: "/examples/thesis_page_02.png", alt: "Table of contents" },
   { src: "/examples/thesis_page_03.png", alt: "Introduction chapter" },
-  { src: "/examples/thesis_page_04.png", alt: "Literature review section" },
+  { src: "/examples/thesis_page_04.png", alt: "Literature review" },
   { src: "/examples/thesis_page_05.png", alt: "Methodology chapter" },
+];
+
+const trustBadges = [
+  { icon: Shield, label: "MIT Licensed" },
+  { icon: Database, label: "200M+ Papers" },
+  { icon: Bot, label: "19 AI Agents" },
 ];
 
 export const HeroSection = () => {
   const { data: githubStats, loading: githubLoading } = useGitHubStats("federicodeponte/opendraft");
 
   return (
-    <section className="container w-full">
-      <div className="grid place-items-center lg:max-w-screen-xl gap-8 mx-auto py-20 md:py-32">
+    <section className="pt-24 pb-16 relative overflow-hidden">
+      {/* Subtle background gradient - extends to very top of viewport */}
+      <div className="absolute inset-x-0 -top-24 bottom-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent pointer-events-none" />
 
-        <div className="text-center space-y-6">
-          <div className="max-w-screen-md mx-auto text-center space-y-4">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] max-w-4xl mx-auto">
-              Write Your Thesis{" "}
-              <span className="text-primary">
-                Faster
-              </span>{" "}
-              with AI
-            </h1>
+      <div className="container relative">
+        {/* Trust badges row */}
+        <div className="flex justify-center gap-4 mb-8">
+          {trustBadges.map((badge) => (
+            <div
+              key={badge.label}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border text-xs font-medium"
+            >
+              <badge.icon className="w-3.5 h-3.5 text-accent" />
+              {badge.label}
+            </div>
+          ))}
+        </div>
 
-            <p className="text-xl md:text-2xl text-muted-foreground font-medium max-w-2xl mx-auto mt-6">
-              Generate a 20,000-word master&apos;s thesis draft in{" "}
-              <span className="font-mono text-primary">20-30 minutes</span>, not{" "}
-              <span className="line-through opacity-60">months</span>
-            </p>
-          </div>
+        {/* Text content */}
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight mb-6">
+            Write Your Thesis{" "}
+            <span className="bg-gradient-to-r from-accent to-emerald-400 bg-clip-text text-transparent">
+              10x Faster
+            </span>{" "}
+            with AI
+          </h1>
 
-          <p className="max-w-screen-sm mx-auto text-base text-muted-foreground leading-relaxed">
-            AI-powered framework with 19 specialized agents. 100% open source (MIT). Access to 200M+ research papers. <span className="text-green-600 dark:text-green-400 font-medium">Get 100 free theses daily via our hosted service!</span>
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            19 specialized AI agents research, write, and cite automatically.
+            Generate a complete thesis draft in{" "}
+            <span className="line-through opacity-60">months</span>{" "}
+            <span className="text-accent font-medium">minutes</span>.
           </p>
 
-          {/* GitHub Stats Badge */}
-          <Link
-            href="https://github.com/federicodeponte/opendraft"
-            target="_blank"
-            className="inline-block"
-            aria-label="View OpenDraft on GitHub"
-          >
-            <Badge variant="outline" className="px-3 py-1.5 text-sm gap-2 hover:bg-accent/10 transition-colors cursor-pointer">
-              <Github className="size-4" aria-hidden="true" />
-              {githubLoading ? (
-                <span>Loading...</span>
-              ) : githubStats ? (
-                <>
-                  <Star className="size-4 fill-current" aria-hidden="true" />
-                  <span>{formatNumber(githubStats.stars)} stars on GitHub</span>
-                </>
-              ) : (
-                <span>View on GitHub</span>
-              )}
-            </Badge>
-          </Link>
-
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-8">
-            <Button
-              asChild
-              size="lg"
-              className="w-full sm:w-auto px-8 py-6 text-base font-semibold group"
-            >
-              <Link href="/waitlist" aria-label="Get free AI-generated thesis">
-                Get Free Thesis (100/day)
-                <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+            <Button asChild size="lg" className="h-12 px-8 bg-accent hover:bg-accent/90">
+              <Link href="/waitlist">
+                Get Free Thesis
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto px-8 py-6 text-base font-semibold"
-            >
-              <Link
-                href="https://github.com/federicodeponte/opendraft#-quick-start-10-minutes"
-                target="_blank"
-                aria-label="View quick start guide on GitHub"
-              >
-                <Github className="size-5 mr-2" aria-hidden="true" />
-                I&apos;m Technical, Skip to Code
+            <Button asChild variant="outline" size="lg" className="h-12 px-8">
+              <Link href="https://github.com/federicodeponte/opendraft" target="_blank">
+                <Github className="mr-2 h-4 w-4" />
+                Star on GitHub
+                {!githubLoading && githubStats && (
+                  <span className="ml-2 px-2 py-0.5 rounded-full bg-muted text-xs">
+                    {formatNumber(githubStats.stars)}
+                  </span>
+                )}
               </Link>
             </Button>
           </div>
 
-          <div className="max-w-lg mx-auto p-3 rounded-lg bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800">
-            <p className="text-xs text-yellow-800 dark:text-yellow-200 flex items-start gap-2">
-              <AlertTriangle className="size-4 shrink-0 mt-0.5" />
-              <span>
-                <strong>Important:</strong> Many institutions restrict AI-generated content. Check your institution&apos;s academic honesty policy and disclose AI use if required. Failure to disclose may constitute academic misconduct. <Link href="#faq" className="underline underline-offset-2 hover:text-yellow-900 dark:hover:text-yellow-100 transition-colors">Learn more</Link>.
-              </span>
-            </p>
+          <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-accent" />
+              20 free/day
+            </div>
+            <span className="text-border">·</span>
+            <span>No coding required</span>
+            <span className="text-border">·</span>
+            <span>100% open source</span>
           </div>
         </div>
 
-        <div className="relative group mt-20 w-full">
-          {/* Hero visual - Real thesis screenshots carousel */}
-          <Carousel
-            className="w-full md:w-[900px] lg:w-[1000px] mx-auto"
-            opts={{ loop: true, align: "center" }}
-          >
-            <CarouselContent className="-ml-4">
-              {CAROUSEL_ITEMS.map((item, index) => (
-                <CarouselItem key={index} className="pl-4">
-                  <div className="relative aspect-[16/10] w-full bg-gradient-to-br from-white to-gray-50 dark:from-neutral-900 dark:to-neutral-800 p-8 rounded-2xl border shadow-lg hover:shadow-xl transition-shadow">
-                    <Image
-                      src={item.src}
-                      alt={item.alt}
-                      fill
-                      className="object-contain rounded-xl"
-                      priority={index === 0}
-                      loading={index === 0 ? undefined : "lazy"}
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-4 size-12 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-900" aria-label="Previous slide" />
-            <CarouselNext className="right-4 size-12 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-900" aria-label="Next slide" />
-          </Carousel>
-
-          {/* Active slide indicators */}
-          <div className="mt-6 flex justify-center gap-2">
-            {CAROUSEL_ITEMS.map((_, index) => (
-              <button
-                key={index}
-                className="h-2 w-2 rounded-full bg-muted-foreground/30 hover:bg-primary transition-all data-[active=true]:w-8 data-[active=true]:bg-primary"
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
+        {/* Carousel with shadow */}
+        <div className="max-w-4xl mx-auto">
+          <div className="rounded-2xl border border-border bg-card p-2 shadow-lg">
+            <Carousel opts={{ loop: true, align: "center" }} className="w-full">
+              <CarouselContent>
+                {CAROUSEL_ITEMS.map((item, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-muted">
+                      <Image
+                        src={item.src}
+                        alt={item.alt}
+                        fill
+                        className="object-contain p-4"
+                        priority={index === 0}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-4 bg-background/90 backdrop-blur-sm border-border" />
+              <CarouselNext className="right-4 bg-background/90 backdrop-blur-sm border-border" />
+            </Carousel>
           </div>
-
-          <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-lg pointer-events-none"></div>
+          <p className="text-center text-xs text-muted-foreground mt-4">
+            Real 104-page thesis generated by OpenDraft
+          </p>
         </div>
       </div>
     </section>

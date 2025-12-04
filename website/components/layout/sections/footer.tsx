@@ -1,98 +1,147 @@
-// ABOUTME: Footer section with links to GitHub repo, documentation, and support resources
-// ABOUTME: Shows OpenDraft branding and MIT license information
+// ABOUTME: Footer section - modern clean layout
+// ABOUTME: Organized links, social icons, and MIT license
 
-import { Separator } from "@/components/ui/separator";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
+
+const footerLinks = {
+  product: [
+    { label: "Features", href: "/#features" },
+    { label: "AI Agents", href: "/#agents" },
+    { label: "Pricing", href: "/#comparison" },
+    { label: "Examples", href: "/#examples" },
+  ],
+  resources: [
+    { label: "Documentation", href: "https://github.com/federicodeponte/opendraft/blob/master/00_START_HERE.md" },
+    { label: "Quick Start", href: "https://github.com/federicodeponte/opendraft#-quick-start-10-minutes" },
+    { label: "FAQ", href: "/#faq" },
+    { label: "Blog", href: "/blog" },
+  ],
+  community: [
+    { label: "GitHub", href: "https://github.com/federicodeponte/opendraft" },
+    { label: "Discussions", href: "https://github.com/federicodeponte/opendraft/discussions" },
+    { label: "Issues", href: "https://github.com/federicodeponte/opendraft/issues" },
+    { label: "Contributing", href: "https://github.com/federicodeponte/opendraft/blob/master/CONTRIBUTING.md" },
+  ],
+};
+
+const socialLinks = [
+  { icon: Github, href: "https://github.com/federicodeponte/opendraft", label: "GitHub" },
+  { icon: Linkedin, href: "https://linkedin.com/in/federicodeponte", label: "LinkedIn" },
+];
 
 export const FooterSection = () => {
   return (
-    <footer id="footer" className="py-24 sm:py-32">
-      <div className="w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl mx-auto p-10 bg-card border border-secondary rounded-2xl">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-8">
-          <div className="col-span-full md:col-span-2">
-            <Link href="https://github.com/federicodeponte/opendraft" target="_blank" className="flex font-bold items-center">
-              <GraduationCap className="w-9 h-9 mr-2 bg-gradient-to-tr from-primary to-primary rounded-lg border border-border text-white p-1.5" />
-
-              <h3 className="text-2xl">OpenDraft</h3>
+    <footer className="border-t border-border/50 bg-muted/30">
+      <div className="container py-16">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+          {/* Brand */}
+          <div className="col-span-2">
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-emerald-400 flex items-center justify-center">
+                <GraduationCap className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-semibold text-xl">OpenDraft</span>
             </Link>
-            <p className="mt-4 text-muted-foreground">
-              100% Free & Open Source AI-powered academic writing framework
+            <p className="text-sm text-muted-foreground mb-6 max-w-xs">
+              Free, open-source AI thesis writing framework. 19 specialized agents, 200M+ papers, publication-ready exports.
             </p>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Resources</h3>
-            <div>
-              <Link href="https://github.com/federicodeponte/opendraft" target="_blank" className="opacity-60 hover:opacity-100">
-                GitHub Repository
-              </Link>
-            </div>
-
-            <div>
-              <Link href="https://github.com/federicodeponte/opendraft#-quick-start-10-minutes" target="_blank" className="opacity-60 hover:opacity-100">
-                Quick Start Guide
-              </Link>
-            </div>
-
-            <div>
-              <Link href="https://github.com/federicodeponte/opendraft/blob/master/00_START_HERE.md" target="_blank" className="opacity-60 hover:opacity-100">
-                Documentation
-              </Link>
+            {/* Social links */}
+            <div className="flex gap-3">
+              {socialLinks.map((social) => (
+                <Link
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  className="w-9 h-9 rounded-lg bg-card border border-border flex items-center justify-center hover:border-accent/50 hover:text-accent transition-colors"
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-4 h-4" />
+                </Link>
+              ))}
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Support</h3>
-            <div>
-              <Link href="https://github.com/federicodeponte/opendraft/issues" target="_blank" className="opacity-60 hover:opacity-100">
-                Report Issues
-              </Link>
-            </div>
+          {/* Product */}
+          <div>
+            <h4 className="font-medium mb-4">Product</h4>
+            <ul className="space-y-2">
+              {footerLinks.product.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div>
-              <Link href="https://github.com/federicodeponte/opendraft/discussions" target="_blank" className="opacity-60 hover:opacity-100">
-                Discussions
-              </Link>
-            </div>
+          {/* Resources */}
+          <div>
+            <h4 className="font-medium mb-4">Resources</h4>
+            <ul className="space-y-2">
+              {footerLinks.resources.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div>
-              <Link href="https://github.com/federicodeponte/opendraft#-frequently-asked-questions" target="_blank" className="opacity-60 hover:opacity-100">
-                FAQ
-              </Link>
-            </div>
+          {/* Community */}
+          <div>
+            <h4 className="font-medium mb-4">Community</h4>
+            <ul className="space-y-2">
+              {footerLinks.community.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    target="_blank"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <Separator className="my-6" />
-        <section className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <h3 className="text-center md:text-left">
-            &copy; 2025 OpenDraft •{" "}
+        {/* Bottom bar */}
+        <div className="mt-12 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © 2025 OpenDraft · MIT License · Free Forever
+          </p>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link href="/#faq" className="hover:text-foreground transition-colors">
+              FAQ
+            </Link>
             <Link
-              target="_blank"
               href="https://github.com/federicodeponte/opendraft/blob/master/LICENSE"
-              className="text-primary transition-all border-primary hover:border-b-2"
-            >
-              MIT License
-            </Link>
-          </h3>
-          <div className="flex gap-4 items-center">
-            <Link
               target="_blank"
+              className="hover:text-foreground transition-colors"
+            >
+              License
+            </Link>
+            <Link
               href="https://github.com/federicodeponte/opendraft"
-              className="opacity-60 hover:opacity-100"
-            >
-              ⭐ Star on GitHub
-            </Link>
-            <Link
               target="_blank"
-              href="https://www.linkedin.com/in/federicodeponte/"
-              className="opacity-60 hover:opacity-100"
+              className="flex items-center gap-1 hover:text-accent transition-colors"
             >
-              LinkedIn
+              <Github className="w-4 h-4" />
+              Star on GitHub
             </Link>
           </div>
-        </section>
+        </div>
       </div>
     </footer>
   );

@@ -62,7 +62,7 @@ export default async function UserDashboard({ params, searchParams }: PageProps)
           </div>
         )}
 
-        {!user.email_verified && (
+        {!user.email_verified && !searchParams.verified && (
           <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 p-4 rounded-lg">
             <p className="text-yellow-800 dark:text-yellow-200 text-center">
               ⚠️ Please verify your email to activate your waitlist position. Check your inbox!
@@ -105,7 +105,7 @@ export default async function UserDashboard({ params, searchParams }: PageProps)
           </div>
           <div className="bg-muted/50 p-4 rounded-lg text-center">
             <p className="text-sm text-muted-foreground">Current Position</p>
-            <p className="text-2xl font-bold text-primary dark:text-border">
+            <p className="text-2xl font-bold text-accent">
               #{user.position}
             </p>
           </div>

@@ -24,7 +24,7 @@ export function TierProgress({
   verifiedReferrals,
   position,
   originalPosition,
-  dailyLimit = 100
+  dailyLimit = 20
 }: TierProgressProps) {
   const currentTier = getCurrentTier(verifiedReferrals);
   const { nextTier, refsNeeded, progressPercent } = getNextTier(verifiedReferrals);
@@ -35,7 +35,7 @@ export function TierProgress({
   return (
     <div className="space-y-6">
       {/* Current Status Card */}
-      <Card className="p-6 bg-gradient-to-br from-border to-white dark:from-border dark:to-slate-900 border-2 border-border dark:border-border">
+      <Card className="p-6 bg-card border border-border">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm mb-1">
@@ -59,7 +59,7 @@ export function TierProgress({
               <Users className="size-4" />
               <span>Verified Refs</span>
             </div>
-            <div className="text-2xl font-bold text-primary dark:text-border">
+            <div className="text-2xl font-bold text-accent">
               {verifiedReferrals}
             </div>
           </div>
@@ -132,7 +132,7 @@ export function TierProgress({
                 key={tier.tier}
                 className={`flex items-center justify-between p-3 rounded-lg border-2 transition-all ${
                   isCurrent
-                    ? 'border-primary bg-border dark:bg-border'
+                    ? 'border-accent bg-accent/10'
                     : isUnlocked
                     ? 'border-green-500 bg-green-50 dark:bg-green-950'
                     : 'border-gray-200 dark:border-gray-800 opacity-60'
@@ -149,7 +149,7 @@ export function TierProgress({
                         </Badge>
                       )}
                       {isCurrent && (
-                        <Badge variant="outline" className="bg-primary text-white border-primary">
+                        <Badge variant="outline" className="bg-accent text-accent-foreground border-accent">
                           Current
                         </Badge>
                       )}

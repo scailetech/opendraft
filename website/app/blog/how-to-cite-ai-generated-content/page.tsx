@@ -363,7 +363,7 @@ export default function HowToCiteAIContent() {
       <ul>
         <li><strong>Google Scholar:</strong> Verify AI-provided citations</li>
         <li><strong>CrossRef:</strong> Check DOIs and publication metadata</li>
-        <li><strong>OpenDraft:</strong> Database-validated citations from 200M+ papers (reduced hallucination)</li>
+        <li><strong>OpenDraft:</strong> Auto-verified citations from 200M+ papers (no hallucination)</li>
       </ul>
 
       <h2>FAQs</h2>
@@ -417,9 +417,9 @@ export default function HowToCiteAIContent() {
       </ol>
 
       <div className="bg-primary text-primary-foreground rounded-lg p-8 text-center my-12 not-prose">
-        <h3 className="text-2xl font-bold mb-4">Need Database-Validated Citations?</h3>
+        <h3 className="text-2xl font-bold mb-4">Need Auto-Verified Citations?</h3>
         <p className="text-lg mb-6 opacity-90">
-          OpenDraft validates all citations against CrossRef and arXiv databases during the validation phase. Reduced hallucination, fewer fabricated papers.
+          OpenDraft automatically verifies all citations against CrossRef and arXiv. No hallucination, no fabricated papers.
         </p>
         <Link
           href="https://github.com/federicodeponte/opendraft#-quick-start-10-minutes"

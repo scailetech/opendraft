@@ -12,13 +12,25 @@ app = modal.App("thesis-generator")
 
 # Modal image with system dependencies, Python packages, and codebase
 image = (modal.Image.debian_slim()
-    # System packages for WeasyPrint PDF generation
+    # System packages for PDF generation (WeasyPrint + Pandoc/LaTeX)
     .apt_install(
+        # WeasyPrint dependencies
         "libpango-1.0-0",
         "libpangocairo-1.0-0",
         "libgdk-pixbuf2.0-0",
         "libffi-dev",
-        "shared-mime-info"
+        "shared-mime-info",
+        # Pandoc for professional document conversion
+        "pandoc",
+        # LaTeX dependencies for high-quality PDF output
+        "texlive-xetex",
+        "texlive-fonts-recommended",
+        "texlive-fonts-extra",
+        "texlive-latex-extra",
+        "lmodern",
+        # Font support
+        "fonts-liberation",
+        "fonts-dejavu",
     )
     # Python packages
     .pip_install(
@@ -45,13 +57,17 @@ image = (modal.Image.debian_slim()
         # Utilities
         "rich>=13.0.0"
     )
-    # Add entire codebase into image
+    # Set Gemini 3.0 Pro Preview as default model (must be before add_local_*)
+    .env({"GEMINI_MODEL": "gemini-3-pro-preview"})
+    # Add entire codebase into image (last in build chain)
     .add_local_dir("./opendraft", "/root/opendraft/opendraft")
     .add_local_dir("./utils", "/root/opendraft/utils")
     .add_local_dir("./prompts", "/root/opendraft/prompts")
     .add_local_dir("./concurrency", "/root/opendraft/concurrency")
     .add_local_dir("./backend", "/root/opendraft/backend")
     .add_local_dir("./tests", "/root/opendraft/tests")
+    .add_local_dir("./examples", "/root/opendraft/examples")  # DOCX reference template
+    .add_local_dir("./templates", "/root/opendraft/templates")  # Thesis output templates
     .add_local_file("./config.py", "/root/opendraft/config.py")
     # Add pre-rendered email templates
     .add_local_dir("./backend/email_templates", "/root/opendraft/backend/email_templates")
@@ -66,10 +82,7 @@ volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
     volumes={"/tmp/thesis": volume},
     secrets=[
         modal.Secret.from_name("supabase-credentials"),
-        modal.Secret.from_name("gemini-api-key"),
-        modal.Secret.from_name("gemini-api-key-fallback"),
-        modal.Secret.from_name("gemini-api-key-fallback-2"),
-        modal.Secret.from_name("gemini-api-key-fallback-3"),
+        modal.Secret.from_name("gemini-api-key"),  # Single Tier 3 key
         modal.Secret.from_name("resend-api-key"),
         modal.Secret.from_name("proxy-credentials"),
     ],
@@ -105,12 +118,19 @@ def process_single_user(user: dict) -> dict:
             "processing_started_at": datetime.now().isoformat()
         }).eq("id", user_id).execute()
 
-        # Generate thesis
+        # Generate thesis with full academic metadata
         pdf_path, docx_path = generate_thesis_real(
             topic=user["thesis_topic"],
             language=user["language"],
             academic_level=user["academic_level"],
-            user_id=user_id  # For unique output paths
+            user_id=user_id,  # For unique output paths
+            # Academic metadata for professional cover page
+            author_name=user.get("full_name"),
+            institution=user.get("institution"),  # Optional: from user profile
+            department=user.get("department"),    # Optional: from user profile
+            faculty=user.get("faculty"),          # Optional: from user profile
+            advisor=user.get("advisor"),          # Optional: from user profile
+            location=user.get("location"),        # Optional: from user profile
         )
 
         # Upload to Supabase Storage
@@ -219,8 +239,8 @@ def daily_thesis_batch():
         .eq("status", "waiting") \
         .eq("email_verified", True) \
         .order("position", desc=False) \
-        .limit(100) \
-        .execute()
+        .limit(20) \
+        .execute()  # Limit reduced from 100 to 20 to minimize API stress
 
     users = response.data
     print(f"Found {len(users)} users to process")
@@ -309,42 +329,31 @@ def daily_thesis_batch():
     return {"success": total_success, "failed": total_failed, "total": len(users)}
 
 
-def generate_thesis_real(topic: str, language: str, academic_level: str, user_id: str = "test"):
-    """Generate thesis using the AI framework."""
+def generate_thesis_real(
+    topic: str, 
+    language: str, 
+    academic_level: str, 
+    user_id: str = "test",
+    # Academic metadata for professional cover page
+    author_name: str = None,
+    institution: str = None,
+    department: str = None,
+    faculty: str = None,
+    advisor: str = None,
+    location: str = None,
+):
+    """Generate thesis using the AI framework with professional academic formatting."""
     import sys
     from pathlib import Path
 
     sys.path.insert(0, "/root/opendraft")
 
-    # Set up API keys with INTELLIGENT rotation based on 429 pressure
-    # Now supports 4 Gemini keys for maximum rate limit resilience!
-    primary_key = os.environ.get("GEMINI_API_KEY", "")
-    fallback_key = os.environ.get("GEMINI_API_KEY_FALLBACK", "")
-    fallback_key_2 = os.environ.get("GEMINI_API_KEY_FALLBACK_2", "")
-    fallback_key_3 = os.environ.get("GEMINI_API_KEY_FALLBACK_3", "")
-
-    available_keys = [k for k in [primary_key, fallback_key, fallback_key_2, fallback_key_3] if k]
-    print(f"🔑 {len(available_keys)} Gemini API keys available")
-
-    if len(available_keys) >= 2:
-        try:
-            from utils.backpressure import BackpressureManager
-            bp = BackpressureManager()
-            api_key, key_type = bp.get_best_gemini_key(
-                primary_key,
-                fallback_key,
-                fallback_2=fallback_key_2 if fallback_key_2 else None,
-                fallback_3=fallback_key_3 if fallback_key_3 else None,
-            )
-            print(f"🔑 Using Gemini key: {key_type.value} (intelligent selection from {len(available_keys)} keys for {user_id})")
-        except Exception as e:
-            # Fallback to round-robin if backpressure fails
-            key_index = hash(user_id) % len(available_keys)
-            api_key = available_keys[key_index]
-            print(f"🔑 Using API key #{key_index + 1} for {user_id} (round-robin fallback: {e})")
-    else:
-        api_key = primary_key or fallback_key or fallback_key_2 or fallback_key_3
-        print(f"🔑 Using single API key for {user_id}")
+    # Single Tier 3 Gemini API key - no rotation needed
+    # Using Gemini 3.0 Pro Preview for highest quality
+    # Tier 3 limits: 2,000 RPM, 4M TPM - enough for 100+ theses/day
+    api_key = os.environ.get("GEMINI_API_KEY", "")
+    model_name = os.environ.get("GEMINI_MODEL", "gemini-3-pro-preview")
+    print(f"🔑 Using {model_name} with Tier 3 API key for {user_id}")
 
     os.environ["GOOGLE_API_KEY"] = api_key
 
@@ -360,7 +369,14 @@ def generate_thesis_real(topic: str, language: str, academic_level: str, user_id
         academic_level=academic_level,
         output_dir=output_dir,
         skip_validation=True,
-        verbose=True
+        verbose=True,
+        # Pass academic metadata for professional cover page
+        author_name=author_name,
+        institution=institution,
+        department=department,
+        faculty=faculty,
+        advisor=advisor,
+        location=location,
     )
 
     return str(pdf_path), str(docx_path)

@@ -4,7 +4,7 @@
 import { ImageResponse } from 'next/og'
 import { BRAND_CONFIG } from '@/lib/brand-config'
 
-export const alt = 'OpenDraft - Free AI Thesis Writing Tool with 15 Specialized Agents'
+export const alt = 'OpenDraft - Write Your Thesis 10x Faster'
 export const size = {
   width: 1200,
   height: 630,
@@ -17,14 +17,14 @@ export default async function Image() {
       <div
         style={{
           fontSize: 60,
-          background: '#ffffff',
+          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#171717',
+          color: 'white',
           padding: '80px',
           fontFamily: 'system-ui, sans-serif',
         }}
@@ -49,7 +49,7 @@ export default async function Image() {
             marginBottom: 30,
           }}
         >
-          Generate Thesis Drafts in Minutes
+          Write Your Thesis 10x Faster
         </div>
         <div
           style={{
@@ -59,17 +59,15 @@ export default async function Image() {
             maxWidth: 900,
           }}
         >
-          15 Specialized AI Agents • 200M+ Research Papers • FREE Tier Available
+          19 Specialized AI Agents • 200M+ Research Papers • FREE Tier Available
         </div>
         <div
           style={{
             fontSize: 24,
             marginTop: 40,
             padding: '15px 30px',
-            background: '#16a34a',
-            color: '#ffffff',
+            background: 'rgba(255, 255, 255, 0.2)',
             borderRadius: 10,
-            fontWeight: 600,
           }}
         >
           100% Free & Open Source

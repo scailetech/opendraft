@@ -1,72 +1,68 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Gift, Sparkles, Users } from 'lucide-react';
+// ABOUTME: Waitlist CTA - compelling design with value props
+// ABOUTME: Gradient background, social proof, and benefits
+
+import { Button } from "@/components/ui/button";
+import { ArrowRight, FileText, CheckCircle, Download, Users } from "lucide-react";
+import Link from "next/link";
+
+const benefits = [
+  { icon: FileText, text: "20,000+ words" },
+  { icon: CheckCircle, text: "50+ verified citations" },
+  { icon: Download, text: "PDF, Word, LaTeX" },
+];
 
 export const WaitlistCTASection = () => {
   return (
-    <section className="container py-24 sm:py-32">
-      <div className="mx-auto max-w-5xl">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-border p-8 md:p-12">
-          {/* Background decorative elements */}
-          <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-border/20 blur-3xl" />
-          <div className="absolute bottom-0 left-0 -mb-4 -ml-4 h-32 w-32 rounded-full bg-primary/20 blur-3xl" />
+    <section className="py-24 sm:py-32">
+      <div className="container">
+        <div className="max-w-4xl mx-auto">
+          {/* Card with gradient border */}
+          <div className="relative rounded-2xl overflow-hidden">
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-accent/10 to-transparent" />
 
-          <div className="relative z-10">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
-                <Gift className="h-4 w-4 text-white" />
-                <span className="text-sm font-medium text-white">Limited Offer</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Get a Free AI-Generated Thesis
-              </h2>
-              <p className="text-lg text-border max-w-2xl mx-auto">
-                We&apos;re sponsoring <strong className="text-white">100 free thesis generations per day</strong>.
-                Join the waitlist and skip ahead by referring friends!
-              </p>
-            </div>
+            {/* Content */}
+            <div className="relative bg-card/80 backdrop-blur-sm border border-accent/20 rounded-2xl p-8 md:p-12">
+              <div className="text-center">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-sm text-accent mb-6">
+                  <Users className="w-4 h-4" />
+                  20 free generations daily
+                </div>
 
-            {/* Features Grid */}
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                <Sparkles className="h-8 w-8 text-border mb-3" />
-                <h3 className="font-semibold text-white mb-2">20,000+ Words</h3>
-                <p className="text-sm text-border">
-                  Complete thesis with proper citations, formatted and ready to download
+                <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+                  Get your free thesis draft
+                </h2>
+
+                <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+                  We sponsor the API costs. You get a complete, publication-ready thesis
+                  with verified citations—absolutely free.
                 </p>
-              </div>
 
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                <Users className="h-8 w-8 text-border mb-3" />
-                <h3 className="font-semibold text-white mb-2">Viral Referrals</h3>
-                <p className="text-sm text-border">
-                  Share with 3 friends to skip 100 positions. Unlimited referrals!
-                </p>
-              </div>
+                {/* Benefits row */}
+                <div className="flex flex-wrap justify-center gap-6 mb-8">
+                  {benefits.map((benefit) => (
+                    <div key={benefit.text} className="flex items-center gap-2 text-sm">
+                      <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                        <benefit.icon className="w-4 h-4 text-accent" />
+                      </div>
+                      <span className="text-muted-foreground">{benefit.text}</span>
+                    </div>
+                  ))}
+                </div>
 
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                <Gift className="h-8 w-8 text-border mb-3" />
-                <h3 className="font-semibold text-white mb-2">100% Free</h3>
-                <p className="text-sm text-border">
-                  No credit card required. Get both PDF and Word formats
-                </p>
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            <div className="text-center">
-              <Link href="/waitlist">
-                <Button
-                  size="lg"
-                  className="bg-white text-primary hover:bg-border font-bold px-8 py-6 text-lg shadow-2xl"
-                >
-                  Join Free Waitlist →
+                {/* CTA */}
+                <Button asChild size="lg" className="h-12 px-8 bg-accent hover:bg-accent/90">
+                  <Link href="/waitlist">
+                    Join Free Waitlist
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
-              </Link>
-              <p className="mt-4 text-sm text-border">
-                🎓 Designed for bachelor&apos;s, master&apos;s, and PhD students
-              </p>
+
+                <p className="text-xs text-muted-foreground mt-4">
+                  No credit card required · Skip ahead by referring friends
+                </p>
+              </div>
             </div>
           </div>
         </div>
