@@ -1,13 +1,16 @@
-#!/usr/bin/env python3
 """Monitor thesis generation progress."""
 import modal
 import os
+import time
 
 app = modal.App("monitor-progress")
 image = modal.Image.debian_slim().pip_install("supabase>=2.24.0")
 
-@app.function(image=image, secrets=[modal.Secret.from_name("supabase-credentials")])
-def check_progress():
+@app.function(
+    image=image,
+    secrets=[modal.Secret.from_name("supabase-credentials")],
+)
+def check_status(user_id: str):
     from supabase import create_client
     
     supabase = create_client(
@@ -15,49 +18,35 @@ def check_progress():
         os.environ["SUPABASE_SERVICE_KEY"]
     )
     
-    # Count by status for loadtest users
-    statuses = {}
-    for status in ["waiting", "processing", "completed", "failed"]:
-        result = supabase.table("waitlist")\
-            .select("id", count="exact")\
-            .like("email", "loadtest-%")\
-            .eq("status", status)\
-            .execute()
-        statuses[status] = result.count or 0
+    resp = supabase.table("waitlist").select("*").eq("id", user_id).single().execute()
+    user = resp.data
     
-    total = sum(statuses.values())
-    completed = statuses.get("completed", 0)
-    processing = statuses.get("processing", 0)
-    failed = statuses.get("failed", 0)
-    waiting = statuses.get("waiting", 0)
+    print("=" * 60)
+    print(f"STATUS CHECK: {user['full_name']}")
+    print("=" * 60)
+    print(f"Status:  {user['status']}")
+    print(f"Topic:   {user['thesis_topic'][:60]}...")
     
-    print(f"\n{'='*50}")
-    print(f"📊 LOAD TEST PROGRESS")
-    print(f"{'='*50}")
-    print(f"✅ Completed: {completed}/{total} ({100*completed/total:.1f}%)")
-    print(f"🔄 Processing: {processing}")
-    print(f"⏳ Waiting: {waiting}")
-    print(f"❌ Failed: {failed}")
-    print(f"{'='*50}")
+    if user['processing_started_at']:
+        print(f"Started: {user['processing_started_at']}")
+    if user['completed_at']:
+        print(f"Done:    {user['completed_at']}")
+    if user['error_message']:
+        print(f"Error:   {user['error_message']}")
     
-    # Show recent completions
-    recent = supabase.table("waitlist")\
-        .select("email,full_name,thesis_topic,completed_at")\
-        .like("email", "loadtest-%")\
-        .eq("status", "completed")\
-        .order("completed_at", desc=True)\
-        .limit(5)\
-        .execute()
+    print()
+    if user['pdf_url']:
+        print(f"PDF:  {user['pdf_url'][:80]}...")
+    if user['docx_url']:
+        print(f"DOCX: {user['docx_url'][:80]}...")
+    if user.get('zip_url'):
+        print(f"ZIP:  {user['zip_url'][:80]}...")
     
-    if recent.data:
-        print(f"\n📝 Recent completions:")
-        for r in recent.data:
-            print(f"   • {r['full_name']}: {r['thesis_topic'][:40]}...")
-    
-    return statuses
+    print("=" * 60)
+    return user['status']
 
 if __name__ == "__main__":
+    user_id = "07b4e61c-47d7-4713-82b3-3597b64f77bb"
     with modal.enable_output():
         with app.run():
-            check_progress.remote()
-
+            check_status.remote(user_id)

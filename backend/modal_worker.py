@@ -82,9 +82,8 @@ volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
     volumes={"/tmp/thesis": volume},
     secrets=[
         modal.Secret.from_name("supabase-credentials"),
-        modal.Secret.from_name("gemini-api-key"),  # Single Tier 3 key
+        modal.Secret.from_name("gemini-api-key"),
         modal.Secret.from_name("resend-api-key"),
-        modal.Secret.from_name("proxy-credentials"),
     ],
     image=image,
     retries=2,  # Auto-retry on failure
@@ -159,14 +158,41 @@ def process_single_user(user: dict) -> dict:
         pdf_url = pdf_signed["signedURL"]
         docx_url = docx_signed["signedURL"]
         thesis_generated = True
+        
+        # Create and upload ZIP of entire output folder (includes research, tools, drafts)
+        zip_url = None
+        try:
+            import shutil
+            output_dir = Path(f"/tmp/thesis/{user_id}")
+            zip_base = f"/tmp/thesis/{user_id}_package"
+            shutil.make_archive(zip_base, 'zip', output_dir)
+            zip_path = Path(f"{zip_base}.zip")
+            
+            if zip_path.exists():
+                with open(zip_path, "rb") as zip_file:
+                    supabase.storage.from_("thesis-files").upload(
+                        f"{user_id}/thesis_package.zip",
+                        zip_file.read(),
+                        file_options={"content-type": "application/zip", "upsert": "true"}
+                    )
+                zip_signed = supabase.storage.from_("thesis-files").create_signed_url(
+                    f"{user_id}/thesis_package.zip", expires_in=604800
+                )
+                zip_url = zip_signed["signedURL"]
+                print(f"📦 ZIP package uploaded ({zip_path.stat().st_size / 1024:.1f} KB)")
+        except Exception as zip_err:
+            print(f"⚠️ ZIP upload failed (non-fatal): {zip_err}")
 
         # Update status to completed
-        supabase.table("waitlist").update({
+        update_data = {
             "status": "completed",
             "completed_at": datetime.now().isoformat(),
             "pdf_url": pdf_url,
             "docx_url": docx_url
-        }).eq("id", user_id).execute()
+        }
+        if zip_url:
+            update_data["zip_url"] = zip_url
+        supabase.table("waitlist").update(update_data).eq("id", user_id).execute()
 
         print(f"✅ Thesis generated and uploaded for {email}")
 
@@ -199,6 +225,7 @@ def process_single_user(user: dict) -> dict:
                 name=user["full_name"],
                 pdf_url=pdf_url,
                 docx_url=docx_url,
+                zip_url=zip_url,
                 thesis_topic=user.get("thesis_topic", ""),
                 academic_level=user.get("academic_level", "Master's"),
                 language=user.get("language", "English"),
@@ -387,6 +414,7 @@ def send_completion_email(
     name: str,
     pdf_url: str,
     docx_url: str,
+    zip_url: str = None,
     thesis_topic: str = "",
     academic_level: str = "Master's",
     language: str = "English",
@@ -413,6 +441,7 @@ def send_completion_email(
         html = html.replace("{{THESIS_TOPIC}}", thesis_topic)
         html = html.replace("{{PDF_URL}}", pdf_url)
         html = html.replace("{{DOCX_URL}}", docx_url)
+        html = html.replace("{{ZIP_URL}}", zip_url or "#")
         html = html.replace("{{ACADEMIC_LEVEL}}", academic_level)
         html = html.replace("{{LANGUAGE}}", language)
         html = html.replace("{{CITATION_COUNT}}", str(citation_count) if citation_count > 0 else "~60")
