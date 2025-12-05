@@ -94,6 +94,22 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'OpenDraft',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  category: 'education',
+  classification: 'Academic Writing Tool',
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'msapplication-TileColor': '#10b981',
+    'msapplication-config': '/browserconfig.xml',
+  },
 };
 
 export default function RootLayout({
