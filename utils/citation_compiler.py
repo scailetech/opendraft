@@ -359,13 +359,18 @@ class CitationCompiler:
         year = citation.year
         title = citation.title
 
-        # Format authors
+        # Format authors (APA 7th: for 21+ authors, show first 19...last author)
+        # For practical purposes, limit to 7 authors (6 + et al.)
+        MAX_AUTHORS = 7
         if len(authors) == 1:
             author_str = f"{authors[0]}."
         elif len(authors) == 2:
             author_str = f"{authors[0]}, & {authors[1]}."
-        else:
+        elif len(authors) <= MAX_AUTHORS:
             author_str = ", ".join(authors[:-1]) + f", & {authors[-1]}."
+        else:
+            # More than 7 authors: show first 6, then "... & last author"
+            author_str = ", ".join(authors[:6]) + f", ... & {authors[-1]}."
 
         # Format based on source type
         source_type = citation.source_type

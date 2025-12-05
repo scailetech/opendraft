@@ -69,6 +69,12 @@ class CitationValidator:
         """
         issues = []
 
+        # Check for excessive authors (likely bad data from API)
+        MAX_REASONABLE_AUTHORS = 30
+        if len(authors) > MAX_REASONABLE_AUTHORS:
+            issues.append(f"Excessive authors ({len(authors)}) - likely malformed data")
+            return issues  # Skip individual checks for malformed citations
+
         for author in authors:
             # Pattern 1: Repetitive initials (e.g., "N. C. A. C. B. S. C. A.")
             if re.match(r'^([A-Z]\.\s*){6,}$', author):
