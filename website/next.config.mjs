@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Standalone output for Render deployment (smaller, faster builds)
+  output: 'standalone',
+  
   images: {
     remotePatterns: [
       {
