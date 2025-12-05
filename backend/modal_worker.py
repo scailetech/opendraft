@@ -109,7 +109,7 @@ def process_single_user(user: dict) -> dict:
     thesis_generated = False
 
     try:
-        print(f"🚀 Starting thesis for {email}...")
+        print(f"🚀 Starting thesis for {email}... [v53-zipfix]")
 
         # Update status to processing
         supabase.table("waitlist").update({
@@ -164,24 +164,33 @@ def process_single_user(user: dict) -> dict:
         try:
             import shutil
             output_dir = Path(f"/tmp/thesis/{user_id}")
-            zip_base = f"/tmp/thesis/{user_id}_package"
-            shutil.make_archive(zip_base, 'zip', output_dir)
-            zip_path = Path(f"{zip_base}.zip")
+            print(f"📦 Creating ZIP from {output_dir}...")
             
-            if zip_path.exists():
+            if output_dir.exists():
+                zip_base = f"/tmp/thesis/{user_id}_package"
+                shutil.make_archive(zip_base, 'zip', output_dir)
+                zip_path = Path(f"{zip_base}.zip")
+                print(f"📦 ZIP created: {zip_path} ({zip_path.stat().st_size / 1024:.1f} KB)")
+                
                 with open(zip_path, "rb") as zip_file:
                     supabase.storage.from_("thesis-files").upload(
                         f"{user_id}/thesis_package.zip",
                         zip_file.read(),
                         file_options={"content-type": "application/zip", "upsert": "true"}
                     )
+                print(f"📦 ZIP uploaded to storage")
+                
                 zip_signed = supabase.storage.from_("thesis-files").create_signed_url(
                     f"{user_id}/thesis_package.zip", expires_in=604800
                 )
                 zip_url = zip_signed["signedURL"]
-                print(f"📦 ZIP package uploaded ({zip_path.stat().st_size / 1024:.1f} KB)")
+                print(f"📦 ZIP URL created: {zip_url[:60]}...")
+            else:
+                print(f"⚠️ Output dir not found: {output_dir}")
         except Exception as zip_err:
             print(f"⚠️ ZIP upload failed (non-fatal): {zip_err}")
+            import traceback
+            traceback.print_exc()
 
         # Update status to completed
         update_data = {
@@ -192,7 +201,12 @@ def process_single_user(user: dict) -> dict:
         }
         if zip_url:
             update_data["zip_url"] = zip_url
+            print(f"📦 Adding zip_url to database update")
+        else:
+            print(f"⚠️ No zip_url to save (zip_url is None)")
+        
         supabase.table("waitlist").update(update_data).eq("id", user_id).execute()
+        print(f"✅ Database updated with: {list(update_data.keys())}")
 
         print(f"✅ Thesis generated and uploaded for {email}")
 
@@ -390,6 +404,9 @@ def generate_thesis_real(
     output_dir = Path(f"/tmp/thesis/{user_id}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    print(f"📁 Output directory: {output_dir}")
+    print(f"📁 Output dir exists before: {output_dir.exists()}")
+    
     pdf_path, docx_path = generate_thesis(
         topic=topic,
         language=language,
@@ -405,6 +422,12 @@ def generate_thesis_real(
         advisor=advisor,
         location=location,
     )
+    
+    print(f"📁 Output dir exists after: {output_dir.exists()}")
+    if output_dir.exists():
+        print(f"📁 Contents: {list(output_dir.iterdir())}")
+    print(f"📄 PDF path: {pdf_path}")
+    print(f"📄 DOCX path: {docx_path}")
 
     return str(pdf_path), str(docx_path)
 
