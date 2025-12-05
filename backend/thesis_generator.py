@@ -711,7 +711,6 @@ Supplementary references, tools, and resources for further reading.
 
     full_thesis = f"""---
 title: "{topic}"
-subtitle: "{thesis_type}"
 author: "{yaml_author}"
 date: "{current_date}"
 institution: "{yaml_institution}"

@@ -249,7 +249,7 @@ def process_single_user(user: dict) -> dict:
 
 
 @app.function(
-    schedule=modal.Cron("0 9 * * *"),  # Daily at 9am UTC
+    schedule=modal.Cron("0 2 * * *"),  # Daily at 2am UTC
     timeout=7200,  # 5 min to orchestrate (actual work is parallel)
     secrets=[modal.Secret.from_name("supabase-credentials")],
     image=image,

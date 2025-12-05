@@ -29,7 +29,7 @@ export const HeroSection = () => {
   return (
     <section className="pt-24 pb-16 relative overflow-hidden">
       {/* Subtle background gradient - extends to very top of viewport */}
-      <div className="absolute inset-x-0 -top-24 bottom-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 -top-[200px] bottom-0 bg-gradient-to-b from-accent/8 via-accent/3 to-transparent pointer-events-none" />
 
       <div className="container relative">
         {/* Trust badges row */}
