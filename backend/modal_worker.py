@@ -163,8 +163,12 @@ def process_single_user(user: dict) -> dict:
         zip_url = None
         try:
             import shutil
-            output_dir = Path(f"/tmp/thesis/{user_id}")
+            # Derive output_dir from pdf_path (which we know exists)
+            # pdf_path is like: /tmp/thesis/{user_id}/exports/FINAL_THESIS.pdf
+            # We want: /tmp/thesis/{user_id}
+            output_dir = Path(pdf_path).parent.parent  # exports -> user_id folder
             print(f"📦 Creating ZIP from {output_dir}...")
+            print(f"📦 PDF path was: {pdf_path}")
             
             if output_dir.exists():
                 zip_base = f"/tmp/thesis/{user_id}_package"
@@ -549,3 +553,84 @@ def _get_fallback_html(name: str, pdf_url: str, docx_url: str, email: str) -> st
 def main():
     """Test function - triggers the batch."""
     daily_thesis_batch.remote()
+
+
+@app.function(
+    timeout=600,
+    image=image,
+)
+def regenerate_example_pdf(md_content: str, filename: str) -> bytes:
+    """
+    Regenerate PDF from markdown content using Modal's LaTeX tools.
+    Returns PDF bytes.
+    """
+    import subprocess
+    import tempfile
+    from pathlib import Path
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        md_path = Path(tmpdir) / "thesis.md"
+        pdf_path = Path(tmpdir) / "thesis.pdf"
+        
+        # Write markdown
+        md_path.write_text(md_content, encoding='utf-8')
+        
+        # Convert to PDF using pandoc with XeLaTeX
+        cmd = [
+            "pandoc",
+            str(md_path),
+            "-o", str(pdf_path),
+            "--pdf-engine=xelatex",
+            "-V", "geometry:margin=1in",
+            "-V", "fontsize=12pt",
+            "-V", "documentclass=article",
+            "--toc",
+            "--toc-depth=3",
+            "--number-sections",
+        ]
+        
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise RuntimeError(f"PDF generation failed: {result.stderr}")
+        
+        # Read and return PDF bytes
+        return pdf_path.read_bytes()
+
+
+@app.local_entrypoint()
+def regenerate_examples():
+    """Regenerate example PDFs from markdown files."""
+    from pathlib import Path
+    
+    project_root = Path(__file__).parent.parent
+    
+    # Define which examples to regenerate
+    examples = [
+        {
+            "md_path": project_root / "tests/outputs/academic_ai_thesis/FINAL_THESIS.md",
+            "pdf_name": "Why_Academic_Thesis_AI_Saves_The_World.pdf",
+        }
+    ]
+    
+    for example in examples:
+        md_path = example["md_path"]
+        pdf_name = example["pdf_name"]
+        
+        if not md_path.exists():
+            print(f"❌ Markdown not found: {md_path}")
+            continue
+        
+        print(f"📄 Regenerating {pdf_name}...")
+        md_content = md_path.read_text(encoding='utf-8')
+        
+        # Generate PDF on Modal
+        pdf_bytes = regenerate_example_pdf.remote(md_content, pdf_name)
+        
+        # Save to examples/ and docs/examples/
+        examples_dir = project_root / "examples"
+        docs_examples_dir = project_root / "docs/examples"
+        
+        for output_dir in [examples_dir, docs_examples_dir]:
+            output_path = output_dir / pdf_name
+            output_path.write_bytes(pdf_bytes)
+            print(f"✅ Saved: {output_path} ({len(pdf_bytes):,} bytes)")
