@@ -4,10 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npm run build:standalone",
-    "build:standalone": "cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
+    "build": "next build",
     "start": "next start",
-    "start:standalone": "node .next/standalone/server.js",
     "lint": "next lint"
   },
   "dependencies": {

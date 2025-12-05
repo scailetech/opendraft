@@ -11,7 +11,7 @@ services:
     plan: starter # free, starter, standard, pro
     rootDir: website
     buildCommand: npm ci && npm run build
-    startCommand: npm run start:standalone
+    startCommand: npm start
     envVars:
       # Node environment
       - key: NODE_VERSION
