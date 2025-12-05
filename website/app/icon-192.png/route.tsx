@@ -4,13 +4,9 @@
 import { ImageResponse } from 'next/og'
 import { BRAND_CONFIG, getIconStyle } from '@/lib/brand-config'
 
-export const size = {
-  width: 192,
-  height: 192,
-}
-export const contentType = 'image/png'
+export const runtime = 'edge'
 
-export default function Icon192() {
+export async function GET() {
   return new ImageResponse(
     (
       <div style={getIconStyle(140, '32px')}>
@@ -18,7 +14,8 @@ export default function Icon192() {
       </div>
     ),
     {
-      ...size,
+      width: 192,
+      height: 192,
     }
   )
 }
