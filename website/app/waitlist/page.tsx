@@ -143,7 +143,7 @@ export default function WaitlistPage({ searchParams }: PageProps) {
             <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm text-amber-800 dark:text-amber-200">
-                <strong>Academic Honesty:</strong> Check your institution's AI usage policy before using this tool.{' '}
+                <strong>Academic Honesty:</strong> Check your institution&apos;s AI usage policy before using this tool.{' '}
                 <Link href="/#faq" className="underline hover:text-amber-600">
                   Learn more
                 </Link>

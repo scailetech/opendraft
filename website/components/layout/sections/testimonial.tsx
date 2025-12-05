@@ -63,10 +63,10 @@ export const CommunitySection = () => {
                   <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
                     <Users className="w-4 h-4 text-purple-500" />
                   </div>
-                  <span className="text-sm text-muted-foreground">Contributors</span>
+                  <span className="text-sm text-muted-foreground">Watchers</span>
                 </div>
                 <span className="font-semibold">
-                  {loading ? "—" : stats?.contributors || 0}
+                  {loading ? "—" : stats?.watchers || 0}
                 </span>
               </div>
             </div>
@@ -99,13 +99,13 @@ export const CommunitySection = () => {
                   </div>
                 ))}
                 <div className="w-10 h-10 rounded-full bg-accent/10 border-2 border-card flex items-center justify-center text-xs font-medium text-accent">
-                  +{loading ? "—" : Math.max(0, (stats?.contributors || 0) - 8)}
+                  +{loading ? "—" : Math.max(0, (stats?.watchers || 0) - 8)}
                 </div>
               </div>
             </div>
 
             <p className="text-sm text-muted-foreground mb-6">
-              Join {loading ? "—" : stats?.contributors || 0}+ developers building the future of academic writing.
+              Join {loading ? "—" : stats?.watchers || 0}+ developers building the future of academic writing.
             </p>
 
             <div className="flex gap-3">

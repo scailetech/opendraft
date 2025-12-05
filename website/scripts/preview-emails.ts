@@ -66,11 +66,8 @@ async function main() {
         WelcomeEmail({
           fullName: sampleData.fullName,
           position: sampleData.position,
-          thesisTopic: sampleData.thesisTopic,
           referralCode: sampleData.referralCode,
-          referralCount: sampleData.referralCount,
-          estimatedWait: sampleData.estimatedWait,
-          dashboardUrl: sampleData.dashboardUrl,
+          referralUrl: `https://opendraft.xyz/waitlist/r/${sampleData.referralCode}`,
         })
       ),
     },
@@ -83,7 +80,7 @@ async function main() {
           oldPosition: sampleData.oldPosition,
           referralCount: sampleData.referralCount,
           dashboardUrl: sampleData.dashboardUrl,
-          referralCode: sampleData.referralCode,
+          positionsSkipped: sampleData.oldPosition - sampleData.newPosition,
         })
       ),
     },
@@ -92,13 +89,8 @@ async function main() {
       html: await render(
         CompletionEmail({
           fullName: sampleData.fullName,
-          thesisTopic: sampleData.thesisTopic,
           pdfUrl: sampleData.pdfUrl,
           docxUrl: sampleData.docxUrl,
-          academicLevel: sampleData.academicLevel,
-          language: sampleData.language,
-          citationCount: sampleData.citationCount,
-          wordCount: sampleData.wordCount,
         })
       ),
     },

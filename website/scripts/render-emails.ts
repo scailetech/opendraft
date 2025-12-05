@@ -20,23 +20,14 @@ async function main() {
   const html = await render(
     CompletionEmail({
       fullName: '{{FULL_NAME}}',
-      thesisTopic: '{{THESIS_TOPIC}}',
       pdfUrl: '{{PDF_URL}}',
       docxUrl: '{{DOCX_URL}}',
-      academicLevel: '{{ACADEMIC_LEVEL}}',
-      language: '{{LANGUAGE}}',
-      citationCount: 0, // Will be replaced by Python
-      wordCount: '{{WORD_COUNT}}',
     })
   );
 
-  // Replace the citationCount "0" with placeholder
   // Note: {{UNSUBSCRIBE_URL}} and {{PREFERENCES_URL}} are already in the template
   // and will be replaced by Python backend
-  const htmlWithPlaceholders = html.replace(
-    '>0 academic sources<',
-    '>{{CITATION_COUNT}} academic sources<'
-  );
+  const htmlWithPlaceholders = html;
 
   // Write to file
   const outputPath = path.join(outputDir, 'completion.html');

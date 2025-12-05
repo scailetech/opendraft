@@ -78,7 +78,7 @@ export const ComparisonSection = () => {
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          ChatGPT is great for many things—academic thesis writing with citations isn't one of them.
+          ChatGPT is great for many things—academic thesis writing with citations isn&apos;t one of them.
         </p>
       </div>
     </section>
