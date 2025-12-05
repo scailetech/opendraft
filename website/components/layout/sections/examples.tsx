@@ -2,14 +2,14 @@
 // ABOUTME: Shows real thesis download with stats and preview
 
 import { Button } from "@/components/ui/button";
-import { Download, FileText, BookOpen, Quote, Clock, Code } from "lucide-react";
+import { Download, FileText, BookOpen, Quote, Clock } from "lucide-react";
 import Link from "next/link";
 
 const stats = [
-  { icon: FileText, value: "104", label: "Pages" },
-  { icon: BookOpen, value: "30k+", label: "Words" },
-  { icon: Quote, value: "200+", label: "Citations" },
-  { icon: Clock, value: "~20", label: "Minutes" },
+  { icon: FileText, value: "60", label: "Pages" },
+  { icon: BookOpen, value: "18k+", label: "Words" },
+  { icon: Quote, value: "40+", label: "Citations" },
+  { icon: Clock, value: "~15", label: "Minutes" },
 ];
 
 export const ExamplesSection = () => {
@@ -67,7 +67,7 @@ export const ExamplesSection = () => {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button asChild size="lg" className="flex-1">
                   <Link
-                    href="https://federicodeponte.github.io/opendraft/examples/Why_Academic_Thesis_AI_Saves_The_World.pdf"
+                    href="/examples/Why_Academic_Thesis_AI_Saves_The_World.pdf"
                     target="_blank"
                   >
                     <Download className="mr-2 h-4 w-4" />
@@ -76,20 +76,11 @@ export const ExamplesSection = () => {
                 </Button>
                 <Button asChild variant="outline" size="lg" className="flex-1">
                   <Link
-                    href="https://federicodeponte.github.io/opendraft/examples/academic_ai_thesis.docx"
+                    href="/examples/Why_Academic_Thesis_AI_Saves_The_World.docx"
                     target="_blank"
                   >
                     <Download className="mr-2 h-4 w-4" />
                     Download Word
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="flex-1">
-                  <Link
-                    href="https://federicodeponte.github.io/opendraft/examples/academic_ai_thesis.tex"
-                    target="_blank"
-                  >
-                    <Code className="mr-2 h-4 w-4" />
-                    View LaTeX
                   </Link>
                 </Button>
               </div>
