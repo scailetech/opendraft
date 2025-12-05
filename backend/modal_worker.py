@@ -118,7 +118,7 @@ def process_single_user(user: dict) -> dict:
         }).eq("id", user_id).execute()
 
         # Generate thesis with full academic metadata
-        pdf_path, docx_path = generate_thesis_real(
+        pdf_path, docx_path, zip_path_from_gen = generate_thesis_real(
             topic=user["thesis_topic"],
             language=user["language"],
             academic_level=user["academic_level"],
@@ -131,6 +131,7 @@ def process_single_user(user: dict) -> dict:
             advisor=user.get("advisor"),          # Optional: from user profile
             location=user.get("location"),        # Optional: from user profile
         )
+        print(f"📦 ZIP path from generator: {zip_path_from_gen}")
 
         # Upload to Supabase Storage
         with open(pdf_path, "rb") as pdf_file:
@@ -159,24 +160,12 @@ def process_single_user(user: dict) -> dict:
         docx_url = docx_signed["signedURL"]
         thesis_generated = True
         
-        # Create and upload ZIP of entire output folder (includes research, tools, drafts)
+        # Upload ZIP (already created in generate_thesis_real)
         zip_url = None
-        try:
-            import shutil
-            # Derive output_dir from pdf_path (which we know exists)
-            # pdf_path is like: /tmp/thesis/{user_id}/exports/FINAL_THESIS.pdf
-            # We want: /tmp/thesis/{user_id}
-            output_dir = Path(pdf_path).parent.parent  # exports -> user_id folder
-            print(f"📦 Creating ZIP from {output_dir}...")
-            print(f"📦 PDF path was: {pdf_path}")
-            
-            if output_dir.exists():
-                zip_base = f"/tmp/thesis/{user_id}_package"
-                shutil.make_archive(zip_base, 'zip', output_dir)
-                zip_path = Path(f"{zip_base}.zip")
-                print(f"📦 ZIP created: {zip_path} ({zip_path.stat().st_size / 1024:.1f} KB)")
-                
-                with open(zip_path, "rb") as zip_file:
+        if zip_path_from_gen and Path(zip_path_from_gen).exists():
+            try:
+                print(f"📦 Uploading ZIP from {zip_path_from_gen}...")
+                with open(zip_path_from_gen, "rb") as zip_file:
                     supabase.storage.from_("thesis-files").upload(
                         f"{user_id}/thesis_package.zip",
                         zip_file.read(),
@@ -189,12 +178,12 @@ def process_single_user(user: dict) -> dict:
                 )
                 zip_url = zip_signed["signedURL"]
                 print(f"📦 ZIP URL created: {zip_url[:60]}...")
-            else:
-                print(f"⚠️ Output dir not found: {output_dir}")
-        except Exception as zip_err:
-            print(f"⚠️ ZIP upload failed (non-fatal): {zip_err}")
-            import traceback
-            traceback.print_exc()
+            except Exception as zip_err:
+                print(f"⚠️ ZIP upload failed (non-fatal): {zip_err}")
+                import traceback
+                traceback.print_exc()
+        else:
+            print(f"⚠️ No ZIP file to upload (zip_path_from_gen={zip_path_from_gen})")
 
         # Update status to completed
         update_data = {
@@ -437,7 +426,21 @@ def generate_thesis_real(
     print(f"📄 PDF path: {pdf_path}")
     print(f"📄 DOCX path: {docx_path}")
 
-    return str(pdf_path), str(docx_path)
+    # Create ZIP here while we KNOW the files exist
+    zip_path = None
+    try:
+        import shutil
+        zip_base = f"/tmp/thesis/{user_id}_package"
+        print(f"📦 Creating ZIP from {output_dir}...")
+        shutil.make_archive(zip_base, 'zip', output_dir)
+        zip_path = Path(f"{zip_base}.zip")
+        print(f"📦 ZIP created: {zip_path} ({zip_path.stat().st_size / 1024:.1f} KB)")
+    except Exception as e:
+        print(f"⚠️ ZIP creation failed in generate_thesis_real: {e}")
+        import traceback
+        traceback.print_exc()
+
+    return str(pdf_path), str(docx_path), str(zip_path) if zip_path else None
 
 
 def send_completion_email(
@@ -618,7 +621,7 @@ def generate_showcase_thesis() -> tuple[bytes, bytes]:
     
     print(f"🚀 Generating showcase thesis: {topic}")
     
-    pdf_path, docx_path = generate_thesis_real(
+    pdf_path, docx_path, _ = generate_thesis_real(
         topic=topic,
         language="en",
         academic_level="master",
