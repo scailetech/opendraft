@@ -597,40 +597,76 @@ def regenerate_example_pdf(md_content: str, filename: str) -> bytes:
         return pdf_path.read_bytes()
 
 
+@app.function(
+    timeout=3600,  # 1 hour for full thesis generation
+    volumes={"/tmp/thesis": volume},
+    secrets=[
+        modal.Secret.from_name("gemini-api-key"),
+    ],
+    image=image,
+)
+def generate_showcase_thesis() -> tuple[bytes, bytes]:
+    """
+    Generate the OpenDraft showcase thesis: "Why OpenDraft Will Save The World"
+    Returns (pdf_bytes, docx_bytes)
+    """
+    topic = "Why OpenDraft Will Save The World: Democratizing Academic Research Through AI"
+    
+    print(f"🚀 Generating showcase thesis: {topic}")
+    
+    pdf_path, docx_path = generate_thesis_real(
+        topic=topic,
+        language="en",
+        academic_level="master",
+        user_id="showcase",
+        author_name="OpenDraft Team",
+        institution="OpenDraft - Open Source Academic AI",
+        department="AI Research Division",
+        faculty="Faculty of Computer Science",
+        advisor="The Open Source Community",
+        location="Worldwide",
+    )
+    
+    from pathlib import Path
+    pdf_bytes = Path(pdf_path).read_bytes()
+    docx_bytes = Path(docx_path).read_bytes()
+    
+    print(f"✅ Generated PDF: {len(pdf_bytes):,} bytes")
+    print(f"✅ Generated DOCX: {len(docx_bytes):,} bytes")
+    
+    return pdf_bytes, docx_bytes
+
+
 @app.local_entrypoint()
 def regenerate_examples():
-    """Regenerate example PDFs from markdown files."""
+    """Generate fresh OpenDraft showcase thesis and save to examples."""
     from pathlib import Path
     
     project_root = Path(__file__).parent.parent
     
-    # Define which examples to regenerate
-    examples = [
-        {
-            "md_path": project_root / "tests/outputs/academic_ai_thesis/FINAL_THESIS.md",
-            "pdf_name": "Why_Academic_Thesis_AI_Saves_The_World.pdf",
-        }
-    ]
+    print("🚀 Generating fresh OpenDraft showcase thesis on Modal...")
+    print("   This will take 10-20 minutes for full thesis generation.")
+    print()
     
-    for example in examples:
-        md_path = example["md_path"]
-        pdf_name = example["pdf_name"]
-        
-        if not md_path.exists():
-            print(f"❌ Markdown not found: {md_path}")
-            continue
-        
-        print(f"📄 Regenerating {pdf_name}...")
-        md_content = md_path.read_text(encoding='utf-8')
-        
-        # Generate PDF on Modal
-        pdf_bytes = regenerate_example_pdf.remote(md_content, pdf_name)
-        
-        # Save to examples/ and docs/examples/
-        examples_dir = project_root / "examples"
-        docs_examples_dir = project_root / "docs/examples"
-        
-        for output_dir in [examples_dir, docs_examples_dir]:
-            output_path = output_dir / pdf_name
-            output_path.write_bytes(pdf_bytes)
-            print(f"✅ Saved: {output_path} ({len(pdf_bytes):,} bytes)")
+    # Generate thesis on Modal (with all AI agents)
+    pdf_bytes, docx_bytes = generate_showcase_thesis.remote()
+    
+    # Save to examples/ and docs/examples/
+    examples_dir = project_root / "examples"
+    docs_examples_dir = project_root / "docs/examples"
+    
+    pdf_name = "Why_Academic_Thesis_AI_Saves_The_World.pdf"
+    docx_name = "Why_Academic_Thesis_AI_Saves_The_World.docx"
+    
+    for output_dir in [examples_dir, docs_examples_dir]:
+        pdf_path = output_dir / pdf_name
+        pdf_path.write_bytes(pdf_bytes)
+        print(f"✅ Saved PDF: {pdf_path} ({len(pdf_bytes):,} bytes)")
+    
+    docx_path = examples_dir / docx_name
+    docx_path.write_bytes(docx_bytes)
+    print(f"✅ Saved DOCX: {docx_path} ({len(docx_bytes):,} bytes)")
+    
+    print()
+    print("🎉 Showcase thesis generated successfully!")
+    print("   Don't forget to commit and push to deploy to GitHub Pages.")
