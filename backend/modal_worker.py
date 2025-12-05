@@ -109,7 +109,7 @@ def process_single_user(user: dict) -> dict:
     thesis_generated = False
 
     try:
-        print(f"🚀 Starting thesis for {email}... [v53-zipfix]")
+        print(f"🚀 Starting thesis for {email}... [v57-zipfix2]")
 
         # Update status to processing
         supabase.table("waitlist").update({
@@ -385,7 +385,9 @@ def generate_thesis_real(
     department: str = None,
     faculty: str = None,
     advisor: str = None,
+    second_examiner: str = None,
     location: str = None,
+    student_id: str = None,
 ):
     """Generate thesis using the AI framework with professional academic formatting."""
     import sys
@@ -424,7 +426,9 @@ def generate_thesis_real(
         department=department,
         faculty=faculty,
         advisor=advisor,
+        second_examiner=second_examiner,
         location=location,
+        student_id=student_id,
     )
     
     print(f"📁 Output dir exists after: {output_dir.exists()}")
@@ -619,12 +623,14 @@ def generate_showcase_thesis() -> tuple[bytes, bytes]:
         language="en",
         academic_level="master",
         user_id="showcase",
-        author_name="OpenDraft Team",
-        institution="OpenDraft - Open Source Academic AI",
-        department="AI Research Division",
-        faculty="Faculty of Computer Science",
-        advisor="The Open Source Community",
-        location="Worldwide",
+        author_name="Federico De Ponte",
+        institution="Technical University of Berlin",
+        department="Department of Computer Science",
+        faculty="Faculty of Electrical Engineering and Computer Science",
+        advisor="Prof. Dr. Maria Schmidt",
+        second_examiner="Prof. Dr. Hans Weber",
+        location="Berlin",
+        student_id="123456",
     )
     
     from pathlib import Path
