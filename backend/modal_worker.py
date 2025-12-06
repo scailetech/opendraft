@@ -54,6 +54,8 @@ image = (modal.Image.debian_slim()
         "requests>=2.31.0",
         "beautifulsoup4>=4.12.0",
         "lxml>=4.9.0",
+        # Fallback Services (for rate limit handling)
+        "crawl4ai>=0.3.0",  # OpenPull/URL scraping with JS rendering
         # Utilities
         "rich>=13.0.0"
     )
@@ -267,17 +269,35 @@ def daily_thesis_batch():
         os.environ["SUPABASE_SERVICE_KEY"]
     )
 
-    # Get next 100 waiting users (FIFO, email verified)
-    response = supabase.table("waitlist") \
+    # Priority 1: Get paid users first (immediate processing)
+    paid_response = supabase.table("waitlist") \
+        .select("*") \
+        .eq("status", "waiting") \
+        .eq("payment_status", "paid") \
+        .eq("payment_mode", "immediate") \
+        .order("paid_at", desc=False) \
+        .limit(50) \
+        .execute()
+    
+    paid_users = paid_response.data
+    print(f"Found {len(paid_users)} paid users for immediate processing")
+
+    # Priority 2: Get free waitlist users (FIFO, email verified)
+    free_response = supabase.table("waitlist") \
         .select("*") \
         .eq("status", "waiting") \
         .eq("email_verified", True) \
+        .eq("payment_mode", "waitlist") \
         .order("position", desc=False) \
         .limit(20) \
         .execute()  # Limit reduced from 100 to 20 to minimize API stress
 
-    users = response.data
-    print(f"Found {len(users)} users to process")
+    free_users = free_response.data
+    print(f"Found {len(free_users)} free waitlist users to process")
+
+    # Combine: paid users first, then free users
+    users = paid_users + free_users
+    print(f"Total users to process: {len(users)} (${len(paid_users)} paid, ${len(free_users)} free)")
 
     if not users:
         print("No users to process today!")

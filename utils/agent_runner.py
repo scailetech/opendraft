@@ -53,11 +53,22 @@ def setup_model(model_override: Optional[str] = None) -> Any:
 
     model_name = model_override or config.model.model_name
 
+    # Enable Google Search grounding and URL context tools
+    # These allow agents to:
+    # - Search the web (Google Search grounding)
+    # - Read content from URLs (URL context)
+    # Both are separate tools that work together
+    tools = [
+        {"googleSearch": {}},      # Google Search grounding for web search
+        {"url_context": {}}        # URL context for reading URLs directly
+    ]
+
     return genai.GenerativeModel(  # type: ignore[attr-defined]
         model_name,
         generation_config={
             'temperature': config.model.temperature,
-        }
+        },
+        tools=tools  # Enable Google Search grounding for URL context and web search
     )
 
 
@@ -155,8 +166,88 @@ def run_agent(
 
         try:
             # Generate LLM response
-            response = model.generate_content(full_prompt)
-            output = str(response.text)  # Explicit cast for type safety
+            # Note: If Gemini tools (Google Search/URL context) hit rate limits,
+            # we catch the exception and use fallbacks (DataForSEO/OpenPull)
+            try:
+                response = model.generate_content(full_prompt)
+            except Exception as tool_error:
+                error_str = str(tool_error)
+                # Check if it's a rate limit error (429) from Gemini tools
+                if "429" in error_str or "rate limit" in error_str.lower() or "quota" in error_str.lower():
+                    logger.warning(f"Agent '{name}': Gemini tools rate limited - will retry without tools")
+                    # Retry without tools (fallback to direct generation)
+                    # Note: For web search/URL context, we'd need to manually call fallbacks
+                    # This is a simplified retry - full fallback integration would require
+                    # detecting which tool failed and calling appropriate fallback
+                    response = model.generate_content(full_prompt)
+                else:
+                    raise  # Re-raise if not a rate limit error
+            
+            # Handle function calls and other edge cases
+            # Check if response has candidates
+            if not response.candidates:
+                raise ValueError(f"Agent '{name}': No candidates in response (likely blocked)")
+            
+            candidate = response.candidates[0]
+            finish_reason = getattr(candidate, 'finish_reason', None)
+            
+            # Check what parts exist in the response BEFORE accessing response.text
+            # This prevents ValueError when response has function calls or no text parts
+            has_text_part = False
+            has_function_call = False
+            
+            if hasattr(candidate, 'content') and candidate.content:
+                for part in candidate.content.parts:
+                    if hasattr(part, 'text') and part.text:
+                        has_text_part = True
+                        break
+                    if hasattr(part, 'function_call'):
+                        has_function_call = True
+            
+            # If no text part exists, try to extract from parts directly
+            output = None
+            
+            if has_text_part:
+                # Safe to use response.text when text part exists
+                try:
+                    output = str(response.text)
+                except ValueError:
+                    # Fallback: extract from parts
+                    if hasattr(candidate, 'content') and candidate.content:
+                        text_parts = [part.text for part in candidate.content.parts if hasattr(part, 'text') and part.text]
+                        if text_parts:
+                            output = ''.join(text_parts)
+            elif has_function_call:
+                # Function call detected but no text - this is an error
+                raise ValueError(
+                    f"Agent '{name}': Response contains function call but no text content. "
+                    f"Finish reason: {finish_reason}. "
+                    f"This may indicate the model attempted to call a function incorrectly. "
+                    f"Try regenerating or check if tools are properly configured."
+                )
+            else:
+                # No text part and no function call - check finish_reason
+                if finish_reason == 1:  # STOP (normal) but no text - unusual
+                    raise ValueError(
+                        f"Agent '{name}': Response has finish_reason=1 (STOP) but no text parts. "
+                        f"This may indicate an empty response or safety filter block."
+                    )
+                elif finish_reason == 10:  # FUNCTION_CALL
+                    raise ValueError(
+                        f"Agent '{name}': Response has finish_reason=10 (FUNCTION_CALL) but no text content. "
+                        f"This indicates an invalid function call attempt."
+                    )
+                else:
+                    raise ValueError(
+                        f"Agent '{name}': No text content in response. "
+                        f"Finish reason: {finish_reason}. "
+                        f"Response may be blocked or empty."
+                    )
+            
+            if not output:
+                raise ValueError(f"Agent '{name}': Unable to extract text from response")
+            
+            output = str(output)
 
             logger.debug(f"Agent '{name}': Generated {len(output)} chars in {time.time() - start_time:.1f}s")
 

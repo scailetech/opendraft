@@ -229,6 +229,7 @@ class GeminiGroundedClient(BaseAPIClient):
     def search_paper(self, query: str) -> Optional[Dict[str, Any]]:
         """
         Search for a source using Gemini with Google Search grounding via REST API.
+        Falls back to DataForSEO on rate limit (429) errors.
 
         Args:
             query: Search query (topic, title, keywords)
@@ -249,6 +250,27 @@ class GeminiGroundedClient(BaseAPIClient):
             # Generate with Google Search grounding via REST API
             response_data = self._generate_content_with_grounding(prompt)
 
+            # If rate limited (429), try DataForSEO fallback
+            if not response_data:
+                # Check if we should try DataForSEO fallback
+                try:
+                    from utils.web_search_fallback import WebSearchFallback
+                    fallback = WebSearchFallback()
+                    if fallback.dataforseo.enabled:
+                        logger.info(f"Gemini Google Search failed - trying DataForSEO fallback for: {query[:50]}...")
+                        results = fallback.dataforseo.search(query, limit=5)
+                        if results and len(results) > 0:
+                            # Convert DataForSEO result to Gemini format
+                            result = results[0]
+                            return {
+                                "title": result.get("title", ""),
+                                "url": result.get("url", ""),
+                                "snippet": result.get("snippet", ""),
+                                "source": "DataForSEO"
+                            }
+                except Exception as fallback_error:
+                    logger.warning(f"DataForSEO fallback failed: {fallback_error}")
+            
             if not response_data:
                 return None
 
@@ -268,6 +290,24 @@ class GeminiGroundedClient(BaseAPIClient):
             return valid_sources[0]
 
         except Exception as e:
+            # Try DataForSEO fallback on any error
+            try:
+                from utils.web_search_fallback import WebSearchFallback
+                fallback = WebSearchFallback()
+                if fallback.dataforseo.enabled:
+                    logger.info(f"Gemini error - trying DataForSEO fallback for: {query[:50]}...")
+                    results = fallback.dataforseo.search(query, limit=5)
+                    if results and len(results) > 0:
+                        result = results[0]
+                        return {
+                            "title": result.get("title", ""),
+                            "url": result.get("url", ""),
+                            "snippet": result.get("snippet", ""),
+                            "source": "DataForSEO"
+                        }
+            except Exception as fallback_error:
+                logger.warning(f"DataForSEO fallback failed: {fallback_error}")
+            
             print(f"Gemini grounded search error: {e}")
             import traceback
             traceback.print_exc()
