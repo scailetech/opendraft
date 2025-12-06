@@ -21,8 +21,8 @@ export const WAITLIST_CONFIG = {
   REFERRAL_CODE_CHARS: 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', // No confusing chars (0,O,1,I)
 
   // Email settings
-  FROM_EMAIL: 'OpenDraft <hello@opendraft.ai>',
-  REPLY_TO_EMAIL: 'support@opendraft.ai',
+  FROM_EMAIL: 'OpenDraft <hello@opendraft.xyz>',
+  REPLY_TO_EMAIL: 'support@opendraft.xyz',
 
   // Processing schedule
   PROCESSING_TIME_UTC: '09:00', // 9am UTC daily
