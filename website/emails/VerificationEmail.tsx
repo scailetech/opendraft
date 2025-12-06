@@ -53,7 +53,7 @@ export const VerificationEmail = ({
             <strong>Want to skip ahead?</strong>
           </Text>
           <Text style={text}>
-            Each referral = <strong>20 positions</strong> skipped!
+            Each referral = <strong>20 positions</strong> skipped for you, and <strong>10 positions</strong> for your friend!
           </Text>
           <Text style={text}>
             Your referral code: <span style={code}>{referralCode}</span>

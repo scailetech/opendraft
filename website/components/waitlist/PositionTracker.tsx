@@ -108,8 +108,7 @@ export function PositionTracker({ userId, initialPosition }: PositionTrackerProp
         {position > WAITLIST_CONFIG.DAILY_THESIS_LIMIT && (
           <div className="bg-accent/10 p-4 rounded-lg">
             <p className="text-sm text-accent">
-              <strong>Want to skip ahead?</strong> Each referral skips you
-              20 positions.
+              <strong>Want to skip ahead?</strong> Each referral skips you 20 positions, and your friend gets 10 positions too!
             </p>
           </div>
         )}

@@ -4,8 +4,9 @@ export const WAITLIST_CONFIG = {
   // Daily processing limits
   DAILY_THESIS_LIMIT: parseInt(process.env.NEXT_PUBLIC_DAILY_THESIS_LIMIT || '20'),
 
-  // Referral mechanics: 1 referral = 20 positions
-  REFERRAL_REWARD: parseInt(process.env.NEXT_PUBLIC_REFERRAL_REWARD || '20'), // Positions per referral
+  // Referral mechanics: 1 referral = 20 positions for referrer, 10 positions for referred person
+  REFERRAL_REWARD: parseInt(process.env.NEXT_PUBLIC_REFERRAL_REWARD || '20'), // Positions per referral (for referrer)
+  REFERRAL_BONUS: parseInt(process.env.NEXT_PUBLIC_REFERRAL_BONUS || '10'), // Positions bonus for referred person
   REFERRALS_REQUIRED: parseInt(process.env.NEXT_PUBLIC_REFERRALS_REQUIRED || '1'), // 1 referral = reward
 
   // Rate limiting

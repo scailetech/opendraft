@@ -121,7 +121,7 @@ export default function WaitlistPage({ searchParams }: PageProps) {
               </div>
               <h3 className="font-medium mb-1">Wait or Skip Ahead</h3>
               <p className="text-sm text-muted-foreground">
-                Each referral = 20 positions skipped
+                Each referral = 20 positions for you, 10 for your friend
               </p>
             </div>
 

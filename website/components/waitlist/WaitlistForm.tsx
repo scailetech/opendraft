@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select';
 import { WAITLIST_CONFIG } from '@/lib/config/waitlist';
 import Turnstile from 'react-turnstile';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -35,11 +35,13 @@ interface WaitlistFormProps {
   referralCode?: string;
 }
 
-export function WaitlistForm({ referralCode }: WaitlistFormProps) {
+export function WaitlistForm({ referralCode: urlReferralCode }: WaitlistFormProps) {
   const [turnstileToken, setTurnstileToken] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [success, setSuccess] = useState<{ position: number; referralCode: string } | null>(null);
+  const [success, setSuccess] = useState<{ position: number; referralCode: string; referralBonusApplied?: boolean } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showReferralField, setShowReferralField] = useState(false);
+  const [manualReferralCode, setManualReferralCode] = useState('');
 
   const {
     register,
@@ -67,6 +69,9 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
     setIsSubmitting(true);
     setError(null);
 
+    // Use URL referral code if present, otherwise use manual input
+    const finalReferralCode = urlReferralCode || manualReferralCode.trim() || undefined;
+
     try {
       const response = await fetch('/api/waitlist/signup', {
         method: 'POST',
@@ -74,7 +79,7 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
         body: JSON.stringify({
           ...data,
           turnstileToken,
-          referredByCode: referralCode,
+          referredByCode: finalReferralCode,
         }),
       });
 
@@ -87,6 +92,7 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
       setSuccess({
         position: result.position,
         referralCode: result.referralCode,
+        referralBonusApplied: result.referralBonusApplied,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -103,9 +109,14 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
         </h3>
         <p className="text-green-700 dark:text-green-300 mb-4">
           <strong>Position #{success.position}</strong> - Check your email to verify your spot.
+          {success.referralBonusApplied && (
+            <span className="block mt-2 text-sm">
+              🎉 You skipped {WAITLIST_CONFIG.REFERRAL_BONUS} positions with your referral code!
+            </span>
+          )}
         </p>
         <p className="text-sm text-green-600 dark:text-green-400 mb-4">
-          Want to skip ahead? Each referral = 20 positions skipped!
+          Want to skip ahead? Each referral = {WAITLIST_CONFIG.REFERRAL_REWARD} positions skipped for you, and {WAITLIST_CONFIG.REFERRAL_BONUS} positions for your friend!
         </p>
         <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-green-300 dark:border-green-700">
           <p className="text-xs text-muted-foreground mb-2">Your referral code:</p>
@@ -119,13 +130,56 @@ export function WaitlistForm({ referralCode }: WaitlistFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto space-y-6">
-      {referralCode && (
+      {(urlReferralCode || manualReferralCode.trim()) && (
         <div className="bg-accent/10 p-4 rounded-lg border border-accent/20">
           <p className="text-sm text-accent">
-            🎁 You were referred! Your friend will skip 20 positions when you verify.
+            🎁 You were referred! You&apos;ll skip {WAITLIST_CONFIG.REFERRAL_BONUS} positions when you verify, and your friend will skip {WAITLIST_CONFIG.REFERRAL_REWARD} positions too!
           </p>
         </div>
       )}
+
+      {/* Referral Code Input Field */}
+      <div className="border border-border rounded-lg">
+        <button
+          type="button"
+          onClick={() => setShowReferralField(!showReferralField)}
+          className="w-full flex items-center justify-between p-3 text-sm font-medium hover:bg-muted/50 transition-colors"
+        >
+          <span className="text-muted-foreground">
+            {showReferralField ? 'Hide' : 'Have a referral code?'}
+          </span>
+          {showReferralField ? (
+            <ChevronUp className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          )}
+        </button>
+        {showReferralField && (
+          <div className="p-4 pt-0 border-t border-border">
+            <label htmlFor="referralCode" className="block text-sm font-medium mb-2">
+              Referral Code (Optional)
+            </label>
+            <Input
+              id="referralCode"
+              type="text"
+              placeholder="Enter referral code (e.g., AWDVRVLML)"
+              value={manualReferralCode}
+              onChange={(e) => setManualReferralCode(e.target.value.toUpperCase().trim())}
+              maxLength={WAITLIST_CONFIG.REFERRAL_CODE_LENGTH}
+              className="font-mono uppercase"
+              disabled={!!urlReferralCode}
+            />
+            {urlReferralCode && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Referral code already applied from URL
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground mt-2">
+              Skip {WAITLIST_CONFIG.REFERRAL_BONUS} positions when you verify your email!
+            </p>
+          </div>
+        )}
+      </div>
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium mb-2">

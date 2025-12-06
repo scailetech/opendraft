@@ -97,7 +97,7 @@ export function ReferralDashboard({ referralCode, userId }: ReferralDashboardPro
         {/* Simple explanation */}
         <div className="bg-muted p-4 rounded-lg">
           <p className="text-sm text-center text-muted-foreground">
-            Each verified referral = <span className="font-semibold text-foreground">20 positions</span> skipped
+            Each verified referral = <span className="font-semibold text-foreground">20 positions</span> for you, <span className="font-semibold text-foreground">10 positions</span> for your friend
           </p>
         </div>
       </CardContent>

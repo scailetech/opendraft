@@ -105,7 +105,25 @@ export async function POST(request: NextRequest) {
       .limit(1)
       .single();
 
-    const position = (maxPosData?.position || 0) + 1;
+    let position = (maxPosData?.position || 0) + 1;
+
+    // 6.5. Apply referral bonus if user was referred
+    let referralBonusApplied = false;
+    if (referredByCode) {
+      // Verify the referral code exists
+      const { data: referrer } = await supabaseAdmin
+        .from('waitlist')
+        .select('id, email_verified')
+        .eq('referral_code', referredByCode)
+        .single();
+
+      if (referrer) {
+        // Apply bonus: skip REFERRAL_BONUS positions (but not below 1)
+        const bonus = WAITLIST_CONFIG.REFERRAL_BONUS;
+        position = Math.max(1, position - bonus);
+        referralBonusApplied = true;
+      }
+    }
 
     // 7. Insert into database
     const { data: user, error } = await supabaseAdmin
@@ -163,6 +181,7 @@ export async function POST(request: NextRequest) {
       position,
       referralCode,
       userId: user.id,
+      referralBonusApplied,
     });
   } catch (error) {
     console.error('Signup error:', error);
