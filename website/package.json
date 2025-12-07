@@ -44,6 +44,8 @@
     "react-icons": "^5.5.0",
     "react-turnstile": "^1.1.4",
     "resend": "^3.5.0",
+    "@stripe/stripe-js": "^2.4.0",
+    "stripe": "^17.3.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"

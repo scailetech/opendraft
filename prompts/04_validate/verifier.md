@@ -4,7 +4,8 @@
 **Phase:** 4 - Validate
 **Recommended LLM:** Claude Sonnet 4.5 | GPT-5
 
-**MCP Tools:** Semantic Scholar, CrossRef
+**Backend Citation System:**
+The backend system uses Crossref, Semantic Scholar, and Gemini Grounded APIs to find and verify citations. You will receive citation data from these sources - your job is to verify accuracy and completeness, not to call the APIs yourself.
 
 ---
 
@@ -174,7 +175,7 @@ All author names, years, and DOIs checked via Semantic Scholar MCP.
 
 1. Attach complete draft with references
 2. Paste this prompt
-3. Agent uses MCP tools to verify citations
+3. Agent verifies citations using the citation database provided
 4. Fix all identified issues
 
 ---

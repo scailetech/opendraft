@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+    <title>Your Thesis is Ready!</title>
+    <style>
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .email-body { background-color: #0a0a0a !important; }
+      .email-container { background-color: #0a0a0a !important; }
+      .email-card { background-color: #171717 !important; border-color: #262626 !important; }
+      .email-text { color: #fafafa !important; }
+      .email-text-muted { color: #a3a3a3 !important; }
+      .email-text-subtle { color: #737373 !important; }
+      .email-divider { border-color: #262626 !important; }
+      .success-badge { background-color: #052e16 !important; color: #4ade80 !important; }
+      .topic-card { background-color: #171717 !important; border-color: #262626 !important; }
+      .stats-border { border-color: #262626 !important; }
+      .btn-secondary { background-color: #262626 !important; border-color: #404040 !important; color: #fafafa !important; }
+      .package-card { background-color: #052e16 !important; border-color: #166534 !important; }
+      .package-title { color: #4ade80 !important; }
+      .package-text { color: #86efac !important; }
+      .alert-card { background-color: #1c1917 !important; border-color: #292524 !important; }
+      .alert-title { color: #fbbf24 !important; }
+      .alert-text { color: #d97706 !important; }
+      .honesty-section { background-color: #1c1c1c !important; }
+      .footer-border { border-color: #262626 !important; }
+    }
+    </style>
+</head>
+<body class="email-body" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, sans-serif; background-color: #fafaf9; margin: 0; padding: 0;">
+  <div class="email-container" style="background-color: #fafaf9; margin: 0 auto; padding: 40px 20px; max-width: 560px;">
+    
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 32px;">
+      <p class="email-text" style="color: #1c1917; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin: 0;">OpenDraft</p>
+    </div>
+
+    <!-- Hero Section -->
+    <div style="text-align: center; margin-bottom: 32px;">
+      <span class="success-badge" style="background-color: #dcfce7; color: #15803d; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; display: inline-block; margin-bottom: 16px;">✓ Generation Complete</span>
+      <h1 class="email-text" style="color: #1c1917; font-size: 28px; font-weight: 700; line-height: 1.2; margin: 0 0 12px 0; letter-spacing: -0.5px;">Your Thesis is Ready!</h1>
+      <p class="email-text-muted" style="color: #57534e; font-size: 16px; line-height: 1.6; margin: 0;">Hi {{FULL_NAME}}, your AI-generated thesis has been completed successfully.</p>
+    </div>
+
+    <!-- Topic Card -->
+    <div class="topic-card" style="background-color: #ffffff; border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid #e7e5e4;">
+      <p class="email-text-subtle" style="color: #a8a29e; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">THESIS TOPIC</p>
+      <p class="email-text" style="color: #1c1917; font-size: 16px; font-weight: 500; line-height: 1.5; margin: 0 0 20px 0;">{{THESIS_TOPIC}}</p>
+      <div class="stats-border" style="border-top: 1px solid #e7e5e4; padding-top: 16px; margin-top: 4px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="33%" align="center">
+              <p class="email-text" style="color: #1c1917; font-size: 16px; font-weight: 600; margin: 0;">{{ACADEMIC_LEVEL}}</p>
+              <p class="email-text-subtle" style="color: #a8a29e; font-size: 12px; margin: 4px 0 0 0;">Level</p>
+            </td>
+            <td width="33%" align="center">
+              <p class="email-text" style="color: #1c1917; font-size: 16px; font-weight: 600; margin: 0;">{{WORD_COUNT}}</p>
+              <p class="email-text-subtle" style="color: #a8a29e; font-size: 12px; margin: 4px 0 0 0;">Words</p>
+            </td>
+            <td width="33%" align="center">
+              <p class="email-text" style="color: #1c1917; font-size: 16px; font-weight: 600; margin: 0;">{{CITATION_COUNT}}+</p>
+              <p class="email-text-subtle" style="color: #a8a29e; font-size: 12px; margin: 4px 0 0 0;">Citations</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Download Section -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <p class="email-text" style="color: #1c1917; font-size: 14px; font-weight: 600; margin: 0 0 16px 0;">Download Your Thesis</p>
+      
+      <!-- Primary Button -->
+      <div style="margin-bottom: 12px;">
+        <a href="{{PDF_URL}}" style="background-color: #10b981; border-radius: 8px; color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; text-align: center; display: inline-block; padding: 14px 32px; min-width: 200px;">↓ Download PDF</a>
+      </div>
+      
+      <!-- Secondary Buttons -->
+      <div>
+        <a href="{{DOCX_URL}}" class="btn-secondary" style="background-color: #ffffff; border-radius: 8px; color: #1c1917; font-size: 14px; font-weight: 500; text-decoration: none; text-align: center; display: inline-block; padding: 10px 20px; border: 1px solid #d6d3d1; margin-right: 8px;">Word Document</a>
+        <a href="{{ZIP_URL}}" class="btn-secondary" style="background-color: #ffffff; border-radius: 8px; color: #1c1917; font-size: 14px; font-weight: 500; text-decoration: none; text-align: center; display: inline-block; padding: 10px 20px; border: 1px solid #d6d3d1;">Full Package (.zip)</a>
+      </div>
+    </div>
+
+    <!-- Package Info Card -->
+    <div class="package-card" style="background-color: #f0fdf4; border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid #bbf7d0;">
+      <p class="package-title" style="color: #15803d; font-size: 14px; font-weight: 600; margin: 0 0 6px 0;">📦 Full Package Included</p>
+      <p class="package-text" style="color: #166534; font-size: 13px; line-height: 1.5; margin: 0;">The ZIP file contains your complete thesis folder with research summaries, drafts, bibliography, and refinement tools for Cursor IDE.</p>
+    </div>
+
+    <!-- Alert Card -->
+    <div class="alert-card" style="background-color: #fffbeb; border-radius: 10px; padding: 16px 20px; margin-bottom: 32px; border: 1px solid #fde68a;">
+      <p class="alert-title" style="color: #92400e; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">⏱ Links expire in 7 days</p>
+      <p class="alert-text" style="color: #a16207; font-size: 13px; line-height: 1.5; margin: 0;">Download your files before they expire. You can always generate a new thesis from the waitlist.</p>
+    </div>
+
+    <!-- Divider -->
+    <hr class="email-divider" style="border: none; border-top: 1px solid #e7e5e4; margin: 0;">
+
+    <!-- Features Section -->
+    <div style="padding: 24px 0;">
+      <p class="email-text" style="color: #1c1917; font-size: 15px; font-weight: 600; margin: 0 0 20px 0;">What's in your thesis</p>
+      
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 16px;">
+        <tr>
+          <td width="32" valign="top" style="font-size: 18px; padding-top: 2px;">📚</td>
+          <td valign="top">
+            <p class="email-text" style="color: #1c1917; font-size: 14px; font-weight: 500; margin: 0 0 2px 0;">Research & Citations</p>
+            <p class="email-text-muted" style="color: #78716c; font-size: 13px; line-height: 1.4; margin: 0;">Academic sources from Crossref, Semantic Scholar, and more</p>
+          </td>
+        </tr>
+      </table>
+      
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 16px;">
+        <tr>
+          <td width="32" valign="top" style="font-size: 18px; padding-top: 2px;">✍️</td>
+          <td valign="top">
+            <p class="email-text" style="color: #1c1917; font-size: 14px; font-weight: 500; margin: 0 0 2px 0;">Professional Writing</p>
+            <p class="email-text-muted" style="color: #78716c; font-size: 13px; line-height: 1.4; margin: 0;">APA 7th edition formatting with proper citations</p>
+          </td>
+        </tr>
+      </table>
+      
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td width="32" valign="top" style="font-size: 18px; padding-top: 2px;">📄</td>
+          <td valign="top">
+            <p class="email-text" style="color: #1c1917; font-size: 14px; font-weight: 500; margin: 0 0 2px 0;">Multiple Formats</p>
+            <p class="email-text-muted" style="color: #78716c; font-size: 13px; line-height: 1.4; margin: 0;">PDF for submission, Word for editing, ZIP for refinement</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Divider -->
+    <hr class="email-divider" style="border: none; border-top: 1px solid #e7e5e4; margin: 0;">
+
+    <!-- Academic Honesty Section -->
+    <div class="honesty-section" style="background-color: #f5f5f4; border-radius: 10px; padding: 20px; margin-top: 24px;">
+      <p class="email-text" style="color: #1c1917; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">📖 Academic Integrity Notice</p>
+      <p class="email-text-muted" style="color: #57534e; font-size: 13px; line-height: 1.6; margin: 0;">This AI-generated content is intended as a <strong>research aid and starting point</strong>. Please review your institution's policies on AI usage. We recommend citing AI assistance appropriately and ensuring all work meets your academic standards.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-border" style="text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #e7e5e4;">
+      <p class="email-text-subtle" style="color: #a8a29e; font-size: 13px; line-height: 1.5; margin: 0 0 12px 0;">Questions? Reply to this email or contact <a href="mailto:support@clients.opendraft.xyz" style="color: #10b981; text-decoration: none;">support@clients.opendraft.xyz</a></p>
+      <p class="email-text-subtle" style="color: #a8a29e; font-size: 12px; margin: 0 0 8px 0;">© 2025 OpenDraft · AI-Powered Academic Writing</p>
+      <p class="email-text-subtle" style="color: #a8a29e; font-size: 12px; margin: 0;">
+        <a href="https://opendraft.xyz" style="color: #10b981; text-decoration: none;">Website</a>
+        · 
+        <a href="https://github.com/federicodeponte/opendraft" style="color: #10b981; text-decoration: none;">GitHub</a>
+        · 
+        <a href="https://opendraft.xyz/#faq" style="color: #10b981; text-decoration: none;">FAQ</a>
+      </p>
+    </div>
+
+    </div>
+</body>
+</html>

@@ -1,120 +1,65 @@
-# Environment variables
-.env
-.env.local
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
 
-# Python
+# Testing
+coverage/
+.pytest_cache/
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
+
+# Next.js
+.next/
+out/
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
-# Virtual environments
-venv/
-ENV/
-env/
+# Production
+/build
 
-# Research data (user-generated)
-research/papers/
-research/sources.md
-research/summaries.md
-research/gaps.md
-sections/
-outline.md
-final_thesis.*
+# Misc
+.DS_Store
+*.pem
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# IDE
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
+# Python
+*.pyc
+__pycache__/
+.venv/
+.venv-modal/
+venv/
+ENV/
+env/
+
+# Modal
+.modal/
+
+# Temporary
+tmp/
+temp/
+*.tmp
 
 # Logs
 *.log
 
-# Output files
-output/
-*.pdf
-*.docx
-*.tex
-*.html
-# Exception: Allow showcase files in examples directory
-!examples/*.html
-!examples/*.pdf
-!examples/*.docx
-# Exception: Allow example PDFs in docs/examples/
-!docs/examples/*.pdf
-
-# Test outputs (keep structure, ignore most generated files)
-tests/outputs/**/*.pdf
-tests/outputs/**/*.docx
-tests/outputs/**/*.tex
-tests/outputs/**/*.html
-tests/outputs/**/temp_*
-tests/outputs/**/TEST_*
-!tests/outputs/PRODUCTION_TEST_RESULTS.md
-!tests/outputs/README.md
-
-# Example outputs (generated)
-examples/output/**/*
-!examples/output/.gitkeep
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-*.bak
-
-# Additional Python artifacts
-.mypy_cache/
-.pytest_cache/
-.coverage
-htmlcov/
-*.pyc
-
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb
-
-# Research papers cache
-papers/
-cache/
-.cache/
-.citation_cache*.json
-
-# AI API keys (extra safety)
-*_api_key*
-*_secret*
-credentials.json
-
-# IDE additions
-.cursor/
-
-# Documentation builds
-docs/_build/
-site/
-
-# Log files (keep logs/ directory structure but ignore generated files)
-logs/*.log
-logs/*.log.[0-9]*
-!logs/README.md
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,18 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern, clean logo inspired by Cursor's aesthetic -->
+  <rect width="32" height="32" rx="6" fill="url(#gradient)"/>
+  <path d="M16 8L22 14L16 20L10 14L16 8Z" fill="white" opacity="0.9"/>
+  <path d="M16 12L19 15L16 18L13 15L16 12Z" fill="url(#gradient2)"/>
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="gradient2" x1="13" y1="13" x2="19" y2="19" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+

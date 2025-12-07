@@ -62,17 +62,18 @@ image = (modal.Image.debian_slim()
     # Set Gemini 3.0 Pro Preview as default model (must be before add_local_*)
     .env({"GEMINI_MODEL": "gemini-3-pro-preview"})
     # Add entire codebase into image (last in build chain)
-    .add_local_dir("./opendraft", "/root/opendraft/opendraft")
-    .add_local_dir("./utils", "/root/opendraft/utils")
-    .add_local_dir("./prompts", "/root/opendraft/prompts")
-    .add_local_dir("./concurrency", "/root/opendraft/concurrency")
-    .add_local_dir("./backend", "/root/opendraft/backend")
-    .add_local_dir("./tests", "/root/opendraft/tests")
-    .add_local_dir("./examples", "/root/opendraft/examples")  # DOCX reference template
-    .add_local_dir("./templates", "/root/opendraft/templates")  # Thesis output templates
-    .add_local_file("./config.py", "/root/opendraft/config.py")
+    # Note: When running from backend/ directory, paths are relative to parent
+    .add_local_dir("../opendraft", "/root/opendraft/opendraft")
+    .add_local_dir("../utils", "/root/opendraft/utils")
+    .add_local_dir("../prompts", "/root/opendraft/prompts")
+    .add_local_dir("../concurrency", "/root/opendraft/concurrency")
+    .add_local_dir(".", "/root/opendraft/backend")  # Backend directory (current dir)
+    .add_local_dir("../tests", "/root/opendraft/tests")
+    .add_local_dir("../examples", "/root/opendraft/examples")  # DOCX reference template
+    .add_local_dir("../templates", "/root/opendraft/templates")  # Thesis output templates
+    .add_local_file("../config.py", "/root/opendraft/config.py")
     # Add pre-rendered email templates
-    .add_local_dir("./backend/email_templates", "/root/opendraft/backend/email_templates")
+    .add_local_dir("./email_templates", "/root/opendraft/backend/email_templates")
 )
 
 # Persistent volume for temporary thesis files
@@ -86,6 +87,7 @@ volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
         modal.Secret.from_name("supabase-credentials"),
         modal.Secret.from_name("gemini-api-key"),
         modal.Secret.from_name("resend-api-key"),
+        modal.Secret.from_name("opendraft-dataforseo"),
     ],
     image=image,
     retries=2,  # Auto-retry on failure
@@ -97,6 +99,7 @@ def process_single_user(user: dict) -> dict:
     """
     import resend
     from supabase import create_client
+    from pathlib import Path
 
     supabase = create_client(
         os.environ["SUPABASE_URL"],
@@ -113,18 +116,24 @@ def process_single_user(user: dict) -> dict:
     try:
         print(f"🚀 Starting thesis for {email}... [v57-zipfix2]")
 
-        # Update status to processing
+        # Update status to processing with phase tracking
         supabase.table("waitlist").update({
             "status": "processing",
-            "processing_started_at": datetime.now().isoformat()
+            "processing_started_at": datetime.now().isoformat(),
+            "current_phase": "initializing",
+            "progress_percent": 0
         }).eq("id", user_id).execute()
 
-        # Generate thesis with full academic metadata
+        # Generate thesis with full academic metadata and progress tracking
+        # Set user email in environment for streamer
+        os.environ["USER_EMAIL"] = email
+        
         pdf_path, docx_path, zip_path_from_gen = generate_thesis_real(
             topic=user["thesis_topic"],
             language=user["language"],
             academic_level=user["academic_level"],
-            user_id=user_id,  # For unique output paths
+            user_id=user_id,  # For unique output paths and progress tracking
+            supabase_client=supabase,  # Pass for progress updates
             # Academic metadata for professional cover page
             author_name=user.get("full_name"),
             institution=user.get("institution"),  # Optional: from user profile
@@ -269,35 +278,17 @@ def daily_thesis_batch():
         os.environ["SUPABASE_SERVICE_KEY"]
     )
 
-    # Priority 1: Get paid users first (immediate processing)
-    paid_response = supabase.table("waitlist") \
-        .select("*") \
-        .eq("status", "waiting") \
-        .eq("payment_status", "paid") \
-        .eq("payment_mode", "immediate") \
-        .order("paid_at", desc=False) \
-        .limit(50) \
-        .execute()
-    
-    paid_users = paid_response.data
-    print(f"Found {len(paid_users)} paid users for immediate processing")
-
-    # Priority 2: Get free waitlist users (FIFO, email verified)
-    free_response = supabase.table("waitlist") \
+    # Get waiting users (email verified, ordered by position)
+    response = supabase.table("waitlist") \
         .select("*") \
         .eq("status", "waiting") \
         .eq("email_verified", True) \
-        .eq("payment_mode", "waitlist") \
         .order("position", desc=False) \
         .limit(20) \
-        .execute()  # Limit reduced from 100 to 20 to minimize API stress
+        .execute()  # Process up to 20 users at a time
 
-    free_users = free_response.data
-    print(f"Found {len(free_users)} free waitlist users to process")
-
-    # Combine: paid users first, then free users
-    users = paid_users + free_users
-    print(f"Total users to process: {len(users)} (${len(paid_users)} paid, ${len(free_users)} free)")
+    users = response.data
+    print(f"Found {len(users)} verified users in waiting status")
 
     if not users:
         print("No users to process today!")
@@ -388,6 +379,7 @@ def generate_thesis_real(
     language: str, 
     academic_level: str, 
     user_id: str = "test",
+    supabase_client = None,  # For progress tracking
     # Academic metadata for professional cover page
     author_name: str = None,
     institution: str = None,
@@ -403,6 +395,25 @@ def generate_thesis_real(
     from pathlib import Path
 
     sys.path.insert(0, "/root/opendraft")
+    
+    # Initialize progress tracker and milestone streamer
+    tracker = None
+    streamer = None
+    detailed = None
+    if supabase_client:
+        from utils.progress_tracker import ProgressTracker
+        from utils.milestone_streamer import MilestoneStreamer
+        from utils.detailed_progress import DetailedProgressTracker
+        import resend
+        
+        tracker = ProgressTracker(user_id, supabase_client)
+        streamer = MilestoneStreamer(
+            user_id=user_id,
+            email=os.environ.get("USER_EMAIL", "user@example.com"),
+            supabase_client=supabase_client,
+            resend_api_key=resend.api_key
+        )
+        detailed = DetailedProgressTracker(tracker, streamer)
 
     # Single Tier 3 Gemini API key - no rotation needed
     # Using Gemini 3.0 Pro Preview for highest quality
@@ -429,6 +440,8 @@ def generate_thesis_real(
         output_dir=output_dir,
         skip_validation=True,
         verbose=True,
+        tracker=detailed,  # Pass detailed progress tracker
+        streamer=streamer,  # Pass milestone streamer
         # Pass academic metadata for professional cover page
         author_name=author_name,
         institution=institution,
@@ -629,6 +642,7 @@ def regenerate_example_pdf(md_content: str, filename: str) -> bytes:
     volumes={"/tmp/thesis": volume},
     secrets=[
         modal.Secret.from_name("gemini-api-key"),
+        modal.Secret.from_name("opendraft-dataforseo"),
     ],
     image=image,
 )

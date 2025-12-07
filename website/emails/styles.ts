@@ -1,65 +1,78 @@
 /**
- * ABOUTME: Shared email design tokens aligned with website design system
- * ABOUTME: Single source of truth for all email styling - Clean B/W with Green Accent
+ * Shared email design tokens - Single source of truth for all email styling
+ * Light mode default (matches actual email design)
  */
 
 // =============================================================================
-// COLOR TOKENS - Matches website globals.css
+// COLOR TOKENS - Light mode default (matches working VerificationEmail)
 // =============================================================================
 
 export const colors = {
-  // Backgrounds (dark mode - default)
-  background: '#171717',        // Dark mode background (--background dark)
-  backgroundLight: '#1c1c1c',   // Card background (--card dark)
-  backgroundMuted: '#262626',   // Muted sections (--muted dark)
+  // Backgrounds (light mode - default)
+  background: '#fafaf9',        // Light cream background
+  backgroundLight: '#ffffff',  // White cards
+  backgroundMuted: '#f9fafb',  // Muted sections
 
   // Text
-  foreground: '#fafafa',        // Primary text (--foreground dark)
-  muted: '#a3a3a3',             // Secondary text (--muted-foreground dark)
-  mutedLight: '#737373',        // Tertiary text
+  foreground: '#1c1917',       // Primary text (dark brown)
+  muted: '#57534e',            // Secondary text
+  mutedLight: '#a8a29e',       // Tertiary text
+  mutedSubtle: '#737373',      // Very subtle text
 
-  // Primary - Green accent (matches website)
-  primary: '#22c55e',           // Green-500 (--primary dark)
-  primaryHover: '#16a34a',      // Green-600
-  // Solid hex - 10% green blended on #171717 (Outlook compatible)
-  primaryMuted: '#1a2f1f',
+  // Primary - Green accent
+  primary: '#10b981',          // Green-500 (emerald)
+  primaryHover: '#059669',     // Green-600
+  primaryLight: '#34d399',     // Green-400
+
+  // Success/Green variants
+  success: '#10b981',
+  successLight: '#dcfce7',     // Light green background
+  successBorder: '#bbf7d0',    // Green border
+  successText: '#15803d',      // Dark green text
+  successDark: '#166534',      // Darker green
+
+  // Info/Blue variants
+  info: '#3b82f6',
+  infoLight: '#dbeafe',        // Light blue background
+  infoBorder: '#bfdbfe',       // Blue border
+  infoText: '#1d4ed8',         // Dark blue text
+  infoDark: '#2563eb',         // Darker blue
+
+  // Warning/Amber variants
+  warning: '#f59e0b',
+  warningLight: '#fef3c7',     // Light amber background
+  warningBorder: '#fbbf24',    // Amber border
+  warningText: '#78350f',      // Dark amber text
+
+  // Error/Red variants
+  error: '#ef4444',
+  errorLight: '#fee2e2',       // Light red background
+  errorBorder: '#fca5a5',      // Red border
+  errorText: '#991b1b',        // Dark red text
 
   // Secondary
-  secondary: '#262626',         // (--secondary dark)
-  secondaryHover: '#333333',
+  secondary: '#262626',         // Dark gray
+  secondaryHover: '#404040',
 
   // Borders
-  border: '#404040',            // (--border dark)
-  borderLight: '#333333',
+  border: '#e7e5e4',           // Light border
+  borderLight: '#e5e7eb',      // Very light border
 
-  // Status colors
-  success: '#22c55e',
-  warning: '#f59e0b',
-  error: '#ef4444',
-  info: '#3b82f6',
-
-  // Status muted colors (solid hex - Outlook compatible)
-  successMuted: '#1a2f1f',      // 10% green on dark
-  warningMuted: '#2d2517',      // 10% amber on dark
-  infoMuted: '#1a2333',         // 10% blue on dark
-  errorMuted: '#2d1a1a',        // 10% red on dark
-
-  // Light mode variants (for @media prefers-color-scheme: light)
-  light: {
-    background: '#ffffff',
-    backgroundLight: '#f5f5f5',
-    backgroundMuted: '#e5e5e5',
-    foreground: '#171717',
-    muted: '#525252',
+  // Dark mode variants (for @media prefers-color-scheme: dark)
+  dark: {
+    background: '#0a0a0a',
+    backgroundLight: '#171717',
+    backgroundMuted: '#262626',
+    foreground: '#fafafa',
+    muted: '#a3a3a3',
     mutedLight: '#737373',
-    primary: '#16a34a',           // Green-600 for light mode
-    primaryMuted: '#dcfce7',
-    successMuted: '#dcfce7',
-    warningMuted: '#fef3c7',
-    infoMuted: '#dbeafe',
-    errorMuted: '#fee2e2',
-    border: '#d4d4d4',
-    borderLight: '#e5e5e5',
+    border: '#262626',
+    primary: '#22c55e',
+    successLight: '#052e16',
+    successBorder: '#166534',
+    infoLight: '#172554',
+    infoBorder: '#1e40af',
+    infoText: '#60a5fa',
   },
 } as const;
 
@@ -73,20 +86,24 @@ export const typography = {
 
   // Font sizes
   fontSize: {
-    xs: '12px',
-    sm: '14px',
-    base: '16px',
-    lg: '18px',
-    xl: '20px',
-    '2xl': '24px',
-    '3xl': '30px',
+    xs: '11px',
+    sm: '12px',
+    base: '13px',
+    md: '14px',
+    lg: '15px',
+    xl: '16px',
+    '2xl': '18px',
+    '3xl': '20px',
+    '4xl': '24px',
+    '5xl': '28px',
+    '6xl': '48px',
   },
 
   // Line heights
   lineHeight: {
-    tight: '1.25',
+    tight: '1.2',
     normal: '1.5',
-    relaxed: '1.625',
+    relaxed: '1.6',
   },
 
   // Font weights
@@ -117,53 +134,39 @@ export const spacing = {
 } as const;
 
 // =============================================================================
-// BORDER RADIUS - Matches website (--radius: 0.5rem = 8px)
+// BORDER RADIUS
 // =============================================================================
 
 export const borderRadius = {
   sm: '4px',
   md: '6px',
   lg: '8px',
-  xl: '12px',
-  full: '9999px',
+  xl: '10px',
+  '2xl': '12px',
+  full: '20px',
+  pill: '9999px',
 } as const;
 
 // =============================================================================
 // DARK MODE MEDIA QUERY CSS
-// Injected into email <head> for light mode support
 // =============================================================================
 
 export const darkModeMediaQuery = `
-  @media (prefers-color-scheme: light) {
-    .email-body { background-color: ${colors.light.background} !important; }
-    .email-container { background-color: ${colors.light.background} !important; }
-    .email-text { color: ${colors.light.foreground} !important; }
-    .email-text-muted { color: ${colors.light.muted} !important; }
-    .email-card {
-      background-color: ${colors.light.backgroundLight} !important;
-      border-color: ${colors.light.border} !important;
-    }
-    .email-card-highlight {
-      background-color: ${colors.light.primaryMuted} !important;
-    }
-    .email-footer {
-      border-color: ${colors.light.border} !important;
-    }
-    .email-button-primary {
-      background-color: ${colors.light.primary} !important;
-    }
-    .email-alert-info {
-      background-color: ${colors.light.infoMuted} !important;
-    }
-    .email-alert-warning {
-      background-color: ${colors.light.warningMuted} !important;
-    }
-    .email-alert-success {
-      background-color: ${colors.light.successMuted} !important;
-    }
-    .email-alert-error {
-      background-color: ${colors.light.errorMuted} !important;
-    }
+  @media (prefers-color-scheme: dark) {
+    .email-body { background-color: ${colors.dark.background} !important; }
+    .email-container { background-color: ${colors.dark.background} !important; }
+    .email-card { background-color: ${colors.dark.backgroundLight} !important; border-color: ${colors.dark.border} !important; }
+    .email-text { color: ${colors.dark.foreground} !important; }
+    .email-text-muted { color: ${colors.dark.muted} !important; }
+    .email-text-subtle { color: ${colors.dark.mutedLight} !important; }
+    .email-divider { border-color: ${colors.dark.border} !important; }
+    .info-badge { background-color: ${colors.dark.infoLight} !important; color: ${colors.dark.infoText} !important; }
+    .referral-card { background-color: ${colors.dark.successLight} !important; border-color: ${colors.dark.successBorder} !important; }
+    .position-card { background-color: ${colors.dark.successLight} !important; border-color: ${colors.dark.successBorder} !important; }
+    .celebration-card { background-color: ${colors.dark.successLight} !important; border-color: ${colors.dark.successBorder} !important; }
+    .alert-card { background-color: #2d2517 !important; border-color: #78350f !important; }
+    .info-card { background-color: ${colors.dark.infoLight} !important; border-color: ${colors.dark.infoBorder} !important; }
+    .btn-secondary { background-color: ${colors.dark.secondary} !important; border-color: #404040 !important; color: ${colors.dark.foreground} !important; }
   }
 `;
 
@@ -176,55 +179,102 @@ export const styles = {
   main: {
     backgroundColor: colors.background,
     fontFamily: typography.fontFamily,
+    margin: '0',
+    padding: '0',
   },
 
   // Container
   container: {
     backgroundColor: colors.background,
     margin: '0 auto',
-    padding: `${spacing[10]} ${spacing[6]}`,
-    maxWidth: '600px',
+    padding: `${spacing[10]} ${spacing[5]}`,
+    maxWidth: '560px',
   },
 
-  // Logo/Header area
+  // Header
+  header: {
+    textAlign: 'center' as const,
+    marginBottom: spacing[8],
+  },
+
+  // Logo
   logo: {
     color: colors.foreground,
-    fontSize: typography.fontSize['2xl'],
+    fontSize: typography.fontSize['4xl'],
     fontWeight: typography.fontWeight.bold,
+    letterSpacing: '-0.5px',
     margin: '0',
     padding: '0',
+  },
+
+  // Hero section
+  heroSection: {
+    textAlign: 'center' as const,
+    marginBottom: spacing[8],
+  },
+
+  // Badge
+  badge: {
+    backgroundColor: colors.infoLight,
+    color: colors.infoText,
+    fontSize: typography.fontSize.base,
+    fontWeight: typography.fontWeight.semibold,
+    padding: '6px 14px',
+    borderRadius: borderRadius.full,
+    display: 'inline-block',
+    marginBottom: spacing[4],
   },
 
   // Headings
   h1: {
     color: colors.foreground,
-    fontSize: typography.fontSize['2xl'],
+    fontSize: typography.fontSize['5xl'],
     fontWeight: typography.fontWeight.bold,
     lineHeight: typography.lineHeight.tight,
-    margin: `${spacing[6]} 0`,
+    margin: '0 0 12px 0',
+    padding: '0',
   },
 
   h2: {
     color: colors.foreground,
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.semibold,
+    fontSize: typography.fontSize['3xl'],
+    fontWeight: typography.fontWeight.bold,
     lineHeight: typography.lineHeight.tight,
-    margin: `${spacing[5]} 0 ${spacing[3]} 0`,
+    margin: '0 0 16px 0',
+    padding: '0',
   },
 
   // Body text
   text: {
     color: colors.muted,
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.xl,
     lineHeight: typography.lineHeight.relaxed,
     margin: `${spacing[4]} 0`,
+    padding: '0',
+  },
+
+  heroText: {
+    color: colors.muted,
+    fontSize: typography.fontSize.xl,
+    lineHeight: typography.lineHeight.relaxed,
+    margin: '0',
+    padding: '0',
   },
 
   textSmall: {
     color: colors.mutedLight,
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.md,
     lineHeight: typography.lineHeight.normal,
-    margin: `${spacing[2]} 0`,
+    margin: '0',
+    padding: '0',
+  },
+
+  linkText: {
+    color: colors.mutedLight,
+    fontSize: typography.fontSize.base,
+    textAlign: 'center' as const,
+    marginBottom: spacing[8],
+    padding: '0',
   },
 
   // Strong/highlight text
@@ -233,118 +283,188 @@ export const styles = {
     fontWeight: typography.fontWeight.semibold,
   },
 
-  // Primary button (Green)
+  // Buttons
   buttonPrimary: {
     backgroundColor: colors.primary,
     borderRadius: borderRadius.lg,
-    color: '#000000',
-    fontSize: typography.fontSize.base,
+    color: '#ffffff',
+    fontSize: typography.fontSize.lg,
     fontWeight: typography.fontWeight.semibold,
     textDecoration: 'none',
     textAlign: 'center' as const,
     display: 'inline-block',
-    padding: `${spacing[3]} ${spacing[6]}`,
+    padding: '14px 32px',
+    minWidth: '200px',
   },
 
-  // Secondary button
   buttonSecondary: {
     backgroundColor: colors.secondary,
     borderRadius: borderRadius.lg,
-    color: colors.foreground,
-    fontSize: typography.fontSize.base,
+    color: '#ffffff',
+    fontSize: typography.fontSize.lg,
     fontWeight: typography.fontWeight.semibold,
     textDecoration: 'none',
     textAlign: 'center' as const,
     display: 'inline-block',
-    padding: `${spacing[3]} ${spacing[6]}`,
-    border: `1px solid ${colors.border}`,
+    padding: '14px 32px',
+    minWidth: '200px',
   },
 
-  // Button container (centered)
-  buttonContainer: {
+  buttonWrapper: {
     textAlign: 'center' as const,
-    margin: `${spacing[6]} 0`,
-  },
-
-  // Cards/boxes
-  card: {
-    backgroundColor: colors.backgroundLight,
-    borderRadius: borderRadius.lg,
-    padding: spacing[5],
-    margin: `${spacing[5]} 0`,
-    border: `1px solid ${colors.borderLight}`,
-  },
-
-  cardHighlight: {
-    backgroundColor: colors.primaryMuted,
-    borderRadius: borderRadius.lg,
-    padding: spacing[5],
-    margin: `${spacing[5]} 0`,
-    border: `1px solid ${colors.primary}`,
-  },
-
-  // Stats display
-  statNumber: {
-    color: colors.primary,
-    fontSize: typography.fontSize['3xl'],
-    fontWeight: typography.fontWeight.bold,
-    lineHeight: '1',
-  },
-
-  statLabel: {
-    color: colors.mutedLight,
-    fontSize: typography.fontSize.sm,
-    marginTop: spacing[1],
+    marginBottom: spacing[6],
   },
 
   // Code/monospace
   code: {
     fontFamily: typography.fontFamilyMono,
-    backgroundColor: colors.backgroundMuted,
-    padding: `${spacing[1]} ${spacing[2]}`,
-    borderRadius: borderRadius.sm,
     fontSize: typography.fontSize.sm,
-    color: colors.foreground,
+  },
+
+  codeBlock: {
+    fontFamily: typography.fontFamilyMono,
+    background: colors.successLight,
+    padding: '10px 16px',
+    borderRadius: borderRadius.md,
+    color: colors.successText,
+    textAlign: 'center' as const,
+    fontSize: typography.fontSize['2xl'],
+    fontWeight: typography.fontWeight.semibold,
+    margin: '0',
+    letterSpacing: '1px',
+    display: 'block',
   },
 
   // Links
   link: {
     color: colors.primary,
-    textDecoration: 'underline',
+    textDecoration: 'none',
   },
 
   // Divider
   divider: {
+    border: 'none',
     borderTop: `1px solid ${colors.border}`,
-    margin: `${spacing[8]} 0`,
+    margin: `0 0 ${spacing[6]} 0`,
+  },
+
+  // Cards
+  card: {
+    backgroundColor: colors.backgroundLight,
+    borderRadius: borderRadius.xl,
+    padding: spacing[5],
+    marginBottom: spacing[6],
+    border: `1px solid ${colors.border}`,
+  },
+
+  // Success/Green card (referral, position, celebration)
+  cardSuccess: {
+    backgroundColor: colors.successLight,
+    borderRadius: borderRadius.xl,
+    padding: spacing[5],
+    marginBottom: spacing[6],
+    border: `1px solid ${colors.successBorder}`,
+  },
+
+  cardSuccessCentered: {
+    backgroundColor: colors.successLight,
+    borderRadius: borderRadius.xl,
+    padding: spacing[6],
+    marginBottom: spacing[6],
+    border: `1px solid ${colors.successBorder}`,
+    textAlign: 'center' as const,
+  },
+
+  // Info/Blue card
+  cardInfo: {
+    backgroundColor: colors.infoLight,
+    borderRadius: borderRadius.xl,
+    padding: spacing[5],
+    marginBottom: spacing[6],
+    border: `1px solid ${colors.infoBorder}`,
+  },
+
+  // Warning/Amber card
+  cardWarning: {
+    backgroundColor: colors.warningLight,
+    borderRadius: borderRadius.xl,
+    padding: `${spacing[4]} ${spacing[5]}`,
+    marginBottom: spacing[6],
+    border: `1px solid ${colors.warningBorder}`,
+  },
+
+  // Card titles
+  cardTitle: {
+    color: colors.successText,
+    fontSize: typography.fontSize.lg,
+    fontWeight: typography.fontWeight.semibold,
+    margin: '0 0 8px 0',
+    padding: '0',
+  },
+
+  cardTitleInfo: {
+    color: colors.infoText,
+    fontSize: typography.fontSize.lg,
+    fontWeight: typography.fontWeight.semibold,
+    margin: '0 0 12px 0',
+    padding: '0',
+  },
+
+  cardText: {
+    color: colors.successDark,
+    fontSize: typography.fontSize.md,
+    lineHeight: typography.lineHeight.normal,
+    margin: '0 0 12px 0',
+    padding: '0',
+  },
+
+  cardTextInfo: {
+    color: colors.infoDark,
+    fontSize: typography.fontSize.md,
+    lineHeight: typography.lineHeight.normal,
+    margin: '8px 0',
+    padding: '0',
+  },
+
+  // Position number
+  positionNumber: {
+    color: colors.primary,
+    fontSize: typography.fontSize['6xl'],
+    fontWeight: typography.fontWeight.bold,
+    margin: '0 0 12px 0',
+    lineHeight: '1',
+    padding: '0',
+  },
+
+  positionLabel: {
+    color: colors.successDark,
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.semibold,
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.5px',
+    margin: '0 0 8px 0',
+    padding: '0',
   },
 
   // Footer
-  footer: {
-    color: colors.mutedLight,
-    fontSize: typography.fontSize.sm,
-    lineHeight: typography.lineHeight.relaxed,
+  footerWrapper: {
+    textAlign: 'center' as const,
     marginTop: spacing[10],
     paddingTop: spacing[6],
     borderTop: `1px solid ${colors.border}`,
   },
 
-  // Table for structured data
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse' as const,
+  footer: {
+    color: colors.mutedLight,
+    fontSize: typography.fontSize.base,
+    margin: '0 0 8px 0',
+    padding: '0',
   },
 
-  tableCell: {
-    padding: `${spacing[2]} 0`,
-    color: colors.muted,
+  copyright: {
+    color: colors.mutedLight,
     fontSize: typography.fontSize.sm,
-  },
-
-  tableCellValue: {
-    padding: `${spacing[2]} 0`,
-    color: colors.foreground,
-    fontSize: typography.fontSize.sm,
-    textAlign: 'right' as const,
+    margin: '0',
+    padding: '0',
   },
 } as const;

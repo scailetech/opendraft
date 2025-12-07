@@ -1,0 +1,3 @@
+[console_scripts]
+opendraft = opendraft.cli:main
+thesis-ai = opendraft.cli:main

@@ -133,7 +133,7 @@ class APITierDetector:
 
         try:
             # Create test model (lightweight)
-            model = genai.GenerativeModel('gemini-2.5-flash')
+            model = genai.GenerativeModel('gemini-2.5-flash', tools=None)
 
             # Test 1: Send 3 rapid requests (2 seconds apart = 90 RPM equivalent)
             if verbose:

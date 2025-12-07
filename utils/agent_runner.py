@@ -53,22 +53,18 @@ def setup_model(model_override: Optional[str] = None) -> Any:
 
     model_name = model_override or config.model.model_name
 
-    # Enable Google Search grounding and URL context tools
-    # These allow agents to:
-    # - Search the web (Google Search grounding)
-    # - Read content from URLs (URL context)
-    # Both are separate tools that work together
-    tools = [
-        {"googleSearch": {}},      # Google Search grounding for web search
-        {"url_context": {}}        # URL context for reading URLs directly
-    ]
-
+    # Disable SDK tools - we use fallback services (DataForSEO/OpenPull) instead
+    # The googleSearch tool in SDK is causing errors: "Unknown field for FunctionDeclaration: googleSearch"
+    # Instead, we rely on:
+    # - Backend REST APIs for citation research (CrossRef, Semantic Scholar, Gemini Grounded REST)
+    # - Fallback services (DataForSEO for web search, OpenPull for URL scraping)
+    
     return genai.GenerativeModel(  # type: ignore[attr-defined]
         model_name,
         generation_config={
             'temperature': config.model.temperature,
         },
-        tools=tools  # Enable Google Search grounding for URL context and web search
+        tools=None  # Explicitly disable tools to avoid "Unknown field" errors
     )
 
 

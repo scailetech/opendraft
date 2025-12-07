@@ -10,6 +10,7 @@ import {
   Text,
 } from '@react-email/components';
 import * as React from 'react';
+import { styles, colors, darkModeMediaQuery } from './styles';
 
 interface ReferralRewardEmailProps {
   fullName: string;
@@ -25,158 +26,75 @@ export const ReferralRewardEmail = ({
   newPosition = 50,
   oldPosition = 70,
   referralCount = 1,
-  dashboardUrl = 'https://opendraft.ai/waitlist/abc123',
+  dashboardUrl = 'https://opendraft.xyz/waitlist/abc123',
   positionsSkipped = 20,
 }: ReferralRewardEmailProps) => (
   <Html>
-    <Head />
+    <Head>
+      <style>{darkModeMediaQuery}</style>
+    </Head>
     <Preview>You skipped {String(positionsSkipped)} positions on the waitlist!</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Congratulations, {fullName}!</Heading>
+    <Body style={styles.main} className="email-body">
+      <Container style={styles.container} className="email-container">
+        {/* Header */}
+        <div style={styles.header}>
+          <Text style={styles.logo}>OpenDraft</Text>
+        </div>
 
-        <Section style={celebrationBox}>
-          <Text style={bigText}>
-            You skipped <strong>{positionsSkipped} positions</strong>!
-          </Text>
-          <Text style={text}>
-            <span style={strikethrough}>#{oldPosition}</span> → <span style={highlight}>#{newPosition}</span>
-          </Text>
-        </Section>
+        {/* Hero Section */}
+        <div style={styles.heroSection}>
+          <span className="info-badge" style={styles.badge}>
+            🎉 Position Boost!
+          </span>
+          <Heading style={styles.h1}>Congratulations, {fullName}!</Heading>
+        </div>
 
-        <Text style={text}>
-          Thanks to your verified referral{referralCount > 1 ? 's' : ''}, you&apos;ve moved up the waitlist!
+        {/* Celebration Box */}
+        <div className="celebration-card" style={styles.cardSuccessCentered}>
+          <Text style={{ ...styles.cardTitle, fontSize: styles.text.fontSize }}>
+            You skipped <span style={styles.strong}>{positionsSkipped} positions</span>!
+          </Text>
+          <Text style={{ color: colors.successDark, fontSize: styles.h2.fontSize, fontWeight: styles.h2.fontWeight, margin: '0', padding: '0' }}>
+            <span style={{ textDecoration: 'line-through', color: colors.mutedLight, fontSize: styles.text.fontSize }}>#{oldPosition}</span> → <span style={{ color: colors.primary, fontSize: styles.h1.fontSize, fontWeight: styles.h1.fontWeight }}>#{newPosition}</span>
+          </Text>
+        </div>
+
+        <Text style={styles.text} className="email-text">
+          Thanks to your verified referral{referralCount > 1 ? 's' : ''}, you've moved up the waitlist!
         </Text>
 
-        <Section style={infoBox}>
-          <Text style={infoTitle}>Keep Going!</Text>
-          <Text style={smallText}>
+        {/* Info Box */}
+        <div className="info-card" style={styles.cardInfo}>
+          <Text style={styles.cardTitleInfo}>Keep Going!</Text>
+          <Text style={styles.cardTextInfo} className="email-text-muted">
             Each verified referral = 20 more positions skipped. Share your link to move up faster!
           </Text>
-        </Section>
+        </div>
 
-        <Section style={buttonContainer}>
-          <Button style={button} href={dashboardUrl}>
+        {/* Button */}
+        <div style={styles.buttonWrapper}>
+          <Button style={styles.buttonPrimary} href={dashboardUrl}>
             View Dashboard
           </Button>
-        </Section>
+        </div>
 
-        <Text style={footer}>
-          Thanks for spreading the word!
-          <br />
-          OpenDraft Team
-        </Text>
+        {/* Footer */}
+        <div style={styles.footerWrapper}>
+          <Text style={styles.footer} className="email-text-subtle">
+            Thanks for spreading the word!
+            <br />
+            OpenDraft Team
+          </Text>
+          <Text style={styles.copyright} className="email-text-subtle">
+            © 2025 OpenDraft ·{' '}
+            <a href="https://opendraft.xyz" style={styles.link}>
+              opendraft.xyz
+            </a>
+          </Text>
+        </div>
       </Container>
     </Body>
   </Html>
 );
 
 export default ReferralRewardEmail;
-
-const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
-
-const container = {
-  backgroundColor: '#ffffff',
-  margin: '0 auto',
-  padding: '20px 0 48px',
-  marginBottom: '64px',
-  maxWidth: '600px',
-};
-
-const h1 = {
-  color: '#0a0a0a',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  margin: '40px 0',
-  padding: '0 40px',
-  textAlign: 'center' as const,
-};
-
-const text = {
-  color: '#4b5563',
-  fontSize: '16px',
-  lineHeight: '24px',
-  margin: '16px 0',
-  padding: '0 40px',
-  textAlign: 'center' as const,
-};
-
-const bigText = {
-  color: '#0a0a0a',
-  fontSize: '20px',
-  fontWeight: 'bold',
-  lineHeight: '28px',
-  margin: '0',
-  textAlign: 'center' as const,
-};
-
-const celebrationBox = {
-  backgroundColor: '#f0fdf4',
-  borderRadius: '8px',
-  margin: '24px 40px',
-  padding: '24px',
-  border: '2px solid #22c55e',
-};
-
-const strikethrough = {
-  textDecoration: 'line-through',
-  color: '#9ca3af',
-  fontSize: '18px',
-};
-
-const highlight = {
-  color: '#22c55e',
-  fontSize: '28px',
-  fontWeight: 'bold',
-};
-
-const infoBox = {
-  backgroundColor: '#eff6ff',
-  borderRadius: '8px',
-  margin: '24px 40px',
-  padding: '16px',
-  border: '1px solid #3b82f6',
-};
-
-const infoTitle = {
-  color: '#0a0a0a',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  margin: '0 0 8px 0',
-};
-
-const smallText = {
-  color: '#4b5563',
-  fontSize: '14px',
-  lineHeight: '20px',
-  margin: '8px 0',
-};
-
-const buttonContainer = {
-  padding: '27px 40px',
-  textAlign: 'center' as const,
-};
-
-const button = {
-  backgroundColor: '#3b82f6',
-  borderRadius: '8px',
-  color: '#fff',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  textAlign: 'center' as const,
-  display: 'inline-block',
-  padding: '12px 24px',
-};
-
-const footer = {
-  color: '#6b7280',
-  fontSize: '14px',
-  lineHeight: '24px',
-  margin: '32px 0',
-  padding: '0 40px',
-  textAlign: 'center' as const,
-};

@@ -1,0 +1,910 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Screen reader only - visually hidden but accessible to assistive technologies */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Mobile touch improvements */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Responsive typography utilities */
+@media (max-width: 640px) {
+  .text-responsive {
+    font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+  }
+  
+  .text-responsive-lg {
+    font-size: clamp(0.875rem, 3vw, 1rem);
+  }
+  
+  .text-responsive-xl {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+}
+
+/* Mobile-optimized spacing */
+@media (max-width: 640px) {
+  .mobile-px {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .mobile-py {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  .mobile-gap {
+    gap: 0.75rem;
+  }
+}
+
+/* Touch target minimum - Only for primary action buttons */
+/* Note: Removed aggressive min-size rules that were making all buttons/checkboxes 44x44px */
+/* Individual components should handle their own touch-friendly sizing as needed */
+@media (max-width: 640px) {
+  /* Primary action buttons that need larger touch targets */
+  button.touch-target-lg,
+  .touch-target-lg {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Standard touch targets for secondary actions */
+  button.touch-target-md,
+  .touch-target-md {
+    min-height: 36px;
+    min-width: 36px;
+  }
+  
+  /* Small touch targets - opt-in only */
+  button.touch-target-sm,
+  .touch-target-sm {
+    min-height: 32px;
+    min-width: 32px;
+  }
+}
+
+/* Enhanced focus indicators for accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: calc(var(--radius) - 2px);
+}
+
+/* Enhanced focus indicators for better visibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+}
+
+/* High contrast focus for better visibility */
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+/* Remove default focus outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Safe area insets for mobile devices */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@import "react-day-picker/dist/style.css";
+
+/* Ensure Geist fonts are base layer */
+@layer components {
+  /* Responsive content padding - matches header alignment */
+  .padding-content {
+    @apply px-3 xs:px-4 sm:px-5 md:px-6 lg:px-7 xl:px-8;
+  }
+
+  .padding-horizontal {
+    @apply px-3 xs:px-4 sm:px-5 md:px-6 lg:px-7 xl:px-8;
+  }
+
+  .padding-vertical {
+    @apply py-4 md:py-6;
+  }
+}
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+  :root {
+    /* Light theme - Cursor-inspired soft grey (not bright white) */
+    --background: 220 10% 96%; /* Soft grey background with slight blue tint */
+    --foreground: 220 10% 10%; /* Near black with slight warmth */
+    --card: 220 10% 99%; /* White cards on grey background for contrast */
+    --card-foreground: 220 10% 10%;
+    --popover: 220 10% 99%;
+    --popover-foreground: 220 10% 10%;
+    --primary: 220 10% 8%; /* Dark grey for primary actions */
+    --primary-foreground: 0 0% 100%; /* White text on dark */
+    --secondary: 220 8% 92%; /* Slightly darker grey */
+    --secondary-foreground: 220 10% 10%;
+    --muted: 220 8% 93%;
+    --muted-foreground: 220 8% 40%; /* Medium grey */
+    --accent: 220 8% 90%; /* Darker grey for hover */
+    --accent-foreground: 220 10% 10%;
+    --destructive: 0 60% 40%; /* Subtle red for errors */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 10% 86%; /* Visible but soft border */
+    --input: 220 10% 98%;
+    --ring: 220 10% 30%; /* Soft dark focus ring */
+    --chart-1: 220 10% 20%; /* Neutral greys for charts */
+    --chart-2: 220 8% 40%;
+    --chart-3: 220 6% 60%;
+    --chart-4: 220 8% 30%;
+    --chart-5: 220 6% 50%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    /* Dark theme - Cursor-inspired neutral monochrome */
+    --background: 0 0% 9%; /* Dark grey/black */
+    --foreground: 0 0% 91%; /* Light grey/white */
+    --card: 0 0% 13%; /* Slightly lighter dark */
+    --card-foreground: 0 0% 91%;
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 91%;
+    --primary: 0 0% 100%; /* White for primary actions */
+    --primary-foreground: 0 0% 9%; /* Dark text on white */
+    --secondary: 0 0% 17%; /* Dark grey */
+    --secondary-foreground: 0 0% 91%;
+    --muted: 0 0% 17%;
+    --muted-foreground: 0 0% 65%; /* Medium grey */
+    --accent: 0 0% 19%; /* Slightly lighter for hover */
+    --accent-foreground: 0 0% 91%;
+    --destructive: 0 0% 80%; /* Light grey for errors (minimal color) */
+    --destructive-foreground: 0 0% 9%;
+    --border: 0 0% 27%; /* Medium grey border */
+    --input: 0 0% 17%;
+    --ring: 0 0% 100%; /* White focus ring */
+    --chart-1: 0 0% 80%; /* Neutral greys for charts */
+    --chart-2: 0 0% 60%;
+    --chart-3: 0 0% 40%;
+    --chart-4: 0 0% 70%;
+    --chart-5: 0 0% 50%;
+  }
+}
+
+/* Radius system */
+:root {
+  --radius-sm: 0.25rem;  /* 4px */
+  --radius-md: 0.375rem; /* 6px */
+  --radius-lg: 0.5rem;   /* 8px */
+  --radius-xl: 0.75rem;  /* 12px */
+  
+  /* Global spacing system - tighter, more refined */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 0.75rem;    /* 12px */
+  --spacing-lg: 1rem;       /* 16px */
+  --spacing-xl: 1.5rem;     /* 24px */
+  --spacing-2xl: 2rem;      /* 32px */
+  
+  /* Section spacing - consistent vertical rhythm */
+  --section-gap: 1.5rem;    /* 24px - space between major sections */
+  --content-gap: 0.75rem;   /* 12px - space between related content */
+  --element-gap: 0.5rem;    /* 8px - space between form elements */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Cursor-inspired font stack - system fonts first for native feel */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif, var(--font-geist-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Typography - Cursor-inspired clean hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  /* Global radius overrides - Langdock-style subtle curves */
+  /* Note: Using !important here to override Tailwind's utility classes consistently */
+  .rounded-sm { border-radius: 0.25rem !important; } /* 4px */
+  .rounded { border-radius: 0.375rem !important; }    /* 6px */
+  .rounded-md { border-radius: 0.375rem !important; } /* 6px */
+  .rounded-lg { border-radius: 0.5rem !important; }   /* 8px */
+  .rounded-xl { border-radius: 0.75rem !important; }  /* 12px */
+  .rounded-2xl { border-radius: 1rem !important; }    /* 16px */
+
+  /* Smooth transitions - Cursor-inspired subtle animations */
+  /* NOTE: transform excluded to prevent tooltip animations */
+  /* Using GPU-accelerated properties (opacity, transform) for better performance */
+  * {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* GPU acceleration hints for animated elements */
+  .animate-fade-in,
+  .animate-slide-in-up,
+  .animate-slide-in-down,
+  .animate-scale-in,
+  .animate-shimmer,
+  [class*="motion-"] {
+    will-change: transform, opacity;
+  }
+
+  /* Disable transitions for animations and specific elements */
+  *:where(.animate-spin, .animate-pulse, [data-no-transition]) {
+    transition: none;
+  }
+  
+  /* GPU-accelerated spinners for smooth animation */
+  .animate-spin {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Smooth number transitions for progress counters */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  
+  /* GPU-accelerated progress bar */
+  .progress-bar-fill {
+    will-change: width;
+    transform: translateZ(0);
+    transition: width 0.3s ease-out;
+  }
+
+  /* Subtle hover effects */
+  button:hover:not(:disabled) {
+    transition-duration: 100ms;
+  }
+
+  /* Hover scale utility */
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Custom animations for UX improvements */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-in;
+}
+
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Shimmer animation for skeletons - Cursor-style */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.04) 60%,
+    transparent 100%
+  );
+  animation: shimmer 2.5s ease-in-out infinite;
+  transform: translateX(-100%);
+}
+
+.dark .animate-shimmer::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0.02) 60%,
+    transparent 100%
+  );
+}
+
+/* Bounce animation for loading dots */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+/* Auto-Skeleton: Automatically generate skeletons from component structure */
+/* Note: Using !important here to ensure skeleton state overrides all component styles */
+.skeleton-auto {
+  pointer-events: none;
+  user-select: none;
+}
+
+.skeleton-auto * {
+  color: transparent !important;
+  background: hsl(var(--muted)) !important;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 2s infinite !important;
+  border-color: hsl(var(--border)) !important;
+  box-shadow: none !important;
+}
+
+.skeleton-auto img,
+.skeleton-auto svg,
+.skeleton-auto [role="img"],
+.skeleton-auto [data-icon] {
+  opacity: 0.1;
+  filter: grayscale(100%);
+}
+
+.skeleton-auto input,
+.skeleton-auto textarea,
+.skeleton-auto select,
+.skeleton-auto button {
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.skeleton-auto a {
+  pointer-events: none !important;
+}
+
+/* Preserve layout structure */
+.skeleton-auto [class*="flex"],
+.skeleton-auto [class*="grid"],
+.skeleton-auto [class*="space-"] {
+  display: inherit !important;
+}
+
+/* Dark mode adjustments */
+.dark .skeleton-auto * {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  ) !important;
+}
+
+@keyframes progress-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Success pulse animation for completed rows - subtle glow instead of scale */
+@keyframes successPulse {
+  0% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    opacity: 0.95;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  }
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+/* Animation utility classes */
+.animate-fade-in {
+  animation: fade-in 200ms ease-in-out;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 300ms ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 200ms ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 300ms ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 200ms ease-out;
+}
+
+.animate-checkmark {
+  animation: checkmark 0.3s ease-out;
+}
+
+.animate-progress-shimmer {
+  background-size: 200% 100%;
+  animation: progress-shimmer 1.5s linear infinite;
+}
+
+.animate-success-pulse {
+  animation: successPulse 0.8s ease-out;
+}
+
+/* Count-up animation for success numbers */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card hover effects - subtle Cursor-style lift */
+.card-hover {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Interactive element feedback */
+.interactive-lift {
+  transition: transform 0.1s ease-out;
+}
+
+.interactive-lift:hover {
+  transform: translateY(-0.5px);
+}
+
+.interactive-lift:active {
+  transform: translateY(0.5px);
+}
+
+/* Table row hover - subtle */
+tbody tr {
+  transition: background-color 0.1s ease-out;
+}
+
+tbody tr:hover {
+  background-color: hsl(var(--accent) / 0.2);
+}
+
+/* Table row stagger animation on mount - limited to first 10 rows for performance */
+/* Uses opacity only to prevent CLS (Cumulative Layout Shift) */
+@keyframes rowFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-row-stagger tbody tr:nth-child(-n+10) {
+  animation: rowFadeIn 0.2s ease-out both;
+}
+
+.animate-row-stagger tbody tr:nth-child(1) { animation-delay: 0ms; }
+.animate-row-stagger tbody tr:nth-child(2) { animation-delay: 25ms; }
+.animate-row-stagger tbody tr:nth-child(3) { animation-delay: 50ms; }
+.animate-row-stagger tbody tr:nth-child(4) { animation-delay: 75ms; }
+.animate-row-stagger tbody tr:nth-child(5) { animation-delay: 100ms; }
+.animate-row-stagger tbody tr:nth-child(6) { animation-delay: 125ms; }
+.animate-row-stagger tbody tr:nth-child(7) { animation-delay: 150ms; }
+.animate-row-stagger tbody tr:nth-child(8) { animation-delay: 175ms; }
+.animate-row-stagger tbody tr:nth-child(9) { animation-delay: 200ms; }
+.animate-row-stagger tbody tr:nth-child(10) { animation-delay: 225ms; }
+
+/* Rows 11+ appear instantly (no animation) */
+.animate-row-stagger tbody tr:nth-child(n+11) {
+  animation: none;
+}
+
+/* Error message slide-in */
+.error-message {
+  animation: slide-in-down 0.2s ease-out;
+}
+
+/* Success checkmark animation */
+.success-checkmark {
+  animation: checkmark 0.3s ease-out;
+}
+
+.animate-count-up {
+  animation: countUp 0.3s ease-out;
+}
+
+/* Batch success celebration animation - Premium feel */
+@keyframes batchSuccessCelebration {
+  0% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.008);
+  }
+  30% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.004);
+  }
+  60% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes successRipple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes successGlow {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.batch-success-celebration {
+  animation: batchSuccessCelebration 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Ripple effect container */
+.batch-success-celebration::before {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.1) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  animation: successRipple 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Subtle screen glow overlay */
+.batch-success-celebration::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(34, 197, 94, 0.08) 0%,
+    rgba(34, 197, 94, 0.04) 30%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 9998;
+  animation: successGlow 1.2s ease-out forwards;
+}
+
+/* Dark mode adjustments - slightly more visible */
+.dark .batch-success-celebration::before {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, rgba(34, 197, 94, 0.15) 40%, transparent 70%);
+}
+
+.dark .batch-success-celebration::after {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(34, 197, 94, 0.12) 0%,
+    rgba(34, 197, 94, 0.06) 30%,
+    transparent 60%
+  );
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Staggered animation delays for loading dots */
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+/* Disable tooltip animations - Radix uses transforms for positioning */
+/* Note: Using !important to override Radix's default animations which can cause positioning issues */
+[data-radix-tooltip-content],
+[data-radix-portal] [data-radix-tooltip-content],
+[data-radix-tooltip-content][data-state],
+[data-radix-tooltip-content] * {
+  transition: none !important;
+  animation: none !important;
+}
+
+[data-radix-tooltip-content][data-state="delayed-open"],
+[data-radix-tooltip-content][data-state="instant-open"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+[data-radix-tooltip-content][data-state="closed"] {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Recharts Tooltip Overrides - Remove default white background */
+/* Note: Using !important to override Recharts' inline styles */
+.recharts-tooltip-wrapper {
+  background-color: transparent !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.recharts-tooltip-wrapper,
+.recharts-tooltip-wrapper > div,
+.recharts-default-tooltip-wrapper {
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.recharts-default-tooltip {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+.recharts-tooltip-label {
+  color: hsl(var(--foreground)) !important;
+  font-weight: 500 !important;
+  margin-bottom: 4px !important;
+}
+
+.recharts-tooltip-item {
+  color: hsl(var(--foreground)) !important;
+  padding: 2px 0 !important;
+}
+
+/* Improved text selection for prompt textarea with syntax highlighting */
+/* Make text visible when selected for better UX */
+textarea#prompt::selection,
+textarea#prompt::-moz-selection {
+  background-color: hsl(var(--primary) / 0.4) !important;
+  color: hsl(var(--foreground)) !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+}
+
+/* Show text when actively selecting */
+textarea#prompt:focus::selection,
+textarea#prompt:focus::-moz-selection {
+  background-color: hsl(var(--primary) / 0.5) !important;
+  color: hsl(var(--foreground)) !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+}
+
+/* When text is selected, make it fully visible */
+textarea#prompt.has-selection {
+  color: hsl(var(--foreground)) !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+}
+
+textarea#prompt.has-selection::selection,
+textarea#prompt.has-selection::-moz-selection {
+  background-color: hsl(var(--primary) / 0.5) !important;
+  color: hsl(var(--foreground)) !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+}
+
+/* Ensure overlay doesn't interfere with selection */
+textarea#prompt {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* Accessibility: Respect user's motion preferences (WCAG 2.1) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

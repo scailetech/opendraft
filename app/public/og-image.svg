@@ -1,0 +1,37 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0d1117"/>
+  
+  <!-- Gradient overlay -->
+  <rect width="1200" height="630" fill="url(#bgGradient)" opacity="0.3"/>
+  
+  <!-- Logo emoji -->
+  <text x="100" y="280" font-size="80">👟</text>
+  
+  <!-- Title -->
+  <text x="100" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="#c9d1d9">
+    bulk.run
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="100" y="450" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="400" fill="#8b949e">
+    Run AI on 1000 rows at once
+  </text>
+  
+  <!-- Description -->
+  <text x="100" y="510" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="400" fill="#8b949e" opacity="0.8">
+    Upload CSV, define prompts, batch process with AI
+  </text>
+  
+  <!-- Decorative elements -->
+  <circle cx="1000" cy="150" r="3" fill="#10b981" opacity="0.6"/>
+  <circle cx="1050" cy="180" r="2" fill="#10b981" opacity="0.4"/>
+  <circle cx="1100" cy="200" r="2.5" fill="#10b981" opacity="0.5"/>
+  
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10b981" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#059669" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+</svg>

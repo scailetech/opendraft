@@ -53,6 +53,20 @@ export const WAITLIST_CONFIG = {
     { code: 'zh', name: 'Chinese' },
     { code: 'ja', name: 'Japanese' },
   ] as const,
+
+  // Payment settings
+  IMMEDIATE_PAYMENT_AMOUNT: 20.00,
+  IMMEDIATE_PAYMENT_CURRENCY: 'EUR',
+  PAYMENT_MODES: {
+    WAITLIST: 'waitlist',
+    IMMEDIATE: 'immediate',
+  } as const,
+  PAYMENT_STATUS: {
+    PENDING: 'pending',
+    PAID: 'paid',
+    FAILED: 'failed',
+    REFUNDED: 'refunded',
+  } as const,
 } as const;
 
 export type WaitlistStatus = typeof WAITLIST_CONFIG.STATUS[keyof typeof WAITLIST_CONFIG.STATUS];

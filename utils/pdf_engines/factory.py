@@ -30,10 +30,11 @@ class PDFEngineFactory:
     """
 
     # Registry of all available engine classes
+    # WeasyPrint DISABLED - always use Pandoc/XeLaTeX for professional quality
     _ENGINE_CLASSES = [
         PandocLatexEngine,
-        LibreOfficeEngine,
-        WeasyPrintEngine,
+        # LibreOfficeEngine,  # Disabled - prefer Pandoc
+        # WeasyPrintEngine,   # DISABLED - poor quality, never use
     ]
 
     @classmethod
@@ -57,10 +58,11 @@ class PDFEngineFactory:
             return cls._auto_select()
 
         # Map engine type to class
+        # WeasyPrint REMOVED - only allow Pandoc
         engine_map = {
             'pandoc': PandocLatexEngine,
-            'libreoffice': LibreOfficeEngine,
-            'weasyprint': WeasyPrintEngine,
+            # 'libreoffice': LibreOfficeEngine,  # Disabled
+            # 'weasyprint': WeasyPrintEngine,    # DISABLED - never use
         }
 
         engine_class = engine_map.get(engine_type)

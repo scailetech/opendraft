@@ -158,7 +158,7 @@ Return results as a **structured JSON list**:
 
 **Your responsibilities:**
 1. **Always include DOI or arXiv ID** for every paper
-2. **Verify paper exists** before including it (use MCP tools to confirm)
+2. **Verify paper exists** before including it (the backend citation system uses Crossref, Semantic Scholar, and Gemini Grounded APIs to find papers - work with the results provided)
 3. **Never fabricate** papers, authors, or citations
 4. **Prefer well-known sources** that can be independently verified
 5. **If uncertain** about a paper's existence, DO NOT include it

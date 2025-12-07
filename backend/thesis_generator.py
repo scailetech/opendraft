@@ -297,6 +297,8 @@ def generate_thesis(
     output_dir: Optional[Path] = None,
     skip_validation: bool = True,
     verbose: bool = True,
+    tracker=None,  # Progress tracker for real-time updates
+    streamer=None,  # Milestone streamer for partial results
     # Academic metadata for professional cover page
     author_name: Optional[str] = None,
     institution: Optional[str] = None,
@@ -308,7 +310,7 @@ def generate_thesis(
     student_id: Optional[str] = None,
 ) -> Tuple[Path, Path]:
     """
-    Generate a complete academic thesis using 15+ specialized AI agents.
+    Generate a complete academic thesis using 19 specialized AI agents.
 
     This is a simplified, production-ready version of the test workflow,
     optimized for automated processing on Modal.com or similar platforms.
@@ -385,6 +387,9 @@ def generate_thesis(
     # ====================================================================
     if verbose:
         print("\n📚 PHASE 1: RESEARCH")
+    
+    if tracker:
+        tracker.update_phase("research", progress_percent=5, details={"stage": "starting_research"})
 
     try:
         scout_result = research_citations_via_api(
@@ -400,6 +405,9 @@ def generate_thesis(
 
         if verbose:
             print(f"✅ Scout: {scout_result['count']} citations found")
+        
+        if tracker:
+            tracker.update_research(sources_count=scout_result['count'], phase_detail="Scout completed")
 
         scout_output = (folders['research'] / "scout_raw.md").read_text(encoding='utf-8')
 
@@ -442,6 +450,9 @@ def generate_thesis(
     # ====================================================================
     if verbose:
         print("\n🏗️  PHASE 2: STRUCTURE")
+    
+    if tracker:
+        tracker.update_phase("structure", progress_percent=25, details={"stage": "creating_outline"})
 
     # Architect - Create outline
     architect_output = run_agent(
@@ -466,6 +477,19 @@ def generate_thesis(
         skip_validation=skip_validation,
         verbose=verbose
     )
+    
+    # MILESTONE: Outline Complete - Stream to user
+    if streamer:
+        # Count chapters from outline
+        chapters_count = formatter_output.count('## Chapter') + formatter_output.count('# Chapter')
+        streamer.stream_outline_complete(
+            outline_path=folders['drafts'] / "00_formatted_outline.md",
+            chapters_count=chapters_count if chapters_count > 0 else 5  # Default to 5 if can't parse
+        )
+    
+    # Update progress with outline milestone
+    if tracker:
+        tracker.update_phase("structure", progress_percent=30, details={"stage": "outline_complete", "milestone": "outline_complete"})
 
     rate_limit_delay()
 
@@ -514,6 +538,17 @@ def generate_thesis(
 
     if verbose:
         print(f"✅ Citations: {len(citation_database.citations)} unique")
+    
+    # MILESTONE: Research Complete - Stream to user
+    if streamer:
+        streamer.stream_research_complete(
+            sources_count=len(citation_database.citations),
+            bibliography_path=citation_db_path
+        )
+    
+    # Update progress with specific detail
+    if tracker:
+        tracker.update_phase("structure", progress_percent=23, sources_count=len(citation_database.citations), details={"stage": "research_complete", "milestone": "research_complete"})
 
     # Prepare citation summary for writing agents
     citation_summary = f"\n\n## CITATION DATABASE\n\nYou have {len(citation_database.citations)} citations available.\n\n"
@@ -531,6 +566,9 @@ def generate_thesis(
     # ====================================================================
     if verbose:
         print("\n✍️  PHASE 3: COMPOSE")
+    
+    if tracker:
+        tracker.update_phase("writing", progress_percent=35, chapters_count=0, details={"stage": "starting_composition"})
 
     # Introduction
     intro_output = run_agent(
@@ -542,6 +580,18 @@ def generate_thesis(
         skip_validation=skip_validation,
         verbose=verbose
     )
+    
+    # MILESTONE: Introduction Complete - Stream to user
+    if streamer:
+        streamer.stream_chapter_complete(
+            chapter_num=1,
+            chapter_name="Introduction",
+            chapter_path=folders['drafts'] / "01_introduction.md"
+        )
+    
+    # Update progress  
+    if tracker:
+        tracker.update_phase("writing", progress_percent=40, chapters_count=1, details={"stage": "introduction_complete", "milestone": "introduction_complete"})
 
     rate_limit_delay()
 
@@ -605,6 +655,18 @@ Research:
         skip_validation=skip_validation,
         verbose=verbose
     )
+    
+    # MILESTONE: Conclusion Complete - Stream to user  
+    if streamer:
+        streamer.stream_chapter_complete(
+            chapter_num=3,
+            chapter_name="Conclusion",
+            chapter_path=folders['drafts'] / "03_conclusion.md"
+        )
+    
+    # Update progress
+    if tracker:
+        tracker.update_phase("writing", progress_percent=70, chapters_count=3, details={"stage": "conclusion_complete", "milestone": "conclusion_complete"})
 
     rate_limit_delay()
 
@@ -656,6 +718,9 @@ Supplementary references, tools, and resources for further reading.
     # ====================================================================
     if verbose:
         print("\n🔧 PHASE 4: COMPILE")
+    
+    if tracker:
+        tracker.update_phase("compiling", progress_percent=75, details={"stage": "assembling_thesis"})
 
     # Strip headers from section outputs (they already contain # headers from agents)
     def strip_first_header(text: str) -> str:
@@ -809,13 +874,25 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
     # ====================================================================
     if verbose:
         print("\n📄 PHASE 5: EXPORT")
+    
+    if tracker:
+        tracker.update_exporting(export_type="PDF and DOCX")
 
-    # Export to PDF with error handling
+    # Export to PDF with error handling - ONLY Pandoc/XeLaTeX allowed
     pdf_path = folders['exports'] / "FINAL_THESIS.pdf"
+    
+    if verbose:
+        print("📄 Exporting PDF with Pandoc/XeLaTeX (ONLY engine allowed - professional quality)...")
+    
     pdf_success = export_pdf(
         md_file=final_md_path,
-        output_pdf=pdf_path
+        output_pdf=pdf_path,
+        engine='pandoc'  # ONLY Pandoc/XeLaTeX - WeasyPrint disabled!
     )
+    
+    # If Pandoc fails, thesis generation should FAIL (no silent fallback to poor quality)
+    if not pdf_success:
+        raise RuntimeError("PDF export failed - Pandoc/XeLaTeX required! WeasyPrint is disabled.")
     
     if not pdf_success or not pdf_path.exists():
         raise RuntimeError(f"PDF export failed - file not created: {pdf_path}")
@@ -839,6 +916,9 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
         print("="*70)
         print("\n💡 Open the folder in Cursor to refine your thesis!")
         print(f"   cursor {output_dir}")
+    
+    if tracker:
+        tracker.mark_completed()
 
     return pdf_path, docx_path
 
