@@ -3,6 +3,6 @@
 
 modal>=0.63.0
 supabase==2.3.4
-resend==0.7.0
+resend==0.8.0
 google-generativeai>=0.8.0
 python-dotenv>=1.0.0
