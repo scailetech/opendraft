@@ -1,0 +1,53 @@
+# OpenDraft Worker - Thesis Generator
+# Polls database for pending theses and processes them
+
+FROM python:3.11-slim
+
+# Install system dependencies for PDF generation
+RUN apt-get update && apt-get install -y \
+    # Pandoc + LaTeX for PDF generation
+    pandoc \
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-xetex \
+    # System utilities
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy Python requirements from parent opendraft directory
+COPY ../requirements.txt ./requirements.txt
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Additional dependencies for Supabase integration
+RUN pip install --no-cache-dir supabase psycopg2-binary
+
+# Copy the entire opendraft backend
+COPY ../backend ./backend
+COPY ../utils ./utils
+COPY ../concurrency ./concurrency
+COPY ../config.py ./config.py
+
+# Copy worker script
+COPY ./worker-poller.py ./worker-poller.py
+
+# Create output directories
+RUN mkdir -p /app/outputs /app/logs
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
+
+# Health check - verify Python and basic imports work
+HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=3 \
+    CMD python -c "from backend import thesis_generator; print('✓ Thesis generator ready')" || exit 1
+
+# Run the worker poller
+CMD ["python", "-u", "worker-poller.py"]
