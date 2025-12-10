@@ -1,68 +1,96 @@
 /**
- * API Route: Generate Thesis - SIMPLE VERSION
- * Just create the entry and trigger Modal
+ * API Route: Generate Thesis
+ * Creates thesis entry in theses table and triggers Modal processing
+ * Supports both waitlist users (free) and direct generation (paid)
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+import { createClient as createServerClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { authenticateRequest } from '@/lib/auth-middleware'
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { topic, academic_level = 'master', language = 'en', author_name, email = 'app@opendraft.ai' } = body
-    
-    if (!topic) {
-      return NextResponse.json({ error: 'Missing topic' }, { status: 400 })
+    // Get authenticated user (supports dev mode bypass)
+    const userId = await authenticateRequest(request)
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    
-    const supabase = createClient(supabaseUrl, supabaseServiceKey)
-    
-    // Simple insert with all required fields
-    const { data: thesis, error } = await supabase
-      .from('waitlist')
+
+    // In dev mode, use service role to bypass RLS for mock user
+    const isDev = process.env.NEXT_PUBLIC_DEV_MODE === 'true'
+    const supabase = isDev
+      ? createSupabaseClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!,
+          { auth: { persistSession: false } }
+        )
+      : await createServerClient()
+
+    // Parse request body
+    const body = await request.json()
+    const {
+      topic,
+      language = 'en',
+      academic_level = 'master',
+      waitlist_id = null, // NULL for direct/paid generation
+      author_name,
+      institution,
+      department,
+      faculty,
+      advisor,
+      second_examiner,
+      location,
+      student_id,
+    } = body
+
+    if (!topic) {
+      return NextResponse.json({ error: 'Topic is required' }, { status: 400 })
+    }
+
+    // Create thesis entry in theses table with "pending" status
+    // Local worker (or Render worker) will poll for pending theses
+    const { data: thesis, error: createError } = await supabase
+      .from('theses')
       .insert({
-        email,
-        full_name: author_name || 'App User',
-        thesis_topic: topic,
-        academic_level,
+        user_id: userId,
+        waitlist_id,
+        topic,
         language,
-        status: 'waiting',
-        email_verified: true,
-        verified_at: new Date().toISOString(),
-        position: 0,
-        original_position: 0,
-        referral_code: `APP${Date.now().toString(36).toUpperCase()}`, // Dummy code for app users
+        academic_level,
+        status: 'pending',  // Worker polls for 'pending' status
+        current_phase: null,
+        progress_percent: 0,
+        author_name,
+        institution,
+        department,
+        faculty,
+        advisor,
+        second_examiner,
+        location,
+        student_id,
       })
       .select()
       .single()
-    
-    if (error) {
-      console.error('Insert error:', error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+
+    if (createError) {
+      console.error('Failed to create thesis:', createError)
+      return NextResponse.json({ error: createError.message }, { status: 500 })
     }
-    
-    console.log(`📝 Created thesis: ${thesis.id}`)
-    
-    // Trigger Modal in background (fire and forget)
-    fetch('http://localhost:3001/api/thesis/trigger-modal', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ thesis_id: thesis.id }),
-    }).catch(() => console.log('Trigger sent'))
-    
+
+    console.log(`📝 Created thesis: ${thesis.id} for user: ${userId} (status: pending)`)
+    console.log(`✅ Worker will pick up thesis automatically (polls every 10s)`)
+
     return NextResponse.json({
       success: true,
       thesis_id: thesis.id,
-      message: 'Thesis started!',
+      status: 'pending',
+      message: 'Thesis generation started',
     })
-    
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Generate thesis error:', error)
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed' },
+      { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     )
   }

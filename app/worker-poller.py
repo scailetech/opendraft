@@ -14,17 +14,22 @@ from datetime import datetime
 from supabase import create_client, Client
 
 # Add parent directory to path to import backend modules
-sys.path.insert(0, '/app')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)  # /Users/federicodeponte/opendraft
+sys.path.insert(0, project_root)
 
-from backend.thesis_generator import ThesisGenerator
+from backend.thesis_generator import generate_thesis
 
 # Setup logging
+log_dir = os.path.join(project_root, 'logs')
+os.makedirs(log_dir, exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler('/app/logs/worker.log')
+        logging.FileHandler(os.path.join(log_dir, 'worker.log'))
     ]
 )
 logger = logging.getLogger(__name__)
