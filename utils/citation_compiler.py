@@ -14,7 +14,6 @@ import google.generativeai as genai
 from utils.citation_database import Citation, CitationDatabase, CitationStyle
 from utils.api_citations import CitationResearcher
 
-# FIXED (Bug #14): Added missing logger initialization
 logger = logging.getLogger(__name__)
 
 
@@ -70,7 +69,13 @@ class CitationCompiler:
         self.researcher.verbose = verbose
 
         # Delegate to CitationResearcher (handles caching internally)
-        citation = self.researcher.research_citation(topic)
+        result = self.researcher.research_citation(topic)
+
+        # Handle both list and single citation (orchestrator now returns list)
+        if isinstance(result, list):
+            citation = result[0] if result else None
+        else:
+            citation = result
 
         if citation:
             # Generate next citation ID
@@ -204,7 +209,7 @@ class CitationCompiler:
         """
         Generate reference list from citations used in text.
 
-        FIXED: Removes placeholder headers and detects content-full sections.
+        Removes placeholder headers and detects content-full sections.
         Prevents dual headers (German placeholder + English actual citations).
 
         Args:

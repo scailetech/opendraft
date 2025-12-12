@@ -12,7 +12,7 @@ import time
 import logging
 from pathlib import Path
 from typing import Optional, Callable, Tuple, List, TYPE_CHECKING, Any, Dict
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -404,7 +404,9 @@ def research_citations_via_api(
     topic: Optional[str] = None,
     scope: Optional[str] = None,
     seed_references: Optional[List[str]] = None,
-    min_sources_deep: int = 100
+    min_sources_deep: int = 100,
+    # Timeout control
+    per_topic_timeout_seconds: int = 90  # Increased from 30s - citations need time to search multiple APIs
 ) -> Dict[str, Any]:
     """
     Research citations using API-backed fallback chain with optional deep research mode.
@@ -435,6 +437,7 @@ def research_citations_via_api(
         scope: Optional research scope constraints (e.g., "EU focus; B2C and B2B")
         seed_references: Optional seed papers to expand from
         min_sources_deep: Minimum sources for deep research (default: 100)
+        per_topic_timeout_seconds: Maximum time to spend on each research topic (default: 90)
 
     Returns:
         Dict with keys:
@@ -566,15 +569,37 @@ def research_citations_via_api(
     BATCH_DELAY = config.scout_batch_delay
     PARALLEL_WORKERS = config.scout_parallel_workers
 
-    # Helper function for parallel execution
-    def _research_single_topic(topic_with_idx: Tuple[int, str]) -> Tuple[int, str, Optional[Citation], Optional[str]]:
-        """Research a single topic. Returns (idx, topic, citation_or_None, error_or_None)."""
+    # Detect if proxies are configured for rate limit bypass
+    from utils.api_citations.base import PROXY_LIST
+    use_proxies = len(PROXY_LIST) > 0
+
+    # Adjust batch delay based on proxy availability
+    # With proxies: skip delays for maximum throughput
+    # Without proxies: respect API rate limits
+    effective_batch_delay = 0 if use_proxies else BATCH_DELAY
+
+    if verbose and use_proxies:
+        print(f"\n🔀 Proxy rotation enabled: {len(PROXY_LIST)} proxies")
+        print(f"   Batch delays disabled for maximum throughput")
+
+    # Helper function for parallel execution with timeout
+    def _research_single_topic(topic_with_idx: Tuple[int, str]) -> Tuple[int, str, List[Citation], Optional[str]]:
+        """Research a single topic with timeout. Returns (idx, topic, list_of_citations, error_or_None)."""
         idx, research_topic = topic_with_idx
         try:
-            citation = researcher.research_citation(research_topic)
-            return (idx, research_topic, citation, None)
+            # Wrap in executor for timeout control
+            with ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(researcher.research_citation, research_topic)
+                try:
+                    citations_list = future.result(timeout=per_topic_timeout_seconds)
+                    return (idx, research_topic, citations_list, None)
+                except FuturesTimeoutError:
+                    return (idx, research_topic, [], f"Timeout after {per_topic_timeout_seconds}s")
         except Exception as e:
-            return (idx, research_topic, None, str(e))
+            return (idx, research_topic, [], str(e))
+
+    # Early stopping at 50 citations
+    early_stop_threshold = 50
 
     # Parallel or sequential based on config
     if PARALLEL_WORKERS > 1:
@@ -586,12 +611,18 @@ def research_citations_via_api(
         processed = 0
 
         for batch_start in range(0, total_topics, BATCH_SIZE):
+            # Early stopping: Check if we've reached target + 10%
+            if len(citations) >= early_stop_threshold:
+                if verbose:
+                    print(f"\n⏩ Early stopping: {len(citations)} citations collected (target: {target_minimum}, threshold: {early_stop_threshold})")
+                break
+
             batch_end = min(batch_start + BATCH_SIZE, total_topics)
             batch = list(enumerate(research_topics[batch_start:batch_end], batch_start + 1))
 
-            if verbose and batch_start > 0:
-                print(f"\n⏸️  Batch complete ({batch_start} topics processed). Waiting {BATCH_DELAY}s to respect API limits...")
-                time.sleep(BATCH_DELAY)
+            if verbose and batch_start > 0 and effective_batch_delay > 0:
+                print(f"\n⏸️  Batch complete ({batch_start} topics processed). Waiting {effective_batch_delay}s to respect API limits...")
+                time.sleep(effective_batch_delay)
 
             if verbose:
                 print(f"\n📦 Processing batch {batch_start // BATCH_SIZE + 1} ({len(batch)} topics)...")
@@ -601,7 +632,7 @@ def research_citations_via_api(
                 futures = {executor.submit(_research_single_topic, item): item for item in batch}
 
                 for future in as_completed(futures):
-                    idx, research_topic, citation, error = future.result()
+                    idx, research_topic, citations_list, error = future.result()
                     processed += 1
 
                     if verbose:
@@ -612,14 +643,27 @@ def research_citations_via_api(
                         if verbose:
                             print(f"❌ Error: {error[:30]}...")
                         logger.error(f"Citation research failed for '{research_topic}': {error}")
-                    elif citation:
-                        citations.append(citation)
-                        source = citation.api_source or 'Unknown'
-                        if source in sources_breakdown:
-                            sources_breakdown[source] += 1
+                    elif citations_list:
+                        # Add ALL citations from this query (multiple sources)
+                        citations.extend(citations_list)
+                        # Update source breakdown for all citations
+                        for citation in citations_list:
+                            source = citation.api_source or 'Unknown'
+                            if source in sources_breakdown:
+                                sources_breakdown[source] += 1
                         if verbose:
-                            authors_str = citation.authors[0] if citation.authors else "Unknown"
-                            print(f"✅ {authors_str} et al. ({citation.year})")
+                            # Show all sources found for this query
+                            sources_str = ", ".join([c.api_source or 'Unknown' for c in citations_list])
+                            first_citation = citations_list[0]
+                            authors_str = first_citation.authors[0] if first_citation.authors else "Unknown"
+                            count_str = f" (+{len(citations_list)-1} more)" if len(citations_list) > 1 else ""
+                            print(f"✅ {authors_str} et al. ({first_citation.year}) [{sources_str}]{count_str}")
+
+                        # Check for early stopping within batch
+                        if len(citations) >= early_stop_threshold:
+                            if verbose:
+                                print(f"\n⏩ Early stopping: {len(citations)} citations collected")
+                            break
                     else:
                         failed_topics.append(research_topic)
                         if verbose:
@@ -630,29 +674,52 @@ def research_citations_via_api(
             print("\n🔄 Sequential citation research (1 worker)")
 
         for idx, research_topic in enumerate(research_topics, 1):
-            # Add delay every BATCH_SIZE topics to prevent burst rate limits
-            if idx > 1 and (idx - 1) % BATCH_SIZE == 0:
+            # Early stopping: Check if we've reached target + 10%
+            if len(citations) >= early_stop_threshold:
                 if verbose:
-                    print(f"\n⏸️  Batch complete ({idx-1} topics processed). Waiting {BATCH_DELAY}s to respect API limits...")
-                time.sleep(BATCH_DELAY)
+                    print(f"\n⏩ Early stopping: {len(citations)} citations collected (target: {target_minimum}, threshold: {early_stop_threshold})")
+                break
+
+            # Add delay every BATCH_SIZE topics to prevent burst rate limits
+            if idx > 1 and (idx - 1) % BATCH_SIZE == 0 and effective_batch_delay > 0:
+                if verbose:
+                    print(f"\n⏸️  Batch complete ({idx-1} topics processed). Waiting {effective_batch_delay}s to respect API limits...")
+                time.sleep(effective_batch_delay)
 
             if verbose:
                 print(f"[{idx}/{len(research_topics)}] 🔎 {research_topic[:65]}{'...' if len(research_topic) > 65 else ''}")
 
             try:
-                citation = researcher.research_citation(research_topic)
+                # Wrap in executor for timeout control
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(researcher.research_citation, research_topic)
+                    try:
+                        citations_list = future.result(timeout=per_topic_timeout_seconds)
+                    except FuturesTimeoutError:
+                        citations_list = []
+                        failed_topics.append(research_topic)
+                        if verbose:
+                            print(f"    ⏱️  Timeout after {per_topic_timeout_seconds}s")
+                        logger.warning(f"Citation research timed out for '{research_topic}' after {per_topic_timeout_seconds}s")
+                        continue
 
-                if citation:
-                    citations.append(citation)
+                if citations_list:
+                    # Add ALL citations from this query (multiple sources)
+                    citations.extend(citations_list)
 
-                    # Track source
-                    source = citation.api_source or 'Unknown'
-                    if source in sources_breakdown:
-                        sources_breakdown[source] += 1
+                    # Track sources for all citations
+                    for citation in citations_list:
+                        source = citation.api_source or 'Unknown'
+                        if source in sources_breakdown:
+                            sources_breakdown[source] += 1
 
                     if verbose:
-                        authors_str = citation.authors[0] if citation.authors else "Unknown"
-                        print(f"    ✅ {authors_str} et al. ({citation.year})")
+                        # Show all sources found for this query
+                        sources_str = ", ".join([c.api_source or 'Unknown' for c in citations_list])
+                        first_citation = citations_list[0]
+                        authors_str = first_citation.authors[0] if first_citation.authors else "Unknown"
+                        count_str = f" (+{len(citations_list)-1} more)" if len(citations_list) > 1 else ""
+                        print(f"    ✅ {authors_str} et al. ({first_citation.year}) [{sources_str}]{count_str}")
                 else:
                     failed_topics.append(research_topic)
                     if verbose:
@@ -768,6 +835,10 @@ def research_citations_via_api(
             markdown_lines.append(f"**DOI**: {citation.doi}")
             if citation.url:
                 markdown_lines.append(f"**URL**: {citation.url}")
+            if hasattr(citation, 'abstract') and citation.abstract:
+                # Include abstract for Scribe to summarize (prevent hallucination)
+                markdown_lines.append("")
+                markdown_lines.append(f"**Abstract**: {citation.abstract}")
             markdown_lines.append("")
 
     if failed_topics:

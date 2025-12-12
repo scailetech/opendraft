@@ -4,7 +4,6 @@ ABOUTME: Production-grade academic document export utility with strategy pattern
 ABOUTME: Supports multiple PDF engines (LibreOffice, Pandoc, WeasyPrint) with auto-fallback
 """
 
-import re
 import sys
 import argparse
 from pathlib import Path
@@ -14,7 +13,7 @@ from typing import Optional, Literal
 from utils.logging_config import get_logger
 logger = get_logger(__name__)
 
-# Fix BUG #19: Add project root to path for subprocess/different CWD execution
+# Add project root to path for subprocess/different CWD execution
 project_root = Path(__file__).resolve().parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -80,15 +79,12 @@ def extract_metadata_from_yaml(md_file: Path) -> dict:
             'date': 'date',
             'institution': 'institution',
             'department': 'department',
-            'faculty': 'faculty',
             'degree': 'degree',
             'advisor': 'advisor',
             'student_id': 'student_id',
-            'matriculation_number': 'matriculation_number',
             'project_type': 'project_type',
             'system_credit': 'system_credit',
-            'second_examiner': 'second_examiner',
-            'location': 'location',
+            'generated_by': 'system_credit',  # Map generated_by to system_credit
         }
 
         normalized = {}
@@ -142,15 +138,11 @@ def export_pdf(
             date=metadata.get('date'),
             institution=metadata.get('institution'),
             department=metadata.get('department'),
-            faculty=metadata.get('faculty'),
             course=metadata.get('degree'),  # Map degree to course field
             instructor=metadata.get('advisor'),  # Map advisor to instructor field
-            second_examiner=metadata.get('second_examiner'),
             student_id=metadata.get('student_id'),
-            matriculation_number=metadata.get('matriculation_number'),
             project_type=metadata.get('project_type'),
-            system_credit=metadata.get('system_credit'),
-            location=metadata.get('location'),
+            system_credit=metadata.get('system_credit')
         )
 
     logger.info("="*70)
@@ -410,7 +402,7 @@ def export_docx(
     import subprocess
     import shutil
 
-    # Extract metadata from YAML frontmatter (same as export_pdf)
+    # Extract metadata from YAML frontmatter
     metadata = extract_metadata_from_yaml(md_file)
 
     # Create options with metadata if not provided
@@ -427,10 +419,9 @@ def export_docx(
             instructor=metadata.get('advisor'),  # Map advisor to instructor field
             second_examiner=metadata.get('second_examiner'),
             student_id=metadata.get('student_id'),
-            matriculation_number=metadata.get('matriculation_number'),
             project_type=metadata.get('project_type'),
             system_credit=metadata.get('system_credit'),
-            location=metadata.get('location'),
+            location=metadata.get('location')
         )
 
     # Try Pandoc method first (best quality)

@@ -6,6 +6,7 @@ Runs daily at 9am UTC, processes 100 waiting users from Supabase IN PARALLEL
 import modal
 import os
 from datetime import datetime
+from typing import Tuple
 
 # Create Modal app
 app = modal.App("thesis-generator")
@@ -646,7 +647,7 @@ def regenerate_example_pdf(md_content: str, filename: str) -> bytes:
     ],
     image=image,
 )
-def generate_showcase_thesis() -> tuple[bytes, bytes]:
+def generate_showcase_thesis() -> Tuple[bytes, bytes]:
     """
     Generate the OpenDraft showcase thesis: "Why OpenDraft Will Save The World"
     Returns (pdf_bytes, docx_bytes)

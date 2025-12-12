@@ -55,8 +55,34 @@ class PandocLatexEngine(PDFEngine):
         """Check if pandoc and xelatex are available."""
         return (
             shutil.which('pandoc') is not None and
-            shutil.which('xelatex') is not None
+            self._find_xelatex() is not None
         )
+
+    def _find_xelatex(self) -> Optional[str]:
+        """Find xelatex binary, checking common LaTeX installation paths."""
+        # First check PATH
+        xelatex = shutil.which('xelatex')
+        if xelatex:
+            return xelatex
+
+        # Common LaTeX installation paths on macOS
+        common_paths = [
+            # TinyTeX (R/RStudio default)
+            Path.home() / "Library/TinyTeX/bin/universal-darwin/xelatex",
+            # MacTeX
+            Path("/Library/TeX/texbin/xelatex"),
+            Path("/usr/local/texlive/2025/bin/universal-darwin/xelatex"),
+            Path("/usr/local/texlive/2024/bin/universal-darwin/xelatex"),
+            Path("/usr/local/texlive/2023/bin/universal-darwin/xelatex"),
+            # BasicTeX
+            Path("/usr/local/texlive/2025basic/bin/universal-darwin/xelatex"),
+        ]
+
+        for path in common_paths:
+            if path.exists():
+                return str(path)
+
+        return None
 
     def generate(
         self,
@@ -427,11 +453,14 @@ class PandocLatexEngine(PDFEngine):
             # Use absolute paths to avoid any path resolution issues
             margin = options.margins.replace('in', 'in').replace('cm', 'cm')
 
+            # Find xelatex path (may not be in PATH)
+            xelatex_path = self._find_xelatex()
+
             cmd = [
                 'pandoc',
                 str(md_file.resolve()),
                 '-o', str(output_pdf.resolve()),
-                '--pdf-engine=xelatex',  # Use XeLaTeX for full Unicode support
+                f'--pdf-engine={xelatex_path}',  # Use XeLaTeX for full Unicode support
                 '--include-in-header', str(preamble_path.resolve()),
                 '--from', 'markdown+autolink_bare_uris+raw_tex',
                 '--variable', f'geometry:margin={margin}',

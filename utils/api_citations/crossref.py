@@ -76,7 +76,7 @@ class CrossrefClient(BaseAPIClient):
                 "query": query,
                 "rows": 5,  # Get top 5 results
                 "sort": "relevance",
-                "select": "DOI,title,author,published,container-title,publisher,volume,issue,page,type",
+                "select": "DOI,title,author,published,container-title,publisher,volume,issue,page,type,abstract",
             },
         )
 
@@ -184,6 +184,14 @@ class CrossrefClient(BaseAPIClient):
             issue = paper.get("issue", "")
             page = paper.get("page", "")
 
+            # Abstract (optional) - Crossref sometimes returns JATS XML, extract text
+            abstract = paper.get("abstract", "")
+            if abstract:
+                # Strip JATS XML tags if present (<jats:p>, <jats:italic>, etc.)
+                import re
+                abstract = re.sub(r'<[^>]+>', '', abstract)
+                abstract = abstract.strip()
+
             # Source type
             crossref_type = paper.get("type", "")
             source_type = self._map_source_type(crossref_type)
@@ -206,6 +214,7 @@ class CrossrefClient(BaseAPIClient):
                 "pages": page,
                 "source_type": source_type,
                 "confidence": confidence,
+                "abstract": abstract if abstract else None,
             }
 
         except Exception as e:

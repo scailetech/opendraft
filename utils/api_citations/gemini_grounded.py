@@ -167,7 +167,7 @@ class GeminiGroundedClient(BaseAPIClient):
     def __init__(
         self,
         api_key: Optional[str] = None,
-        timeout: int = 120,  # Longer timeout for deep research
+        timeout: int = 30,  # Reduced timeout for fast gemini-2.5-flash
         max_retries: int = 3,
         forbidden_domains: Optional[List[str]] = None,
         validate_urls: bool = True
@@ -177,7 +177,7 @@ class GeminiGroundedClient(BaseAPIClient):
 
         Args:
             api_key: Google AI API key (defaults to GOOGLE_API_KEY env var)
-            timeout: Request timeout in seconds (120s for deep research)
+            timeout: Request timeout in seconds (60s for parallel execution)
             max_retries: Number of retry attempts
             forbidden_domains: List of domains to filter out
             validate_urls: Whether to validate URLs return HTTP 200
@@ -203,7 +203,7 @@ class GeminiGroundedClient(BaseAPIClient):
                 "GOOGLE_API_KEY not found. Set via environment variable or constructor."
             )
 
-        # Use Gemini 2.5 Flash for fast grounded search (Pro is too slow)
+        # Use Gemini 2.5 Flash for fast grounding with two-step approach
         self.model_name = 'gemini-2.5-flash'
         
         # Fallback API key for 429 rate limit handling
@@ -226,10 +226,30 @@ class GeminiGroundedClient(BaseAPIClient):
             'Connection': 'keep-alive',
         })
 
+    def _try_dataforseo_fallback(self, query: str) -> Optional[Dict[str, Any]]:
+        """
+        Fallback to DataForSEO SERP API when googleSearch hits quota limits.
+        Uses DataForSEO to get search results, then feeds them to Gemini for processing.
+
+        Args:
+            query: Search query
+
+        Returns:
+            Citation metadata or None
+        """
+        try:
+            from .dataforseo_client import DataForSEOClient
+            dataforseo = DataForSEOClient(timeout=15)
+            result = dataforseo.search_paper(query)
+            return result
+        except Exception as e:
+            logger.warning(f"DataForSEO fallback failed: {e}")
+            return None
+
     def search_paper(self, query: str) -> Optional[Dict[str, Any]]:
         """
         Search for a source using Gemini with Google Search grounding via REST API.
-        Falls back to DataForSEO on rate limit (429) errors.
+        Falls back to DataForSEO SERP API when googleSearch hits quota limits (429).
 
         Args:
             query: Search query (topic, title, keywords)
@@ -250,29 +270,9 @@ class GeminiGroundedClient(BaseAPIClient):
             # Generate with Google Search grounding via REST API
             response_data = self._generate_content_with_grounding(prompt)
 
-            # If rate limited (429), try DataForSEO fallback
+            # If googleSearch hit quota limit (429), try DataForSEO fallback
             if not response_data:
-                # Check if we should try DataForSEO fallback
-                try:
-                    from utils.web_search_fallback import WebSearchFallback
-                    fallback = WebSearchFallback()
-                    if fallback.dataforseo.enabled:
-                        logger.info(f"Gemini Google Search failed - trying DataForSEO fallback for: {query[:50]}...")
-                        results = fallback.dataforseo.search(query, limit=5)
-                        if results and len(results) > 0:
-                            # Convert DataForSEO result to Gemini format
-                            result = results[0]
-                            return {
-                                "title": result.get("title", ""),
-                                "url": result.get("url", ""),
-                                "snippet": result.get("snippet", ""),
-                                "source": "DataForSEO"
-                            }
-                except Exception as fallback_error:
-                    logger.warning(f"DataForSEO fallback failed: {fallback_error}")
-            
-            if not response_data:
-                return None
+                return self._try_dataforseo_fallback(query)
 
             # Extract grounding citations from response
             sources = self._extract_grounding_citations(response_data)
@@ -338,6 +338,7 @@ class GeminiGroundedClient(BaseAPIClient):
                 },
                 "tools": [
                     {"googleSearch": {}},  # Enable Google Search grounding
+                    {"urlContext": {}},    # Enable URL context for scraping
                 ]
             }
 

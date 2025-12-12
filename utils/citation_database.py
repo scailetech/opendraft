@@ -39,6 +39,7 @@ class Citation:
         url: Optional[str] = None,
         access_date: Optional[str] = None,
         api_source: Optional[str] = None,
+        abstract: Optional[str] = None,
     ):
         self.id = citation_id
         self.authors = authors
@@ -55,6 +56,7 @@ class Citation:
         self.url = url
         self.access_date = access_date
         self.api_source = api_source
+        self.abstract = abstract
 
     def to_dict(self) -> Dict:
         """Convert to dictionary for JSON serialization."""
@@ -86,6 +88,8 @@ class Citation:
             data["access_date"] = self.access_date
         if self.api_source:
             data["api_source"] = self.api_source
+        if self.abstract:
+            data["abstract"] = self.abstract
 
         return data
 
@@ -107,6 +111,7 @@ class Citation:
             doi=data.get("doi"),
             url=data.get("url"),
             access_date=data.get("access_date"),
+            abstract=data.get("abstract"),
             api_source=data.get("api_source"),
         )
 
@@ -329,7 +334,7 @@ def has_more_metadata(citation_a: Citation, citation_b: Citation) -> bool:
         bool: True if citation_a has more complete metadata than citation_b
     """
     # Count non-None optional fields for each citation
-    optional_fields = ['journal', 'publisher', 'volume', 'issue', 'pages', 'doi', 'url', 'access_date']
+    optional_fields = ['journal', 'publisher', 'volume', 'issue', 'pages', 'doi', 'url', 'access_date', 'abstract']
 
     score_a = sum(1 for field in optional_fields if getattr(citation_a, field) is not None)
     score_b = sum(1 for field in optional_fields if getattr(citation_b, field) is not None)

@@ -51,13 +51,7 @@ def insert_academic_structure(
         # Step 2b: Center the title block (Title, Subtitle, Author, Date)
         _center_title_block(doc, title_idx, date_idx)
 
-        # Step 2c: Move Date to bottom of cover page (after Location)
-        # Academic format: Date goes at bottom with city, not right after Author
-        _move_date_to_bottom(doc, date_idx, options, verbose)
-        # Recalculate positions after date move
-        title_idx, date_idx = _find_title_block(doc)
-
-        # Step 3: Insert additional metadata AFTER author (supervisor, etc.)
+        # Step 3: Insert additional metadata AFTER date (supervisor, etc.)
         if options:
             _insert_metadata_after_date(doc, date_idx, options, verbose)
             # Recalculate date position
@@ -70,26 +64,15 @@ def insert_academic_structure(
             if verbose:
                 print(f"   ✓ Inserted page break after cover page")
 
-        # Step 5: Find TOC (if exists) and insert page break before Abstract
-        # TOC is in an SDT block not accessible via paragraphs, so we insert
-        # the page break at the START of Abstract paragraph
-        toc_abstract_idx = _find_toc_end(doc)
-        if toc_abstract_idx is not None:
-            _insert_page_break_before(doc, toc_abstract_idx)
-            if verbose:
-                print(f"   ✓ Inserted page break after Table of Contents")
-
-        # Step 6: Insert page break after Abstract (before first chapter)
+        # Step 5: Pandoc generates TOC with --toc flag, so we don't insert manual TOC
+        # Just need to insert page break after Abstract (before first chapter)
         abstract_end_idx = _find_abstract_end(doc)
         if abstract_end_idx is not None:
             _insert_page_break_after(doc, abstract_end_idx)
             if verbose:
                 print(f"   ✓ Inserted page break after Abstract")
 
-        # Step 7: Number chapter headings (1. Introduction, 2. Literature Review, etc.)
-        _number_chapter_headings(doc, verbose)
-
-        # Step 8: Fix table widths to use full page width
+        # Step 6: Fix table widths to fit page
         _fix_table_widths(doc, verbose)
 
         doc.save(docx_path)
@@ -133,34 +116,6 @@ def _center_title_block(doc: Document, title_idx, date_idx):
             doc.paragraphs[i].alignment = WD_ALIGN_PARAGRAPH.CENTER
 
 
-def _move_date_to_bottom(doc: Document, date_idx: int, options: Optional[Dict], verbose: bool):
-    """
-    Remove the Date paragraph from its current position (after Author).
-    
-    The date will be added at the bottom with Location in _insert_metadata_after_date.
-    Academic format requires date at the bottom of the cover page, not after author.
-    """
-    if date_idx is None or date_idx >= len(doc.paragraphs):
-        return
-    
-    date_para = doc.paragraphs[date_idx]
-    date_text = date_para.text.strip()
-    
-    if not date_text:
-        return
-    
-    # Store the date text for later use
-    if options is not None:
-        options['_original_date'] = date_text
-    
-    # Clear the date paragraph content (effectively removing it visually)
-    # We can't easily delete paragraphs in python-docx, so we clear the text
-    date_para.clear()
-    
-    if verbose:
-        print(f"   ✓ Moved date '{date_text}' to bottom of cover page")
-
-
 def _find_cover_end(doc: Document):
     """Find the last paragraph of cover page content (before Abstract or first heading)."""
     for i, para in enumerate(doc.paragraphs):
@@ -185,40 +140,6 @@ def _find_abstract_heading(doc: Document):
         if 'abstract' in text and 'Heading' in style:
             return i
 
-    return None
-
-
-def _find_toc_end(doc: Document):
-    """
-    Find where to insert page break between TOC and Abstract.
-    
-    TOC in Word is in an SDT (Structured Document Tag) block which is NOT
-    accessible via doc.paragraphs. The solution is to return the Abstract
-    paragraph index, and we'll insert a page break at its START.
-    
-    Returns the Abstract heading index if TOC exists in the document.
-    """
-    # Check if TOC exists by searching raw XML
-    from zipfile import ZipFile
-    import tempfile
-    import os
-    
-    # We need to check if TOC exists in the document
-    # Since doc might not be saved yet, we check if --toc was enabled
-    # by looking for TOC-related content in any accessible paragraph
-    abstract_idx = _find_abstract_heading(doc)
-    if abstract_idx is None:
-        return None
-    
-    # Check for TOC by looking at raw document XML
-    # (doc is already loaded, but we can check via the element tree)
-    body = doc._body._body
-    body_xml = body.xml if hasattr(body, 'xml') else ''
-    
-    if 'Table of Contents' in body_xml or 'TOCHeading' in body_xml:
-        # TOC exists - return abstract index to insert page break before it
-        return abstract_idx
-    
     return None
 
 
@@ -296,18 +217,9 @@ def _find_abstract_end(doc: Document):
             continue
 
         if in_abstract:
-            # Check for chapter heading (Heading 1)
-            # Handle both numbered (1. Introduction) and unnumbered (Introduction) sections
-            # Also handle \newpage markers and common first chapter names
-            if style == 'Heading 1' and text:
-                # Check if it's a chapter heading (numbered or common chapter names)
-                is_numbered = text[0].isdigit()
-                is_common_chapter = any(
-                    text.lower().startswith(ch) for ch in 
-                    ['introduction', 'literature', 'background', 'chapter', 'methodology']
-                )
-                if is_numbered or is_common_chapter:
-                    return last_abstract_para
+            # Check for chapter heading (Heading 1 starting with number)
+            if style == 'Heading 1' and text and (text[0].isdigit() or text.startswith('1')):
+                return last_abstract_para
             last_abstract_para = i
 
     return None
@@ -406,26 +318,13 @@ def _insert_metadata_after_date(doc: Document, date_idx: int, options: Dict, ver
         insert_after = new_para
         additions += 2
 
-    # Location and Date at the bottom together
-    location = options.get('location')
-    date_text = options.get('_original_date')  # Date moved from Pandoc's position
-    
-    if location or date_text:
+    # Location
+    if options.get('location'):
         new_para = _insert_para_after(insert_after, '')
         insert_after = new_para
-        additions += 1
-        
-        # Combine location and date if both exist, otherwise use what's available
-        if location and date_text:
-            bottom_text = f"{location}, {date_text}"
-        elif location:
-            bottom_text = location
-        else:
-            bottom_text = date_text
-        
-        new_para = _insert_para_after(insert_after, bottom_text, size=10)
+        new_para = _insert_para_after(insert_after, options['location'], size=10)
         insert_after = new_para
-        additions += 1
+        additions += 2
 
     if verbose and additions > 0:
         print(f"   ✓ Added metadata ({additions} lines)")
@@ -495,104 +394,6 @@ def _insert_para_after(after_para, text: str, size: int = 11, bold: bool = False
     return after_para  # Fallback
 
 
-def _number_chapter_headings(doc: Document, verbose: bool = False):
-    """
-    Number chapter headings (Heading 1) starting from Introduction.
-    
-    Abstract is skipped. Numbering: 1. Introduction, 2. Literature Review, etc.
-    """
-    chapter_num = 0
-    skip_headings = {'abstract', 'table of contents', 'acknowledgments', 'acknowledgements', 
-                     'declaration', 'references', 'bibliography', 'appendix', 'appendices'}
-    
-    for para in doc.paragraphs:
-        style = para.style.name if para.style else ''
-        text = para.text.strip()
-        
-        if style == 'Heading 1' and text:
-            text_lower = text.lower()
-            
-            # Skip certain headings
-            if text_lower in skip_headings:
-                continue
-            
-            # Skip if already numbered
-            if text[0].isdigit():
-                continue
-            
-            # Number this heading
-            chapter_num += 1
-            para.text = f"{chapter_num}. {text}"
-    
-    if verbose and chapter_num > 0:
-        print(f"   ✓ Numbered {chapter_num} chapter headings")
-
-
-def _fix_table_widths(doc: Document, verbose: bool = False):
-    """
-    Fix table formatting by removing width constraints and letting Word auto-fit.
-    For wide tables (5+ columns), use very small font to fit content.
-    """
-    from docx.shared import Pt, Twips, Inches
-    from docx.oxml.ns import qn
-    from docx.oxml import OxmlElement
-    
-    tables_fixed = 0
-    for table in doc.tables:
-        num_cols = len(table.columns)
-        if num_cols == 0:
-            continue
-        
-        tbl = table._tbl
-        tblPr = tbl.tblPr
-        if tblPr is None:
-            tblPr = OxmlElement('w:tblPr')
-            tbl.insert(0, tblPr)
-        
-        # Remove any existing width settings to let Word auto-calculate
-        tblW = tblPr.find(qn('w:tblW'))
-        if tblW is not None:
-            tblPr.remove(tblW)
-        
-        # Set to auto layout (not fixed)
-        tblLayout = tblPr.find(qn('w:tblLayout'))
-        if tblLayout is not None:
-            tblPr.remove(tblLayout)
-        
-        # Enable autofit
-        table.autofit = True
-        
-        # For wide tables, use smaller font
-        if num_cols >= 5:
-            font_size = Pt(7)  # Very small for wide tables
-        elif num_cols >= 4:
-            font_size = Pt(8)
-        else:
-            font_size = Pt(9)
-        
-        for row in table.rows:
-            for cell in row.cells:
-                # Remove cell width constraints
-                tc = cell._tc
-                tcPr = tc.tcPr
-                if tcPr is not None:
-                    tcW = tcPr.find(qn('w:tcW'))
-                    if tcW is not None:
-                        tcPr.remove(tcW)
-                
-                # Set font size and reduce spacing
-                for para in cell.paragraphs:
-                    for run in para.runs:
-                        run.font.size = font_size
-                    para.paragraph_format.space_before = Pt(1)
-                    para.paragraph_format.space_after = Pt(1)
-        
-        tables_fixed += 1
-    
-    if verbose and tables_fixed > 0:
-        print(f"   ✓ Fixed {tables_fixed} tables (auto-fit, {font_size.pt}pt font)")
-
-
 def _insert_page_break_after(doc: Document, para_index: int) -> None:
     """Insert a page break after the specified paragraph."""
     if para_index is None or para_index >= len(doc.paragraphs):
@@ -603,32 +404,89 @@ def _insert_page_break_after(doc: Document, para_index: int) -> None:
     run.add_break(WD_BREAK.PAGE)
 
 
-def _insert_page_break_before(doc: Document, para_index: int) -> None:
-    """Insert a page break before the specified paragraph (at its start)."""
-    if para_index is None or para_index >= len(doc.paragraphs):
-        return
+def _fix_table_widths(doc: Document, verbose: bool = False):
+    """
+    Fix table widths to fit within page margins.
 
-    target_para = doc.paragraphs[para_index]
-    
-    # Insert a run at the beginning of the paragraph with a page break
-    # We need to insert before existing runs
+    Pandoc-generated tables often overflow. This function:
+    - Sets tables to auto-fit contents
+    - Reduces font size for wide tables
+    - Prevents mid-word breaks by setting noWrap on first column
+    - Uses autofit layout to distribute column widths naturally
+    """
     from docx.oxml.ns import qn
     from docx.oxml import OxmlElement
-    
-    # Create a new run with page break
-    new_run = OxmlElement('w:r')
-    br = OxmlElement('w:br')
-    br.set(qn('w:type'), 'page')
-    new_run.append(br)
-    
-    # Insert at the beginning of the paragraph
-    p_element = target_para._element
-    # Find first run or insert at start
-    first_run = p_element.find(qn('w:r'))
-    if first_run is not None:
-        first_run.addprevious(new_run)
-    else:
-        p_element.append(new_run)
+
+    tables_fixed = 0
+
+    for table in doc.tables:
+        num_cols = len(table.columns)
+
+        # Get table properties
+        tbl = table._tbl
+        tblPr = tbl.tblPr
+        if tblPr is None:
+            tblPr = OxmlElement('w:tblPr')
+            tbl.insert(0, tblPr)
+
+        # Set table width to 100% (5000 = 100% in fifths of a percent)
+        tblW = tblPr.find(qn('w:tblW'))
+        if tblW is None:
+            tblW = OxmlElement('w:tblW')
+            tblPr.append(tblW)
+        tblW.set(qn('w:w'), '5000')
+        tblW.set(qn('w:type'), 'pct')
+
+        # Set layout to autofit (not fixed) - allows columns to resize
+        tblLayout = tblPr.find(qn('w:tblLayout'))
+        if tblLayout is None:
+            tblLayout = OxmlElement('w:tblLayout')
+            tblPr.append(tblLayout)
+        tblLayout.set(qn('w:type'), 'autofit')
+
+        # Enable autofit
+        table.autofit = True
+
+        # Set font size based on column count
+        if num_cols >= 5:
+            font_size = Pt(8)
+        elif num_cols >= 4:
+            font_size = Pt(9)
+        else:
+            font_size = Pt(10)
+
+        for row_idx, row in enumerate(table.rows):
+            for col_idx, cell in enumerate(row.cells):
+                tc = cell._tc
+                tcPr = tc.tcPr
+                if tcPr is None:
+                    tcPr = OxmlElement('w:tcPr')
+                    tc.insert(0, tcPr)
+
+                # Remove fixed cell width constraints
+                tcW = tcPr.find(qn('w:tcW'))
+                if tcW is not None:
+                    tcPr.remove(tcW)
+
+                # For the first column (often labels like "Domain"), prevent word wrap
+                # This stops mid-word breaks like "Dermat-ology"
+                if col_idx == 0:
+                    noWrap = tcPr.find(qn('w:noWrap'))
+                    if noWrap is None:
+                        noWrap = OxmlElement('w:noWrap')
+                        tcPr.append(noWrap)
+
+                # Set font size for all cells
+                for para in cell.paragraphs:
+                    for run in para.runs:
+                        run.font.size = font_size
+                    para.paragraph_format.space_before = Pt(2)
+                    para.paragraph_format.space_after = Pt(2)
+
+        tables_fixed += 1
+
+    if verbose and tables_fixed > 0:
+        print(f"   ✓ Fixed {tables_fixed} tables (auto-fit, {font_size.pt}pt font)")
 
 
 # ============================================================================

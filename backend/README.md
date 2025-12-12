@@ -104,3 +104,82 @@ modal app logs thesis-generator
 **Files not uploading:**
 - Check storage bucket name is 'thesis-files'
 - Verify RLS policies allow service role to upload
+
+## Performance Optimization
+
+### Proxy Support for Citation Research
+
+To bypass API rate limits and maximize research speed during thesis generation:
+
+#### 1. Get Proxies
+
+Obtain residential or datacenter proxies from your provider:
+- Smartproxy, Oxylabs, BrightData, etc.
+- Format: `host:port:username:password`
+- Recommended: 5-10 proxies for optimal rotation
+
+#### 2. Configure Environment
+
+Add to `.env.local`:
+
+```bash
+# Proxy rotation for citation research (bypasses rate limits)
+PROXY_LIST=proxy1.com:8080:user:pass,proxy2.com:8080:user:pass
+
+# Maximum parallelism (recommended: 32+ with proxies, 4 without)
+SCOUT_PARALLEL_WORKERS=32
+
+# Batch size (process all 60 queries at once with proxies)
+SCOUT_BATCH_SIZE=60
+
+# Minimal delay with proxy rotation
+SCOUT_BATCH_DELAY=0.1
+```
+
+#### 3. Performance Gains
+
+| Configuration | Research Time | Worker Count | Rate Limits |
+|---------------|--------------|--------------|-------------|
+| **Without Proxies** | ~8-12 minutes | 4 workers | 429 errors, backoff delays |
+| **With Proxies** | ~1-2 minutes | 32 workers | None |
+
+**Total Speedup**: ~8-10x faster for research phase
+
+#### 4. How It Works
+
+**Without Proxies** (Current Default):
+- 4 parallel workers
+- Batch size: 15 queries
+- 4 batches with 0.5s delays
+- Crossref/Semantic Scholar rate limits apply
+- Total: ~10 minutes
+
+**With Proxies** (Optimized):
+- 32 parallel workers
+- Batch size: 60 queries (all at once)
+- No delays (proxies bypass rate limits)
+- Each query hits 3 APIs simultaneously
+- Total: ~1-2 minutes
+
+#### 5. Verification
+
+Check logs for proxy usage:
+
+```bash
+# Should see:
+# INFO: Loaded 5 proxies for rotation
+# 🔀 Proxy rotation enabled: 5 proxies
+# Batch delays disabled for maximum throughput
+```
+
+#### 6. Troubleshooting
+
+**Proxies not working:**
+- Verify format: `host:port:user:pass`
+- Check proxy credentials are valid
+- Test with single proxy first
+
+**Still seeing rate limits:**
+- Increase proxy count (minimum 5 recommended)
+- Verify proxies are rotating (check API logs)
+- Some proxies may be blocked - rotate them out

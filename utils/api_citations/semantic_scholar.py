@@ -75,7 +75,7 @@ class SemanticScholarClient(BaseAPIClient):
             params={
                 "query": query,
                 "limit": 5,  # Get top 5 results
-                "fields": "title,authors,year,venue,externalIds,url,citationCount,publicationTypes",
+                "fields": "title,authors,year,venue,externalIds,url,citationCount,publicationTypes,abstract",
             },
         )
 
@@ -172,6 +172,11 @@ class SemanticScholarClient(BaseAPIClient):
             issue = ""
             pages = ""
 
+            # Abstract (optional)
+            abstract = paper.get("abstract", "")
+            if abstract:
+                abstract = abstract.strip()
+
             # Source type
             publication_types = paper.get("publicationTypes", [])
             source_type = self._map_source_type(publication_types, journal)
@@ -199,6 +204,7 @@ class SemanticScholarClient(BaseAPIClient):
                 "pages": pages,
                 "source_type": source_type,
                 "confidence": confidence,
+                "abstract": abstract if abstract else None,
             }
 
         except Exception as e:

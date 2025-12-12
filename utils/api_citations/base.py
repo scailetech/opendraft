@@ -41,11 +41,23 @@ USER_AGENTS = [
 import os
 
 def _load_proxy_list() -> list:
-    """Load proxy list from PROXY_LIST environment variable."""
+    """Load and validate proxy list from PROXY_LIST environment variable."""
     proxy_env = os.getenv('PROXY_LIST', '')
     if not proxy_env:
         return []
-    return [p.strip() for p in proxy_env.split(',') if p.strip()]
+
+    proxies = [p.strip() for p in proxy_env.split(',') if p.strip()]
+
+    # Log proxy count (don't log credentials for security)
+    if proxies:
+        logger.info(f"Loaded {len(proxies)} proxies for rotation")
+        # Validate format (basic check)
+        for idx, proxy in enumerate(proxies, 1):
+            parts = proxy.split(':')
+            if len(parts) not in [2, 4]:
+                logger.warning(f"Proxy {idx} has unexpected format (expected host:port or host:port:user:pass)")
+
+    return proxies
 
 PROXY_LIST: list = _load_proxy_list()
 
@@ -260,7 +272,7 @@ class BaseAPIClient(ABC):
                     return None  # Not found is not an error, just no result
 
                 elif response.status_code == 429:
-                    # Rate limited - signal backpressure and wait longer
+                    # Rate limited - with proxy rotation, retry immediately with different proxy
                     bp = get_backpressure_manager()
                     if bp and self.api_type:
                         from utils.backpressure import APIType
@@ -270,17 +282,22 @@ class BaseAPIClient(ABC):
                         except ValueError:
                             pass  # Unknown API type
 
-                    wait_time = 2**attempt  # Exponential backoff
-                    # Add backpressure delay on top of exponential backoff
-                    if bp:
-                        wait_time += bp.get_recommended_delay()
+                    # With proxies: minimal delay (next request uses different proxy)
+                    # Without proxies: exponential backoff
+                    if PROXY_LIST:
+                        wait_time = 0.5  # Minimal delay, rely on proxy rotation
+                    else:
+                        wait_time = 2**attempt  # Exponential backoff
+                        # Add backpressure delay on top of exponential backoff
+                        if bp:
+                            wait_time += bp.get_recommended_delay()
                     logger.warning(f"Rate limited (429), waiting {wait_time:.1f}s before retry")
                     time.sleep(wait_time)
                     continue
 
                 elif response.status_code >= 500:
-                    # Server error - retry
-                    wait_time = 2**attempt
+                    # Server error - retry (with proxies: minimal delay, without: exponential backoff)
+                    wait_time = 0.5 if PROXY_LIST else 2**attempt
                     logger.warning(f"Server error ({response.status_code}), waiting {wait_time}s before retry")
                     time.sleep(wait_time)
                     continue
@@ -291,13 +308,15 @@ class BaseAPIClient(ABC):
                     return None
 
             except requests.exceptions.Timeout:
-                wait_time = 2**attempt
+                # With proxies: minimal delay, without: exponential backoff
+                wait_time = 0.5 if PROXY_LIST else 2**attempt
                 logger.warning(f"Request timeout, waiting {wait_time}s before retry")
                 time.sleep(wait_time)
                 continue
 
             except requests.exceptions.ConnectionError as e:
-                wait_time = 2**attempt
+                # With proxies: minimal delay, without: exponential backoff
+                wait_time = 0.5 if PROXY_LIST else 2**attempt
                 logger.warning(f"Connection error: {e}, waiting {wait_time}s before retry")
                 time.sleep(wait_time)
                 continue

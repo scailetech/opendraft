@@ -59,6 +59,22 @@ temp/
 
 # Logs
 *.log
+logs/
+
+# Cost/test logs
+cost_test_*.log
+
+# Test outputs
+tests/outputs/
+backend/outputs/
+outputs/demo_thesis/
+outputs/test_thesis/
+test_results/
+
+# Debug test scripts (may contain API keys)
+backend/test_gemini_*.py
+backend/test_dataforseo_integration.py
+backend/test_research_phase_optimized.py
 
 # OS
 .DS_Store

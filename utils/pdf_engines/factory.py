@@ -9,9 +9,16 @@ from typing import List, Optional, Literal
 
 from .base import PDFEngine, PDFGenerationOptions, EngineResult
 from .libreoffice_engine import LibreOfficeEngine
-from .weasyprint_engine import WeasyPrintEngine
 from .pandoc_engine import PandocLatexEngine
 from utils.exceptions import PDFExportError, ConfigurationError
+
+# WeasyPrint is optional - it requires system libraries (libgobject, pango, etc.)
+try:
+    from .weasyprint_engine import WeasyPrintEngine
+    WEASYPRINT_AVAILABLE = True
+except (ImportError, OSError):
+    WEASYPRINT_AVAILABLE = False
+    WeasyPrintEngine = None
 
 
 class PDFEngineFactory:

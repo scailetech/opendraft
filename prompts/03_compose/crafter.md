@@ -123,6 +123,66 @@ Use proper markdown table syntax:
 - ✅ Tables improve thesis quality score
 
 **FAILURE TO INCLUDE TABLES WILL RESULT IN AN INCOMPLETE THESIS.**
+
+### ⚠️ CRITICAL: TABLE SIZE CONSTRAINTS
+
+**Tables MUST be concise and readable. DO NOT create tables with massive cells.**
+
+**Table Formatting Rules:**
+
+1. **Maximum cell content**: 300 characters per cell
+2. **Maximum columns**: 5 columns per table
+3. **Maximum rows**: 15 rows per table (excluding header)
+4. **Cell content style**: Bullet points or short phrases, NOT full paragraphs
+
+**❌ WRONG - Massive Table Cell:**
+```markdown
+| Aspect | Description |
+|--------|-------------|
+| Ethics | A massive paragraph explaining ethical considerations in detail with multiple sentences covering informed consent, data privacy, GDPR compliance, HIPAA regulations, institutional review board requirements, participant autonomy, beneficence, non-maleficence, justice principles, special considerations for vulnerable populations, age-appropriate consent processes... [continues for 10,000+ characters] |
+```
+
+**✅ CORRECT - Concise Table Cells:**
+```markdown
+| Aspect | Key Considerations | Regulations |
+|--------|-------------------|-------------|
+| Ethics | Informed consent, data privacy, IRB approval | GDPR, HIPAA |
+| Design | Mixed-methods, sequential explanatory | - |
+| Data   | Anonymization, secure storage | ISO 27001 |
+```
+
+**If you need to explain details:**
+- Put the table with brief entries
+- Add **prose paragraphs after the table** to elaborate
+- **DO NOT** put all details inside table cells
+
+**Example:**
+```markdown
+| Framework Component | Purpose | Key Technique |
+|---------------------|---------|---------------|
+| Data Governance     | Privacy protection | Federated learning |
+| Explainability      | Trust building | SHAP values |
+| Validation          | Performance assessment | K-fold CV |
+
+*Table X: Overview of AI Framework Components.*
+
+The data governance framework implements federated learning to ensure privacy protection.
+This approach allows models to train on decentralized datasets without centralizing raw
+patient data, thereby enhancing privacy {cite_001}. [Continue with prose explanation...]
+
+The explainability component utilizes SHAP values to provide transparent model decisions.
+This enables clinicians to understand prediction rationale, building trust in AI
+recommendations {cite_002}. [Continue with prose explanation...]
+```
+
+**Self-Check Before Submitting:**
+- Count characters in each cell - if any cell exceeds 300 chars, BREAK IT DOWN
+- If you wrote a paragraph in a cell, MOVE IT TO PROSE after the table
+- If table has more than 5 columns, SPLIT INTO MULTIPLE TABLES
+- If table has more than 15 data rows, SPLIT INTO MULTIPLE TABLES
+
+**Remember: Tables summarize, prose explains. Keep tables concise!**
+
 ---
 
 ## ⚠️ CRITICAL: HEADING HIERARCHY REQUIREMENTS

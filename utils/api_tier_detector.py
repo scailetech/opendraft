@@ -6,7 +6,7 @@ ABOUTME: Detects free tier (10 RPM), paid tier (2,000 RPM), or custom limits via
 
 import os
 import time
-from typing import Literal, Optional, Dict
+from typing import Literal, Optional, Dict, Tuple
 from pathlib import Path
 import json
 
@@ -117,7 +117,7 @@ class APITierDetector:
         }
         return tier_map.get(tier, 10)
 
-    def _probe_rate_limit(self, verbose: bool = True) -> tuple[str, int]:
+    def _probe_rate_limit(self, verbose: bool = True) -> Tuple[str, int]:
         """
         Probe API to determine rate limit.
 

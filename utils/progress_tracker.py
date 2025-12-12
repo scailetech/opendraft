@@ -9,25 +9,29 @@ from datetime import datetime
 
 class ProgressTracker:
     """Tracks and updates thesis generation progress in real-time."""
-    
-    def __init__(self, user_id: str, supabase_client=None):
+
+    def __init__(self, thesis_id: str = None, user_id: str = None, table_name: str = "theses", supabase_client=None):
         """
         Initialize progress tracker.
-        
+
         Args:
-            user_id: User ID to track progress for
+            thesis_id: Thesis ID to track progress for (preferred for new theses table)
+            user_id: User ID to track progress for (legacy, for waitlist table)
+            table_name: Table name to update ('theses' or 'waitlist'). Default: 'theses'
             supabase_client: Supabase client instance (optional, will create if not provided)
         """
-        self.user_id = user_id
-        
+        self.thesis_id = thesis_id
+        self.user_id = user_id or thesis_id  # Fallback to thesis_id if user_id not provided
+        self.table_name = table_name
+        self.record_id = thesis_id if thesis_id else user_id  # ID to use for queries
+
         if supabase_client:
             self.supabase = supabase_client
         else:
             from supabase import create_client
-            self.supabase = create_client(
-                os.environ.get("SUPABASE_URL", ""),
-                os.environ.get("SUPABASE_SERVICE_KEY", "")
-            )
+            supabase_url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+            supabase_key = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+            self.supabase = create_client(supabase_url, supabase_key)
     
     def update_phase(
         self,
@@ -62,10 +66,10 @@ class ProgressTracker:
             
             if details:
                 update_data["progress_details"] = details
-            
-            self.supabase.table("waitlist").update(update_data).eq("id", self.user_id).execute()
-            
-            print(f"📊 Progress: {phase} ({progress_percent}%) | Sources: {sources_count or 0} | Chapters: {chapters_count or 0}")
+
+            self.supabase.table(self.table_name).update(update_data).eq("id", self.record_id).execute()
+
+            print(f"📊 Progress [{self.table_name}]: {phase} ({progress_percent}%) | Sources: {sources_count or 0} | Chapters: {chapters_count or 0}")
             
         except Exception as e:
             # Don't fail thesis generation if progress update fails

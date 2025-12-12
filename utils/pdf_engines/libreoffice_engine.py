@@ -362,7 +362,7 @@ class LibreOfficeEngine(PDFEngine):
             )
 
     @staticmethod
-    def _parse_margin(margin_str: str) -> Inches:
+    def _parse_margin(margin_str: str) -> "Inches":
         """
         Parse margin string to Inches object.
 
@@ -384,7 +384,7 @@ class LibreOfficeEngine(PDFEngine):
             return Inches(1.0)
 
     @staticmethod
-    def _add_page_numbers(doc: Document, position: str = "bottom-center") -> None:
+    def _add_page_numbers(doc: "Document", position: str = "bottom-center") -> None:
         """
         Add page numbers to document footer.
 

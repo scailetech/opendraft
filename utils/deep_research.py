@@ -7,12 +7,13 @@ ABOUTME: Two-phase approach: planning (Gemini) → execution (orchestrator)
 import re
 import json
 import logging
+from typing import Tuple
 
 # Gemini finish_reason codes
 # 1 = STOP (normal), 2 = SAFETY, 3 = MAX_TOKENS, 4 = RECITATION
 SAFETY_BLOCKED = 2
 
-def safe_get_response_text(response) -> tuple[str, bool]:
+def safe_get_response_text(response) -> Tuple[str, bool]:
     """
     Safely extract text from Gemini response, handling safety blocks.
     
@@ -234,7 +235,7 @@ class DeepResearchPlanner:
         prompt += """**Output Format:**
 Return JSON with keys:
 - strategy: Brief research strategy description (2-3 paragraphs)
-- queries: List of specific search queries to execute (aim for 50+)
+- queries: List of specific search queries to execute (aim for 100)
 - outline: Structured outline with section headings
 
 **Query Diversity:** Generate mix of academic AND industry queries for source diversity:

@@ -11,21 +11,26 @@ import json
 
 class MilestoneStreamer:
     """Streams partial thesis results to Supabase and sends progressive notifications."""
-    
-    def __init__(self, user_id: str, email: str, supabase_client, resend_api_key: str):
+
+    def __init__(self, thesis_id: str, user_id: str, email: str, supabase_client, resend_api_key: str, table_name: str = "theses"):
         """
         Initialize milestone streamer.
-        
+
         Args:
-            user_id: User ID
+            thesis_id: Thesis ID for tracking
+            user_id: User ID for file storage paths
             email: User email for notifications
             supabase_client: Supabase client instance
             resend_api_key: Resend API key for emails
+            table_name: Table name to update ('theses' or 'waitlist'). Default: 'theses'
         """
+        self.thesis_id = thesis_id
         self.user_id = user_id
         self.email = email
         self.supabase = supabase_client
         self.resend_api_key = resend_api_key
+        self.table_name = table_name
+        self.record_id = thesis_id if thesis_id else user_id
     
     def upload_milestone_file(self, file_path: Path, milestone_name: str) -> Optional[str]:
         """
@@ -184,13 +189,13 @@ class MilestoneStreamer:
         
         # Update database with milestone
         try:
-            self.supabase.table("waitlist").update({
+            self.supabase.table(self.table_name).update({
                 "progress_details": {
                     "last_milestone": "research_complete",
                     "research_url": bib_url,
                     "milestone_timestamp": datetime.now().isoformat()
                 }
-            }).eq("id", self.user_id).execute()
+            }).eq("id", self.record_id).execute()
         except Exception as e:
             print(f"⚠️  Failed to update milestone in DB: {e}")
     
@@ -238,11 +243,11 @@ class MilestoneStreamer:
         if chapter_path and chapter_path.exists():
             chapter_url = self.upload_milestone_file(chapter_path, f"chapter_{chapter_num:02d}")
         
-        # Only send email for major chapters (Introduction, Conclusion, every 2nd chapter)
-        # To avoid email spam, we're selective about which chapters trigger emails
-        should_email = (chapter_num == 1 or  # Introduction
-                       chapter_num % 2 == 0 or  # Every other chapter
-                       "conclusion" in chapter_name.lower())
+        # Only send email for major milestones (Introduction, Conclusion)
+        # To avoid email spam, we DON'T email for every chapter - only major milestones
+        should_email = (chapter_num == 1 or  # Introduction only
+                       "conclusion" in chapter_name.lower())  # Conclusion only
+        # Note: Main Body sections (2.1-2.4) upload to Supabase but don't trigger emails
         
         if should_email:
             self.send_milestone_email(

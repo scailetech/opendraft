@@ -1,9 +1,0 @@
-# OpenDraft Security Policy
-# https://securitytxt.org/
-
-Contact: mailto:security@opendraft.xyz
-Expires: 2026-12-31T23:59:59.000Z
-Preferred-Languages: en
-Canonical: https://opendraft.xyz/.well-known/security.txt
-Policy: https://github.com/federicodeponte/opendraft/blob/main/SECURITY.md
-

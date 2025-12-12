@@ -241,3 +241,123 @@ def estimate_tokens(text: str, chars_per_token: float = 4.0) -> int:
         2
     """
     return int(len(text) / chars_per_token)
+
+
+def clean_ai_language(text: str) -> str:
+    """
+    Clean AI-typical language patterns from text.
+
+    Replaces:
+    - Em dashes (—) with regular dashes (--)
+    - Overused AI words with more natural alternatives
+    - Removes filler phrases
+
+    Args:
+        text: Input text to clean
+
+    Returns:
+        Cleaned text with AI patterns removed
+
+    Example:
+        >>> clean_ai_language("This delves into the realm of AI")
+        "This examines the field of AI"
+    """
+    import re
+
+    # Em dash and other special dashes → regular dashes
+    text = text.replace('—', '--')  # Em dash
+    text = text.replace('–', '-')   # En dash
+    text = text.replace('―', '--')  # Horizontal bar
+
+    # Smart quotes → regular quotes
+    text = text.replace('"', '"')
+    text = text.replace('"', '"')
+    text = text.replace(''', "'")
+    text = text.replace(''', "'")
+
+    # AI word replacements (case-insensitive, preserve case)
+    replacements = [
+        # Overused verbs
+        (r'\bdelves?\b', 'examines'),
+        (r'\bDelves?\b', 'Examines'),
+        (r'\bunveils?\b', 'reveals'),
+        (r'\bUnveils?\b', 'Reveals'),
+        (r'\bshowcases?\b', 'demonstrates'),
+        (r'\bShowcases?\b', 'Demonstrates'),
+        (r'\bleverages?\b', 'uses'),
+        (r'\bLeverages?\b', 'Uses'),
+        (r'\butilizes?\b', 'uses'),
+        (r'\bUtilizes?\b', 'Uses'),
+        (r'\bspearheads?\b', 'leads'),
+        (r'\bSpearheads?\b', 'Leads'),
+
+        # Overused nouns
+        (r'\btapestry\b', 'combination'),
+        (r'\bTapestry\b', 'Combination'),
+        (r'\brealm\b', 'field'),
+        (r'\bRealm\b', 'Field'),
+        (r'\blandscape\b', 'environment'),
+        (r'\bLandscape\b', 'Environment'),
+        (r'\becosystem\b', 'system'),
+        (r'\bEcosystem\b', 'System'),
+        (r'\bparadigm shift\b', 'major change'),
+        (r'\bParadigm shift\b', 'Major change'),
+        (r'\bgame.?changer\b', 'significant development'),
+        (r'\bGame.?changer\b', 'Significant development'),
+
+        # Overused adjectives
+        (r'\bgroundbreaking\b', 'innovative'),
+        (r'\bGroundbreaking\b', 'Innovative'),
+        (r'\bcutting.?edge\b', 'advanced'),
+        (r'\bCutting.?edge\b', 'Advanced'),
+        (r'\bstate.?of.?the.?art\b', 'current'),
+        (r'\bState.?of.?the.?art\b', 'Current'),
+        (r'\bseamless(ly)?\b', 'smooth\\1' if '\\1' else 'smooth'),
+        (r'\bSeamless(ly)?\b', 'Smooth\\1' if '\\1' else 'Smooth'),
+        (r'\brobust\b', 'strong'),
+        (r'\bRobust\b', 'Strong'),
+        (r'\bholistic\b', 'comprehensive'),
+        (r'\bHolistic\b', 'Comprehensive'),
+        (r'\bmultifaceted\b', 'complex'),
+        (r'\bMultifaceted\b', 'Complex'),
+        (r'\bpivotal\b', 'important'),
+        (r'\bPivotal\b', 'Important'),
+        (r'\bcrucial\b', 'important'),
+        (r'\bCrucial\b', 'Important'),
+        (r'\bparamount\b', 'essential'),
+        (r'\bParamount\b', 'Essential'),
+        (r'\bintricate\b', 'complex'),
+        (r'\bIntricate\b', 'Complex'),
+        (r'\bplethora\b', 'many'),
+        (r'\bPlethora\b', 'Many'),
+        (r'\bmyriad\b', 'many'),
+        (r'\bMyriad\b', 'Many'),
+
+        # Filler adverbs
+        (r'\bargubly\b', ''),
+        (r'\bArguably\b', ''),
+        (r'\bundoubtedly\b', ''),
+        (r'\bUndoubtedly\b', ''),
+        (r'\bindeed\b', ''),
+        (r'\bIndeed\b', ''),
+        (r'\binterestingly\b', ''),
+        (r'\bInterestingly\b', ''),
+        (r'\bnoteworthy\b', 'notable'),
+        (r'\bNoteworthy\b', 'Notable'),
+        (r'\bIt is worth noting that\b', ''),
+        (r'\bit is worth noting that\b', ''),
+        (r'\bIt bears mentioning\b', ''),
+        (r'\bit bears mentioning\b', ''),
+    ]
+
+    for pattern, replacement in replacements:
+        text = re.sub(pattern, replacement, text)
+
+    # Clean up double spaces from removed words
+    text = re.sub(r'  +', ' ', text)
+    # Clean up spaces before punctuation
+    text = re.sub(r' +([.,;:!?])', r'\1', text)
+    # Clean up sentence starts after removals
+    text = re.sub(r'\. +([a-z])', lambda m: '. ' + m.group(1).upper(), text)
+
+    return text

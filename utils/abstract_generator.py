@@ -14,8 +14,11 @@ DRY Principle:
 """
 
 import re
+import logging
 from pathlib import Path
 from typing import Optional, Tuple
+
+logger = logging.getLogger(__name__)
 
 def detect_thesis_language(thesis_content: str) -> str:
     """
@@ -148,31 +151,39 @@ def replace_placeholder_with_abstract(thesis_content: str, generated_abstract: s
         flags=re.IGNORECASE
     ).strip()
 
-    # Define placeholder patterns
+    # Define placeholder patterns (handle optional leading whitespace from indented templates)
     if language == 'german':
-        placeholder_pattern = r'## Zusammenfassung\n+\[Zusammenfassung wird.*?\]\n+\\newpage'
+        placeholder_pattern = r'^\s*## Zusammenfassung\n+\s*\[Zusammenfassung wird.*?\]\n+\s*\\\\?newpage'
         replacement = f"## Zusammenfassung\n\n{generated_abstract}\n\n\\\\newpage"
     else:
-        placeholder_pattern = r'## Abstract\n+\[Abstract will be generated.*?\]\n*---?\n*'
-        replacement = f"## Abstract\n\n{generated_abstract}\n\n---\n"
+        # Match abstract placeholder with optional whitespace, brackets, and newpage
+        placeholder_pattern = r'^\s*## Abstract\n+\s*\[Abstract will be generated.*?\]\n*(?:---?\n*|\s*\\\\?newpage)?'
+        replacement = f"## Abstract\n\n{generated_abstract}\n\n\\\\newpage"
 
-    # Replace placeholder
-    updated_content = re.sub(placeholder_pattern, replacement, thesis_content, flags=re.DOTALL)
+    # Replace placeholder (MULTILINE to match ^ at line start, DOTALL to match . across lines)
+    updated_content = re.sub(placeholder_pattern, replacement, thesis_content, flags=re.DOTALL | re.MULTILINE)
 
     # Verify replacement happened
     if updated_content == thesis_content:
-        print("⚠️  WARNING: Placeholder pattern not found - trying alternative patterns")
+        logger.warning("Placeholder pattern not found - trying alternative patterns")
 
-        # Try alternative patterns
+        # Try alternative patterns (account for optional leading whitespace from indented templates)
         alt_patterns = [
-            (r'## Abstract\n+\[.*?\]\n+\\newpage', f"## Abstract\n\n{generated_abstract}\n\n\\\\newpage"),
-            (r'## Zusammenfassung\n+\[.*?\]\n+\\newpage', f"## Zusammenfassung\n\n{generated_abstract}\n\n\\\\newpage")
+            # Match with \newpage (escaped in markdown as \\newpage) - with optional whitespace
+            (r'^\s*## Abstract\n+\s*\[.*?\]\n+\s*\\\\newpage', f"## Abstract\n\n{generated_abstract}\n\n\\\\newpage"),
+            (r'^\s*## Zusammenfassung\n+\s*\[.*?\]\n+\s*\\\\newpage', f"## Zusammenfassung\n\n{generated_abstract}\n\n\\\\newpage"),
+            # Match with literal \newpage - with optional whitespace
+            (r'^\s*## Abstract\n+\s*\[.*?\]\n+\s*\\newpage', f"## Abstract\n\n{generated_abstract}\n\n\\newpage"),
+            (r'^\s*## Zusammenfassung\n+\s*\[.*?\]\n+\s*\\newpage', f"## Zusammenfassung\n\n{generated_abstract}\n\n\\newpage"),
+            # Match without newpage - with optional whitespace
+            (r'^\s*## Abstract\n+\s*\[.*?\]', f"## Abstract\n\n{generated_abstract}"),
+            (r'^\s*## Zusammenfassung\n+\s*\[.*?\]', f"## Zusammenfassung\n\n{generated_abstract}"),
         ]
 
         for pattern, repl in alt_patterns:
-            updated_content = re.sub(pattern, repl, thesis_content, flags=re.DOTALL)
+            updated_content = re.sub(pattern, repl, thesis_content, flags=re.DOTALL | re.MULTILINE)
             if updated_content != thesis_content:
-                print("✅ Alternative pattern matched successfully")
+                logger.info("Alternative pattern matched successfully")
                 break
 
     return updated_content
@@ -291,45 +302,3 @@ def generate_abstract_for_thesis(
         return False, None
 
 
-# Standalone function for testing
-def main():
-    """Test abstract generator on existing thesis files."""
-    import sys
-    from pathlib import Path
-
-    # Add project root to path
-    project_root = Path(__file__).parent.parent
-    sys.path.insert(0, str(project_root))
-
-    from config import get_config
-    from utils.agent_runner import setup_model, run_agent
-
-    config = get_config()
-    model = setup_model()
-
-    # Test on opensource thesis
-    thesis_path = project_root / "tests/outputs/opensource_thesis/FINAL_THESIS.md"
-    output_dir = project_root / "tests/outputs/opensource_thesis"
-
-    print("="*80)
-    print("ABSTRACT GENERATOR - STANDALONE TEST")
-    print("="*80)
-    print()
-
-    success, content = generate_abstract_for_thesis(
-        thesis_path=thesis_path,
-        model=model,
-        run_agent_func=run_agent,
-        output_dir=output_dir,
-        verbose=True
-    )
-
-    if success:
-        print("\n✅ Abstract generation completed successfully!")
-    else:
-        print("\n❌ Abstract generation failed")
-        sys.exit(1)
-
-
-if __name__ == '__main__':
-    main()

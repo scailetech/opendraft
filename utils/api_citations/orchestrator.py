@@ -59,11 +59,12 @@ class CitationResearcher:
     Classic Fallback chain (if smart routing disabled):
     1. Crossref API (best metadata, DOI-focused, academic papers)
     2. Semantic Scholar API (better search, 200M+ papers, academic focus)
-    3. Gemini Grounded (Google Search grounding, web sources, URL validation)
+    3. Gemini Grounded (Google Search grounding with DataForSEO fallback, web sources)
     4. Gemini LLM (last resort, unverified)
 
     Provides 95%+ success rate vs 40% LLM-only approach.
     Smart routing maximizes source diversity by routing to appropriate APIs first.
+    Gemini Grounded uses DataForSEO SERP API as fallback when googleSearch hits quota limits.
     """
 
     # Persistent cache file path
@@ -86,7 +87,7 @@ class CitationResearcher:
             gemini_model: Gemini model for LLM fallback (optional)
             enable_crossref: Whether to use Crossref API
             enable_semantic_scholar: Whether to use Semantic Scholar API
-            enable_gemini_grounded: Whether to use Gemini with Google Search grounding
+            enable_gemini_grounded: Whether to use Gemini with Google Search grounding (includes DataForSEO fallback)
             enable_llm_fallback: Whether to fall back to LLM if all else fails
             enable_smart_routing: Whether to use smart query routing (default: True)
             verbose: Whether to print progress
@@ -108,7 +109,7 @@ class CitationResearcher:
             try:
                 self.gemini_grounded = GeminiGroundedClient(
                     validate_urls=False,  # Disable URL validation to prevent timeouts
-                    timeout=45  # Reduced to fit within as_completed timeout
+                    timeout=30  # Reduced timeout for fast gemini-2.5-flash
                 )
             except Exception as e:
                 logger.warning(f"Gemini Grounded client unavailable: {e}")
@@ -120,7 +121,7 @@ class CitationResearcher:
 
         # Load persistent cache (or initialize empty if file doesn't exist)
         self.cache: Dict[str, Optional[Tuple[Dict[str, Any], str]]] = self._load_cache()
-        
+
         # Track source usage for round-robin variety (reset each session)
         self.source_usage_count: Dict[str, int] = {
             "Semantic Scholar": 0,
@@ -133,7 +134,7 @@ class CitationResearcher:
         Load citation cache from disk.
 
         Returns:
-            Dict mapping topics to (metadata, source) tuples or None
+            Dict mapping topics to (metadata, source) tuples, list of tuples, or None
         """
         if not self.CACHE_FILE.exists():
             logger.info(f"No existing cache file found at {self.CACHE_FILE}")
@@ -150,9 +151,15 @@ class CitationResearcher:
             for topic, value in cache_data.items():
                 if value is None:
                     cache[topic] = None
-                else:
-                    # value is [metadata_dict, source_string]
+                elif isinstance(value, list) and len(value) == 2 and isinstance(value[0], dict):
+                    # Old format: [metadata_dict, source_string] - single citation
                     cache[topic] = (value[0], value[1])
+                elif isinstance(value, list) and len(value) > 0 and isinstance(value[0], list):
+                    # New format: [[metadata1, source1], [metadata2, source2], ...] - multiple citations
+                    cache[topic] = [(item[0], item[1]) for item in value]
+                else:
+                    # Fallback for unexpected format
+                    cache[topic] = (value[0], value[1]) if isinstance(value, list) and len(value) >= 2 else None
 
             return cache
         except Exception as e:
@@ -171,9 +178,25 @@ class CitationResearcher:
             for topic, value in self.cache.items():
                 if value is None:
                     cache_data[topic] = None
-                else:
+                elif isinstance(value, list):
+                    if len(value) == 0:
+                        # Empty list - treat as no results
+                        cache_data[topic] = None
+                    elif isinstance(value[0], tuple):
+                        # List of (metadata, source) tuples - convert to list of [metadata, source] lists
+                        cache_data[topic] = [[metadata, source] for metadata, source in value]
+                    else:
+                        # Unexpected format - skip
+                        logger.warning(f"Unexpected cache format for topic '{topic}': {type(value[0])}")
+                        cache_data[topic] = None
+                elif isinstance(value, tuple) and len(value) == 2:
+                    # Single (metadata, source) tuple - for backward compatibility
                     metadata, source = value
                     cache_data[topic] = [metadata, source]
+                else:
+                    # Unexpected format - skip
+                    logger.warning(f"Unexpected cache format for topic '{topic}': {type(value)}")
+                    cache_data[topic] = None
 
             with open(self.CACHE_FILE, 'w', encoding='utf-8') as f:
                 json.dump(cache_data, f, indent=2, ensure_ascii=False)
@@ -182,28 +205,39 @@ class CitationResearcher:
         except Exception as e:
             logger.error(f"Failed to save cache to {self.CACHE_FILE}: {e}")
 
-    def research_citation(self, topic: str) -> Optional[Citation]:
+    def research_citation(self, topic: str) -> List[Citation]:
         """
-        Research a citation using fallback chain.
+        Research citations using parallel API calls.
 
         Args:
             topic: Topic or description to research
 
         Returns:
-            Citation object if found, None otherwise
+            List of Citation objects (may be empty if none found)
         """
         # Check cache first
         if topic in self.cache:
             cached = self.cache[topic]
             if cached is None:
-                return None
-            cached_metadata, cached_source = cached
-            if self.verbose:
-                print(
-                    f"    ✓ Cached: {cached_metadata.get('authors', ['Unknown'])[0] if cached_metadata.get('authors') else 'Unknown'} et al. ({cached_metadata.get('year', 'n.d.')}) [from {cached_source}]"
-                )
-            citation = self._create_citation(cached_metadata, cached_source)
-            return citation
+                return []
+            # Cache may store either single tuple or list of tuples
+            if isinstance(cached, list):
+                # List of (metadata, source) tuples
+                cached_list = cached
+            else:
+                # Single (metadata, source) tuple - convert to list
+                cached_list = [cached]
+
+            citations = []
+            for cached_metadata, cached_source in cached_list:
+                if self.verbose:
+                    print(
+                        f"    ✓ Cached: {cached_metadata.get('authors', ['Unknown'])[0] if cached_metadata.get('authors') else 'Unknown'} et al. ({cached_metadata.get('year', 'n.d.')}) [from {cached_source}]"
+                    )
+                citation = self._create_citation(cached_metadata, cached_source)
+                if citation:
+                    citations.append(citation)
+            return citations
 
         if self.verbose:
             print(f"  🔍 Researching: {topic[:70]}{'...' if len(topic) > 70 else ''}")
@@ -235,37 +269,36 @@ class CitationResearcher:
         if self.verbose and api_chain:
             print(f"    🔀 API chain: {' → '.join(api_chain)}")
 
-        # Try API chain - use parallel queries for academic sources
-        metadata: Optional[Dict[str, Any]] = None
-        source: Optional[str] = None
-        
+        # Collect ALL valid results from API chain
+        valid_results: List[Tuple[Dict[str, Any], str]] = []
+
         # Determine if we should use parallel queries
         # Use parallel for academic/journal queries where both CrossRef and Semantic Scholar are in chain
         use_parallel = (
-            'crossref' in api_chain 
+            'crossref' in api_chain
             and 'semantic_scholar' in api_chain
-            and self.enable_crossref 
+            and self.enable_crossref
             and self.enable_semantic_scholar
         )
-        
+
         if use_parallel:
             # Query ALL 3 APIs in parallel for maximum source diversity
             parallel_apis = ['crossref', 'semantic_scholar']
             if self.enable_gemini_grounded:
                 parallel_apis.append('gemini_grounded')
-            
+
             if self.verbose:
                 apis_str = " + ".join([a.replace("_", " ").title() for a in parallel_apis])
                 print(f"    → Querying {apis_str} in parallel...", end=" ", flush=True)
             results: List[Tuple[Optional[Dict[str, Any]], str]] = []
-            
+
             with ThreadPoolExecutor(max_workers=3) as executor:
                 futures = {
-                    executor.submit(self._search_api, api, topic): api 
+                    executor.submit(self._search_api, api, topic): api
                     for api in parallel_apis
                 }
                 try:
-                    for future in as_completed(futures, timeout=60):  # Reduced from 90
+                    for future in as_completed(futures, timeout=30):  # 30s timeout - balanced for Gemini
                         try:
                             result = future.result()
                             results.append(result)
@@ -285,29 +318,32 @@ class CitationResearcher:
                                     results.append(result)
                             except Exception:
                                 pass
-            
-            # Pick best result from parallel queries
-            metadata, source = self._pick_best_result(results)
-            
-            if metadata:
+
+            # Collect ALL valid results (not just best one)
+            for result_metadata, result_source in results:
+                if result_metadata and (result_metadata.get('doi') or result_metadata.get('url')):
+                    valid_results.append((result_metadata, result_source))
+                    # Update source usage count for logging
+                    self.source_usage_count[result_source] = self.source_usage_count.get(result_source, 0) + 1
+
+            if valid_results:
                 if self.verbose:
-                    print(f"✓ ({source})")
+                    sources_str = ", ".join([src for _, src in valid_results])
+                    print(f"✓ ({sources_str})")
             else:
                 if self.verbose:
                     print(f"✗")
         else:
             # Sequential fallback for industry queries or when parallel not applicable
             for api_name in api_chain:
-                if metadata:
-                    break  # Already found citation
-
                 if api_name == 'crossref' and self.enable_crossref:
                     if self.verbose:
                         print(f"    → Trying Crossref API...", end=" ", flush=True)
                     try:
                         metadata = self.crossref.search_paper(topic)
-                        if metadata:
-                            source = "Crossref"
+                        if metadata and (metadata.get('doi') or metadata.get('url')):
+                            valid_results.append((metadata, "Crossref"))
+                            self.source_usage_count["Crossref"] = self.source_usage_count.get("Crossref", 0) + 1
                             if self.verbose:
                                 print(f"✓")
                         else:
@@ -323,8 +359,9 @@ class CitationResearcher:
                         print(f"    → Trying Semantic Scholar API...", end=" ", flush=True)
                     try:
                         metadata = self.semantic_scholar.search_paper(topic)
-                        if metadata:
-                            source = "Semantic Scholar"
+                        if metadata and (metadata.get('doi') or metadata.get('url')):
+                            valid_results.append((metadata, "Semantic Scholar"))
+                            self.source_usage_count["Semantic Scholar"] = self.source_usage_count.get("Semantic Scholar", 0) + 1
                             if self.verbose:
                                 print(f"✓")
                         else:
@@ -340,8 +377,9 @@ class CitationResearcher:
                         print(f"    → Trying Gemini Grounded (Google Search)...", end=" ", flush=True)
                     try:
                         metadata = self.gemini_grounded.search_paper(topic)
-                        if metadata:
-                            source = "Gemini Grounded"
+                        if metadata and (metadata.get('doi') or metadata.get('url')):
+                            valid_results.append((metadata, "Gemini Grounded"))
+                            self.source_usage_count["Gemini Grounded"] = self.source_usage_count.get("Gemini Grounded", 0) + 1
                             if self.verbose:
                                 print(f"✓")
                         else:
@@ -353,13 +391,13 @@ class CitationResearcher:
                         logger.error(f"Gemini Grounded error: {e}")
 
         # Try Gemini LLM as absolute last resort (not part of smart routing)
-        if not metadata and self.enable_llm_fallback:
+        if not valid_results and self.enable_llm_fallback:
             if self.verbose:
                 print(f"    → Trying Gemini LLM fallback...", end=" ", flush=True)
             try:
                 metadata = self._llm_research(topic)
-                if metadata:
-                    source = "Gemini LLM"
+                if metadata and (metadata.get('doi') or metadata.get('url')):
+                    valid_results.append((metadata, "Gemini LLM"))
                     if self.verbose:
                         print(f"✓")
                 else:
@@ -370,32 +408,35 @@ class CitationResearcher:
                     print(f"✗ Error: {e}")
                 logger.error(f"Gemini LLM error: {e}")
 
-        # Cache result (even if None)
-        # Defensive: Only cache when we have both metadata AND source
-        if metadata and source:
-            self.cache[topic] = (metadata, source)
+        # Cache results (even if empty list)
+        if valid_results:
+            self.cache[topic] = valid_results
         else:
             self.cache[topic] = None
 
         # Persist cache to disk
         self._save_cache()
 
-        # Convert to Citation object
-        if metadata:
-            citation = self._create_citation(metadata, source)
-            if self.verbose and citation:
-                # Check if preprint and show visible marker (Fix 3)
-                preprint_marker = " ⚠️ [PREPRINT]" if citation.source_type == "preprint" else ""
-                print(f"    ✓ Found: {citation.authors[0]} et al. ({citation.year}) [from {source}]{preprint_marker}")
-                if citation.doi:
-                    print(f"      DOI: {citation.doi}")
-                elif citation.url:
-                    print(f"      URL: {citation.url}")
-            return citation
-        else:
-            if self.verbose:
-                print(f"    ✗ No citation found for: {topic[:70]}...")
-            return None
+        # Convert to Citation objects
+        citations = []
+        if valid_results:
+            for metadata, source in valid_results:
+                citation = self._create_citation(metadata, source)
+                if citation:
+                    citations.append(citation)
+                    if self.verbose:
+                        # Check if preprint and show visible marker (Fix 3)
+                        preprint_marker = " ⚠️ [PREPRINT]" if citation.source_type == "preprint" else ""
+                        print(f"    ✓ Found: {citation.authors[0]} et al. ({citation.year}) [from {source}]{preprint_marker}")
+                        if citation.doi:
+                            print(f"      DOI: {citation.doi}")
+                        elif citation.url:
+                            print(f"      URL: {citation.url}")
+
+        if not citations and self.verbose:
+            print(f"    ✗ No citations found for: {topic[:70]}...")
+
+        return citations
 
     def _create_citation(self, metadata: Dict[str, Any], source: Optional[str] = None) -> Optional[Citation]:
         """
@@ -570,6 +611,9 @@ class CitationResearcher:
             if is_preprint:
                 source_type = "preprint"
             
+            # Extract abstract/snippet (Gemini returns "snippet", others return "abstract")
+            abstract = metadata.get("abstract") or metadata.get("snippet")
+
             citation = Citation(
                 citation_id="temp_id",  # Will be assigned by CitationCompiler
                 authors=metadata["authors"],
@@ -585,6 +629,7 @@ class CitationResearcher:
                 doi=doi,
                 url=metadata.get("url", ""),
                 api_source=source,  # Track which API found this citation
+                abstract=abstract,  # Include abstract from API responses
             )
 
             return citation
@@ -595,11 +640,11 @@ class CitationResearcher:
     def _search_api(self, api_name: str, topic: str) -> Tuple[Optional[Dict[str, Any]], str]:
         """
         Search a single API for citations.
-        
+
         Args:
             api_name: Name of the API ('crossref', 'semantic_scholar', 'gemini_grounded')
             topic: Topic to search for
-            
+
         Returns:
             Tuple of (metadata, source_name) or (None, api_name)
         """
