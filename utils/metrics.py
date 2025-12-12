@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ABOUTME: Production-grade monitoring and metrics system for thesis pipeline
+ABOUTME: Production-grade monitoring and metrics system for draft pipeline
 ABOUTME: Provides structured JSONL logging, success tracking, cost estimation, and performance analytics
 """
 

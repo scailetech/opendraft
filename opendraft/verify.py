@@ -185,7 +185,7 @@ def verify_installation():
         print("   You're ready to generate academic theses.")
         print("\nNext steps:")
         print("  1. Review QUICKSTART.md for usage examples")
-        print("  2. Run: python tests/scripts/test_ai_pricing_thesis.py")
+        print("  2. Run: python tests/scripts/test_ai_pricing_draft.py")
         print("  3. Check examples/ for sample theses")
         return 0
     else:

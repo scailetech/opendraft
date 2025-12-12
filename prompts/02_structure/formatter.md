@@ -209,7 +209,7 @@ Given a paper outline from the Architect Agent, you will:
 [Continue...]
 
 ### 2.3 Summary and Gap Analysis
-[Synthesis paragraph]
+[Syndraft paragraph]
 
 ---
 

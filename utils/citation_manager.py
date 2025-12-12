@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ABOUTME: Citation Manager (Agent #3.5) - Extract citations from text
-ABOUTME: Creates structured citation database from research notes or thesis
+ABOUTME: Creates structured citation database from research notes or draft
 """
 
 import json
@@ -40,7 +40,7 @@ def extract_citations_from_text(
     Extract all citations from text using LLM.
 
     Args:
-        text: Text to extract citations from (thesis or research notes)
+        text: Text to extract citations from (draft or research notes)
         model: Configured Gemini model
         language: Language of the text
         citation_style: Citation style to use
@@ -233,7 +233,7 @@ CRITICAL:
     database = CitationDatabase(
         citations=citations,
         citation_style=citation_style,
-        thesis_language=language,
+        draft_language=language,
     )
 
     # Validate database
@@ -259,7 +259,7 @@ def run_citation_manager(
     Run Citation Manager agent on input file.
 
     Args:
-        input_path: Path to input text file (thesis or research notes)
+        input_path: Path to input text file (draft or research notes)
         output_path: Path to save citation_database.json
         language: Language of the text
         citation_style: Citation style to use
@@ -351,7 +351,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description="Citation Manager - Extract citations from text")
-    parser.add_argument("input", type=Path, help="Input text file (thesis or research notes)")
+    parser.add_argument("input", type=Path, help="Input text file (draft or research notes)")
     parser.add_argument("output", type=Path, help="Output path for citation_database.json")
     parser.add_argument("--language", type=str, default="english", choices=["english", "german", "spanish", "french"])
     parser.add_argument("--style", type=str, default="APA 7th", choices=["APA 7th", "IEEE", "Chicago", "MLA"])

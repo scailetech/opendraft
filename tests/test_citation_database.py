@@ -91,7 +91,7 @@ class TestCitationDatabase:
 
         assert len(db.citations) == 0
         assert db.citation_style == "APA 7th"
-        assert db.thesis_language == "english"
+        assert db.draft_language == "english"
 
     def test_create_database_with_citations(self):
         """Test creating database with citations."""
@@ -184,14 +184,14 @@ class TestCitationDatabase:
             Citation("cite_001", ["Smith"], 2023, "Test", "journal", journal="Journal"),
         ]
 
-        db = CitationDatabase(citations, citation_style="APA 7th", thesis_language="german")
+        db = CitationDatabase(citations, citation_style="APA 7th", draft_language="german")
         data = db.to_dict()
 
         assert "citations" in data
         assert "metadata" in data
         assert data["metadata"]["total_citations"] == 1
         assert data["metadata"]["citation_style"] == "APA 7th"
-        assert data["metadata"]["thesis_language"] == "german"
+        assert data["metadata"]["draft_language"] == "german"
 
     def test_database_from_dict(self):
         """Test creating database from dictionary."""
@@ -209,7 +209,7 @@ class TestCitationDatabase:
             "metadata": {
                 "total_citations": 1,
                 "citation_style": "APA 7th",
-                "thesis_language": "english",
+                "draft_language": "english",
             }
         }
 
@@ -371,7 +371,7 @@ class TestCitationDatabaseIO:
             Citation("cite_002", ["Jones"], 2022, "Test 2", "book", publisher="Publisher"),
         ]
 
-        db = CitationDatabase(citations, citation_style="APA 7th", thesis_language="german")
+        db = CitationDatabase(citations, citation_style="APA 7th", draft_language="german")
 
         # Save database
         db_path = tmp_path / "test_db.json"
@@ -385,7 +385,7 @@ class TestCitationDatabaseIO:
         assert len(loaded_db.citations) == 2
         assert loaded_db.citations[0].id == "cite_001"
         assert loaded_db.citation_style == "APA 7th"
-        assert loaded_db.thesis_language == "german"
+        assert loaded_db.draft_language == "german"
 
     def test_validate_citation_database_dict(self):
         """Test validating database dictionary."""
@@ -403,7 +403,7 @@ class TestCitationDatabaseIO:
             "metadata": {
                 "total_citations": 1,
                 "citation_style": "APA 7th",
-                "thesis_language": "english",
+                "draft_language": "english",
             }
         }
 
@@ -415,7 +415,7 @@ class TestCitationDatabaseIO:
             "metadata": {
                 "total_citations": 0,
                 "citation_style": "APA 7th",
-                "thesis_language": "english",
+                "draft_language": "english",
             }
         }
 
@@ -447,7 +447,7 @@ class TestCitationDatabaseIO:
             "metadata": {
                 "total_citations": 5,  # Wrong count
                 "citation_style": "APA 7th",
-                "thesis_language": "english",
+                "draft_language": "english",
             }
         }
 

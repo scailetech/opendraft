@@ -1,6 +1,6 @@
 """
 ABOUTME: Decentralized backpressure signaling for rate limit coordination
-ABOUTME: Uses Modal.Dict for cross-container state sharing across thesis workers
+ABOUTME: Uses Modal.Dict for cross-container state sharing across draft workers
 """
 
 import time
@@ -52,7 +52,7 @@ class BackpressureManager:
     - All containers share the same rate limit state
     """
     
-    def __init__(self, dict_name: str = "thesis-backpressure"):
+    def __init__(self, dict_name: str = "draft-backpressure"):
         """
         Initialize backpressure manager.
         

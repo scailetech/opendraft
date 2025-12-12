@@ -55,7 +55,7 @@ class TitleScraper:
     def __init__(
         self,
         timeout: int = 10,
-        user_agent: str = "Academic-Thesis-AI/1.0 (Citation Metadata Scraper)",
+        user_agent: str = "Academic-Draft-AI/1.0 (Citation Metadata Scraper)",
         rate_limit_delay: float = 1.0,
         verbose: bool = False
     ):

@@ -120,9 +120,9 @@ Use proper markdown table syntax:
 - ✅ Tables make complex data digestible
 - ✅ Tables demonstrate rigorous analysis
 - ✅ Tables are expected in academic writing
-- ✅ Tables improve thesis quality score
+- ✅ Tables improve draft quality score
 
-**FAILURE TO INCLUDE TABLES WILL RESULT IN AN INCOMPLETE THESIS.**
+**FAILURE TO INCLUDE TABLES WILL RESULT IN AN INCOMPLETE DRAFT.**
 
 ### ⚠️ CRITICAL: TABLE SIZE CONSTRAINTS
 
@@ -249,7 +249,7 @@ Use ALL 4 levels of markdown headings throughout your sections:
 - **Analysis/Results:** At least 3 level-2 sections with level-3 and level-4 headings
 - **Discussion:** At least 2 level-2 sections with level-3 subsections
 
-**FAILURE TO USE PROPER HEADING HIERARCHY WILL RESULT IN A FLAT, UNPROFESSIONAL THESIS.**
+**FAILURE TO USE PROPER HEADING HIERARCHY WILL RESULT IN A FLAT, UNPROFESSIONAL DRAFT.**
 
 
 
@@ -257,11 +257,11 @@ Use ALL 4 levels of markdown headings throughout your sections:
 
 ---
 
-## ⚠️ CRITICAL: THESIS SECTION STRUCTURE
+## ⚠️ CRITICAL: DRAFT SECTION STRUCTURE
 
-**The thesis has a FIXED chapter structure. You MUST follow this exact layout:**
+**The draft has a FIXED chapter structure. You MUST follow this exact layout:**
 
-### Master Thesis Structure (5 Main Chapters)
+### Master Draft Structure (5 Main Chapters)
 
 ```
 # 1. Introduction          ← Chapter 1 (written separately)
@@ -369,7 +369,7 @@ The Citation Manager has already extracted all citations from research materials
 5. **Use the citation ID** from the database (cite_001, cite_002, etc.)
 6. **Multiple citations**: Use multiple IDs together: {cite_001}{cite_003}{cite_007}
 
-**CRITICAL:** If you see "Maximum citation ID: cite_049", you MUST NOT use cite_050, cite_051, or any higher IDs. Using non-existent citation IDs will cause [MISSING] errors in the final thesis.
+**CRITICAL:** If you see "Maximum citation ID: cite_049", you MUST NOT use cite_050, cite_051, or any higher IDs. Using non-existent citation IDs will cause [MISSING] errors in the final draft.
 
 ### If Citation is Missing
 
@@ -389,17 +389,17 @@ You do NOT create the References section. The Citation Compiler will:
 ### Language-Specific Citation Format
 
 **Citation IDs are language-agnostic:**
-- Use {cite_001}, {cite_002}, etc. regardless of thesis language
+- Use {cite_001}, {cite_002}, etc. regardless of draft language
 - The Citation Compiler will format them according to the specified citation style
 - Works seamlessly for German, Spanish, French, or any other language
 
-**Example (German thesis):**
+**Example (German draft):**
 ```
 Die CO2-Bepreisung hat sich als wirksames Instrument etabliert {cite_001}.
 Aktuelle Daten zeigen einen Rückgang um 24% {cite_002}.
 ```
 
-**Example (English thesis):**
+**Example (English draft):**
 ```
 Carbon pricing has proven effective {cite_001}.
 Recent data shows a 24% reduction {cite_002}.
@@ -409,7 +409,7 @@ Recent data shows a 24% reduction {cite_002}.
 
 ## ⚠️ CRITICAL: LANGUAGE CONSISTENCY REQUIREMENT
 
-**BEFORE GENERATING ANY CONTENT, DETERMINE THE INPUT THESIS LANGUAGE FROM THE RESEARCH/OUTLINE MATERIALS.**
+**BEFORE GENERATING ANY CONTENT, DETERMINE THE INPUT DRAFT LANGUAGE FROM THE RESEARCH/OUTLINE MATERIALS.**
 
 If research materials and outline are in a **non-English language** (German, Spanish, French, etc.), **ALL SECTION CONTENT AND METADATA MUST BE IN THE SAME LANGUAGE.**
 
@@ -461,7 +461,7 @@ If research materials and outline are in a **non-English language** (German, Spa
 
 **BEFORE returning the section, run these language checks:**
 
-**For German thesis, these patterns MUST NOT appear:**
+**For German draft, these patterns MUST NOT appear:**
 ```bash
 grep "**Section:**" output.md      # FAIL - should be "**Abschnitt:**"
 grep "**Word Count:**" output.md   # FAIL - should be "**Wortzahl:**"
@@ -472,7 +472,7 @@ grep "Citations Used" output.md    # FAIL - should be "Verwendete Zitate"
 grep "Notes for Revision" output.md  # FAIL - should be "Hinweise zur Überarbeitung"
 ```
 
-**For Spanish thesis, these patterns MUST NOT appear:**
+**For Spanish draft, these patterns MUST NOT appear:**
 ```bash
 grep "**Section:**" output.md      # FAIL - should be "**Sección:**"
 grep "**Word Count:**" output.md   # FAIL - should be "**Recuento de palabras:**"
@@ -736,14 +736,14 @@ For humanities, social sciences, or qualitative research theses without mathemat
 
 **⚠️ CRITICAL: CLEAN OUTPUT - NO INTERNAL METADATA SECTIONS**
 
-**Your output should contain ONLY the actual section content for the final thesis.**
+**Your output should contain ONLY the actual section content for the final draft.**
 
 DO NOT include these internal tracking sections in your output:
 - ❌ `## Citations Used`
 - ❌ `## Notes for Revision`
 - ❌ `## Word Count Breakdown`
 
-These are for YOUR internal tracking only (mental notes). The final output should be clean academic prose ready for inclusion in the thesis.
+These are for YOUR internal tracking only (mental notes). The final output should be clean academic prose ready for inclusion in the draft.
 
 **⚠️ LANGUAGE CONSISTENCY:**
 - If writing in **German**: Use proper German section name (e.g., "Einleitung" not "Introduction")
@@ -898,7 +898,7 @@ When you finish writing, the system will generate:
 
 **When in doubt, use {cite_MISSING: description} instead of inventing a citation.**
 
-The Citation Researcher can find real sources for missing citations. But once you invent fake citations, the entire thesis loses academic credibility and must be regenerated.
+The Citation Researcher can find real sources for missing citations. But once you invent fake citations, the entire draft loses academic credibility and must be regenerated.
 
 ---
 

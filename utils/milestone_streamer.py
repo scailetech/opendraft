@@ -1,6 +1,6 @@
 """
 Milestone Streaming - Upload partial results and notify users at key milestones.
-Provides early value and keeps users engaged during long-running thesis generation.
+Provides early value and keeps users engaged during long-running draft generation.
 """
 import os
 from typing import Optional
@@ -10,27 +10,27 @@ import json
 
 
 class MilestoneStreamer:
-    """Streams partial thesis results to Supabase and sends progressive notifications."""
+    """Streams partial draft results to Supabase and sends progressive notifications."""
 
-    def __init__(self, thesis_id: str, user_id: str, email: str, supabase_client, resend_api_key: str, table_name: str = "theses"):
+    def __init__(self, draft_id: str, user_id: str, email: str, supabase_client, resend_api_key: str, table_name: str = "theses"):
         """
         Initialize milestone streamer.
 
         Args:
-            thesis_id: Thesis ID for tracking
+            draft_id: Draft ID for tracking
             user_id: User ID for file storage paths
             email: User email for notifications
             supabase_client: Supabase client instance
             resend_api_key: Resend API key for emails
             table_name: Table name to update ('theses' or 'waitlist'). Default: 'theses'
         """
-        self.thesis_id = thesis_id
+        self.draft_id = draft_id
         self.user_id = user_id
         self.email = email
         self.supabase = supabase_client
         self.resend_api_key = resend_api_key
         self.table_name = table_name
-        self.record_id = thesis_id if thesis_id else user_id
+        self.record_id = draft_id if draft_id else user_id
     
     def upload_milestone_file(self, file_path: Path, milestone_name: str) -> Optional[str]:
         """
@@ -63,14 +63,14 @@ class MilestoneStreamer:
             storage_path = f"{self.user_id}/milestones/{milestone_name}{suffix}"
             
             with open(file_path, "rb") as f:
-                self.supabase.storage.from_("thesis-files").upload(
+                self.supabase.storage.from_("draft-files").upload(
                     storage_path,
                     f.read(),
                     file_options={"content-type": content_type, "upsert": "true"}
                 )
             
             # Create signed URL (7 days)
-            signed = self.supabase.storage.from_("thesis-files").create_signed_url(
+            signed = self.supabase.storage.from_("draft-files").create_signed_url(
                 storage_path, 
                 expires_in=604800
             )
@@ -123,7 +123,7 @@ class MilestoneStreamer:
             <body>
                 <div class="header">
                     <h1>🎉 {milestone_title}</h1>
-                    <p>Your thesis is making progress!</p>
+                    <p>Your draft is making progress!</p>
                 </div>
                 
                 <div class="content">
@@ -135,13 +135,13 @@ class MilestoneStreamer:
                     
                     <div class="milestone">
                         <strong>What's Next?</strong><br>
-                        We're continuing to work on your complete thesis. You'll receive another update when the next milestone is reached, and a final email when everything is ready!
+                        We're continuing to work on your complete draft. You'll receive another update when the next milestone is reached, and a final email when everything is ready!
                     </div>
                 </div>
                 
                 <div class="footer">
                     <p>OpenDraft - AI-Powered Academic Writing</p>
-                    <p>This is an automated progress update for your thesis generation.</p>
+                    <p>This is an automated progress update for your draft generation.</p>
                 </div>
             </body>
             </html>
@@ -150,7 +150,7 @@ class MilestoneStreamer:
             resend.Emails.send({
                 "from": "OpenDraft <hello@clients.opendraft.xyz>",
                 "to": self.email,
-                "subject": f"🎓 {milestone_title} - Thesis Progress Update",
+                "subject": f"🎓 {milestone_title} - Draft Progress Update",
                 "html": html
             })
             
@@ -178,7 +178,7 @@ class MilestoneStreamer:
         self.send_milestone_email(
             milestone_name="research",
             milestone_title="Research Complete!",
-            message=f"Great news! We've completed the research phase and found <strong>{sources_count} high-quality academic sources</strong> for your thesis. The research phase typically takes the longest, so the rest should go faster!",
+            message=f"Great news! We've completed the research phase and found <strong>{sources_count} high-quality academic sources</strong> for your draft. The research phase typically takes the longest, so the rest should go faster!",
             file_url=bib_url,
             metadata={
                 "Sources Found": sources_count,
@@ -212,13 +212,13 @@ class MilestoneStreamer:
         # Upload outline if available
         outline_url = None
         if outline_path and outline_path.exists():
-            outline_url = self.upload_milestone_file(outline_path, "thesis_outline")
+            outline_url = self.upload_milestone_file(outline_path, "draft_outline")
         
         # Send email
         self.send_milestone_email(
             milestone_name="outline",
-            milestone_title="Thesis Outline Ready!",
-            message=f"Your thesis structure is complete! We've created a detailed outline with <strong>{chapters_count} chapters</strong>. Now we're moving into the writing phase - this is where your thesis really comes to life!",
+            milestone_title="Draft Outline Ready!",
+            message=f"Your draft structure is complete! We've created a detailed outline with <strong>{chapters_count} chapters</strong>. Now we're moving into the writing phase - this is where your draft really comes to life!",
             file_url=outline_url,
             metadata={
                 "Chapters Planned": chapters_count,

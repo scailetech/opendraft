@@ -330,9 +330,9 @@ def all_api_mocks(
     Use this for integration tests that need complete offline testing.
 
     Example:
-        def test_full_thesis_generation(all_api_mocks):
+        def test_full_draft_generation(all_api_mocks):
             # Test runs with all APIs mocked
-            result = generate_thesis("AI Pricing Models")
+            result = generate_draft("AI Pricing Models")
             assert result is not None
     """
     return {

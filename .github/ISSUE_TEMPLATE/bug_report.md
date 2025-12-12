@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug to help us improve Academic Thesis AI
+about: Report a bug to help us improve Academic Draft AI
 title: '[BUG] '
 labels: bug
 assignees: ''
@@ -36,7 +36,7 @@ Paste any error messages or relevant log output here
 ## Related Files
 - **Agent Output:** (e.g., which agent failed - Scout, Scribe, etc.)
 - **Configuration:** (relevant settings from config.py or .env)
-- **Thesis Section:** (if applicable, which section was being generated)
+- **Draft Section:** (if applicable, which section was being generated)
 
 ## Screenshots
 If applicable, add screenshots to help explain your problem.

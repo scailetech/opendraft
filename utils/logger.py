@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ABOUTME: Production-grade logging system for academic thesis AI
+ABOUTME: Production-grade logging system for academic draft AI
 ABOUTME: Replaces print() statements with structured logging (file + console)
 """
 
@@ -11,9 +11,9 @@ from typing import Optional
 from datetime import datetime
 
 
-class ThesisLogger:
+class DraftLogger:
     """
-    Centralized logging system for thesis generation workflow.
+    Centralized logging system for draft generation workflow.
 
     Features:
     - Dual output: console (colored, user-friendly) + file (structured, detailed)
@@ -30,7 +30,7 @@ class ThesisLogger:
         logger.error(f"Failed to fetch from Crossref: {error}")
     """
 
-    _instance: Optional['ThesisLogger'] = None
+    _instance: Optional['DraftLogger'] = None
     _initialized: bool = False
 
     def __new__(cls):
@@ -41,7 +41,7 @@ class ThesisLogger:
 
     def __init__(self):
         """Initialize logging system (only once)"""
-        if ThesisLogger._initialized:
+        if DraftLogger._initialized:
             return
 
         # Create logs directory
@@ -50,7 +50,7 @@ class ThesisLogger:
 
         # Generate timestamped log file
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.log_file = self.log_dir / f"thesis_generation_{timestamp}.log"
+        self.log_file = self.log_dir / f"draft_generation_{timestamp}.log"
 
         # Configure root logger
         self.logger = logging.getLogger("opendraft")
@@ -82,11 +82,11 @@ class ThesisLogger:
         self.logger.addHandler(console_handler)
         self.logger.addHandler(file_handler)
 
-        ThesisLogger._initialized = True
+        DraftLogger._initialized = True
 
         # Log initialization
         self.logger.info("=" * 80)
-        self.logger.info("Thesis Generation Logging System Initialized")
+        self.logger.info("Draft Generation Logging System Initialized")
         self.logger.info(f"Log file: {self.log_file}")
         self.logger.info("=" * 80)
 
@@ -101,7 +101,7 @@ class ThesisLogger:
             Logger instance configured with module name
 
         Example:
-            logger = ThesisLogger().get_logger(__name__)
+            logger = DraftLogger().get_logger(__name__)
             logger.info("Processing started")
         """
         return logging.getLogger(f"opendraft.{name}")
@@ -123,8 +123,8 @@ def get_logger(name: str = "main") -> logging.Logger:
         logger = get_logger(__name__)
         logger.info("Starting workflow")
     """
-    thesis_logger = ThesisLogger()
-    return thesis_logger.get_logger(name)
+    draft_logger = DraftLogger()
+    return draft_logger.get_logger(name)
 
 
 def log_phase_start(phase_name: str, phase_number: int, total_phases: int = 5):
@@ -236,14 +236,14 @@ def log_citation_failed(source: str, query: str, error: str):
 
 def log_export_start(format: str, output_path: str):
     """
-    Log the start of thesis export.
+    Log the start of draft export.
 
     Args:
         format: Export format (PDF, DOCX, LaTeX)
         output_path: Output file path
 
     Example:
-        log_export_start("PDF", "outputs/thesis.pdf")
+        log_export_start("PDF", "outputs/draft.pdf")
     """
     logger = get_logger("exporters")
     logger.info(f"📄 Exporting {format}: {output_path}")
@@ -251,7 +251,7 @@ def log_export_start(format: str, output_path: str):
 
 def log_export_complete(format: str, file_size_kb: int):
     """
-    Log successful thesis export.
+    Log successful draft export.
 
     Args:
         format: Export format
@@ -302,7 +302,7 @@ if __name__ == "__main__":
     log_citation_failed("Semantic Scholar", "nonexistent query", "404 Not Found")
 
     # Export logging
-    log_export_start("PDF", "outputs/thesis.pdf")
+    log_export_start("PDF", "outputs/draft.pdf")
     log_export_complete("PDF", 1024)
 
     # Error logging

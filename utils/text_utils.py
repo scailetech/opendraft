@@ -1,5 +1,5 @@
 """
-ABOUTME: Text processing utilities for thesis pipeline
+ABOUTME: Text processing utilities for draft pipeline
 ABOUTME: Smart truncation, sanitization, structure-aware text handling
 """
 

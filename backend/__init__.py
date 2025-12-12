@@ -1,7 +1,7 @@
 """
 OpenDraft Backend - Modal.com Serverless Workers
 
-This module provides production thesis generation via Modal.com.
+This module provides production draft generation via Modal.com.
 """
 
-__all__ = ["thesis_generator", "modal_worker"]
+__all__ = ["draft_generator", "modal_worker"]

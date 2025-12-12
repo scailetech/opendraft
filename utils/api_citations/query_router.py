@@ -125,7 +125,7 @@ class QueryRouter:
         'peer-reviewed', 'peer reviewed', 'scholarly article',
         'journal article', 'academic paper', 'research paper',
         'conference paper', 'proceedings', 'dissertation',
-        'thesis', 'monograph',
+        'draft', 'monograph',
 
         # Research methodology
         'empirical study', 'empirical research', 'empirical analysis',

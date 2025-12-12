@@ -500,7 +500,7 @@ def main():
     if len(sys.argv) > 1:
         docx_path = Path(sys.argv[1])
     else:
-        docx_path = Path('examples/opensource_thesis.docx')
+        docx_path = Path('examples/opensource_draft.docx')
 
     if not docx_path.exists():
         print(f"❌ File not found: {docx_path}")
@@ -521,7 +521,7 @@ def main():
         'instructor': 'Prof. Dr. Maria Schmidt',
         'second_examiner': 'Prof. Dr. Hans Weber',
         'student_id': '123456',
-        'project_type': 'Master Thesis',
+        'project_type': 'Master Draft',
         'system_credit': 'Generated with OpenDraft AI',
         'location': 'Berlin',
     }

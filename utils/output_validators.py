@@ -1,5 +1,5 @@
 """
-ABOUTME: LLM output validation layer for thesis generation pipeline
+ABOUTME: LLM output validation layer for draft generation pipeline
 ABOUTME: Detects hallucinations, repetitions, JSON errors, length violations
 """
 
@@ -36,7 +36,7 @@ class OutputValidator:
     Production-grade validator for LLM outputs.
 
     Prevents corrupted, hallucinated, or malformed outputs from
-    propagating through the thesis generation pipeline.
+    propagating through the draft generation pipeline.
     """
 
     @staticmethod

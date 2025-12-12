@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Full End-to-End Pipeline Test
-Tests complete thesis generation with all improvements:
+Tests complete draft generation with all improvements:
 - Research with abstracts
 - Structure (Architect + Formatter)
 - Compose (7 chapters with 4-section Main Body)
@@ -16,7 +16,7 @@ from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from backend.thesis_generator import generate_thesis
+from backend.draft_generator import generate_draft
 
 # Setup detailed logging
 logging.basicConfig(
@@ -70,7 +70,7 @@ start_time = time.time()
 
 try:
     # Run full pipeline
-    result = generate_thesis(
+    result = generate_draft(
         topic=topic,
         language="en",
         academic_level="master",
@@ -121,17 +121,17 @@ try:
         else:
             print(f"      ❌ {filename:40s} (MISSING)")
 
-    # Check final thesis
-    final_thesis = output_dir / "thesis_compiled.md"
-    final_exists = final_thesis.exists()
+    # Check final draft
+    final_draft = output_dir / "draft_compiled.md"
+    final_exists = final_draft.exists()
     if final_exists:
-        final_size = final_thesis.stat().st_size
+        final_size = final_draft.stat().st_size
         word_estimate = final_size / 6
-        print(f"\n   Final thesis:")
-        print(f"      ✅ thesis_compiled.md ({final_size:,} bytes, ~{word_estimate:,.0f} words)")
+        print(f"\n   Final draft:")
+        print(f"      ✅ draft_compiled.md ({final_size:,} bytes, ~{word_estimate:,.0f} words)")
     else:
-        print(f"\n   Final thesis:")
-        print(f"      ❌ thesis_compiled.md (MISSING)")
+        print(f"\n   Final draft:")
+        print(f"      ❌ draft_compiled.md (MISSING)")
 
     # Check citation database
     citation_db = output_dir / "citation_database.json"
@@ -224,7 +224,7 @@ try:
         print("      ✅ Table size constraints enforced")
         print("      ✅ QA Pass (Thread + Narrator) completed")
         print("      ✅ Citations with abstracts collected")
-        print("      ✅ Final thesis compiled")
+        print("      ✅ Final draft compiled")
     else:
         print("⚠️  FULL PIPELINE TEST INCOMPLETE")
         if not all_core_files_exist:
@@ -232,7 +232,7 @@ try:
         if not qa_reports_exist:
             print("   Missing QA reports")
         if not final_exists:
-            print("   Missing final compiled thesis")
+            print("   Missing final compiled draft")
 
     print("="*80)
 

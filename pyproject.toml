@@ -16,7 +16,7 @@ maintainers = [
 ]
 keywords = [
     "academic-writing",
-    "thesis",
+    "draft",
     "ai",
     "research",
     "citation-management",
@@ -82,7 +82,7 @@ Changelog = "https://github.com/federicodeponte/opendraft/blob/main/CHANGELOG.md
 
 [project.scripts]
 opendraft = "opendraft.cli:main"
-thesis-ai = "opendraft.cli:main"
+draft-ai = "opendraft.cli:main"
 
 [tool.setuptools]
 packages = ["opendraft", "utils", "utils.api_citations", "utils.formatting", "utils.pdf_engines", "concurrency"]

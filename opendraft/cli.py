@@ -30,20 +30,20 @@ def main():
     # Generate command
     generate_parser = subparsers.add_parser(
         "generate",
-        help="Generate a thesis from a topic"
+        help="Generate a draft from a topic"
     )
     generate_parser.add_argument(
         "--topic",
         type=str,
         required=True,
-        help="Research topic for the thesis"
+        help="Research topic for the draft"
     )
     generate_parser.add_argument(
         "--language",
         type=str,
         default="en",
         choices=["en", "de"],
-        help="Thesis language (default: en)"
+        help="Draft language (default: en)"
     )
     generate_parser.add_argument(
         "--level",
@@ -66,23 +66,23 @@ def main():
     elif args.command == "generate":
         from pathlib import Path
         try:
-            from backend.thesis_generator import generate_thesis
+            from backend.draft_generator import generate_draft
         except ImportError:
             # Try with sys.path adjustment for non-installed usage
             import os
             sys.path.insert(0, str(Path(__file__).parent.parent))
-            from backend.thesis_generator import generate_thesis
+            from backend.draft_generator import generate_draft
 
         output_dir = Path(args.output) if args.output else Path("./output")
 
-        print(f"🎓 Generating thesis on: {args.topic}")
+        print(f"🎓 Generating draft on: {args.topic}")
         print(f"   Language: {args.language}")
         print(f"   Level: {args.level}")
         print(f"   Output: {output_dir}")
         print()
 
         try:
-            pdf_path, docx_path = generate_thesis(
+            pdf_path, docx_path = generate_draft(
                 topic=args.topic,
                 language=args.language,
                 academic_level=args.level,
@@ -90,7 +90,7 @@ def main():
                 skip_validation=True,
                 verbose=True
             )
-            print(f"\n✅ Thesis generated successfully!")
+            print(f"\n✅ Draft generated successfully!")
             print(f"   PDF:  {pdf_path}")
             print(f"   DOCX: {docx_path}")
             sys.exit(0)

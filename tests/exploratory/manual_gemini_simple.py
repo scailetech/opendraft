@@ -19,7 +19,7 @@ def main():
     print("GEMINI GROUNDED INDUSTRY QUERY TEST")
     print("=" * 80)
 
-    # Industry query (same as thesis)
+    # Industry query (same as draft)
     query = "McKinsey report AI pricing models"
 
     print(f"\n📝 Query: {query}\n")

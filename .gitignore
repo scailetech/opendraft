@@ -67,8 +67,8 @@ cost_test_*.log
 # Test outputs
 tests/outputs/
 backend/outputs/
-outputs/demo_thesis/
-outputs/test_thesis/
+outputs/demo_draft/
+outputs/test_draft/
 test_results/
 
 # Debug test scripts (may contain API keys)

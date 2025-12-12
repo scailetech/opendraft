@@ -1,4 +1,4 @@
-# Backend - Modal.com Thesis Generation Worker
+# Backend - Modal.com Draft Generation Worker
 
 This directory contains the Modal.com serverless worker that automatically generates theses daily.
 
@@ -55,20 +55,20 @@ This runs the batch processor once immediately (for testing).
 
 1. **Daily Trigger**: Runs at 9am UTC every day
 2. **Fetch Queue**: Gets next 100 waiting users (FIFO, email verified)
-3. **Generate Thesis**: Runs your OpenDraft code for each user
+3. **Generate Draft**: Runs your OpenDraft code for each user
 4. **Upload Files**: Stores PDF/DOCX in Supabase Storage
-5. **Update Database**: Marks thesis as completed, stores signed URLs
+5. **Update Database**: Marks draft as completed, stores signed URLs
 6. **Send Email**: Notifies user with download links
 
 ## Integration with OpenDraft
 
-Replace the `generate_thesis_placeholder()` function with your actual thesis generation code:
+Replace the `generate_draft_placeholder()` function with your actual draft generation code:
 
 ```python
-from opendraft_ai import ThesisGenerator
+from opendraft_ai import DraftGenerator
 
-def generate_thesis_placeholder(topic: str, language: str, academic_level: str):
-    generator = ThesisGenerator(model="gemini-2.5-flash")
+def generate_draft_placeholder(topic: str, language: str, academic_level: str):
+    generator = DraftGenerator(model="gemini-2.5-flash")
     result = generator.generate(
         topic=topic,
         language=language,
@@ -82,7 +82,7 @@ def generate_thesis_placeholder(topic: str, language: str, academic_level: str):
 View logs in real-time:
 
 ```bash
-modal app logs thesis-generator
+modal app logs draft-generator
 ```
 
 ## Cost Estimate
@@ -102,14 +102,14 @@ modal app logs thesis-generator
 - Verify storage bucket exists
 
 **Files not uploading:**
-- Check storage bucket name is 'thesis-files'
+- Check storage bucket name is 'draft-files'
 - Verify RLS policies allow service role to upload
 
 ## Performance Optimization
 
 ### Proxy Support for Citation Research
 
-To bypass API rate limits and maximize research speed during thesis generation:
+To bypass API rate limits and maximize research speed during draft generation:
 
 #### 1. Get Proxies
 

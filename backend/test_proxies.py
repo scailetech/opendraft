@@ -6,19 +6,19 @@ import asyncio
 from playwright.async_api import async_playwright
 import time
 
-async def test_thesis_generation():
+async def test_draft_generation():
     async with async_playwright() as p:
         # Launch browser
         browser = await p.chromium.launch(headless=False)
         page = await browser.new_page()
 
-        print("✓ Opening thesis writer...")
+        print("✓ Opening draft writer...")
         await page.goto('http://localhost:3000/write')
 
         # Wait for page to load
         await page.wait_for_timeout(2000)
 
-        print("✓ Filling in thesis details...")
+        print("✓ Filling in draft details...")
 
         # Fill in topic
         topic_input = page.locator('input[name="topic"], textarea[placeholder*="topic" i], input[placeholder*="topic" i]').first
@@ -27,13 +27,13 @@ async def test_thesis_generation():
         # Select language if needed
         await page.wait_for_timeout(1000)
 
-        print("✓ Starting thesis generation...")
+        print("✓ Starting draft generation...")
 
         # Click generate button
         generate_btn = page.locator('button:has-text("Generate"), button:has-text("Start"), button:has-text("Create")').first
         await generate_btn.click()
 
-        print("✓ Thesis generation started!")
+        print("✓ Draft generation started!")
         print("✓ Monitoring progress...")
 
         # Monitor progress for 30 seconds
@@ -66,4 +66,4 @@ async def test_thesis_generation():
         await browser.close()
 
 if __name__ == '__main__':
-    asyncio.run(test_thesis_generation())
+    asyncio.run(test_draft_generation())

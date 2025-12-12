@@ -93,15 +93,15 @@ def test_pdf_generation_all_engines():
     print("TEST 4: PDF Generation - All Engines")
     print("=" * 70)
 
-    # Use existing thesis file
-    md_file = Path("tests/outputs/real_thesis/FINAL_THESIS.md")
+    # Use existing draft file
+    md_file = Path("tests/outputs/real_draft/FINAL_DRAFT.md")
     assert md_file.exists(), f"Test file not found: {md_file}"
 
     results = {}
 
     for engine_type in ['pandoc', 'libreoffice', 'weasyprint']:
         print(f"\n--- Testing {engine_type} engine ---")
-        output_pdf = Path(f"tests/outputs/real_thesis/TEST_{engine_type}.pdf")
+        output_pdf = Path(f"tests/outputs/real_draft/TEST_{engine_type}.pdf")
 
         try:
             start_time = time.time()
@@ -147,8 +147,8 @@ def test_custom_options():
     print("TEST 5: Custom PDF Options")
     print("=" * 70)
 
-    md_file = Path("tests/outputs/real_thesis/FINAL_THESIS.md")
-    output_pdf = Path("tests/outputs/real_thesis/TEST_custom_options.pdf")
+    md_file = Path("tests/outputs/real_draft/FINAL_DRAFT.md")
+    output_pdf = Path("tests/outputs/real_draft/TEST_custom_options.pdf")
 
     # Custom options
     custom_options = PDFGenerationOptions(
@@ -178,8 +178,8 @@ def test_fallback_mechanism():
     print("TEST 6: Automatic Fallback Mechanism")
     print("=" * 70)
 
-    md_file = Path("tests/outputs/real_thesis/FINAL_THESIS.md")
-    output_pdf = Path("tests/outputs/real_thesis/TEST_fallback.pdf")
+    md_file = Path("tests/outputs/real_draft/FINAL_DRAFT.md")
+    output_pdf = Path("tests/outputs/real_draft/TEST_fallback.pdf")
     options = PDFGenerationOptions()
 
     print("Testing fallback with preferred engine...")
@@ -233,14 +233,14 @@ def test_performance():
     print("TEST 8: Performance Benchmarks")
     print("=" * 70)
 
-    md_file = Path("tests/outputs/real_thesis/FINAL_THESIS.md")
+    md_file = Path("tests/outputs/real_draft/FINAL_DRAFT.md")
 
     # Get file size
     file_size = md_file.stat().st_size / 1024  # KB
     print(f"Input file size: {file_size:.1f} KB")
 
     print("\nBenchmarking Pandoc engine...")
-    output_pdf = Path("tests/outputs/real_thesis/TEST_perf_pandoc.pdf")
+    output_pdf = Path("tests/outputs/real_draft/TEST_perf_pandoc.pdf")
 
     start = time.time()
     engine = PDFEngineFactory.create('pandoc')
@@ -265,12 +265,12 @@ def test_title_page_and_toc():
     print("TEST 9: Title Page and Table of Contents")
     print("=" * 70)
 
-    md_file = Path("tests/outputs/real_thesis/FINAL_THESIS.md")
-    output_pdf = Path("tests/outputs/real_thesis/TEST_title_toc.pdf")
+    md_file = Path("tests/outputs/real_draft/FINAL_DRAFT.md")
+    output_pdf = Path("tests/outputs/real_draft/TEST_title_toc.pdf")
 
     # Test with title page metadata and TOC enabled
     options = PDFGenerationOptions(
-        title="Test Thesis Title",
+        title="Test Draft Title",
         author="Test Author",
         date="January 2025",
         institution="Test University",
@@ -294,7 +294,7 @@ def test_title_page_and_toc():
     assert output_pdf.exists(), "Output PDF not created"
 
     # Verify PDF has more pages than without title page
-    base_pdf = Path("tests/outputs/real_thesis/TEST_pandoc.pdf")
+    base_pdf = Path("tests/outputs/real_draft/TEST_pandoc.pdf")
     if base_pdf.exists():
         from PyPDF2 import PdfReader
         base_pages = len(PdfReader(base_pdf).pages)

@@ -44,8 +44,8 @@ except Exception as e:
     print(f"❌ Error loading chapter files: {e}")
     sys.exit(1)
 
-# Prepare thesis content for QA (truncated for context limits)
-thesis_content = f"""# Complete Thesis for QA Review
+# Prepare draft content for QA (truncated for context limits)
+draft_content = f"""# Complete Draft for QA Review
 
 Topic: The Impact of Precision Medicine and AI on Personalized Healthcare
 
@@ -77,7 +77,7 @@ The advent of precision medicine represents a paradigm shift in healthcare...
 
 ## Chapter 3: Conclusion
 [Conclusion content - truncated for test]
-In conclusion, this thesis has demonstrated the transformative potential...
+In conclusion, this draft has demonstrated the transformative potential...
 
 ## Chapter 4: Appendices
 [Appendices content - truncated for test]
@@ -96,9 +96,9 @@ try:
         model=model,
         name="Thread - Narrative Consistency",
         prompt_path="prompts/03_compose/thread.md",
-        user_input=f"""Review the complete thesis for narrative consistency.
+        user_input=f"""Review the complete draft for narrative consistency.
 
-{thesis_content}
+{draft_content}
 
 **Check for:**
 1. Contradictions across sections
@@ -151,9 +151,9 @@ try:
         model=model,
         name="Narrator - Voice Unification",
         prompt_path="prompts/03_compose/narrator.md",
-        user_input=f"""Review the complete thesis for voice consistency.
+        user_input=f"""Review the complete draft for voice consistency.
 
-{thesis_content}
+{draft_content}
 
 **Check for:**
 1. Consistent tone (formal, objective, confident)
@@ -162,7 +162,7 @@ try:
 4. Uniform vocabulary level
 5. Consistent hedging language
 
-**Target:** Academic master-level thesis
+**Target:** Academic master-level draft
 **Citation style:** APA 7th
 
 **IMPORTANT:** Be thorough but concise. Identify top 3-5 voice issues only.""",

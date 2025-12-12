@@ -50,7 +50,7 @@ class HealthCheckResult:
 
 class HealthChecker:
     """
-    System health monitoring for thesis generation system.
+    System health monitoring for draft generation system.
 
     Checks:
     - API keys (Gemini)
@@ -466,7 +466,7 @@ class HealthChecker:
 
         if failed > 0:
             logger.error(f"HEALTH CHECK FAILED: {failed} critical issue(s) detected")
-            logger.error("Fix critical issues before running thesis generation")
+            logger.error("Fix critical issues before running draft generation")
         elif degraded > 0:
             logger.warning(f"HEALTH CHECK DEGRADED: {degraded} issue(s) detected")
             logger.warning("System will work but may have reduced functionality")
@@ -479,7 +479,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="System health check for thesis generation",
+        description="System health check for draft generation",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(

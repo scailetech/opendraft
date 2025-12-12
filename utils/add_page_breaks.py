@@ -3,7 +3,7 @@
 ABOUTME: Post-processing utility to add LaTeX page breaks for professional PDF structure
 ABOUTME: Adds \\newpage before major sections and appendices for clean page layouts
 
-Target: 8-12 page breaks for optimal academic thesis readability.
+Target: 8-12 page breaks for optimal academic draft readability.
 
 Strategy:
 - Add \\newpage before all top-level headings (# Section)
@@ -14,7 +14,7 @@ Usage:
     python3 utils/add_page_breaks.py <markdown_file>
 
 Integration:
-    Called automatically after Enhancement agent in thesis generation pipeline.
+    Called automatically after Enhancement agent in draft generation pipeline.
 """
 
 import sys

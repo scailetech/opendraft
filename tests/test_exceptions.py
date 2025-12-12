@@ -7,7 +7,7 @@ ABOUTME: Tests all 8 exception classes with context, recovery hints, and backwar
 import pytest
 import requests
 from utils.exceptions import (
-    ThesisGenerationError,
+    DraftGenerationError,
     APIQuotaExceededError,
     CitationFetchError,
     PDFExportError,
@@ -18,12 +18,12 @@ from utils.exceptions import (
 )
 
 
-class TestThesisGenerationError:
+class TestDraftGenerationError:
     """Test base exception class functionality."""
 
     def test_basic_initialization(self):
         """Test exception can be created with message only."""
-        error = ThesisGenerationError("Test error")
+        error = DraftGenerationError("Test error")
         assert str(error) == "Test error"
         assert error.message == "Test error"
         assert error.context == {}
@@ -32,13 +32,13 @@ class TestThesisGenerationError:
     def test_with_context(self):
         """Test exception with context dictionary."""
         context = {"file": "test.py", "line": 42}
-        error = ThesisGenerationError("Test error", context=context)
+        error = DraftGenerationError("Test error", context=context)
         assert error.context == context
         assert "Context:" in str(error)
 
     def test_with_recovery_hint(self):
         """Test exception with recovery hint."""
-        error = ThesisGenerationError(
+        error = DraftGenerationError(
             "Test error",
             recovery_hint="Try restarting the service"
         )
@@ -47,7 +47,7 @@ class TestThesisGenerationError:
 
     def test_full_error_string(self):
         """Test formatted error string with all components."""
-        error = ThesisGenerationError(
+        error = DraftGenerationError(
             "Test error",
             context={"key": "value"},
             recovery_hint="Fix it"
@@ -314,7 +314,7 @@ class TestExceptionInheritance:
     """Test all custom exceptions inherit from base."""
 
     def test_all_inherit_from_base(self):
-        """Test all exception classes inherit from ThesisGenerationError."""
+        """Test all exception classes inherit from DraftGenerationError."""
         exceptions = [
             APIQuotaExceededError(api_name="Test"),
             CitationFetchError(citation_id="test", source="test"),
@@ -326,15 +326,15 @@ class TestExceptionInheritance:
         ]
 
         for exc in exceptions:
-            assert isinstance(exc, ThesisGenerationError)
+            assert isinstance(exc, DraftGenerationError)
             assert isinstance(exc, Exception)
 
     def test_can_catch_with_base_class(self):
         """Test exceptions can be caught with base class."""
-        with pytest.raises(ThesisGenerationError):
+        with pytest.raises(DraftGenerationError):
             raise APIQuotaExceededError(api_name="Test")
 
-        with pytest.raises(ThesisGenerationError):
+        with pytest.raises(DraftGenerationError):
             raise CitationFetchError(citation_id="test", source="test")
 
 

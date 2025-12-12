@@ -6,7 +6,7 @@ repository:
   homepage: "https://opendraft-landing.vercel.app"
   topics:
     - academic-writing
-    - thesis-generator
+    - draft-generator
     - ai-agents
     - citation-management
     - research-tools

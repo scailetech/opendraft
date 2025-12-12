@@ -1,134 +1,80 @@
-# OpenDraft - AI-Powered Academic Thesis Generation
+# OpenDraft - AI-Powered Academic Draft Generation Pipeline
 
-Complete platform for generating professional academic theses with AI, featuring real-time progress tracking and milestone streaming.
+Open-source multi-agent pipeline for generating professional academic drafts using AI.
 
-## 🎯 What is OpenDraft?
+## What is OpenDraft?
 
-OpenDraft democratizes academic research by providing free, AI-powered thesis generation with:
-- **19 specialized AI agents** for research, writing, and formatting
-- **Real-time progress tracking** - See every step (30+ granular updates)
-- **Professional PDF export** - Pandoc/XeLaTeX quality
-- **50+ academic sources** - Auto-verified citations
-- **Complete package** - PDF, DOCX, and ZIP with all materials
+OpenDraft is an AI-powered pipeline that generates academic drafts through a coordinated system of 19 specialized agents:
 
-## 📁 Monorepo Structure
+- **Research Phase**: Scout, Scribe, Signal agents gather and verify sources
+- **Structure Phase**: Architect, Formatter agents create outline and structure
+- **Compose Phase**: Crafter, Thread, Narrator agents write each section
+- **QA Phase**: Skeptic, Verifier, Referee agents review and improve
+- **Refine Phase**: Voice, Polish, Entropy agents enhance readability
+- **Export Phase**: Generate PDF (Pandoc/XeLaTeX) and DOCX outputs
+
+## Features
+
+- 19 specialized AI agents working in sequence
+- Real-time progress tracking (30+ granular steps)
+- Professional PDF export via Pandoc/XeLaTeX
+- 50+ auto-verified academic citations
+- Multiple output formats: PDF, DOCX, Markdown
+
+## Project Structure
 
 ```
 opendraft/
-├── backend/              # Modal backend for thesis generation
-│   ├── modal_worker.py   # Main Modal worker
-│   ├── thesis_generator.py
-│   └── ...
-├── utils/                # Shared utilities
-│   ├── progress_tracker.py
-│   ├── milestone_streamer.py
+├── backend/              # Core generation engine
+│   ├── draft_generator.py   # Main pipeline orchestrator
+│   └── modal_worker.py      # Distributed processing
+├── utils/                # Utilities
+│   ├── api_citations/       # Citation APIs (Crossref, Semantic Scholar)
+│   ├── pdf_engines/         # Export engines (Pandoc, WeasyPrint)
 │   ├── export_professional.py
-│   ├── pdf_engines/      # Pandoc/XeLaTeX exporters
-│   └── ...
-├── website/              # Marketing site (opendraft.xyz)
-│   ├── app/
-│   ├── components/
-│   └── package.json
-├── app/                  # Web app (app.opendraft.xyz)
-│   ├── app/
-│   │   ├── (authenticated)/write/  # Thesis writer UI
-│   │   └── api/thesis/            # API routes
-│   ├── components/thesis/
-│   └── package.json
-├── prompts/              # AI agent prompts
-├── examples/             # Showcase theses
-└── tests/                # Test files
+│   └── progress_tracker.py
+├── prompts/              # Agent instruction templates
+│   ├── 01_research/         # Scout, Scribe, Signal
+│   ├── 02_structure/        # Architect, Formatter
+│   ├── 03_compose/          # Crafter, Thread, Narrator
+│   ├── 04_validate/         # Skeptic, Verifier, Referee
+│   ├── 05_refine/           # Voice, Polish, Entropy
+│   └── 06_enhance/          # Abstract Generator
+├── opendraft/            # CLI interface
+├── tests/                # Test suite
+├── config.py             # Configuration
+└── requirements.txt      # Dependencies
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
-### Backend (Modal)
+### Installation
 ```bash
-cd backend
-modal deploy modal_worker.py
+pip install -r requirements.txt
 ```
 
-### Website (opendraft.xyz)
+### Environment Setup
 ```bash
-cd website
-npm install
-npm run dev
+cp .env.example .env
+# Add your GOOGLE_API_KEY for Gemini
 ```
 
-### App (app.opendraft.xyz)
+### Run Pipeline
 ```bash
-cd app
-npm install
-npm run dev
-# Opens at http://localhost:3000
+python backend/draft_generator.py --topic "Your research topic" --level master
 ```
 
-## 🎓 Features
+## Tech Stack
 
-### Progress Tracking
-- **30+ granular steps** (research → structure → writing → export)
-- Real-time database updates
-- Source counting (0 → 50)
-- Chapter tracking (0 → 3)
-- Phase transitions visible
+- **AI**: Google Gemini 2.0 Flash
+- **Citations**: Crossref, Semantic Scholar, Gemini Grounded
+- **Export**: Pandoc/XeLaTeX (PDF), python-docx (DOCX)
+- **Language**: Python 3.10+
 
-### Milestone Streaming
-- Email notifications at key points
-- UI toast notifications
-- Progressive engagement
-- Partial results (in ZIP)
-
-### Professional Export
-- **Pandoc/XeLaTeX ONLY** (WeasyPrint disabled)
-- Professional academic formatting
-- LaTeX-quality typesetting
-- Custom cover pages
-- All formats: PDF, DOCX, ZIP
-
-### Web App UI
-- Beautiful two-panel layout
-- Gradient stat cards
-- Milestone markers on progress bar
-- Real agent descriptions
-- Real-time polling (3s updates)
-- Persistent jobs (localStorage)
-- Download buttons for all formats
-
-## 🔧 Tech Stack
-
-**Backend**: Python, Modal, Pandoc/XeLaTeX  
-**Database**: Supabase (PostgreSQL)  
-**Frontend**: Next.js 14, React, TypeScript  
-**Styling**: Tailwind CSS, shadcn/ui  
-**AI**: Google Gemini 3.0 Pro Preview  
-**Fallbacks**: DataForSEO  
-**Email**: Resend  
-
-## 📊 Status
-
-**Backend**: ✅ Production ready - Deployed to Modal  
-**Website**: ✅ Live at opendraft.xyz  
-**App**: ✅ Ready for deployment to app.opendraft.xyz  
-**Quality**: ✅ Professional output guaranteed  
-
-## 🎉 Recent Achievements
-
-- ✅ Progress tracking with 30+ steps
-- ✅ Milestone streaming
-- ✅ Beautiful web app UI
-- ✅ Pandoc/XeLaTeX forced (WeasyPrint disabled)
-- ✅ Real-time polling working
-- ✅ Enhanced UI with gradients and milestones
-- ✅ All features tested end-to-end
-
-## 📝 License
+## License
 
 MIT
 
-## 👤 Author
+## Author
 
 Federico De Ponte
-
----
-
-**OpenDraft - Making Academic Research Accessible to Everyone** 🚀

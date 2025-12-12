@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest a new feature or enhancement for Academic Thesis AI
+about: Suggest a new feature or enhancement for Academic Draft AI
 title: '[FEATURE] '
 labels: enhancement
 assignees: ''
@@ -43,7 +43,7 @@ Which existing agents or features would this interact with?
 - [ ] Medicine/Health
 - [ ] Other: ___________
 
-**Example Thesis Topics:** What kinds of theses would use this feature?
+**Example Draft Topics:** What kinds of theses would use this feature?
 
 ## Alternatives Considered
 Describe alternative solutions or features you've considered.

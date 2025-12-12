@@ -4,7 +4,7 @@ COMPREHENSIVE COST TRACKING - PER MODEL
 Tracks token usage for each Gemini model separately.
 
 Models used:
-- gemini-3-pro-preview (thesis writing via SDK) - MOST EXPENSIVE!
+- gemini-3-pro-preview (draft writing via SDK) - MOST EXPENSIVE!
 - gemini-2.5-flash (citation research via REST API) - CHEAPEST
 - gemini-2.5-pro (validation if enabled) - EXPENSIVE
 
@@ -14,10 +14,10 @@ Pricing (Dec 2025 - CORRECTED):
 - Gemini 2.5 Pro: $1.25 per 1M input, $10.00 per 1M output 💰 EXPENSIVE
 
 Tracking Methods:
-- SDK calls (thesis writing): Monkey-patches genai.GenerativeModel.generate_content
+- SDK calls (draft writing): Monkey-patches genai.GenerativeModel.generate_content
 - REST API calls (citation research): Monkey-patches GeminiGroundedClient._generate_content_with_grounding
 
-WARNING: Mixed model usage - expect $1-3 per thesis with proper model configuration!
+WARNING: Mixed model usage - expect $1-3 per draft with proper model configuration!
 """
 
 import sys
@@ -213,7 +213,7 @@ def main():
     print("="*80)
     print(f"Start time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
-    print("🎯 Purpose: Calculate exact cost per thesis by tracking each model separately")
+    print("🎯 Purpose: Calculate exact cost per draft by tracking each model separately")
     print()
     print("📋 Models tracked (with CORRECT pricing):")
     for model_name in TOKEN_TRACKER.keys():
@@ -230,11 +230,11 @@ def main():
                 print(f"   - {model_name}: ${pricing['input']}/1M in, ${pricing['output']}/1M out{cost_label}")
     print()
     print("⚠️  WARNING: Gemini 3 Pro Preview is 6-8x more expensive than 2.5 Flash!")
-    print("   If most tokens use 3 Pro Preview, expect $1-3 cost per thesis (not $0.03!)")
+    print("   If most tokens use 3 Pro Preview, expect $1-3 cost per draft (not $0.03!)")
     print()
 
-    # Import thesis generator AFTER patching
-    from backend.thesis_generator import generate_thesis
+    # Import draft generator AFTER patching
+    from backend.draft_generator import generate_draft
     from utils.api_citations.gemini_grounded import GeminiGroundedClient
 
     # Patch Gemini Grounded REST API
@@ -260,14 +260,14 @@ def main():
     print(f"   Language: english")
     print()
 
-    print("🚀 Starting Full Thesis Generation with Per-Model Cost Tracking...")
+    print("🚀 Starting Full Draft Generation with Per-Model Cost Tracking...")
     print()
 
     start_time = time.time()
 
     try:
         # Run full pipeline
-        result = generate_thesis(
+        result = generate_draft(
             topic=topic,
             language="en",
             academic_level="master",
@@ -326,7 +326,7 @@ def main():
 
         # Recommendation
         if costs['totals']['profit'] > 0:
-            print(f"✅ PROFITABLE: ${costs['totals']['profit']:.2f} profit per thesis at $10 price point")
+            print(f"✅ PROFITABLE: ${costs['totals']['profit']:.2f} profit per draft at $10 price point")
 
             # Calculate minimum price for 20% margin
             min_price_20 = costs['totals']['total_cost'] * 1.25
@@ -334,7 +334,7 @@ def main():
             print(f"   💡 Could price as low as ${min_price_20:.2f} (20% margin)")
             print(f"   💡 Recommended pricing: ${min_price_50:.2f} (50% margin) or $10 (current)")
         else:
-            print(f"❌ NOT PROFITABLE: ${abs(costs['totals']['profit']):.2f} LOSS per thesis at $10 price point")
+            print(f"❌ NOT PROFITABLE: ${abs(costs['totals']['profit']):.2f} LOSS per draft at $10 price point")
             recommended_price = costs['totals']['total_cost'] * 1.5
             print(f"   💡 Recommended price: ${recommended_price:.2f} (50% margin)")
         print()

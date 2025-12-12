@@ -51,7 +51,7 @@ class DetailedProgressTracker:
     def writing_conclusion_start(self): self.update(66, "writing", "writing_conclusion")
     def writing_conclusion_done(self): self.update(72, "writing", "conclusion_complete", chapters=3, milestone="conclusion_complete")
     
-    def compile_start(self): self.update(74, "compiling", "assembling_thesis")
+    def compile_start(self): self.update(74, "compiling", "assembling_draft")
     def compile_citations(self): self.update(77, "compiling", "inserting_citations")
     def compile_enhance(self): self.update(80, "compiling", "enhancing_content")
     def compile_done(self): self.update(85, "compiling", "compilation_complete", milestone="compilation_complete")
@@ -61,7 +61,7 @@ class DetailedProgressTracker:
     def export_docx_start(self): self.update(94, "exporting", "generating_docx")
     def export_docx_done(self): self.update(97, "exporting", "docx_complete")
     def export_zip(self): self.update(99, "exporting", "creating_zip")
-    def complete(self): self.update(100, "completed", "thesis_ready", milestone="thesis_complete")
+    def complete(self): self.update(100, "completed", "draft_ready", milestone="draft_complete")
     
     # Compatibility methods for existing code
     def update_research(self, sources_count: int, phase_detail: str = ""):

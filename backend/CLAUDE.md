@@ -1,4 +1,4 @@
-# Backend Thesis Generation System
+# Backend Draft Generation System
 
 ## Gemini Model Configuration
 

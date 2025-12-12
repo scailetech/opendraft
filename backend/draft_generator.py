@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-ABOUTME: Standalone thesis generation function for Modal.com automated processing
-ABOUTME: Extracts core logic from test_academic_ai_thesis.py for production use
+ABOUTME: Standalone draft generation function for Modal.com automated processing
+ABOUTME: Extracts core logic from test_academic_ai_draft.py for production use
 
-This module provides a simplified, production-ready thesis generation workflow
+This module provides a simplified, production-ready draft generation workflow
 that can be called from Modal workers or other automated systems.
 
 Output Structure:
-    thesis_output/
+    draft_output/
     ├── research/           # All research materials
     │   ├── papers/         # Individual paper summaries
     │   ├── combined_research.md
@@ -80,13 +80,13 @@ from utils.scrape_citation_titles import TitleScraper
 from utils.scrape_citation_metadata import MetadataScraper
 from utils.citation_quality_filter import CitationQualityFilter
 from utils.citation_compiler import CitationCompiler
-from utils.abstract_generator import generate_abstract_for_thesis
+from utils.abstract_generator import generate_abstract_for_draft
 from utils.export_professional import export_pdf, export_docx
 
 
 def setup_output_folders(output_dir: Path) -> Dict[str, Path]:
     """
-    Create the organized folder structure for thesis output.
+    Create the organized folder structure for draft output.
     
     Returns dict with paths to all subdirectories.
     """
@@ -222,7 +222,7 @@ def copy_tools_to_output(tools_dir: Path, topic: str, academic_level: str, verbo
 def create_output_readme(output_dir: Path, topic: str, verbose: bool = True):
     """Create README.md for the output folder."""
     project_root = Path(__file__).parent.parent
-    readme_template = project_root / 'templates' / 'thesis_readme.md'
+    readme_template = project_root / 'templates' / 'draft_readme.md'
     
     if readme_template.exists():
         shutil.copy(readme_template, output_dir / 'README.md')
@@ -267,7 +267,7 @@ def fix_single_line_tables(content: str) -> str:
 
 def deduplicate_appendices(content: str) -> str:
     """
-    Remove duplicate appendix sections from thesis content.
+    Remove duplicate appendix sections from draft content.
     
     BUG: LLM sometimes generates duplicate appendix sections when
     generating long-form content across multiple agent calls.
@@ -331,7 +331,7 @@ def clean_malformed_markdown(content: str) -> str:
     return content
 
 
-def generate_thesis(
+def generate_draft(
     topic: str,
     language: str = "en",
     academic_level: str = "master",
@@ -351,16 +351,16 @@ def generate_thesis(
     student_id: Optional[str] = None,
 ) -> Tuple[Path, Path]:
     """
-    Generate a complete academic thesis using 19 specialized AI agents.
+    Generate a complete academic draft using 19 specialized AI agents.
 
     This is a simplified, production-ready version of the test workflow,
     optimized for automated processing on Modal.com or similar platforms.
 
     Args:
-        topic: Thesis topic (e.g., "Machine Learning for Climate Prediction")
-        language: Thesis language - 'en' or 'de' (English/German)
+        topic: Draft topic (e.g., "Machine Learning for Climate Prediction")
+        language: Draft language - 'en' or 'de' (English/German)
         academic_level: 'bachelor', 'master', or 'phd'
-        output_dir: Custom output directory (default: config.paths.output_dir / "generated_thesis")
+        output_dir: Custom output directory (default: config.paths.output_dir / "generated_draft")
         skip_validation: Skip strict quality gates (recommended for automated runs)
         verbose: Print progress messages
         author_name: Student's full name (for cover page)
@@ -373,14 +373,14 @@ def generate_thesis(
         student_id: Student matriculation number
 
     Returns:
-        Tuple[Path, Path]: (pdf_path, docx_path) - Paths to generated thesis files
+        Tuple[Path, Path]: (pdf_path, docx_path) - Paths to generated draft files
 
     Raises:
         ValueError: If insufficient citations found or generation fails
         Exception: If any critical step fails
 
     Example:
-        >>> pdf, docx = generate_thesis(
+        >>> pdf, docx = generate_draft(
         ...     topic="AI-Assisted Academic Writing",
         ...     language="en",
         ...     academic_level="master",
@@ -393,9 +393,9 @@ def generate_thesis(
     # ====================================================================
     # STARTUP AND INITIALIZATION
     # ====================================================================
-    thesis_start_time = time.time()
+    draft_start_time = time.time()
     logger.info("="*80)
-    logger.info("THESIS GENERATION STARTED")
+    logger.info("DRAFT GENERATION STARTED")
     logger.info("="*80)
     logger.info(f"Topic: {topic}")
     logger.info(f"Language: {language}")
@@ -417,7 +417,7 @@ def generate_thesis(
 
         if verbose:
             print("="*70)
-            print("THESIS GENERATION - AUTOMATED WORKFLOW")
+            print("DRAFT GENERATION - AUTOMATED WORKFLOW")
             print("="*70)
             print(f"Topic: {topic}")
             print(f"Language: {language}")
@@ -431,7 +431,7 @@ def generate_thesis(
         logger.info("[SETUP] Model initialized successfully")
 
         if output_dir is None:
-            output_dir = config.paths.output_dir / "generated_thesis"
+            output_dir = config.paths.output_dir / "generated_draft"
 
         logger.info(f"[SETUP] Output directory: {output_dir}")
 
@@ -483,7 +483,7 @@ def generate_thesis(
             scout_output = (folders['research'] / "scout_raw.md").read_text(encoding='utf-8')
 
         except ValueError as e:
-            raise ValueError(f"Insufficient citations for thesis generation: {str(e)}")
+            raise ValueError(f"Insufficient citations for draft generation: {str(e)}")
 
         rate_limit_delay()
 
@@ -530,7 +530,7 @@ def generate_thesis(
             model=model,
             name="Architect - Design Structure",
             prompt_path="prompts/02_structure/architect.md",
-            user_input=f"Create thesis outline for: {topic}\n\nResearch gaps:\n{signal_output[:2000]}\n\nLength: 25,000-30,000 words (comprehensive master thesis)",
+            user_input=f"Create draft outline for: {topic}\n\nResearch gaps:\n{signal_output[:2000]}\n\nLength: 25,000-30,000 words (comprehensive master draft)",
             save_to=folders['drafts'] / "00_outline.md",
             skip_validation=skip_validation,
             verbose=verbose
@@ -578,7 +578,7 @@ def generate_thesis(
         citation_database = CitationDatabase(
             citations=scout_citations,
             citation_style="APA 7th",
-            thesis_language="english" if language == "en" else "german"
+            draft_language="english" if language == "en" else "german"
         )
 
         # Deduplicate citations
@@ -752,7 +752,7 @@ Outline:
                 model=model,
                 name="Crafter - Literature Review",
                 prompt_path="prompts/03_compose/crafter.md",
-                user_input=f"""Write section 2.1 Literature Review for this thesis.
+                user_input=f"""Write section 2.1 Literature Review for this draft.
 
 Topic: {topic}
 
@@ -781,7 +781,7 @@ Outline context:
 - Review of empirical studies (with abstracts provided)
 - Comparison of different approaches/methodologies
 - Evolution of the field
-- Research gaps that your thesis will address
+- Research gaps that your draft will address
 
 **Use the abstracts provided to write evidence-based literature review with specific findings, NOT generic statements.**""",
                 save_to=folders['drafts'] / "02_1_literature_review.md",
@@ -826,7 +826,7 @@ Outline context:
                 model=model,
                 name="Crafter - Methodology",
                 prompt_path="prompts/03_compose/crafter.md",
-                user_input=f"""Write section 2.2 Methodology for this thesis.
+                user_input=f"""Write section 2.2 Methodology for this draft.
 
 Topic: {topic}
 
@@ -904,7 +904,7 @@ Outline:
                 model=model,
                 name="Crafter - Analysis and Results",
                 prompt_path="prompts/03_compose/crafter.md",
-                user_input=f"""Write section 2.3 Analysis and Results for this thesis.
+                user_input=f"""Write section 2.3 Analysis and Results for this draft.
 
 Topic: {topic}
 
@@ -982,7 +982,7 @@ Research data:
                 model=model,
                 name="Crafter - Discussion",
                 prompt_path="prompts/03_compose/crafter.md",
-                user_input=f"""Write section 2.4 Discussion for this thesis.
+                user_input=f"""Write section 2.4 Discussion for this draft.
 
 Topic: {topic}
 
@@ -1185,11 +1185,11 @@ Main findings:
                 model=model,
                 name="Crafter - Appendices",
                 prompt_path="prompts/03_compose/crafter.md",
-                user_input=f"""Write 3-4 appendices for this thesis:
+                user_input=f"""Write 3-4 appendices for this draft:
 
     Topic: {topic}
 
-    Thesis content summary:
+    Draft content summary:
     - Introduction: {intro_output[:1500]}
     - Main findings: {body_output[:2000]}
     - Conclusion: {conclusion_output[:1000]}
@@ -1201,13 +1201,13 @@ Main findings:
     2. Generate 3-4 appendices following this structure:
 
     ## Appendix A: Conceptual Framework
-    A detailed framework or model relevant to the thesis topic with tables/diagrams described in markdown.
+    A detailed framework or model relevant to the draft topic with tables/diagrams described in markdown.
 
     ## Appendix B: Supplementary Data Tables
     Additional data, metrics, or case study details supporting the main analysis.
 
     ## Appendix C: Glossary of Terms
-    Key technical terms and definitions used throughout the thesis.
+    Key technical terms and definitions used throughout the draft.
 
     ## Appendix D: Additional Resources
     Supplementary references, tools, and resources for further reading.
@@ -1267,7 +1267,7 @@ Main findings:
             print("\n🔍 PHASE 3.5: QUALITY ASSURANCE")
 
         # Prepare all chapter content for QA review
-        all_chapters_content = f"""# Complete Thesis for QA Review
+        all_chapters_content = f"""# Complete Draft for QA Review
 
 ## Chapter 1: Introduction
 {intro_output}
@@ -1301,7 +1301,7 @@ Main findings:
             discussion_content = (folders['drafts'] / '02_4_discussion.md').read_text(encoding='utf-8') if (folders['drafts'] / '02_4_discussion.md').exists() else ""
 
             # Truncate sections to fit within context (keep first/last portions)
-            all_chapters_for_qa = f"""# Complete Thesis for QA Review
+            all_chapters_for_qa = f"""# Complete Draft for QA Review
 
 Topic: {topic}
 
@@ -1338,7 +1338,7 @@ Topic: {topic}
 """
         except Exception as e:
             logger.warning(f"Could not read section files for QA: {e}")
-            all_chapters_for_qa = f"""# Complete Thesis for QA Review (Truncated)
+            all_chapters_for_qa = f"""# Complete Draft for QA Review (Truncated)
 
 Topic: {topic}
 
@@ -1357,7 +1357,7 @@ Appendices: {appendix_output[:1000]}
                 model=model,
                 name="Thread - Narrative Consistency",
                 prompt_path="prompts/03_compose/thread.md",
-                user_input=f"""Review the complete thesis for narrative consistency.
+                user_input=f"""Review the complete draft for narrative consistency.
 
 {all_chapters_for_qa}
 
@@ -1398,7 +1398,7 @@ Appendices: {appendix_output[:1000]}
                 model=model,
                 name="Narrator - Voice Unification",
                 prompt_path="prompts/03_compose/narrator.md",
-                user_input=f"""Review the complete thesis for voice consistency.
+                user_input=f"""Review the complete draft for voice consistency.
 
 {all_chapters_for_qa}
 
@@ -1409,7 +1409,7 @@ Appendices: {appendix_output[:1000]}
 4. Uniform vocabulary level
 5. Consistent hedging language
 
-**Target:** Academic {academic_level}-level thesis
+**Target:** Academic {academic_level}-level draft
 **Citation style:** {citation_database.citation_style}""",
                 save_to=folders['drafts'] / "qa_voice_unification.md",
                 skip_validation=True,
@@ -1445,7 +1445,7 @@ Appendices: {appendix_output[:1000]}
             print("\n🔧 PHASE 4: COMPILE")
     
         if tracker:
-            tracker.update_phase("compiling", progress_percent=75, details={"stage": "assembling_thesis"})
+            tracker.update_phase("compiling", progress_percent=75, details={"stage": "assembling_draft"})
 
         # Strip headers from section outputs (they already contain # headers from agents)
         def strip_first_header(text: str) -> str:
@@ -1466,19 +1466,19 @@ Appendices: {appendix_output[:1000]}
 
         # Combine all sections with YAML frontmatter for cover page
         # Calculate word count for cover page
-        thesis_text = f"{intro_clean}\n{body_clean}\n{conclusion_clean}\n{appendix_clean}"
-        word_count = len(thesis_text.split())
+        draft_text = f"{intro_clean}\n{body_clean}\n{conclusion_clean}\n{appendix_clean}"
+        word_count = len(draft_text.split())
 
         # Calculate pages estimate (250 words per page)
         pages_estimate = word_count // 250
 
-        # Determine thesis type label based on academic level
-        thesis_type_labels = {
-            'bachelor': 'Bachelor Thesis',
-            'master': 'Master Thesis',
+        # Determine draft type label based on academic level
+        draft_type_labels = {
+            'bachelor': 'Bachelor Draft',
+            'master': 'Master Draft',
             'phd': 'PhD Dissertation'
         }
-        thesis_type = thesis_type_labels.get(academic_level, 'Master Thesis')
+        draft_type = draft_type_labels.get(academic_level, 'Master Draft')
     
         # Determine degree label
         degree_labels = {
@@ -1499,7 +1499,7 @@ Appendices: {appendix_output[:1000]}
         yaml_location = location or "Munich"
         yaml_student_id = student_id or "N/A"
 
-        full_thesis = f"""---
+        full_draft = f"""---
 title: "{topic}"
 author: "{yaml_author}"
 date: "{current_date}"
@@ -1511,7 +1511,7 @@ advisor: "{yaml_advisor}"
 second_examiner: "{yaml_second_examiner}"
 location: "{yaml_location}"
 student_id: "{yaml_student_id}"
-project_type: "{thesis_type}"
+project_type: "{draft_type}"
 word_count: "{word_count:,} words"
 pages: "{pages_estimate}"
 generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
@@ -1553,50 +1553,50 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
         )
 
         # Generate reference list BEFORE compile_citations (while {cite_XXX} patterns still exist)
-        reference_list = compiler.generate_reference_list(full_thesis)
+        reference_list = compiler.generate_reference_list(full_draft)
 
         # Now compile citations (replaces {cite_XXX} with (Author et al., Year) format)
-        compiled_thesis, replaced_ids, failed_ids = compiler.compile_citations(full_thesis, research_missing=True, verbose=verbose)
+        compiled_draft, replaced_ids, failed_ids = compiler.compile_citations(full_draft, research_missing=True, verbose=verbose)
 
         # Remove the entire template References section (header + placeholder) to avoid duplication
         # Account for optional leading whitespace from indented templates
-        compiled_thesis = re.sub(r'^\s*#+ (?:\d+\.\s*)?References\s*\n\s*\[Citations will be compiled\]\s*', '', compiled_thesis, flags=re.MULTILINE)
+        compiled_draft = re.sub(r'^\s*#+ (?:\d+\.\s*)?References\s*\n\s*\[Citations will be compiled\]\s*', '', compiled_draft, flags=re.MULTILINE)
         # Append the generated reference list with citations
-        compiled_thesis = compiled_thesis + reference_list
+        compiled_draft = compiled_draft + reference_list
 
-        # Save intermediate thesis for abstract generation
-        intermediate_md_path = folders['exports'] / "INTERMEDIATE_THESIS.md"
-        intermediate_md_path.write_text(compiled_thesis, encoding='utf-8')
+        # Save intermediate draft for abstract generation
+        intermediate_md_path = folders['exports'] / "INTERMEDIATE_DRAFT.md"
+        intermediate_md_path.write_text(compiled_draft, encoding='utf-8')
 
         # Generate abstract using the agent
-        abstract_success, abstract_updated_content = generate_abstract_for_thesis(
-            thesis_path=intermediate_md_path,
+        abstract_success, abstract_updated_content = generate_abstract_for_draft(
+            draft_path=intermediate_md_path,
             model=model,
             run_agent_func=run_agent,
             output_dir=folders['exports'],
             verbose=verbose
         )
 
-        # Read updated thesis with abstract
+        # Read updated draft with abstract
         if abstract_success and abstract_updated_content:
-            final_thesis = abstract_updated_content
+            final_draft = abstract_updated_content
         else:
-            # Fallback: use compiled thesis without abstract
-            final_thesis = compiled_thesis
+            # Fallback: use compiled draft without abstract
+            final_draft = compiled_draft
 
         # Save final markdown
-        final_md_path = folders['exports'] / "FINAL_THESIS.md"
+        final_md_path = folders['exports'] / "FINAL_DRAFT.md"
         # Fix single-line tables before saving
-        final_thesis = fix_single_line_tables(final_thesis)
-        final_thesis = deduplicate_appendices(final_thesis)
-        final_thesis = clean_malformed_markdown(final_thesis)
+        final_draft = fix_single_line_tables(final_draft)
+        final_draft = deduplicate_appendices(final_draft)
+        final_draft = clean_malformed_markdown(final_draft)
         # Clean AI language patterns (em dashes, overused words)
         from utils.text_utils import clean_ai_language
-        final_thesis = clean_ai_language(final_thesis)
-        final_md_path.write_text(final_thesis, encoding='utf-8')
+        final_draft = clean_ai_language(final_draft)
+        final_md_path.write_text(final_draft, encoding='utf-8')
 
         if verbose:
-            print(f"✅ Thesis compiled: {len(final_thesis):,} characters")
+            print(f"✅ Draft compiled: {len(final_draft):,} characters")
 
         # ====================================================================
         # PHASE 5: EXPORT
@@ -1608,7 +1608,7 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
             tracker.update_exporting(export_type="PDF and DOCX")
 
         # Export to PDF with error handling - ONLY Pandoc/XeLaTeX allowed
-        pdf_path = folders['exports'] / "FINAL_THESIS.pdf"
+        pdf_path = folders['exports'] / "FINAL_DRAFT.pdf"
     
         if verbose:
             print("📄 Exporting PDF with Pandoc/XeLaTeX (ONLY engine allowed - professional quality)...")
@@ -1619,7 +1619,7 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
             engine='pandoc'  # ONLY Pandoc/XeLaTeX - WeasyPrint disabled!
         )
     
-        # If Pandoc fails, thesis generation should FAIL (no silent fallback to poor quality)
+        # If Pandoc fails, draft generation should FAIL (no silent fallback to poor quality)
         if not pdf_success:
             raise RuntimeError("PDF export failed - Pandoc/XeLaTeX required! WeasyPrint is disabled.")
     
@@ -1627,7 +1627,7 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
             raise RuntimeError(f"PDF export failed - file not created: {pdf_path}")
 
         # Export to DOCX with error handling
-        docx_path = folders['exports'] / "FINAL_THESIS.docx"
+        docx_path = folders['exports'] / "FINAL_DRAFT.docx"
         docx_success = export_docx(
             md_file=final_md_path,
             output_docx=docx_path
@@ -1641,22 +1641,22 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
             print(f"✅ Exported DOCX: {docx_path}")
             print(f"📂 Output folder: {output_dir}")
             print("="*70)
-            print("✅ THESIS GENERATION COMPLETE")
+            print("✅ DRAFT GENERATION COMPLETE")
             print("="*70)
-            print("\n💡 Open the folder in Cursor to refine your thesis!")
+            print("\n💡 Open the folder in Cursor to refine your draft!")
             print(f"   cursor {output_dir}")
     
         if tracker:
             tracker.mark_completed()
 
         # ====================================================================
-        # THESIS GENERATION COMPLETE
+        # DRAFT GENERATION COMPLETE
         # ====================================================================
-        thesis_total_time = time.time() - thesis_start_time
+        draft_total_time = time.time() - draft_start_time
         logger.info("="*80)
-        logger.info("THESIS GENERATION COMPLETE!")
+        logger.info("DRAFT GENERATION COMPLETE!")
         logger.info("="*80)
-        logger.info(f"Total time: {thesis_total_time:.1f}s ({thesis_total_time/60:.1f} minutes)")
+        logger.info(f"Total time: {draft_total_time:.1f}s ({draft_total_time/60:.1f} minutes)")
         logger.info(f"PDF: {pdf_path}")
         logger.info(f"DOCX: {docx_path}")
         logger.info(f"PDF size: {pdf_path.stat().st_size:,} bytes ({pdf_path.stat().st_size/1024/1024:.1f} MB)")
@@ -1667,11 +1667,11 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
         return pdf_path, docx_path
 
     except Exception as e:
-        thesis_total_time = time.time() - thesis_start_time
+        draft_total_time = time.time() - draft_start_time
         logger.error("="*80)
-        logger.error("THESIS GENERATION FAILED!")
+        logger.error("DRAFT GENERATION FAILED!")
         logger.error("="*80)
-        logger.error(f"Failed after {thesis_total_time:.1f}s ({thesis_total_time/60:.1f} minutes)")
+        logger.error(f"Failed after {draft_total_time:.1f}s ({draft_total_time/60:.1f} minutes)")
         logger.error(f"Error: {e}")
         logger.error(f"Error type: {type(e).__name__}")
         logger.error("="*80)
@@ -1696,15 +1696,15 @@ if __name__ == "__main__":
     import os
     import sys
 
-    parser = argparse.ArgumentParser(description="Generate academic thesis")
+    parser = argparse.ArgumentParser(description="Generate academic draft")
 
     # Required arguments
-    parser.add_argument("--topic", required=True, help="Thesis topic")
+    parser.add_argument("--topic", required=True, help="Draft topic")
     parser.add_argument("--language", default="en", choices=["en", "de"], help="Language")
     parser.add_argument("--academic-level", default="master", choices=["bachelor", "master", "phd"], help="Academic level")
 
     # Database integration (optional - for direct execution from Next.js)
-    parser.add_argument("--thesis-id", help="Database thesis ID for progress tracking")
+    parser.add_argument("--draft-id", help="Database draft ID for progress tracking")
     parser.add_argument("--supabase-url", help="Supabase URL")
     parser.add_argument("--supabase-key", help="Supabase service role key")
     parser.add_argument("--gemini-key", help="Gemini API key (overrides env var)")
@@ -1732,16 +1732,16 @@ if __name__ == "__main__":
     if args.supabase_key:
         os.environ['SUPABASE_SERVICE_KEY'] = args.supabase_key
 
-    # Initialize database tracker if thesis_id provided
+    # Initialize database tracker if draft_id provided
     tracker = None
-    if args.thesis_id:
+    if args.draft_id:
         from utils.progress_tracker import ProgressTracker
-        tracker = ProgressTracker(thesis_id=args.thesis_id)
-        print(f"✅ Database tracking enabled for thesis: {args.thesis_id}")
+        tracker = ProgressTracker(draft_id=args.draft_id)
+        print(f"✅ Database tracking enabled for draft: {args.draft_id}")
 
     try:
-        # Generate thesis
-        pdf, docx = generate_thesis(
+        # Generate draft
+        pdf, docx = generate_draft(
             topic=args.topic,
             language=args.language,
             academic_level=args.academic_level,

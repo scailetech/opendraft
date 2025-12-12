@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ABOUTME: Production-grade academic citation search using Semantic Scholar, CrossRef, and arXiv APIs
-ABOUTME: Replaces Gemini Grounded with real academic databases for 50+ quality citations per thesis
+ABOUTME: Replaces Gemini Grounded with real academic databases for 50+ quality citations per draft
 
 This module provides the foundation for generating high-quality academic citations
 by querying real academic APIs instead of web search. It ensures:
@@ -13,7 +13,7 @@ by querying real academic APIs instead of web search. It ensures:
 
 Design Principles:
 - SOLID: Single Responsibility (academic search only)
-- DRY: Reusable across all thesis generation
+- DRY: Reusable across all draft generation
 - Production-grade: Retry logic, rate limiting, error handling
 - Quality-first: Validate during generation, not after
 """
@@ -387,7 +387,7 @@ def search_crossref(query: str, limit: int = 10) -> List[Citation]:
 def _crossref_request_with_retry(url: str, params: Dict[str, Any]) -> requests.Response:
     """Make HTTP request to CrossRef with retry logic. Increased delays for automated runs: base_delay=5s, max_delay=60s"""
     headers = {
-        "User-Agent": "AcademicThesisAI/1.0 (mailto:research@example.com)"
+        "User-Agent": "AcademicDraftAI/1.0 (mailto:research@example.com)"
     }
     response = requests.get(url, params=params, headers=headers, timeout=10)
     response.raise_for_status()

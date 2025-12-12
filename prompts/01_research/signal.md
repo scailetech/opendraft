@@ -269,7 +269,7 @@ Based on this analysis, here are **3 promising directions** for your research:
 3. Agent analyzes gaps and opportunities
 4. Save output to `research/gaps.md`
 
-This output will guide your thesis structure and arguments!
+This output will guide your draft structure and arguments!
 
 ---
 

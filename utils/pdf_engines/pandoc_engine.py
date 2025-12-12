@@ -123,7 +123,7 @@ class PandocLatexEngine(PDFEngine):
             md_content = self._normalize_yaml_for_pandoc(md_content)
 
             # CRITICAL: Remove outer ```markdown wrapper if present (BUG #20)
-            # Recent thesis generations incorrectly wrap entire file in code fence
+            # Recent draft generations incorrectly wrap entire file in code fence
             md_content = self._unwrap_markdown_fence(md_content)
 
             # CRITICAL: Remove duplicate title heading for showcase theses
@@ -160,7 +160,7 @@ class PandocLatexEngine(PDFEngine):
 
             # Create LaTeX preamble for header customization
             # CRITICAL: Use ORIGINAL content (before normalization) for YAML extraction
-            # This preserves showcase fields for is_showcase_thesis() check
+            # This preserves showcase fields for is_showcase_draft() check
             latex_preamble = self._create_latex_preamble(options, original_md_content)
             preamble_path = output_pdf.parent / f"{output_pdf.stem}_preamble.tex"
             preamble_path = preamble_path.resolve()  # Get absolute path
@@ -493,7 +493,7 @@ class PandocLatexEngine(PDFEngine):
                 cmd.extend(['--variable', f'toc-depth={options.toc_depth}'])
                 cmd.extend(['--variable', 'toc-title=Table of Contents'])
 
-            # NOTE: Do NOT use --number-sections because thesis markdown files
+            # NOTE: Do NOT use --number-sections because draft markdown files
             # typically have manual section numbering embedded (e.g., "2.1 The Evolution...")
             # Using --number-sections would create duplicates like "1.1 2.1 The Evolution..."
 
@@ -686,12 +686,12 @@ class PandocLatexEngine(PDFEngine):
         # to prevent Pandoc from inserting duplicate title headings that appear in ToC
         pandoc_recognized_fields = ['title', 'subtitle', 'author', 'date', 'abstract']
 
-        # Check if this is a showcase thesis (has custom professional cover page)
+        # Check if this is a showcase draft (has custom professional cover page)
         # Detection: either has showcase_description field OR project_type contains "showcase"
         is_showcase = ('showcase_description:' in yaml_content.lower() or
                       'showcase' in yaml_content.lower())
 
-        # If showcase thesis, remove title/subtitle from allowed fields
+        # If showcase draft, remove title/subtitle from allowed fields
         # The custom titlepage already renders these - Pandoc shouldn't duplicate them
         if is_showcase:
             pandoc_recognized_fields = ['author', 'date', 'abstract']
@@ -726,7 +726,7 @@ class PandocLatexEngine(PDFEngine):
         """
         Remove outer ```markdown wrapper if present (BUG #20).
 
-        Recent thesis generations incorrectly wrap the entire file content
+        Recent draft generations incorrectly wrap the entire file content
         in a code fence like:
             ```markdown
             ---
@@ -735,7 +735,7 @@ class PandocLatexEngine(PDFEngine):
             # Content...
             ```
 
-        This causes Pandoc to treat the entire thesis as verbatim code.
+        This causes Pandoc to treat the entire draft as verbatim code.
 
         Args:
             md_content: Markdown content potentially wrapped in code fence
@@ -768,7 +768,7 @@ class PandocLatexEngine(PDFEngine):
             original_content: Original content BEFORE normalization (for showcase detection)
 
         Returns:
-            Markdown content with first # heading removed (if showcase thesis)
+            Markdown content with first # heading removed (if showcase draft)
         """
         import re
 

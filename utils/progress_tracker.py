@@ -1,5 +1,5 @@
 """
-Progress tracking utility for thesis generation.
+Progress tracking utility for draft generation.
 Updates database with real-time progress information.
 """
 import os
@@ -8,22 +8,22 @@ from datetime import datetime
 
 
 class ProgressTracker:
-    """Tracks and updates thesis generation progress in real-time."""
+    """Tracks and updates draft generation progress in real-time."""
 
-    def __init__(self, thesis_id: str = None, user_id: str = None, table_name: str = "theses", supabase_client=None):
+    def __init__(self, draft_id: str = None, user_id: str = None, table_name: str = "theses", supabase_client=None):
         """
         Initialize progress tracker.
 
         Args:
-            thesis_id: Thesis ID to track progress for (preferred for new theses table)
+            draft_id: Draft ID to track progress for (preferred for new theses table)
             user_id: User ID to track progress for (legacy, for waitlist table)
             table_name: Table name to update ('theses' or 'waitlist'). Default: 'theses'
             supabase_client: Supabase client instance (optional, will create if not provided)
         """
-        self.thesis_id = thesis_id
-        self.user_id = user_id or thesis_id  # Fallback to thesis_id if user_id not provided
+        self.draft_id = draft_id
+        self.user_id = user_id or draft_id  # Fallback to draft_id if user_id not provided
         self.table_name = table_name
-        self.record_id = thesis_id if thesis_id else user_id  # ID to use for queries
+        self.record_id = draft_id if draft_id else user_id  # ID to use for queries
 
         if supabase_client:
             self.supabase = supabase_client
@@ -72,7 +72,7 @@ class ProgressTracker:
             print(f"📊 Progress [{self.table_name}]: {phase} ({progress_percent}%) | Sources: {sources_count or 0} | Chapters: {chapters_count or 0}")
             
         except Exception as e:
-            # Don't fail thesis generation if progress update fails
+            # Don't fail draft generation if progress update fails
             print(f"⚠️  Progress update failed: {e}")
     
     def update_research(self, sources_count: int, phase_detail: str = ""):
@@ -113,7 +113,7 @@ class ProgressTracker:
         )
     
     def mark_completed(self):
-        """Mark thesis as completed."""
+        """Mark draft as completed."""
         self.update_phase(
             phase="completed",
             progress_percent=100

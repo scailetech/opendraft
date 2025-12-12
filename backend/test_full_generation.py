@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Full Thesis Generation Test - Verify Optimizations
+Full Draft Generation Test - Verify Optimizations
 """
 import requests
 import time
@@ -13,10 +13,10 @@ def main():
     supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
     print('='*70)
-    print('FULL THESIS GENERATION TEST - OPTIMIZATIONS VERIFICATION')
+    print('FULL DRAFT GENERATION TEST - OPTIMIZATIONS VERIFICATION')
     print('='*70)
 
-    # Create thesis
+    # Create draft
     result = supabase.table('theses').insert({
         'user_id': 'ed9754c2-9929-4506-aa99-b5f1de9d5735',
         'topic': 'Machine Learning Applications in Climate Change Prediction',
@@ -25,22 +25,22 @@ def main():
         'status': 'pending'
     }).execute()
 
-    thesis_id = result.data[0]['id']
-    print(f'\n✓ Thesis Created: {thesis_id}')
+    draft_id = result.data[0]['id']
+    print(f'\n✓ Draft Created: {draft_id}')
     print(f'  Topic: Machine Learning Applications in Climate Change Prediction')
 
     # Trigger Modal
     print(f'\nTriggering Modal worker...')
     response = requests.post(
-        'https://tech-opendraft--thesis-generator-trigger-thesis-http.modal.run',
-        json={'thesis_id': thesis_id},
+        'https://tech-opendraft--draft-generator-trigger-draft-http.modal.run',
+        json={'draft_id': draft_id},
         timeout=30
     )
     print(f'✓ Modal Response: {response.json()}')
 
     print(f'\n{"="*70}')
-    print(f'MONITORING THESIS GENERATION TO COMPLETION')
-    print(f'Thesis ID: {thesis_id}')
+    print(f'MONITORING DRAFT GENERATION TO COMPLETION')
+    print(f'Draft ID: {draft_id}')
     print(f'{"="*70}\n')
 
     start_time = time.time()
@@ -51,7 +51,7 @@ def main():
         elapsed = int(time.time() - start_time)
         result = supabase.table('theses').select(
             'status,current_phase,progress_percent,error_message'
-        ).eq('id', thesis_id).single().execute()
+        ).eq('id', draft_id).single().execute()
 
         status = result.data.get('status')
         phase = result.data.get('current_phase')
@@ -70,7 +70,7 @@ def main():
             mins = elapsed // 60
             secs = elapsed % 60
             print(f'\n{"="*70}')
-            print(f'✅ THESIS COMPLETED SUCCESSFULLY!')
+            print(f'✅ DRAFT COMPLETED SUCCESSFULLY!')
             print(f'⏱️  Total Time: {mins} minutes {secs} seconds')
             print(f'{"="*70}')
             break

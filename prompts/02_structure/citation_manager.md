@@ -2,7 +2,7 @@
 
 **Role:** Extract all citations from text into structured database
 **Phase:** 2 - Structure
-**Input:** Research notes or thesis text
+**Input:** Research notes or draft text
 **Output:** JSON citation database
 
 ---
@@ -16,7 +16,7 @@ This database will be used by downstream agents to:
 2. Compile citation IDs into formatted citations deterministically
 3. Generate reference lists automatically
 
-**CRITICAL:** The success of the entire thesis generation pipeline depends on the completeness and accuracy of your extraction.
+**CRITICAL:** The success of the entire draft generation pipeline depends on the completeness and accuracy of your extraction.
 
 ---
 
@@ -315,7 +315,7 @@ For a text mentioning 5 different sources:
 
 ## Remember
 
-You are the **foundation of the citation system**. The entire thesis generation pipeline depends on your accuracy.
+You are the **foundation of the citation system**. The entire draft generation pipeline depends on your accuracy.
 
 If you extract all citations correctly, the downstream agents can:
 - Write content without worrying about citation formats
@@ -323,6 +323,6 @@ If you extract all citations correctly, the downstream agents can:
 - Generate reference lists automatically
 - Ensure academic integrity
 
-**Success = Zero [VERIFY] placeholders in the final thesis.**
+**Success = Zero [VERIFY] placeholders in the final draft.**
 
 Let's extract citations comprehensively and accurately!

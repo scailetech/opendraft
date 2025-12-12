@@ -181,7 +181,7 @@ class TestSectionComplexityAnalysis:
         complex_text = """
         The theoretical framework for this research draws on multiple paradigms.
         Our methodology employs systematic analysis of algorithmic governance structures.
-        The empirical validation demonstrates comprehensive synthesis of regulatory compliance.
+        The empirical validation demonstrates comprehensive syndraft of regulatory compliance.
         Recent literature review indicates emerging research on infrastructure optimization.
         This study contributes novel findings to the interdisciplinary field.
         {cite_001} {cite_002} {cite_003} {cite_004} {cite_005}
@@ -200,7 +200,7 @@ class TestSectionComplexityAnalysis:
 
     def test_complexity_factors(self, compiler):
         """Test that all complexity factors are calculated."""
-        text = "methodology framework analysis hypothesis validation {cite_001}"
+        text = "methodology framework analysis hypodraft validation {cite_001}"
 
         result = compiler.analyze_section_complexity(text)
 
@@ -219,7 +219,7 @@ class TestSectionComplexityAnalysis:
         """Test that metrics are correctly extracted."""
         text = """
         This research employs a systematic methodology to analyze the framework.
-        The hypothesis is validated through empirical evidence. {cite_001} {cite_002}
+        The hypodraft is validated through empirical evidence. {cite_001} {cite_002}
         """
 
         result = compiler.analyze_section_complexity(text)
@@ -234,7 +234,7 @@ class TestSectionComplexityAnalysis:
         assert metrics['word_count'] > 0
         assert metrics['sentence_count'] >= 2
         assert metrics['citation_count'] == 2  # {cite_001} {cite_002}
-        assert metrics['technical_terms'] >= 3  # methodology, framework, hypothesis
+        assert metrics['technical_terms'] >= 3  # methodology, framework, hypodraft
 
 
 class TestDeepResearchIntegration:

@@ -568,7 +568,7 @@ class CitationCompiler:
 
     def analyze_section_complexity(self, section_text: str) -> Dict[str, Any]:
         """
-        Analyze complexity of a thesis section to determine research depth needs.
+        Analyze complexity of a draft section to determine research depth needs.
 
         Used for hybrid deep research approach: complex sections get deep research,
         routine sections get standard citation research.
@@ -598,7 +598,7 @@ class CitationCompiler:
         # Factor 1: Technical term density (presence of academic/technical terms)
         technical_terms = [
             'methodology', 'framework', 'paradigm', 'theoretical', 'empirical',
-            'analysis', 'synthesis', 'hypothesis', 'validation', 'verification',
+            'analysis', 'syndraft', 'hypodraft', 'validation', 'verification',
             'algorithm', 'optimization', 'implementation', 'architecture',
             'governance', 'compliance', 'regulation', 'standard', 'protocol',
             'infrastructure', 'integration', 'scalability', 'performance',

@@ -880,7 +880,7 @@ Provide the source title, URL, and a brief snippet explaining relevance."""
         """Fetch paper metadata from CrossRef using DOI."""
         try:
             api_url = f"https://api.crossref.org/works/{doi}"
-            headers = {'User-Agent': 'AcademicThesisAI/1.0 (mailto:support@example.com)'}
+            headers = {'User-Agent': 'AcademicDraftAI/1.0 (mailto:support@example.com)'}
             response = self.session.get(api_url, headers=headers, timeout=10)
             
             if not response.ok:

@@ -13,15 +13,15 @@ def detect_missing_sections(
     enhanced_text: str, language: str = "english"
 ) -> List[str]:
     """
-    Detect critical sections missing from enhanced thesis.
+    Detect critical sections missing from enhanced draft.
 
     FIXED: Content-aware detection - checks for ACTUAL content, not just headers.
     Checks universal patterns (all languages) to catch English "## References"
     even when language="german".
 
     Args:
-        enhanced_text: Enhanced thesis content
-        language: Thesis language (english/german/spanish/french)
+        enhanced_text: Enhanced draft content
+        language: Draft language (english/german/spanish/french)
 
     Returns:
         List of missing section names
@@ -101,7 +101,7 @@ def _section_has_citation_content(text: str, patterns: List[str]) -> bool:
     Check if References/Bibliography section has actual citations (not placeholder).
 
     Args:
-        text: Full thesis text
+        text: Full draft text
         patterns: List of header patterns to check
 
     Returns:
@@ -207,9 +207,9 @@ def restore_missing_sections(
     to keep them unchanged.
 
     Args:
-        enhanced_text: Enhanced thesis (may have missing sections)
-        pre_enhancement_text: Original thesis before enhancement
-        language: Thesis language
+        enhanced_text: Enhanced draft (may have missing sections)
+        pre_enhancement_text: Original draft before enhancement
+        language: Draft language
         verbose: Print restoration progress
 
     Returns:
@@ -309,12 +309,12 @@ def restore_sections_in_file(
     verbose: bool = True,
 ) -> bool:
     """
-    Restore missing sections in an enhanced thesis file.
+    Restore missing sections in an enhanced draft file.
 
     Args:
-        enhanced_path: Path to enhanced thesis (will be modified in-place)
+        enhanced_path: Path to enhanced draft (will be modified in-place)
         pre_enhancement_path: Path to pre-enhancement version
-        language: Thesis language
+        language: Draft language
         verbose: Print progress
 
     Returns:

@@ -137,7 +137,7 @@ def main():
         epilog='''
 Examples:
   # Check single file
-  python ai_detection.py final_thesis.md
+  python ai_detection.py final_draft.md
   
   # Check with custom API key
   python ai_detection.py paper.md --api-key your_key_here

@@ -123,12 +123,12 @@ class CitationDatabase:
         self,
         citations: List[Citation],
         citation_style: CitationStyle = "APA 7th",
-        thesis_language: Language = "english",
+        draft_language: Language = "english",
         extracted_date: Optional[str] = None,
     ):
         self.citations = citations
         self.citation_style = citation_style
-        self.thesis_language = thesis_language
+        self.draft_language = draft_language
         self.extracted_date = extracted_date or datetime.now().isoformat()
 
     def to_dict(self) -> Dict:
@@ -138,7 +138,7 @@ class CitationDatabase:
             "metadata": {
                 "total_citations": len(self.citations),
                 "citation_style": self.citation_style,
-                "thesis_language": self.thesis_language,
+                "draft_language": self.draft_language,
                 "extracted_date": self.extracted_date,
             }
         }
@@ -152,7 +152,7 @@ class CitationDatabase:
         return CitationDatabase(
             citations=citations,
             citation_style=metadata.get("citation_style", "APA 7th"),
-            thesis_language=metadata.get("thesis_language", "english"),
+            draft_language=metadata.get("draft_language", "english"),
             extracted_date=metadata.get("extracted_date"),
         )
 
@@ -232,7 +232,7 @@ def validate_citation_database(db_dict: Dict) -> bool:
 
     # Validate metadata
     metadata = db_dict["metadata"]
-    required_metadata = ["total_citations", "citation_style", "thesis_language"]
+    required_metadata = ["total_citations", "citation_style", "draft_language"]
     for field in required_metadata:
         if field not in metadata:
             raise ValueError(f"Metadata missing required field: {field}")
@@ -303,14 +303,14 @@ def save_citation_database(db: CitationDatabase, path: Path) -> None:
 
 def create_empty_database(
     citation_style: CitationStyle = "APA 7th",
-    thesis_language: Language = "english"
+    draft_language: Language = "english"
 ) -> CitationDatabase:
     """
     Create empty citation database with metadata.
 
     Args:
         citation_style: Citation style to use
-        thesis_language: Language of thesis
+        draft_language: Language of draft
 
     Returns:
         CitationDatabase: Empty database ready for citations
@@ -318,7 +318,7 @@ def create_empty_database(
     return CitationDatabase(
         citations=[],
         citation_style=citation_style,
-        thesis_language=thesis_language,
+        draft_language=draft_language,
     )
 
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-ABOUTME: Production agent utilities for thesis generation
+ABOUTME: Production agent utilities for draft generation
 ABOUTME: Core functions for model setup, agent execution, and citation research
 
 Extracted from tests/test_utils.py for proper production use.
-These are the essential utilities needed by thesis_generator.py and modal_worker.py.
+These are the essential utilities needed by draft_generator.py and modal_worker.py.
 """
 
 import sys
@@ -109,7 +109,7 @@ def run_agent(
     """
     Run an AI agent with given prompt and input, with optional validation.
 
-    This function is the core execution layer for all agents in the thesis pipeline.
+    This function is the core execution layer for all agents in the draft pipeline.
     It handles LLM interaction, output validation, retries, and file I/O.
 
     Args:
@@ -420,7 +420,7 @@ def research_citations_via_api(
     2. **Deep Research Mode** (use_deep_research=True):
        - Uses DeepResearchPlanner for autonomous research strategy
        - Creates 50+ systematic queries from topic + scope + seed references
-       - Best for comprehensive literature reviews (dissertations, thesis)
+       - Best for comprehensive literature reviews (dissertations, draft)
 
     API Fallback Chain:
     Crossref → Semantic Scholar → Gemini Grounded → Gemini LLM (95%+ success rate)
@@ -782,7 +782,7 @@ def research_citations_via_api(
             f"Acceptable: {acceptable_threshold}+ citations (86%)\n"
             f"Minimal: {minimal_threshold}+ citations (70%)\n"
             f"Current: {citation_count} citations ({percentage:.1f}%) ❌\n\n"
-            f"Academic thesis standards require at least {minimal_threshold} citations.\n\n"
+            f"Academic draft standards require at least {minimal_threshold} citations.\n\n"
             f"Failed Topics ({len(failed_topics)}):\n"
         )
         for failed_topic in failed_topics[:10]:

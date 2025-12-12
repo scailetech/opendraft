@@ -4,8 +4,8 @@ import time
 import requests
 import json
 
-THESIS_ID = "0d2c69c2-420d-45f0-a598-d9bb0631dad6"
-API_URL = f"http://localhost:3000/api/thesis/{THESIS_ID}/status"
+DRAFT_ID = "0d2c69c2-420d-45f0-a598-d9bb0631dad6"
+API_URL = f"http://localhost:3000/api/draft/{DRAFT_ID}/status"
 
 def get_status():
     try:
@@ -18,19 +18,19 @@ def get_status():
 
 def trigger_modal():
     """Trigger Modal function directly via Python API"""
-    print(f"🚀 Triggering Modal for thesis: {THESIS_ID}")
+    print(f"🚀 Triggering Modal for draft: {DRAFT_ID}")
     
     try:
         # Get the function reference
-        process_fn = modal.Function.from_name("thesis-generator", "process_single_user")
+        process_fn = modal.Function.from_name("draft-generator", "process_single_user")
         
         # We need to get the user data first - but we can't access Supabase locally
-        # So we'll use the trigger_thesis_by_id Modal function instead
-        trigger_fn = modal.Function.from_name("trigger-thesis", "trigger_by_id")
+        # So we'll use the trigger_draft_by_id Modal function instead
+        trigger_fn = modal.Function.from_name("trigger-draft", "trigger_by_id")
         
         print("📞 Calling trigger function on Modal...")
         # This should work even with outdated CLI since we're using the Python API
-        result = trigger_fn.remote(THESIS_ID)
+        result = trigger_fn.remote(DRAFT_ID)
         
         if result:
             print(f"✅ Modal triggered!")
@@ -47,8 +47,8 @@ def trigger_modal():
         return False
 
 def monitor_progress():
-    """Monitor thesis progress"""
-    print(f"\n📊 Monitoring thesis: {THESIS_ID}")
+    """Monitor draft progress"""
+    print(f"\n📊 Monitoring draft: {DRAFT_ID}")
     print("=" * 60)
     
     last_status = None
@@ -86,14 +86,14 @@ def monitor_progress():
             
             # Check if completed
             if current_status == 'completed':
-                print(f"\n✅ Thesis generation completed!")
+                print(f"\n✅ Draft generation completed!")
                 print(f"   PDF: {status_data.get('pdf_url', 'N/A')}")
                 print(f"   DOCX: {status_data.get('docx_url', 'N/A')}")
                 break
             
             # Check if failed
             if current_status == 'failed' or error:
-                print(f"\n❌ Thesis generation failed!")
+                print(f"\n❌ Draft generation failed!")
                 if error:
                     print(f"   Error: {error}")
                 break

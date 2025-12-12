@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ABOUTME: URL validation script for academic thesis citations
+ABOUTME: URL validation script for academic draft citations
 ABOUTME: Tests HTTP status of all URLs in markdown bibliography
 """
 
@@ -33,7 +33,7 @@ class URLValidator:
         self.retry_count = retry_count
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Academic Thesis Citation Validator)'
+            'User-Agent': 'Mozilla/5.0 (Academic Draft Citation Validator)'
         })
 
     def extract_urls(self, md_file: Path) -> List[Tuple[str, int]]:
@@ -232,7 +232,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Validate URLs in academic thesis markdown files'
+        description='Validate URLs in academic draft markdown files'
     )
     parser.add_argument(
         'markdown_file',

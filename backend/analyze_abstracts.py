@@ -10,7 +10,7 @@ from utils.citation_database import load_citation_database
 bib_path = Path("tests/outputs/.citation_cache_orchestrator.json")
 
 if not bib_path.exists():
-    # Try the generated thesis location
+    # Try the generated draft location
     bib_path = Path(".citation_cache_orchestrator.json")
 
 if not bib_path.exists():

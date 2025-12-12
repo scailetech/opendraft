@@ -33,7 +33,7 @@ class AcademicDocumentFormatter:
     """
 
     # Showcase-specific YAML fields that indicate this is an AI-generated showcase
-    # (not a traditional academic thesis requiring formal cover page)
+    # (not a traditional academic draft requiring formal cover page)
     SHOWCASE_FIELDS = {
         'subtitle', 'system_creator', 'github_repo', 'quality_score',
         'word_count', 'citations_verified', 'visual_elements',
@@ -50,9 +50,9 @@ class AcademicDocumentFormatter:
         """
         self.verbose = verbose
 
-    def is_showcase_thesis(self, yaml_metadata: Dict[str, Any]) -> bool:
+    def is_showcase_draft(self, yaml_metadata: Dict[str, Any]) -> bool:
         """
-        Determine if thesis is an AI showcase (vs traditional academic thesis).
+        Determine if draft is an AI showcase (vs traditional academic draft).
 
         Showcase theses have rich YAML frontmatter with system metadata
         (subtitle, github_repo, quality_score, etc.) that serves as the cover page.
@@ -62,7 +62,7 @@ class AcademicDocumentFormatter:
             yaml_metadata: YAML frontmatter dictionary
 
         Returns:
-            True if showcase thesis, False if traditional academic thesis
+            True if showcase draft, False if traditional academic draft
         """
         if not yaml_metadata:
             return False
@@ -73,7 +73,7 @@ class AcademicDocumentFormatter:
 
         if self.verbose and has_showcase_fields:
             found_fields = yaml_keys & self.SHOWCASE_FIELDS
-            print(f"   ℹ️  Showcase thesis detected (fields: {', '.join(found_fields)})")
+            print(f"   ℹ️  Showcase draft detected (fields: {', '.join(found_fields)})")
 
         return has_showcase_fields
 
@@ -94,7 +94,7 @@ class AcademicDocumentFormatter:
         Returns:
             True if traditional cover should be generated, False otherwise
         """
-        is_showcase = self.is_showcase_thesis(yaml_metadata)
+        is_showcase = self.is_showcase_draft(yaml_metadata)
 
         # Showcase theses: YAML frontmatter is the cover, don't generate another
         if is_showcase:

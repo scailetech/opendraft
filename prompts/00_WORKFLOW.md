@@ -43,7 +43,7 @@ You'll progress through 5 phases:
   │   └── 06_conclusion.md
   ├── outline.md
   ├── outline_formatted.md
-  └── final_thesis.md
+  └── final_draft.md
   ```
 
 ### 📝 Define Your Paper
@@ -577,14 +577,14 @@ Recent studies (Smith et al., 2023) show effectiveness...
 ```
 
 **Agent will:**
-- Scan for all `{cite_XXX}` patterns in thesis
+- Scan for all `{cite_XXX}` patterns in draft
 - Look up each ID in citation database (from Step 3.5)
 - Format according to citation style (APA 7th, IEEE, MLA)
 - Replace IDs with formatted citations
 - Generate reference list with ONLY cited sources
 - Sort references alphabetically (APA style)
 
-**Save output to:** `thesis_with_citations.md`
+**Save output to:** `draft_with_citations.md`
 
 **✅ Checklist:**
 - [ ] All `{cite_XXX}` IDs replaced
@@ -604,13 +604,13 @@ Recent studies (Smith et al., 2023) show effectiveness...
 
 ## PHASE 6: ENHANCE
 
-**Goal:** Transform complete thesis into publication-ready showcase with professional elements
+**Goal:** Transform complete draft into publication-ready showcase with professional elements
 
 ### Step 15: Professional Enhancement (Enhancer Agent) 🆕
 ⏱️ **Time:** 3-5 min (automatic)
 
 **What it does:**
-Automatically adds professional elements that make your thesis publication-ready:
+Automatically adds professional elements that make your draft publication-ready:
 - YAML metadata frontmatter
 - Enhanced 4-paragraph abstract with keywords
 - 5 comprehensive appendices (domain-specific)
@@ -623,7 +623,7 @@ Automatically adds professional elements that make your thesis publication-ready
 **Instructions:**
 1. Run the test script with enhancement enabled (now automatic):
    ```bash
-   python tests/scripts/test_opensource_thesis.py
+   python tests/scripts/test_opensource_draft.py
    ```
 
 2. The enhancer runs automatically after Agent #13 (Entropy)
@@ -636,7 +636,7 @@ Automatically adds professional elements that make your thesis publication-ready
 - **Added:** YAML metadata + 5 appendices + Limitations + Future Research + visual elements
 
 **Agent will:**
-- Analyze thesis domain and content
+- Analyze draft domain and content
 - Generate appropriate appendices (mathematical frameworks, case studies, resources, glossary)
 - Add Limitations section with methodological, scope, and theoretical constraints
 - Add Future Research section with 5-7 specific research directions
@@ -657,10 +657,10 @@ Automatically adds professional elements that make your thesis publication-ready
 **⚠️ Important:**
 - All original citations are preserved
 - No content is removed, only added
-- Domain-specific appendices are automatically generated based on thesis content
+- Domain-specific appendices are automatically generated based on draft content
 - Enhancement maintains academic integrity
 
-**🎉 MILESTONE:** Enhancement complete! Thesis is now publication-ready showcase quality.
+**🎉 MILESTONE:** Enhancement complete! Draft is now publication-ready showcase quality.
 
 ---
 
@@ -677,19 +677,19 @@ cat sections/01_introduction.md \
     sections/04_results.md \
     sections/05_discussion.md \
     sections/06_conclusion.md \
-    > final_thesis.md
+    > final_draft.md
 ```
 
 **Export to submission format:**
 ```bash
 # PDF (publication quality)
-python utils/export.py --format pdf --output final_thesis.pdf
+python utils/export.py --format pdf --output final_draft.pdf
 
 # Word document (for submission portals)
-python utils/export.py --format docx --output final_thesis.docx
+python utils/export.py --format docx --output final_draft.docx
 
 # LaTeX (if journal requires)
-python utils/export.py --format latex --output final_thesis.tex
+python utils/export.py --format latex --output final_draft.tex
 ```
 
 ---

@@ -73,7 +73,7 @@ print()
 citation_database = CitationDatabase(
     citations=citations,
     citation_style="APA 7th",
-    thesis_language="english"
+    draft_language="english"
 )
 
 print("🔄 Step 1: Deduplication")

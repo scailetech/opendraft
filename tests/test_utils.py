@@ -54,7 +54,7 @@ def parallel_run_agents(
     """
     Run multiple agents in parallel (paid tier only).
 
-    Executes 6 Crafter agents concurrently to dramatically speed up thesis generation.
+    Executes 6 Crafter agents concurrently to dramatically speed up draft generation.
     Automatically gates execution based on API tier - only enabled on paid tier (2,000 RPM).
 
     Args:

@@ -310,11 +310,11 @@ class TestScoutAPICitationQuality:
 class TestScoutAPIRealWorld:
     """Real-world integration tests (slower, marked as slow)."""
 
-    def test_opensource_thesis_topics(self, tmp_path):
-        """Test with real opensource thesis topics (50 topics)."""
+    def test_opensource_draft_topics(self, tmp_path):
+        """Test with real opensource draft topics (50 topics)."""
         model = setup_model()
 
-        # Use first 10 topics from opensource thesis for speed
+        # Use first 10 topics from opensource draft for speed
         research_topics = [
             "open source software development methodologies and practices",
             "distributed peer production in software development",
@@ -343,11 +343,11 @@ class TestScoutAPIRealWorld:
         success_rate = result["count"] / len(research_topics) * 100
         assert success_rate >= 50  # At least 50% success rate
 
-    def test_ai_pricing_thesis_topics(self, tmp_path):
-        """Test with real AI pricing thesis topics."""
+    def test_ai_pricing_draft_topics(self, tmp_path):
+        """Test with real AI pricing draft topics."""
         model = setup_model()
 
-        # Use first 10 topics from AI pricing thesis
+        # Use first 10 topics from AI pricing draft
         research_topics = [
             "pricing models for artificial intelligence services",
             "token-based pricing for large language models",
@@ -376,11 +376,11 @@ class TestScoutAPIRealWorld:
         success_rate = result["count"] / len(research_topics) * 100
         assert success_rate >= 50
 
-    def test_co2_german_thesis_topics(self, tmp_path):
-        """Test with real CO2 German thesis topics."""
+    def test_co2_german_draft_topics(self, tmp_path):
+        """Test with real CO2 German draft topics."""
         model = setup_model()
 
-        # Use first 10 topics from CO2 thesis
+        # Use first 10 topics from CO2 draft
         research_topics = [
             "carbon emissions trading systems design and implementation",
             "cap-and-trade mechanisms for greenhouse gas reduction",

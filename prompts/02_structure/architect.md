@@ -53,7 +53,7 @@ Given research gaps analysis, you will:
 
 ## Core Argument Flow
 
-**Thesis Statement:** [1-2 sentences - your main claim]
+**Draft Statement:** [1-2 sentences - your main claim]
 
 **Logical Progression:**
 1. Current state has problem X (Introduction)
@@ -116,7 +116,7 @@ Given research gaps analysis, you will:
 #### 4.2 [Theme 2]
 [Repeat]
 
-#### 4.3 Synthesis & Gap Identification
+#### 4.3 Syndraft & Gap Identification
 - What we know: [Summary]
 - What's missing: [Gaps]
 - Your contribution: [How you fill gaps]

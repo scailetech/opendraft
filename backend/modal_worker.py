@@ -1,5 +1,5 @@
 """
-Modal.com worker for automated thesis generation
+Modal.com worker for automated draft generation
 Runs daily at 9am UTC, processes 100 waiting users from Supabase IN PARALLEL
 """
 
@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Tuple
 
 # Create Modal app
-app = modal.App("thesis-generator")
+app = modal.App("draft-generator")
 
 # Modal image with system dependencies, Python packages, and codebase
 image = (modal.Image.debian_slim()
@@ -71,19 +71,19 @@ image = (modal.Image.debian_slim()
     .add_local_dir(".", "/root/opendraft/backend")  # Backend directory (current dir)
     .add_local_dir("../tests", "/root/opendraft/tests")
     .add_local_dir("../examples", "/root/opendraft/examples")  # DOCX reference template
-    .add_local_dir("../templates", "/root/opendraft/templates")  # Thesis output templates
+    .add_local_dir("../templates", "/root/opendraft/templates")  # Draft output templates
     .add_local_file("../config.py", "/root/opendraft/config.py")
     # Add pre-rendered email templates
     .add_local_dir("./email_templates", "/root/opendraft/backend/email_templates")
 )
 
-# Persistent volume for temporary thesis files
-volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
+# Persistent volume for temporary draft files
+volume = modal.Volume.from_name("draft-temp", create_if_missing=True)
 
 
 @app.function(
-    timeout=3600,  # 1 hour max per thesis
-    volumes={"/tmp/thesis": volume},
+    timeout=3600,  # 1 hour max per draft
+    volumes={"/tmp/draft": volume},
     secrets=[
         modal.Secret.from_name("supabase-credentials"),
         modal.Secret.from_name("gemini-api-key"),
@@ -95,7 +95,7 @@ volume = modal.Volume.from_name("thesis-temp", create_if_missing=True)
 )
 def process_single_user(user: dict) -> dict:
     """
-    Process a single user thesis - runs in its own container.
+    Process a single user draft - runs in its own container.
     Modal will spin up 100 of these in parallel!
     """
     import resend
@@ -112,10 +112,10 @@ def process_single_user(user: dict) -> dict:
     email = user["email"]
     pdf_url = None
     docx_url = None
-    thesis_generated = False
+    draft_generated = False
 
     try:
-        print(f"🚀 Starting thesis for {email}... [v57-zipfix2]")
+        print(f"🚀 Starting draft for {email}... [v57-zipfix2]")
 
         # Update status to processing with phase tracking
         supabase.table("waitlist").update({
@@ -125,12 +125,12 @@ def process_single_user(user: dict) -> dict:
             "progress_percent": 0
         }).eq("id", user_id).execute()
 
-        # Generate thesis with full academic metadata and progress tracking
+        # Generate draft with full academic metadata and progress tracking
         # Set user email in environment for streamer
         os.environ["USER_EMAIL"] = email
         
-        pdf_path, docx_path, zip_path_from_gen = generate_thesis_real(
-            topic=user["thesis_topic"],
+        pdf_path, docx_path, zip_path_from_gen = generate_draft_real(
+            topic=user["draft_topic"],
             language=user["language"],
             academic_level=user["academic_level"],
             user_id=user_id,  # For unique output paths and progress tracking
@@ -147,46 +147,46 @@ def process_single_user(user: dict) -> dict:
 
         # Upload to Supabase Storage
         with open(pdf_path, "rb") as pdf_file:
-            supabase.storage.from_("thesis-files").upload(
-                f"{user_id}/thesis.pdf",
+            supabase.storage.from_("draft-files").upload(
+                f"{user_id}/draft.pdf",
                 pdf_file.read(),
                 file_options={"content-type": "application/pdf", "upsert": "true"}
             )
 
         with open(docx_path, "rb") as docx_file:
-            supabase.storage.from_("thesis-files").upload(
-                f"{user_id}/thesis.docx",
+            supabase.storage.from_("draft-files").upload(
+                f"{user_id}/draft.docx",
                 docx_file.read(),
                 file_options={"content-type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "upsert": "true"}
             )
 
         # Get signed URLs (7-day expiry)
-        pdf_signed = supabase.storage.from_("thesis-files").create_signed_url(
-            f"{user_id}/thesis.pdf", expires_in=604800
+        pdf_signed = supabase.storage.from_("draft-files").create_signed_url(
+            f"{user_id}/draft.pdf", expires_in=604800
         )
-        docx_signed = supabase.storage.from_("thesis-files").create_signed_url(
-            f"{user_id}/thesis.docx", expires_in=604800
+        docx_signed = supabase.storage.from_("draft-files").create_signed_url(
+            f"{user_id}/draft.docx", expires_in=604800
         )
 
         pdf_url = pdf_signed["signedURL"]
         docx_url = docx_signed["signedURL"]
-        thesis_generated = True
+        draft_generated = True
         
-        # Upload ZIP (already created in generate_thesis_real)
+        # Upload ZIP (already created in generate_draft_real)
         zip_url = None
         if zip_path_from_gen and Path(zip_path_from_gen).exists():
             try:
                 print(f"📦 Uploading ZIP from {zip_path_from_gen}...")
                 with open(zip_path_from_gen, "rb") as zip_file:
-                    supabase.storage.from_("thesis-files").upload(
-                        f"{user_id}/thesis_package.zip",
+                    supabase.storage.from_("draft-files").upload(
+                        f"{user_id}/draft_package.zip",
                         zip_file.read(),
                         file_options={"content-type": "application/zip", "upsert": "true"}
                     )
                 print(f"📦 ZIP uploaded to storage")
                 
-                zip_signed = supabase.storage.from_("thesis-files").create_signed_url(
-                    f"{user_id}/thesis_package.zip", expires_in=604800
+                zip_signed = supabase.storage.from_("draft-files").create_signed_url(
+                    f"{user_id}/draft_package.zip", expires_in=604800
                 )
                 zip_url = zip_signed["signedURL"]
                 print(f"📦 ZIP URL created: {zip_url[:60]}...")
@@ -213,12 +213,12 @@ def process_single_user(user: dict) -> dict:
         supabase.table("waitlist").update(update_data).eq("id", user_id).execute()
         print(f"✅ Database updated with: {list(update_data.keys())}")
 
-        print(f"✅ Thesis generated and uploaded for {email}")
+        print(f"✅ Draft generated and uploaded for {email}")
 
     except Exception as e:
-        print(f"❌ Failed thesis generation for {email}: {e}")
-        # Only mark as failed if thesis wasn't generated
-        if not thesis_generated:
+        print(f"❌ Failed draft generation for {email}: {e}")
+        # Only mark as failed if draft wasn't generated
+        if not draft_generated:
             # Note: error_message column may not exist, so just log it
             try:
                 supabase.table("waitlist").update({
@@ -237,7 +237,7 @@ def process_single_user(user: dict) -> dict:
     # Skip emails for test users (scale testing)
     is_test_user = email.endswith("@opendraft-test.local")
     
-    if thesis_generated and pdf_url and docx_url and not is_test_user:
+    if draft_generated and pdf_url and docx_url and not is_test_user:
         try:
             send_completion_email(
                 email=email,
@@ -245,18 +245,18 @@ def process_single_user(user: dict) -> dict:
                 pdf_url=pdf_url,
                 docx_url=docx_url,
                 zip_url=zip_url,
-                thesis_topic=user.get("thesis_topic", ""),
+                draft_topic=user.get("draft_topic", ""),
                 academic_level=user.get("academic_level", "Master's"),
                 language=user.get("language", "English"),
             )
             print(f"📧 Email sent to {email}")
         except Exception as e:
-            print(f"⚠️ Email failed for {email} (thesis still completed): {e}")
-            # Don't mark as failed - thesis was generated successfully
+            print(f"⚠️ Email failed for {email} (draft still completed): {e}")
+            # Don't mark as failed - draft was generated successfully
     elif is_test_user:
         print(f"📧 Skipping email for test user: {email}")
 
-    print(f"✅ Completed thesis for {email}")
+    print(f"✅ Completed draft for {email}")
     return {"email": email, "status": "success"}
 
 
@@ -266,13 +266,13 @@ def process_single_user(user: dict) -> dict:
     secrets=[modal.Secret.from_name("supabase-credentials")],
     image=image,
 )
-def daily_thesis_batch():
+def daily_draft_batch():
     """
     Main scheduled function - fetches users and spawns parallel processing.
     """
     from supabase import create_client
 
-    print(f"[{datetime.now()}] Starting daily thesis batch...")
+    print(f"[{datetime.now()}] Starting daily draft batch...")
 
     supabase = create_client(
         os.environ["SUPABASE_URL"],
@@ -375,7 +375,7 @@ def daily_thesis_batch():
     return {"success": total_success, "failed": total_failed, "total": len(users)}
 
 
-def generate_thesis_real(
+def generate_draft_real(
     topic: str, 
     language: str, 
     academic_level: str, 
@@ -391,7 +391,7 @@ def generate_thesis_real(
     location: str = None,
     student_id: str = None,
 ):
-    """Generate thesis using the AI framework with professional academic formatting."""
+    """Generate draft using the AI framework with professional academic formatting."""
     import sys
     from pathlib import Path
 
@@ -425,16 +425,16 @@ def generate_thesis_real(
 
     os.environ["GOOGLE_API_KEY"] = api_key
 
-    from backend.thesis_generator import generate_thesis
+    from backend.draft_generator import generate_draft
 
     # Each user gets their own output directory
-    output_dir = Path(f"/tmp/thesis/{user_id}")
+    output_dir = Path(f"/tmp/draft/{user_id}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"📁 Output directory: {output_dir}")
     print(f"📁 Output dir exists before: {output_dir.exists()}")
     
-    pdf_path, docx_path = generate_thesis(
+    pdf_path, docx_path = generate_draft(
         topic=topic,
         language=language,
         academic_level=academic_level,
@@ -464,13 +464,13 @@ def generate_thesis_real(
     zip_path = None
     try:
         import shutil
-        zip_base = f"/tmp/thesis/{user_id}_package"
+        zip_base = f"/tmp/draft/{user_id}_package"
         print(f"📦 Creating ZIP from {output_dir}...")
         shutil.make_archive(zip_base, 'zip', output_dir)
         zip_path = Path(f"{zip_base}.zip")
         print(f"📦 ZIP created: {zip_path} ({zip_path.stat().st_size / 1024:.1f} KB)")
     except Exception as e:
-        print(f"⚠️ ZIP creation failed in generate_thesis_real: {e}")
+        print(f"⚠️ ZIP creation failed in generate_draft_real: {e}")
         import traceback
         traceback.print_exc()
 
@@ -483,13 +483,13 @@ def send_completion_email(
     pdf_url: str,
     docx_url: str,
     zip_url: str = None,
-    thesis_topic: str = "",
+    draft_topic: str = "",
     academic_level: str = "Master's",
     language: str = "English",
     citation_count: int = 0,
     word_count: str = "~30,000",
 ):
-    """Send thesis completion notification email using pre-rendered React Email template."""
+    """Send draft completion notification email using pre-rendered React Email template."""
     import resend
     from pathlib import Path
     from urllib.parse import quote
@@ -506,7 +506,7 @@ def send_completion_email(
 
         # Replace placeholders with actual values
         html = html.replace("{{FULL_NAME}}", name)
-        html = html.replace("{{THESIS_TOPIC}}", thesis_topic)
+        html = html.replace("{{DRAFT_TOPIC}}", draft_topic)
         html = html.replace("{{PDF_URL}}", pdf_url)
         html = html.replace("{{DOCX_URL}}", docx_url)
         html = html.replace("{{ZIP_URL}}", zip_url or "#")
@@ -527,7 +527,7 @@ def send_completion_email(
         "from": FROM_EMAIL,
         "reply_to": REPLY_TO_EMAIL,
         "to": email,
-        "subject": "Your AI-Generated Thesis is Ready!",
+        "subject": "Your AI-Generated Draft is Ready!",
         "html": html
     })
 
@@ -559,11 +559,11 @@ def _get_fallback_html(name: str, pdf_url: str, docx_url: str, email: str) -> st
     <div class="email-container" style="max-width: 600px; margin: 0 auto; background-color: #171717;">
         <p class="email-text" style="font-size: 24px; font-weight: bold; margin: 0 0 32px 0; color: #fafafa;">OpenDraft</p>
 
-        <h1 class="email-text" style="font-size: 24px; font-weight: bold; margin: 24px 0; color: #fafafa;">Your Thesis is Ready!</h1>
+        <h1 class="email-text" style="font-size: 24px; font-weight: bold; margin: 24px 0; color: #fafafa;">Your Draft is Ready!</h1>
 
         <p class="email-text-muted" style="color: #a3a3a3; line-height: 1.625; margin: 16px 0;">Hi {name},</p>
 
-        <p class="email-text-muted" style="color: #a3a3a3; line-height: 1.625; margin: 16px 0;">Great news! Your AI-generated thesis is complete. Download it now:</p>
+        <p class="email-text-muted" style="color: #a3a3a3; line-height: 1.625; margin: 16px 0;">Great news! Your AI-generated draft is complete. Download it now:</p>
 
         <div style="margin: 24px 0; text-align: center;">
             <a href="{pdf_url}" class="email-button-primary" style="background-color: #22c55e; color: #000000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; margin-right: 12px;">Download PDF</a>
@@ -572,11 +572,11 @@ def _get_fallback_html(name: str, pdf_url: str, docx_url: str, email: str) -> st
 
         <div style="background-color: #2d2517; border-radius: 8px; padding: 16px; margin: 20px 0; border-left: 4px solid #f59e0b;">
             <p class="email-text" style="color: #fafafa; font-weight: 600; font-size: 14px; margin: 0 0 8px 0;">Download links expire in 7 days</p>
-            <p class="email-text-muted" style="color: #a3a3a3; font-size: 14px; margin: 0; line-height: 1.625;">Make sure to download your thesis files before they expire.</p>
+            <p class="email-text-muted" style="color: #a3a3a3; font-size: 14px; margin: 0; line-height: 1.625;">Make sure to download your draft files before they expire.</p>
         </div>
 
         <div class="email-footer" style="color: #737373; font-size: 14px; margin-top: 40px; padding-top: 24px; border-top: 1px solid #404040;">
-            <p style="margin: 0;">OpenDraft - AI-Powered Academic Thesis Generation</p>
+            <p style="margin: 0;">OpenDraft - AI-Powered Academic Draft Generation</p>
             <p style="margin: 8px 0 0 0;">Questions? Reply to this email or contact <a href="mailto:support@clients.opendraft.xyz" style="color: #22c55e; text-decoration: underline;">support@clients.opendraft.xyz</a></p>
             <p style="margin: 16px 0 0 0; font-size: 12px;">© 2025 OpenDraft Inc.</p>
             <p style="margin: 8px 0 0 0; font-size: 12px;">
@@ -593,7 +593,7 @@ def _get_fallback_html(name: str, pdf_url: str, docx_url: str, email: str) -> st
 @app.local_entrypoint()
 def main():
     """Test function - triggers the batch."""
-    daily_thesis_batch.remote()
+    daily_draft_batch.remote()
 
 
 @app.function(
@@ -610,8 +610,8 @@ def regenerate_example_pdf(md_content: str, filename: str) -> bytes:
     from pathlib import Path
     
     with tempfile.TemporaryDirectory() as tmpdir:
-        md_path = Path(tmpdir) / "thesis.md"
-        pdf_path = Path(tmpdir) / "thesis.pdf"
+        md_path = Path(tmpdir) / "draft.md"
+        pdf_path = Path(tmpdir) / "draft.pdf"
         
         # Write markdown
         md_path.write_text(md_content, encoding='utf-8')
@@ -639,24 +639,24 @@ def regenerate_example_pdf(md_content: str, filename: str) -> bytes:
 
 
 @app.function(
-    timeout=3600,  # 1 hour for full thesis generation
-    volumes={"/tmp/thesis": volume},
+    timeout=3600,  # 1 hour for full draft generation
+    volumes={"/tmp/draft": volume},
     secrets=[
         modal.Secret.from_name("gemini-api-key"),
         modal.Secret.from_name("opendraft-dataforseo"),
     ],
     image=image,
 )
-def generate_showcase_thesis() -> Tuple[bytes, bytes]:
+def generate_showcase_draft() -> Tuple[bytes, bytes]:
     """
-    Generate the OpenDraft showcase thesis: "Why OpenDraft Will Save The World"
+    Generate the OpenDraft showcase draft: "Why OpenDraft Will Save The World"
     Returns (pdf_bytes, docx_bytes)
     """
     topic = "Why OpenDraft Will Save The World: Democratizing Academic Research Through AI"
     
-    print(f"🚀 Generating showcase thesis: {topic}")
+    print(f"🚀 Generating showcase draft: {topic}")
     
-    pdf_path, docx_path, _ = generate_thesis_real(
+    pdf_path, docx_path, _ = generate_draft_real(
         topic=topic,
         language="en",
         academic_level="master",
@@ -683,24 +683,24 @@ def generate_showcase_thesis() -> Tuple[bytes, bytes]:
 
 @app.local_entrypoint()
 def regenerate_examples():
-    """Generate fresh OpenDraft showcase thesis and save to examples."""
+    """Generate fresh OpenDraft showcase draft and save to examples."""
     from pathlib import Path
     
     project_root = Path(__file__).parent.parent
     
-    print("🚀 Generating fresh OpenDraft showcase thesis on Modal...")
-    print("   This will take 10-20 minutes for full thesis generation.")
+    print("🚀 Generating fresh OpenDraft showcase draft on Modal...")
+    print("   This will take 10-20 minutes for full draft generation.")
     print()
     
-    # Generate thesis on Modal (with all AI agents)
-    pdf_bytes, docx_bytes = generate_showcase_thesis.remote()
+    # Generate draft on Modal (with all AI agents)
+    pdf_bytes, docx_bytes = generate_showcase_draft.remote()
     
     # Save to examples/ and docs/examples/
     examples_dir = project_root / "examples"
     docs_examples_dir = project_root / "docs/examples"
     
-    pdf_name = "Why_Academic_Thesis_AI_Saves_The_World.pdf"
-    docx_name = "Why_Academic_Thesis_AI_Saves_The_World.docx"
+    pdf_name = "Why_Academic_Draft_AI_Saves_The_World.pdf"
+    docx_name = "Why_Academic_Draft_AI_Saves_The_World.docx"
     
     for output_dir in [examples_dir, docs_examples_dir]:
         pdf_path = output_dir / pdf_name
@@ -712,5 +712,5 @@ def regenerate_examples():
     print(f"✅ Saved DOCX: {docx_path} ({len(docx_bytes):,} bytes)")
     
     print()
-    print("🎉 Showcase thesis generated successfully!")
+    print("🎉 Showcase draft generated successfully!")
     print("   Don't forget to commit and push to deploy to GitHub Pages.")

@@ -7,9 +7,9 @@ ABOUTME: Provides domain-specific exceptions with context and recovery guidance
 from typing import Optional, Dict, Any
 
 
-class ThesisGenerationError(Exception):
+class DraftGenerationError(Exception):
     """
-    Base exception for all thesis generation errors.
+    Base exception for all draft generation errors.
 
     Provides structured error context and recovery suggestions.
     All custom exceptions inherit from this base class.
@@ -22,7 +22,7 @@ class ThesisGenerationError(Exception):
         recovery_hint: Optional[str] = None
     ):
         """
-        Initialize thesis generation error.
+        Initialize draft generation error.
 
         Args:
             message: Human-readable error description
@@ -47,7 +47,7 @@ class ThesisGenerationError(Exception):
         return " | ".join(parts)
 
 
-class APIQuotaExceededError(ThesisGenerationError):
+class APIQuotaExceededError(DraftGenerationError):
     """
     Raised when API quota limits are exceeded.
 
@@ -98,7 +98,7 @@ class APIQuotaExceededError(ThesisGenerationError):
         self.reset_time = reset_time
 
 
-class CitationFetchError(ThesisGenerationError):
+class CitationFetchError(DraftGenerationError):
     """
     Raised when citation fetching fails.
 
@@ -148,7 +148,7 @@ class CitationFetchError(ThesisGenerationError):
         self.reason = reason
 
 
-class PDFExportError(ThesisGenerationError):
+class PDFExportError(DraftGenerationError):
     """
     Raised when PDF export fails.
 
@@ -202,7 +202,7 @@ class PDFExportError(ThesisGenerationError):
         self.reason = reason
 
 
-class ValidationError(ThesisGenerationError):
+class ValidationError(DraftGenerationError):
     """
     Raised when input validation fails.
 
@@ -250,7 +250,7 @@ class ValidationError(ThesisGenerationError):
         self.constraint = constraint
 
 
-class ConfigurationError(ThesisGenerationError):
+class ConfigurationError(DraftGenerationError):
     """
     Raised when configuration is invalid or missing.
 
@@ -294,7 +294,7 @@ class ConfigurationError(ThesisGenerationError):
         self.issue = issue
 
 
-class NetworkError(ThesisGenerationError):
+class NetworkError(DraftGenerationError):
     """
     Raised when network operations fail.
 
@@ -346,7 +346,7 @@ class NetworkError(ThesisGenerationError):
         self.retry_count = retry_count
 
 
-class FileOperationError(ThesisGenerationError):
+class FileOperationError(DraftGenerationError):
     """
     Raised when file operations fail.
 

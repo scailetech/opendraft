@@ -121,7 +121,7 @@ class CitationValidator:
                 url,
                 timeout=self.timeout,
                 allow_redirects=True,
-                headers={'User-Agent': 'AcademicThesisAI/1.0 Citation Validator'}
+                headers={'User-Agent': 'AcademicDraftAI/1.0 Citation Validator'}
             )
 
             # Some servers block HEAD, try GET
@@ -326,22 +326,22 @@ class CitationValidator:
 
         return all_issues, stats
 
-    def generate_report(self, issues: List[ValidationIssue], thesis_name: str) -> str:
+    def generate_report(self, issues: List[ValidationIssue], draft_name: str) -> str:
         """
         Generate a human-readable validation report.
 
         Args:
             issues: List of validation issues
-            thesis_name: Name of thesis for report header
+            draft_name: Name of draft for report header
 
         Returns:
             Formatted report string
         """
         if not issues:
-            return f"✅ {thesis_name}: All citations passed validation!\n"
+            return f"✅ {draft_name}: All citations passed validation!\n"
 
         report = [f"\n{'='*80}"]
-        report.append(f"CITATION VALIDATION REPORT: {thesis_name}")
+        report.append(f"CITATION VALIDATION REPORT: {draft_name}")
         report.append(f"{'='*80}\n")
 
         # Group by severity
@@ -375,7 +375,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Validate citations for academic integrity')
     parser.add_argument('database', nargs='?', help='Path to citation_database.json (or validate all)')
-    parser.add_argument('--all', action='store_true', help='Validate all 3 thesis databases')
+    parser.add_argument('--all', action='store_true', help='Validate all 3 draft databases')
 
     args = parser.parse_args()
 
@@ -385,9 +385,9 @@ def main():
     if args.all or not args.database:
         base_dir = Path(__file__).parent.parent
         databases = [
-            (base_dir / "tests/outputs/opensource_thesis/citation_database.json", "Open Source Thesis"),
-            (base_dir / "tests/outputs/ai_pricing_thesis/citation_database.json", "AI Pricing Thesis"),
-            (base_dir / "tests/outputs/co2_thesis_german/citation_database.json", "CO2 German Thesis"),
+            (base_dir / "tests/outputs/opensource_draft/citation_database.json", "Open Source Draft"),
+            (base_dir / "tests/outputs/ai_pricing_draft/citation_database.json", "AI Pricing Draft"),
+            (base_dir / "tests/outputs/co2_draft_german/citation_database.json", "CO2 German Draft"),
         ]
     else:
         databases = [(Path(args.database), Path(args.database).parent.name)]
@@ -396,13 +396,13 @@ def main():
     total_critical = 0
     total_warnings = 0
 
-    for db_path, thesis_name in databases:
+    for db_path, draft_name in databases:
         if not db_path.exists():
-            print(f"⚠️  Skipping {thesis_name}: Database not found at {db_path}")
+            print(f"⚠️  Skipping {draft_name}: Database not found at {db_path}")
             continue
 
         issues, stats = validator.validate_database(db_path)
-        report = validator.generate_report(issues, thesis_name)
+        report = validator.generate_report(issues, draft_name)
         print(report)
 
         total_critical += stats['critical_issues']

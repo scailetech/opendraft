@@ -121,10 +121,10 @@ def export_pdf(
         bool: True if PDF generation succeeded, False otherwise
 
     Examples:
-        >>> export_pdf(Path('thesis.md'), Path('thesis.pdf'))
-        >>> export_pdf(Path('thesis.md'), Path('thesis.pdf'), engine='libreoffice')
+        >>> export_pdf(Path('draft.md'), Path('draft.pdf'))
+        >>> export_pdf(Path('draft.md'), Path('draft.pdf'), engine='libreoffice')
         >>> options = PDFGenerationOptions(line_spacing=1.5)
-        >>> export_pdf(Path('thesis.md'), Path('thesis.pdf'), options=options)
+        >>> export_pdf(Path('draft.md'), Path('draft.pdf'), options=options)
     """
     # Extract metadata from YAML frontmatter
     metadata = extract_metadata_from_yaml(md_file)
@@ -395,9 +395,9 @@ def export_docx(
         bool: True if DOCX generation succeeded, False otherwise
 
     Examples:
-        >>> export_docx(Path('thesis.md'), Path('thesis.docx'))
+        >>> export_docx(Path('draft.md'), Path('draft.docx'))
         >>> options = PDFGenerationOptions(enable_toc=True, toc_depth=3)
-        >>> export_docx(Path('thesis.md'), Path('thesis.docx'), options)
+        >>> export_docx(Path('draft.md'), Path('draft.docx'), options)
     """
     import subprocess
     import shutil
@@ -590,13 +590,13 @@ def main():
         epilog='''
 Examples:
   # Auto-select best engine
-  python export_professional.py thesis.md --pdf thesis.pdf
+  python export_professional.py draft.md --pdf draft.pdf
 
   # Use specific engine
-  python export_professional.py thesis.md --pdf thesis.pdf --engine libreoffice
+  python export_professional.py draft.md --pdf draft.pdf --engine libreoffice
 
   # Generate both PDF and DOCX
-  python export_professional.py thesis.md --pdf thesis.pdf --docx thesis.docx
+  python export_professional.py draft.md --pdf draft.pdf --docx draft.docx
 
   # List available engines
   python export_professional.py --list-engines

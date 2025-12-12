@@ -63,17 +63,17 @@ opendraft verify
 
 You should now see ✅ for API Keys section.
 
-## Step 4: Generate Your First Thesis! (5 min)
+## Step 4: Generate Your First Draft! (5 min)
 
 ### Option A: Quick Test (Recommended)
 ```bash
 # Run a simple test to generate a short academic paper
-python tests/scripts/test_ai_pricing_thesis.py
+python tests/scripts/test_ai_pricing_draft.py
 ```
 
-This will generate a thesis in `tests/outputs/ai_pricing_thesis/` (takes ~15-25 min).
+This will generate a draft in `tests/outputs/ai_pricing_draft/` (takes ~15-25 min).
 
-### Option B: Custom Thesis (Advanced)
+### Option B: Custom Draft (Advanced)
 1. Open `prompts/00_WORKFLOW.md`
 2. Follow the step-by-step agent workflow
 3. Paste prompts into Claude Code / Cursor
@@ -82,13 +82,13 @@ This will generate a thesis in `tests/outputs/ai_pricing_thesis/` (takes ~15-25 
 ## Step 5: View Output
 
 ```bash
-# Check generated thesis
+# Check generated draft
 ls -lh examples/*.pdf
 
 # Open the PDF
-open examples/ai_pricing_thesis.pdf  # macOS
-xdg-open examples/ai_pricing_thesis.pdf  # Linux
-start examples/ai_pricing_thesis.pdf  # Windows
+open examples/ai_pricing_draft.pdf  # macOS
+xdg-open examples/ai_pricing_draft.pdf  # Linux
+start examples/ai_pricing_draft.pdf  # Windows
 ```
 
 ## Troubleshooting
@@ -139,4 +139,4 @@ pip install weasyprint
 
 ---
 
-**Estimated time to first thesis:** 10 min setup + 15-25 min generation = 25-35 min total
+**Estimated time to first draft:** 10 min setup + 15-25 min generation = 25-35 min total

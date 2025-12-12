@@ -2,7 +2,7 @@
 
 **Agent Type:** Research / Information Gathering
 **Phase:** 1 - Research
-**Recommended LLM:** Claude Sonnet 4.5 (best for research synthesis) | GPT-5 | Gemini 2.5 Flash
+**Recommended LLM:** Claude Sonnet 4.5 (best for research syndraft) | GPT-5 | Gemini 2.5 Flash
 
 ---
 
