@@ -106,7 +106,7 @@ jobs:
         cat licenses.md
 
     - name: Upload license report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: licenses-report
         path: licenses.md
