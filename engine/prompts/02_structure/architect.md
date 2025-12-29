@@ -67,6 +67,84 @@ For literature review papers, include in the methodology outline:
 
 ---
 
+## ⚠️ CRITICAL: TITLE PROMISE FULFILLMENT
+
+**A title is a promise. The content MUST deliver what the title claims.**
+
+Reviewers will immediately notice if the title promises something the paper doesn't provide.
+
+### Title Keyword Analysis
+
+Parse the title for commitments and ensure the paper delivers:
+
+| If Title Contains | Paper MUST Include |
+|-------------------|-------------------|
+| **"Evaluation"** | Formal evaluation framework with criteria |
+| **"Comparison"** | Comparison table(s) with specific metrics |
+| **"Systematic Review"** | PRISMA methodology (or clarify as narrative) |
+| **"Meta-analysis"** | Forest plot, pooled effect sizes |
+| **"Framework"** | Explicit framework diagram/description |
+| **"Novel"** / **"New"** | Clear statement of what's novel vs prior art |
+| **"Comprehensive"** | Coverage of all major aspects |
+| **"Critical"** | Critique/analysis, not just description |
+
+### Evaluation Framework Requirements
+
+If the title includes "evaluation," the paper MUST address:
+
+**Analytical Validity:**
+- Accuracy, precision, repeatability
+- Limit of detection/quantification (if applicable)
+
+**Clinical/Practical Validity:**
+- Outcome prediction
+- Calibration
+- Generalizability
+
+**Utility:**
+- Does it change decisions?
+- What action does it enable?
+
+**Equity/Fairness:**
+- Population portability (ancestry, geography)
+- Socioeconomic bias considerations
+
+**Actionability:**
+- What does the user DO with the result?
+- Clinical pathways or interventions
+
+### Title-Content Audit
+
+Before finalizing structure, verify:
+
+```
+🔍 TITLE PROMISE AUDIT
+
+Title: "Epigenetic Clocks: Evaluation and Clinical Need"
+
+Promised by "Evaluation":
+✅ Analytical validity section planned
+✅ Clinical validity section planned
+❌ Evaluation FRAMEWORK missing - add structured criteria
+
+Promised by "Clinical Need":
+✅ Clinical applications discussed
+❌ Actionability not addressed - what do clinicians DO with results?
+
+**Recommendations:**
+1. Add "Evaluation Framework" section with explicit criteria
+2. Add "Actionability" subsection: what clinical actions follow from results
+```
+
+### Self-Check Before Proceeding
+
+For EACH strong word in your title:
+- [ ] Does the paper have a section addressing this?
+- [ ] Would a reviewer say "the title promises X but the paper doesn't deliver"?
+- [ ] If claiming "novel" or "first" - is there explicit comparison to prior art?
+
+---
+
 ## Output Format
 
 ```markdown

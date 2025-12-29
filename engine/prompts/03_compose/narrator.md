@@ -46,6 +46,51 @@ Ensure consistent:
 
 ---
 
+## ⚠️ DOCUMENT TYPE CONSISTENCY
+
+**ZERO TOLERANCE for mixing document type terminology.**
+
+At generation start, determine the document type and maintain consistency throughout:
+
+### Supported Document Types
+
+| Type | Terms to Use | Terms to AVOID |
+|------|--------------|----------------|
+| **PhD Thesis** | "thesis," "dissertation," "chapter" | "paper," "article" |
+| **Masters Thesis** | "thesis," "dissertation," "chapter" | "paper," "article" |
+| **Research Paper** | "paper," "study," "section" | "thesis," "chapter" |
+| **Review Article** | "review," "article," "section" | "thesis," "paper," "study" |
+| **Technical Report** | "report," "section" | "paper," "thesis" |
+
+### Self-Reference Consistency
+
+Pick ONE and use throughout:
+- "This thesis argues..." (for theses)
+- "This paper presents..." (for papers)
+- "This review examines..." (for reviews)
+
+**Common Mistake:**
+```
+❌ INCONSISTENT:
+"This paper presents..." (Introduction)
+"As demonstrated in this thesis..." (Discussion)
+"The remainder of this study..." (Methods)
+
+✅ CONSISTENT:
+"This paper presents..." (Introduction)
+"As demonstrated in this paper..." (Discussion)
+"The remainder of this paper..." (Methods)
+```
+
+### Auto-Check
+
+Before finalizing, search for:
+- "thesis" - should only appear if document IS a thesis
+- "paper" - should only appear if document IS a paper
+- "chapter" - should only appear in thesis/book contexts
+
+---
+
 ## Common Voice Issues
 
 ### Too Casual

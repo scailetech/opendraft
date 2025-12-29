@@ -59,6 +59,86 @@ Suggest:
 
 ---
 
+## ⚠️ CRITICAL: DOMAIN-SPECIFIC REQUIREMENTS
+
+**Every domain has known confounds and technical considerations that MUST be addressed.**
+
+A paper that omits discussion of domain-critical topics will be immediately flagged by expert reviewers.
+
+### 5. Domain-Critical Gap Detection
+
+For each domain, ensure the research addresses these known issues:
+
+#### Epigenetics / DNA Methylation
+| Topic | Why It Matters | Must Address |
+|-------|----------------|--------------|
+| **Cell composition confounding** | Blood leukocyte proportions shift with age/disease | Deconvolution methods, cell-type specific analysis |
+| **Batch effects** | Technical variation between runs | Batch correction methods used |
+| **Normalization** | Raw data requires preprocessing | Normalization pipeline (BMIQ, SWAN, etc.) |
+| **Probe reliability** | Some CpG probes are unreliable | Probe filtering criteria (cross-reactive, SNP-containing) |
+| **Platform differences** | 450k vs EPIC vs sequencing | Platform specified and implications discussed |
+
+#### Machine Learning
+| Topic | Why It Matters | Must Address |
+|-------|----------------|--------------|
+| **Train/test split** | Prevents overfitting assessment | Data split strategy, no leakage |
+| **Cross-validation** | Robust performance estimation | CV strategy used |
+| **Hyperparameter tuning** | Affects reported performance | How parameters were selected |
+| **Overfitting indicators** | Train vs test gap | Performance on held-out data |
+| **Baseline comparisons** | Contextualizes performance | What baselines were compared |
+
+#### Clinical/Biomedical
+| Topic | Why It Matters | Must Address |
+|-------|----------------|--------------|
+| **Population specificity** | Effects may not generalize | Demographics of study population |
+| **Confounders** | BMI, SES, smoking affect outcomes | How confounders were controlled |
+| **Effect sizes** | Statistical vs clinical significance | Effect magnitude, not just p-values |
+| **Calibration** | Predictions must be well-calibrated | Calibration curves if predictive |
+
+### 6. Technical Implementation Gaps
+
+When reviewing technical methods, flag if missing:
+
+**For any computational method:**
+- [ ] Software/package versions
+- [ ] Hardware requirements
+- [ ] Reproducibility information (code availability, seeds)
+
+**For any measurement:**
+- [ ] Measurement protocol details
+- [ ] Quality control steps
+- [ ] Known limitations of the measurement
+
+**For any dataset:**
+- [ ] Source and access information
+- [ ] Preprocessing applied
+- [ ] Sample inclusion/exclusion criteria
+
+### Gap Detection Output
+
+```
+🔴 DOMAIN-CRITICAL GAPS DETECTED
+
+**Epigenetics Paper - Missing Discussions:**
+
+1. Cell Composition Confounding
+   - Paper mentions tissue heterogeneity
+   - Does NOT address: leukocyte deconvolution, cell-type adjustment
+   - Reviewer will ask: "Did you control for cell composition?"
+
+2. Platform/Preprocessing
+   - Mentions "technical noise"
+   - Does NOT specify: 450k vs EPIC, normalization pipeline
+   - Reviewer will ask: "What preprocessing was applied?"
+
+**Recommendation:** Add paragraph addressing:
+- Cell composition adjustment method (e.g., Houseman algorithm)
+- Normalization approach (e.g., BMIQ)
+- Platform used (e.g., Illumina EPIC)
+```
+
+---
+
 ## Output Format
 
 ```markdown
