@@ -769,6 +769,83 @@ If your methodology section contains ANY of these phrases, REWRITE IT:
 - Use figures/tables
 - State statistical significance
 
+---
+
+## ⚠️ CRITICAL: ANALYSIS SECTIONS MUST CONTAIN ACTUAL ANALYSIS
+
+**ZERO TOLERANCE FOR "SUMMARY MASQUERADING AS ANALYSIS"**
+
+If you call a section "Analysis," "Results," or "Findings," reviewers expect **structured quantitative comparisons**, not restatements of what papers said.
+
+### The Problem You MUST Avoid
+
+❌ **BAD (Summary dressed as analysis):**
+```
+Studies show that next-generation clocks outperform first-generation clocks.
+Recent work has demonstrated improved accuracy in age prediction.
+Several researchers have found significant correlations with mortality outcomes.
+```
+
+✅ **GOOD (Actual analysis with data):**
+```
+Table 2 compares predictive accuracy across clock generations. First-generation
+clocks (Horvath 2013, Hannum 2013) achieve mortality hazard ratios of 1.09-1.14
+per year of age acceleration (Marioni et al., 2015). Second-generation clocks
+show marked improvement: PhenoAge reports HR = 1.22 (95% CI: 1.18-1.26) and
+GrimAge achieves HR = 1.44 (95% CI: 1.38-1.51), representing a 25-30%
+improvement in mortality prediction (Lu et al., 2019; McCrory et al., 2021).
+```
+
+### Required Elements for Analysis/Results Sections
+
+**1. QUANTITATIVE COMPARISONS**
+When comparing studies, tools, or methods, you MUST:
+- Extract specific metrics from papers (HR, AUC, r², MAE, ICC, Cohen's d, etc.)
+- Present comparisons in markdown tables where appropriate
+- Include confidence intervals when available
+- Show sample sizes (n=X)
+
+**Example Table:**
+```markdown
+| Clock | HR per SD Age Accel | 95% CI | Sample Size | Reference |
+|-------|---------------------|--------|-------------|-----------|
+| Horvath | 1.09 | 1.05-1.13 | n=4,658 | {cite_001} |
+| PhenoAge | 1.22 | 1.18-1.26 | n=9,947 | {cite_002} |
+| GrimAge | 1.44 | 1.38-1.51 | n=6,935 | {cite_003} |
+```
+
+**2. EFFECT SIZE REPORTING**
+- Never just say "significant" without effect size
+- Report actual numbers: "r = 0.72", "d = 0.45", "HR = 1.34"
+- Use standardized metrics where possible
+- Note clinical/practical significance, not just statistical
+
+**3. HETEROGENEITY ACKNOWLEDGMENT**
+When studies use different methods or populations, explicitly state:
+- "Direct comparison is limited because Study A used blood samples while Study B used saliva"
+- "Effect sizes varied (range: 0.2-0.8), likely due to population differences"
+- "Meta-analytic pooling was not possible due to methodological heterogeneity"
+
+**4. SYNTHESIS (Not Just Summary)**
+Your analysis must answer:
+- What do the numbers MEAN when compared across studies?
+- What patterns emerge? ("Clocks trained on mortality outperform those trained on chronological age")
+- Where do studies DISAGREE and why? ("Two studies report opposite findings, possibly due to...")
+- What is the RANGE of findings? ("Effect sizes ranged from 0.15 to 0.89, with larger studies...")
+
+### Self-Check Before Submitting Analysis Sections
+
+If your section contains NONE of these, REWRITE IT:
+- [ ] At least one comparison table with metrics
+- [ ] Specific numbers (HR, AUC, r², n=, CI)
+- [ ] Effect sizes or magnitude indicators
+- [ ] Acknowledgment of study heterogeneity
+- [ ] Synthesis statement (pattern/insight beyond individual studies)
+
+**Remember:** "Analysis" means you ANALYZED something. If you only described what papers said, you wrote a Summary, not an Analysis.
+
+---
+
 ### Discussion
 **Goal:** Interpret findings, connect to literature
 

@@ -167,14 +167,30 @@ For literature review papers, include in the methodology outline:
 - Techniques: [Statistical methods, etc.]
 - Tools: [Software used]
 
-### 6. Results (1500-2000 words)
+### 6. Results/Analysis (1500-2000 words)
+
+**⚠️ CRITICAL: Results sections MUST contain actual quantitative analysis, not summaries.**
+
 #### 6.1 [Finding 1]
 - Observation: [What you found]
-- Evidence: [Data/stats]
-- Figure/Table: [Visual reference]
+- Evidence: [Specific metrics - HR, AUC, r², effect sizes, CIs]
+- Comparison Table: [Required if comparing multiple studies/tools]
+- Sample sizes: [n=X for key studies]
 
 #### 6.2 [Finding 2]
 [Repeat for each major finding]
+
+#### 6.3 Synthesis Table (REQUIRED)
+- Comparison table with metrics extracted from literature
+- Must include: study identifiers, sample sizes, key metrics, confidence intervals
+- Example columns: | Study | Method | n | Effect Size | 95% CI |
+
+**Analysis Section Checklist (for Crafter):**
+- [ ] At least one markdown comparison table
+- [ ] Specific numbers from papers (not just "significant")
+- [ ] Effect sizes or magnitude of differences
+- [ ] Heterogeneity noted (different methods/populations)
+- [ ] Synthesis insight (pattern beyond individual papers)
 
 ### 7. Discussion (1500-2000 words)
 #### 7.1 Interpretation
