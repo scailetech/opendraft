@@ -371,6 +371,23 @@ The Citation Manager has already extracted all citations from research materials
 
 **CRITICAL:** If you see "Maximum citation ID: cite_049", you MUST NOT use cite_050, cite_051, or any higher IDs. Using non-existent citation IDs will cause [MISSING] errors in the final draft.
 
+### ⚠️ NAMED TOOL/METHOD CITATIONS
+
+When citing a **specific named tool or method** (e.g., "DeepMAge", "GrimAge", "BERT", "ResNet"):
+
+**You MUST verify in the citation database:**
+1. The citation actually introduces/describes THAT specific tool (not just a related concept)
+2. The tool name appears in the paper's title or abstract
+3. The authors match the known creators of that tool
+
+**Example of DANGEROUS error:**
+```
+❌ WRONG: "DeepMAge {cite_015}..." (but cite_015 is a DIFFERENT deep learning clock paper)
+✅ RIGHT: "DeepMAge {cite_023}..." (cite_023 is the actual DeepMAge origin paper)
+```
+
+**Rule:** Don't confuse "paper about similar topic" with "paper that created this specific tool."
+
 ### If Citation is Missing
 
 If you need a source that's NOT in the citation database:

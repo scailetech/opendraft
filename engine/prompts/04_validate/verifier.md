@@ -46,6 +46,74 @@ Using Semantic Scholar MCP:
 
 ---
 
+## ⚠️ CRITICAL: NAMED ENTITY & AUTHOR VERIFICATION
+
+**ZERO TOLERANCE FOR CITATION-AUTHOR MISMATCHES**
+
+This is the most damaging type of error — attributing a specific tool, method, or finding to the wrong authors destroys credibility instantly.
+
+### 4. Named Entity Matching (Tools/Methods)
+
+When the paper mentions a **specific named tool or method** (e.g., "DeepMAge", "GrimAge", "DunedinPACE", "BERT", "ResNet"), you MUST verify:
+
+**Check 1: Origin Paper**
+- Does the cited paper actually INTRODUCE or DESCRIBE that specific tool?
+- Not just a paper ABOUT the concept, but THE paper for that tool
+
+**Check 2: Title/Abstract Match**
+- The tool name should appear in the paper's title OR abstract
+- If citing "DeepMAge", the cited paper should contain "DeepMAge" in title/abstract
+
+**Check 3: Author Attribution**
+- If saying "X et al. developed DeepMAge" — verify X actually developed it
+- Cross-reference the tool's known creators with the cited paper's authors
+
+**Example Error to Catch:**
+```
+❌ WRONG: "DeepMAge (Camillo et al., 2021) is a deep learning epigenetic clock..."
+✅ RIGHT: "DeepMAge (Galkin et al., 2021) is a deep learning epigenetic clock..."
+
+The error: Camillo et al. wrote a DIFFERENT deep learning clock paper.
+DeepMAge was actually created by Galkin/Mamoshina/Zhavoronkov.
+```
+
+### 5. Concept vs Instance Verification
+
+Distinguish between:
+- **Concept papers**: General research about a topic (e.g., "deep learning for age prediction")
+- **Instance papers**: Papers introducing a SPECIFIC tool/method (e.g., "DeepMAge: A Deep Learning...")
+
+**Rule:** When citing a specific named tool, cite the INSTANCE paper, not a concept paper.
+
+**Verification Questions:**
+1. Does the paper cite a SPECIFIC tool by name?
+2. Does the cited source actually introduce/describe THAT specific tool?
+3. Or is it a different paper that just discusses similar concepts?
+
+### 6. Author Attribution Verification
+
+When the paper makes author-specific claims like:
+- "Smith et al. developed..."
+- "According to Johnson et al.'s framework..."
+- "The method proposed by Lee et al...."
+
+**Verify:**
+- Do those authors actually appear on the cited paper?
+- Did they actually make the claimed contribution?
+- Is the attribution specific enough? (e.g., "Chen et al." when there are 10 Chens in the field)
+
+### Named Entity Verification Checklist
+
+For each named tool/method mentioned:
+- [ ] Tool name appears in cited paper's title or abstract
+- [ ] Cited authors are the actual creators/developers
+- [ ] Not confusing concept paper with origin paper
+- [ ] No author name spelling errors (Johnston ≠ Johnson)
+
+**If ANY named entity fails these checks, flag as 🔴 CRITICAL MISATTRIBUTION**
+
+---
+
 ## Output Format
 
 ```markdown
