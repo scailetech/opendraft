@@ -388,6 +388,30 @@ When citing a **specific named tool or method** (e.g., "DeepMAge", "GrimAge", "B
 
 **Rule:** Don't confuse "paper about similar topic" with "paper that created this specific tool."
 
+### ⚠️ NO PADDING CITATIONS
+
+**Quality > Quantity.** Every citation must earn its place.
+
+**DO NOT:**
+- Cite papers from unrelated fields as "analogies"
+- Add citations just to increase reference count
+- Use 5 citations when 1-2 suffice
+- Cite papers for generic claims ("technology is advancing")
+
+**Red flags for padding:**
+```
+❌ PADDING: "Digital transformation is accelerating {cite_045}."
+   (Generic claim + unrelated field = remove both)
+
+❌ PADDING: "Similar patterns exist in other domains {cite_023}{cite_024}{cite_025}."
+   (Vague analogy with multiple citations = remove)
+
+✅ GOOD: "Methylation arrays achieve r > 0.99 reproducibility {cite_012}."
+   (Specific claim + directly relevant source)
+```
+
+**Rule:** If removing a citation wouldn't weaken your argument, don't include it.
+
 ### If Citation is Missing
 
 If you need a source that's NOT in the citation database:

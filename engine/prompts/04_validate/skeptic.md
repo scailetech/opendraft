@@ -45,6 +45,94 @@ Critically review the paper for:
 
 ---
 
+## ⚠️ CRITICAL: REFERENCE QUALITY ASSESSMENT
+
+**ZERO TOLERANCE FOR PADDING CITATIONS**
+
+Reviews are judged by source QUALITY, not quantity. Every citation must earn its place.
+
+### 5. Citation Relevance Filter
+
+For EACH citation in the paper, ask:
+
+**A. Direct Relevance**
+- Does this paper DIRECTLY address the claim being made?
+- Or is it an indirect analogy/parallel from another field?
+- Rule: If it requires explanation for why it's relevant, remove it
+
+**B. Field Alignment**
+- Is this paper from the SAME field as the research topic?
+- Cross-field citations need EXPLICIT justification in the text
+- Red flag: Biology paper citing economics/cybersecurity/unrelated fields
+
+**C. Earning Its Place**
+- If this citation were removed, would the argument be weaker?
+- If the answer is "not really" → REMOVE IT
+- Quality > Quantity
+
+### Red Flags for Padding Citations
+
+```
+🔴 PADDING DETECTED - Remove these citations:
+
+1. "Analogy from unrelated field"
+   ❌ Citing cybersecurity paper to support biology claim
+   ❌ Citing economics paper for medical research analogy
+   → Unless explicitly justified, these are filler
+
+2. "Generic claim support"
+   ❌ Paper cited only for a single generic statement
+   ❌ "Technology is advancing rapidly (Smith, 2023)"
+   → Remove citation or remove claim
+
+3. "Sounds relevant but isn't"
+   ❌ Paper title contains topic keywords but content is different field
+   ❌ "Digital transformation" paper cited in biomedical review
+   → Verify paper actually addresses your specific topic
+
+4. "Quantity padding"
+   ❌ 5 citations for a single claim when 1-2 would suffice
+   ❌ Multiple papers saying the same thing
+   → Keep best 1-2, remove redundant citations
+```
+
+### Citation Audit Checklist
+
+For each reference, verify:
+- [ ] Paper is from relevant field (or cross-field use is justified)
+- [ ] Paper directly supports the specific claim made
+- [ ] Removing this citation would weaken the argument
+- [ ] Not an analogy from unrelated domain
+- [ ] Not padding for citation count
+
+### Output for Padding Issues
+
+```
+⚠️ PADDING CITATIONS DETECTED
+
+**Citation [23]:** Indonesia digital transformation paper
+- **Used for:** "Technology adoption varies across contexts"
+- **Problem:** Unrelated field (cybersecurity/policy → biology)
+- **Action:** REMOVE - generic claim doesn't need citation
+
+**Citation [45]:** Home testing kit audit report
+- **Used for:** "Methylation measurement reliability"
+- **Problem:** Not about methylation, tangentially related at best
+- **Action:** REMOVE - find direct methylation reliability source or remove claim
+
+**Total padding citations found:** 5
+**Recommendation:** Remove citations [23], [45], [51], [67], [72]
+**Result:** Cleaner, more focused reference list
+```
+
+### The Golden Rule
+
+> **If a citation requires mental gymnastics to explain its relevance, it shouldn't be there.**
+
+A 30-source paper with all relevant citations is stronger than a 60-source paper with 30 padding citations.
+
+---
+
 ## Output Format
 
 ```markdown

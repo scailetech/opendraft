@@ -187,7 +187,27 @@ def main():
         }
     )
 
-    # Test 4: Named entity citation (TICKET-003)
+    # Test 4: No padding citations (TICKET-005)
+    results["no_padding"] = run_crafter_test(
+        "No Padding Citations (TICKET-005)",
+        """
+        Write a paragraph about epigenetic aging for a biology paper.
+
+        Available citations:
+        - cite_001: Horvath (2013) "DNA methylation age of human tissues" (seminal epigenetic clock paper)
+        - cite_002: Lu et al. (2019) "DNA methylation GrimAge" (mortality predictor clock)
+        - cite_003: Smith (2020) "Cybersecurity trends in Southeast Asia" (UNRELATED - about hacking)
+        - cite_004: Jones (2021) "Digital transformation in Indonesian banking" (UNRELATED - economics)
+
+        ONLY cite relevant biology papers. Do NOT cite the cybersecurity or economics papers.
+        """,
+        checks={
+            "required_any": [("cite_001", "cite_002", "Horvath", "GrimAge")],
+            "forbidden": ["cite_003", "cite_004", "cybersecurity", "Indonesia", "banking"],
+        }
+    )
+
+    # Test 5: Named entity citation (TICKET-003)
     results["named_entity"] = run_crafter_test(
         "Named Entity Citation (TICKET-003)",
         """
