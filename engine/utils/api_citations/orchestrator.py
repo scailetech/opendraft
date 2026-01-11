@@ -267,33 +267,6 @@ class CitationResearcher:
                     citations.append(citation)
             return citations
 
-        # #region agent log
-        import json
-        import time
-        import os
-        try:
-            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-            os.makedirs(os.path.dirname(debug_log_path), exist_ok=True)
-            with open(debug_log_path, 'a') as f:
-                f.write(json.dumps({
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "I",
-                    "location": "orchestrator.py:253",
-                    "message": "research_citation starting",
-                    "data": {
-                        "topic": topic[:100],
-                        "enable_crossref": self.enable_crossref,
-                        "enable_semantic_scholar": self.enable_semantic_scholar,
-                        "enable_gemini_grounded": self.enable_gemini_grounded,
-                        "enable_smart_routing": self.enable_smart_routing,
-                        "cache_hit": topic in self.cache
-                    },
-                    "timestamp": int(time.time() * 1000)
-                }) + "\n")
-        except Exception as e:
-            logger.debug(f"Debug log write failed: {e}")
-        # #endregion
 
         if self.verbose:
                     safe_print(f"  🔍 Researching: {topic[:70]}{'...' if len(topic) > 70 else ''}")
@@ -325,60 +298,10 @@ class CitationResearcher:
         if self.verbose and api_chain:
             safe_print(f"    🔀 API chain: {' → '.join(api_chain)}")
 
-        # #region agent log
-        import json
-        import time
-        import os
-        try:
-            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-            os.makedirs(os.path.dirname(debug_log_path), exist_ok=True)
-            with open(debug_log_path, 'a') as f:
-                f.write(json.dumps({
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "I",
-                    "location": "orchestrator.py:304",
-                    "message": "API chain determined",
-                    "data": {
-                        "topic": topic[:100],
-                        "api_chain": api_chain,
-                        "enable_crossref": self.enable_crossref,
-                        "enable_semantic_scholar": self.enable_semantic_scholar,
-                        "enable_gemini_grounded": self.enable_gemini_grounded
-                    },
-                    "timestamp": int(time.time() * 1000)
-                }) + "\n")
-        except Exception as e:
-            logger.debug(f"Debug log write failed: {e}")
-        # #endregion
 
         # Collect ALL valid results from API chain
         valid_results: List[Tuple[Dict[str, Any], str]] = []
 
-        # #region agent log
-        import json
-        import time
-        import os
-        try:
-            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-            os.makedirs(os.path.dirname(debug_log_path), exist_ok=True)
-            with open(debug_log_path, 'a') as f:
-                f.write(json.dumps({
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "I",
-                    "location": "orchestrator.py:284",
-                    "message": "Starting API chain execution",
-                    "data": {
-                        "topic": topic[:100],
-                        "api_chain": api_chain,
-                        "use_parallel": False  # Will be set below
-                    },
-                    "timestamp": int(time.time() * 1000)
-                }) + "\n")
-        except Exception as e:
-            logger.debug(f"Debug log write failed: {e}")
-        # #endregion
 
         # Determine if we should use parallel queries
         # Use parallel for academic/journal queries where both CrossRef and Semantic Scholar are in chain
@@ -395,29 +318,6 @@ class CitationResearcher:
             if self.enable_gemini_grounded:
                 parallel_apis.append('gemini_grounded')
 
-            # #region agent log
-            import json
-            import time
-            import os
-            try:
-                debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                os.makedirs(os.path.dirname(debug_log_path), exist_ok=True)
-                with open(debug_log_path, 'a') as f:
-                    f.write(json.dumps({
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "I",
-                        "location": "orchestrator.py:295",
-                        "message": "Using parallel API execution",
-                        "data": {
-                            "topic": topic[:100],
-                            "parallel_apis": parallel_apis
-                        },
-                        "timestamp": int(time.time() * 1000)
-                    }) + "\n")
-            except Exception as e:
-                logger.debug(f"Debug log write failed: {e}")
-            # #endregion
 
             # Report progress for parallel search
             self._report_progress("Querying Crossref, Semantic Scholar & AI search in parallel...", "search")
@@ -461,31 +361,6 @@ class CitationResearcher:
                     # Update source usage count for logging
                     self.source_usage_count[result_source] = self.source_usage_count.get(result_source, 0) + 1
 
-            # #region agent log
-            import json
-            import time
-            import os
-            try:
-                debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                os.makedirs(os.path.dirname(debug_log_path), exist_ok=True)
-                with open(debug_log_path, 'a') as f:
-                    f.write(json.dumps({
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "I",
-                        "location": "orchestrator.py:337",
-                        "message": "Parallel API execution complete",
-                        "data": {
-                            "topic": topic[:100],
-                            "valid_results_count": len(valid_results),
-                            "result_sources": [src for _, src in valid_results],
-                            "total_results": len(results)
-                        },
-                        "timestamp": int(time.time() * 1000)
-                    }) + "\n")
-            except Exception as e:
-                logger.debug(f"Debug log write failed: {e}")
-            # #endregion
 
             if valid_results:
                 if self.verbose:
@@ -521,51 +396,7 @@ class CitationResearcher:
                     if self.verbose:
                         safe_print(f"    → Trying Semantic Scholar API...", end=" ", flush=True)
                     try:
-                        # #region agent log
-                        import json
-                        import time
-                        import os
-                        try:
-                            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                            with open(debug_log_path, 'a') as f:
-                                f.write(json.dumps({
-                                    "sessionId": "debug-session",
-                                    "runId": "run1",
-                                    "hypothesisId": "D",
-                                    "location": "orchestrator.py:377",
-                                    "message": "Calling Semantic Scholar API",
-                                    "data": {
-                                        "topic": topic[:50],
-                                        "enabled": self.enable_semantic_scholar
-                                    },
-                                    "timestamp": int(time.time() * 1000)
-                                }) + "\n")
-                        except Exception as e:
-                            logger.debug(f"Debug log write failed: {e}")
-                        # #endregion
                         metadata = self.semantic_scholar.search_paper(topic)
-                        # #region agent log
-                        import os
-                        try:
-                            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                            with open(debug_log_path, 'a') as f:
-                                f.write(json.dumps({
-                                    "sessionId": "debug-session",
-                                    "runId": "run1",
-                                    "hypothesisId": "D",
-                                    "location": "orchestrator.py:378",
-                                    "message": "Semantic Scholar API response",
-                                    "data": {
-                                        "topic": topic[:50],
-                                        "has_metadata": metadata is not None,
-                                        "has_doi": metadata.get('doi') if metadata else False,
-                                        "has_url": metadata.get('url') if metadata else False
-                                    },
-                                    "timestamp": int(time.time() * 1000)
-                                }) + "\n")
-                        except Exception as e:
-                            logger.debug(f"Debug log write failed: {e}")
-                        # #endregion
                         if metadata and (metadata.get('doi') or metadata.get('url')):
                             valid_results.append((metadata, "Semantic Scholar"))
                             self.source_usage_count["Semantic Scholar"] = self.source_usage_count.get("Semantic Scholar", 0) + 1
@@ -575,29 +406,6 @@ class CitationResearcher:
                             if self.verbose:
                                 safe_print(f"✗")
                     except Exception as e:
-                        # #region agent log
-                        import json
-                        import time
-                        import os
-                        try:
-                            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                            with open(debug_log_path, 'a') as f:
-                                f.write(json.dumps({
-                                    "sessionId": "debug-session",
-                                    "runId": "run1",
-                                    "hypothesisId": "E",
-                                    "location": "orchestrator.py:389",
-                                    "message": "Semantic Scholar API error",
-                                    "data": {
-                                        "topic": topic[:50],
-                                        "error_type": type(e).__name__,
-                                        "error_message": str(e)[:200]
-                                    },
-                                    "timestamp": int(time.time() * 1000)
-                                }) + "\n")
-                        except Exception as e2:
-                            logger.debug(f"Debug log write failed: {e2}")
-                        # #endregion
                         if self.verbose:
                             safe_print(f"✗ Error: {e}")
                         logger.error(f"Semantic Scholar error: {e}")
@@ -607,51 +415,7 @@ class CitationResearcher:
                     if self.verbose:
                         safe_print(f"    → Trying Gemini Grounded (Google Search)...", end=" ", flush=True)
                     try:
-                        # #region agent log
-                        import json
-                        import time
-                        import os
-                        try:
-                            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                            with open(debug_log_path, 'a') as f:
-                                f.write(json.dumps({
-                                    "sessionId": "debug-session",
-                                    "runId": "run1",
-                                    "hypothesisId": "F",
-                                    "location": "orchestrator.py:396",
-                                    "message": "Calling Gemini Grounded API",
-                                    "data": {
-                                        "topic": topic[:50],
-                                        "enabled": self.enable_gemini_grounded
-                                    },
-                                    "timestamp": int(time.time() * 1000)
-                                }) + "\n")
-                        except Exception as e:
-                            logger.debug(f"Debug log write failed: {e}")
-                        # #endregion
                         metadata = self.gemini_grounded.search_paper(topic)
-                        # #region agent log
-                        import os
-                        try:
-                            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                            with open(debug_log_path, 'a') as f:
-                                f.write(json.dumps({
-                                    "sessionId": "debug-session",
-                                    "runId": "run1",
-                                    "hypothesisId": "F",
-                                    "location": "orchestrator.py:397",
-                                    "message": "Gemini Grounded API response",
-                                    "data": {
-                                        "topic": topic[:50],
-                                        "has_metadata": metadata is not None,
-                                        "has_doi": metadata.get('doi') if metadata else False,
-                                        "has_url": metadata.get('url') if metadata else False
-                                    },
-                                    "timestamp": int(time.time() * 1000)
-                                }) + "\n")
-                        except Exception as e:
-                            logger.debug(f"Debug log write failed: {e}")
-                        # #endregion
                         if metadata and (metadata.get('doi') or metadata.get('url')):
                             valid_results.append((metadata, "Gemini Grounded"))
                             self.source_usage_count["Gemini Grounded"] = self.source_usage_count.get("Gemini Grounded", 0) + 1
@@ -661,29 +425,6 @@ class CitationResearcher:
                             if self.verbose:
                                 safe_print(f"✗")
                     except Exception as e:
-                        # #region agent log
-                        import json
-                        import time
-                        import os
-                        try:
-                            debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                            with open(debug_log_path, 'a') as f:
-                                f.write(json.dumps({
-                                    "sessionId": "debug-session",
-                                    "runId": "run1",
-                                    "hypothesisId": "F",
-                                    "location": "orchestrator.py:408",
-                                    "message": "Gemini Grounded API error",
-                                    "data": {
-                                        "topic": topic[:50],
-                                        "error_type": type(e).__name__,
-                                        "error_message": str(e)[:200]
-                                    },
-                                    "timestamp": int(time.time() * 1000)
-                                }) + "\n")
-                        except Exception as e2:
-                            logger.debug(f"Debug log write failed: {e2}")
-                        # #endregion
                         if self.verbose:
                             safe_print(f"✗ Error: {e}")
                         logger.error(f"Gemini Grounded error: {e}")
@@ -947,109 +688,19 @@ class CitationResearcher:
             Tuple of (metadata, source_name) or (None, api_name)
         """
         try:
-            # #region agent log
-            import json
-            import time
-            import os
-            try:
-                debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                with open(debug_log_path, 'a') as f:
-                    f.write(json.dumps({
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "H",
-                        "location": "orchestrator.py:669",
-                        "message": "_search_api called",
-                        "data": {
-                            "api_name": api_name,
-                            "topic": topic[:50],
-                            "enable_crossref": self.enable_crossref,
-                            "enable_semantic_scholar": self.enable_semantic_scholar,
-                            "enable_gemini_grounded": self.enable_gemini_grounded
-                        },
-                        "timestamp": int(time.time() * 1000)
-                    }) + "\n")
-            except Exception as e:
-                logger.debug(f"Debug log write failed: {e}")
-            # #endregion
             if api_name == 'crossref' and self.enable_crossref:
                 metadata = self.crossref.search_paper(topic)
                 if metadata:
                     return (metadata, "Crossref")
             elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
                 metadata = self.semantic_scholar.search_paper(topic)
-                # #region agent log
-                import os
-                try:
-                    debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                    with open(debug_log_path, 'a') as f:
-                        f.write(json.dumps({
-                            "sessionId": "debug-session",
-                            "runId": "run1",
-                            "hypothesisId": "H",
-                            "location": "orchestrator.py:674",
-                            "message": "_search_api Semantic Scholar result",
-                            "data": {
-                                "api_name": api_name,
-                                "has_metadata": metadata is not None,
-                                "has_doi": metadata.get('doi') if metadata else False,
-                                "has_url": metadata.get('url') if metadata else False
-                            },
-                            "timestamp": int(time.time() * 1000)
-                        }) + "\n")
-                except Exception as e:
-                    logger.debug(f"Debug log write failed: {e}")
-                # #endregion
                 if metadata:
                     return (metadata, "Semantic Scholar")
             elif api_name == 'gemini_grounded' and self.enable_gemini_grounded:
                 metadata = self.gemini_grounded.search_paper(topic)
-                # #region agent log
-                import os
-                try:
-                    debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                    with open(debug_log_path, 'a') as f:
-                        f.write(json.dumps({
-                            "sessionId": "debug-session",
-                            "runId": "run1",
-                            "hypothesisId": "H",
-                            "location": "orchestrator.py:678",
-                            "message": "_search_api Gemini Grounded result",
-                            "data": {
-                                "api_name": api_name,
-                                "has_metadata": metadata is not None,
-                                "has_doi": metadata.get('doi') if metadata else False,
-                                "has_url": metadata.get('url') if metadata else False
-                            },
-                            "timestamp": int(time.time() * 1000)
-                        }) + "\n")
-                except Exception as e:
-                    logger.debug(f"Debug log write failed: {e}")
-                # #endregion
                 if metadata:
                     return (metadata, "Gemini Grounded")
         except Exception as e:
-            # #region agent log
-            import os
-            try:
-                debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                with open(debug_log_path, 'a') as f:
-                    f.write(json.dumps({
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "E",
-                        "location": "orchestrator.py:682",
-                        "message": "_search_api exception",
-                        "data": {
-                            "api_name": api_name,
-                            "error_type": type(e).__name__,
-                            "error_message": str(e)[:200]
-                        },
-                        "timestamp": int(time.time() * 1000)
-                    }) + "\n")
-            except Exception as e2:
-                logger.debug(f"Debug log write failed: {e2}")
-            # #endregion
             logger.debug(f"{api_name} error: {e}")
         return (None, api_name)
 

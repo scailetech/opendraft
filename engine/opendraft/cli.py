@@ -125,7 +125,15 @@ def get_api_key():
 
 def clear_screen():
     """Clear terminal screen."""
-    os.system('cls' if os.name == 'nt' else 'clear')
+    import subprocess
+    try:
+        if os.name == 'nt':
+            subprocess.run(['cmd', '/c', 'cls'], check=False)
+        else:
+            subprocess.run(['clear'], check=False)
+    except (FileNotFoundError, OSError):
+        # Fallback: print newlines if clear command not available
+        print('\n' * 50)
 
 
 def print_logo():

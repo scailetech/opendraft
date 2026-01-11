@@ -62,8 +62,18 @@ def _load_proxy_list() -> list:
 
 PROXY_LIST: list = _load_proxy_list()
 
+def mask_credentials(url: str) -> str:
+    """Mask credentials in URL for safe logging."""
+    import re
+    # Pattern: user:password@ in URLs
+    return re.sub(r'://([^:]+):([^@]+)@', r'://\1:****@', url)
+
 def parse_proxy(proxy_str: str) -> dict:
-    """Parse proxy string to requests-compatible dict."""
+    """Parse proxy string to requests-compatible dict.
+
+    Security note: Credentials are embedded in URL but never logged.
+    Use mask_credentials() for any logging of proxy URLs.
+    """
     parts = proxy_str.split(":")
     if len(parts) == 4:
         host, port, user, password = parts
@@ -74,6 +84,58 @@ def parse_proxy(proxy_str: str) -> dict:
     else:
         return {}
     return {"http": proxy_url, "https": proxy_url}
+
+# =========================================================================
+# SSRF Protection - Validate URLs before making requests
+# =========================================================================
+
+import ipaddress
+from urllib.parse import urlparse
+
+def is_safe_url(url: str) -> tuple:
+    """
+    Validate URL is safe from SSRF attacks.
+
+    Args:
+        url: URL to validate
+
+    Returns:
+        Tuple of (is_safe, reason)
+    """
+    if not url:
+        return (False, "empty_url")
+
+    try:
+        parsed = urlparse(url)
+    except Exception:
+        return (False, "invalid_url")
+
+    # Only allow http/https schemes
+    if parsed.scheme not in ('http', 'https'):
+        return (False, f"unsafe_scheme_{parsed.scheme}")
+
+    # Block internal/private IP ranges
+    hostname = parsed.hostname
+    if hostname:
+        # Check for localhost variations
+        if hostname in ('localhost', '127.0.0.1', '::1', '0.0.0.0'):
+            return (False, "localhost_blocked")
+
+        # Try to parse as IP address to check for private ranges
+        try:
+            ip = ipaddress.ip_address(hostname)
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
+                return (False, "private_ip_blocked")
+        except ValueError:
+            # Not an IP address, hostname is fine
+            pass
+
+        # Block cloud metadata endpoints
+        metadata_hosts = ['169.254.169.254', 'metadata.google.internal', 'metadata.azure.com']
+        if hostname in metadata_hosts:
+            return (False, "cloud_metadata_blocked")
+
+    return (True, "valid")
 
 # Standard browser headers
 BROWSER_HEADERS = {
@@ -281,29 +343,6 @@ class BaseAPIClient(ABC):
                 proxy_str = random.choice(PROXY_LIST) if PROXY_LIST else None
                 proxy_dict = parse_proxy(proxy_str) if proxy_str else None
                 
-                # #region agent log
-                import json
-                try:
-                    debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                    with open(debug_log_path, 'a') as f:
-                        f.write(json.dumps({
-                            "sessionId": "debug-session",
-                            "runId": "run1",
-                            "hypothesisId": "B",
-                            "location": "base.py:256",
-                            "message": "Making API request",
-                            "data": {
-                                "api_type": self.api_type,
-                                "url": url,
-                                "has_proxy": proxy_str is not None,
-                                "proxy_count": len(PROXY_LIST),
-                                "attempt": attempt + 1
-                            },
-                            "timestamp": int(time.time() * 1000)
-                        }) + "\n")
-                except Exception as e:
-                    logger.debug(f"Debug log write failed: {e}")
-                # #endregion
                 
                 response = self.session.request(
                     method=method,
@@ -317,28 +356,6 @@ class BaseAPIClient(ABC):
 
                 # Check status code
                 if response.status_code == 200:
-                    # #region agent log
-                    import json
-                    try:
-                        debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                        with open(debug_log_path, 'a') as f:
-                            f.write(json.dumps({
-                                "sessionId": "debug-session",
-                                "runId": "run1",
-                                "hypothesisId": "C",
-                                "location": "base.py:267",
-                                "message": "API request successful",
-                                "data": {
-                                    "api_type": self.api_type,
-                                    "url": url,
-                                    "status_code": 200,
-                                    "proxy_used": proxy_str is not None
-                                },
-                                "timestamp": int(time.time() * 1000)
-                            }) + "\n")
-                    except Exception as e:
-                        logger.debug(f"Debug log write failed: {e}")
-                    # #endregion
                     return response.json()
 
                 elif response.status_code == 404:
@@ -347,31 +364,6 @@ class BaseAPIClient(ABC):
 
                 elif response.status_code == 429:
                     # Rate limited - with proxy rotation, retry immediately with different proxy
-                    # #region agent log
-                    import json
-                    try:
-                        debug_log_path = os.getenv('DEBUG_LOG_PATH', '/tmp/opendraft/debug.log')
-                        with open(debug_log_path, 'a') as f:
-                            proxy_used = random.choice(PROXY_LIST) if PROXY_LIST else None
-                            f.write(json.dumps({
-                                "sessionId": "debug-session",
-                                "runId": "run1",
-                                "hypothesisId": "A",
-                                "location": "base.py:274",
-                                "message": "Rate limit 429 detected",
-                                "data": {
-                                    "api_type": self.api_type,
-                                    "url": url,
-                                    "attempt": attempt + 1,
-                                    "proxy_configured": len(PROXY_LIST) > 0,
-                                    "proxy_used": proxy_used[:20] + "..." if proxy_used else None,
-                                    "has_proxy_list": bool(PROXY_LIST)
-                                },
-                                "timestamp": int(time.time() * 1000)
-                            }) + "\n")
-                    except Exception as e:
-                        logger.debug(f"Debug log write failed: {e}")
-                    # #endregion
                     
                     bp = get_backpressure_manager()
                     proxy_used = random.choice(PROXY_LIST) if PROXY_LIST else None
