@@ -512,7 +512,7 @@ def research_citations_via_api(
         # #region agent log
         import json as json_lib
         import time as time_lib
-        debug_log_path = "/Users/federicodeponte/opendraft/.cursor/debug.log"
+        debug_log_path = "/tmp/opendraft_debug.log"
         try:
             with open(debug_log_path, "a") as f:
                 f.write(json_lib.dumps({

@@ -5,7 +5,7 @@ Live test for TICKET-001 and TICKET-002
 Runs the crafter agent with methodology and analysis requests,
 then checks output for forbidden/required patterns.
 
-Run with: cd /Users/federicodeponte/opendraft && python tests/test_live_crafter.py
+Run with: cd $(pwd) && python tests/test_live_crafter.py
 """
 
 import sys
