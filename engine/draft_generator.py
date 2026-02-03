@@ -874,6 +874,13 @@ def generate_draft(
             min_citations = word_targets['min_citations']
             deep_research_min = word_targets['deep_research_min_sources']
 
+            # -----------------------------------------------------------------------
+            # AGENT: Scout
+            #   Input: research_topics, topic, academic_level word targets
+            #   Output: scout_result dict — {'count': N, 'citations': [...]}
+            #   Prompt: (API-based, no prompt file — uses CitationResearcher)
+            #   Depends on: None (first agent in pipeline)
+            # -----------------------------------------------------------------------
             scout_result = research_citations_via_api(
                 model=model,
                 research_topics=research_topics,
@@ -916,6 +923,13 @@ def generate_draft(
 
         rate_limit_delay()
 
+        # -----------------------------------------------------------------------
+        # AGENT: Scribe
+        #   Input: Truncated scout_output (first 8000 chars)
+        #   Output: combined_research.md — structured paper summaries
+        #   Prompt: prompts/01_research/scribe.md
+        #   Depends on: Scout
+        # -----------------------------------------------------------------------
         # Scribe - Summarize research
         if tracker:
             tracker.log_activity("📝 Summarizing research findings...", event_type="info", phase="research")
@@ -948,6 +962,13 @@ def generate_draft(
 
         rate_limit_delay()
 
+        # -----------------------------------------------------------------------
+        # AGENT: Signal
+        #   Input: Truncated scribe_output (first 8000 chars)
+        #   Output: research_gaps.md — identified research gaps
+        #   Prompt: prompts/01_research/signal.md
+        #   Depends on: Scribe
+        # -----------------------------------------------------------------------
         # Signal - Gap analysis
         if tracker:
             tracker.log_activity("🔍 Analyzing research gaps...", event_type="info", phase="research")
@@ -998,6 +1019,13 @@ def generate_draft(
             outline_context += f"\n\nFocus/Context: {blurb}"
         outline_context += f"\n\nResearch gaps:\n{signal_output[:2000]}\n\nLength: {total_words} words ({doc_type}, {chapters_info} chapters)"
         
+        # -----------------------------------------------------------------------
+        # AGENT: Architect
+        #   Input: topic, blurb, signal_output (first 2000 chars), word/chapter targets
+        #   Output: 00_outline.md — draft outline structure
+        #   Prompt: prompts/02_structure/architect.md
+        #   Depends on: Signal
+        # -----------------------------------------------------------------------
         architect_output = run_agent(
             model=model,
             name="Architect - Design Structure",
@@ -1012,6 +1040,13 @@ def generate_draft(
 
         rate_limit_delay()
 
+        # -----------------------------------------------------------------------
+        # AGENT: Formatter
+        #   Input: architect_output (first 2500 chars), citation style (APA 7th)
+        #   Output: 00_formatted_outline.md — style-formatted outline
+        #   Prompt: prompts/02_structure/formatter.md
+        #   Depends on: Architect
+        # -----------------------------------------------------------------------
         # Formatter - Apply style
         formatter_output = run_agent(
             model=model,
@@ -1040,6 +1075,13 @@ def generate_draft(
 
         # ====================================================================
         # PHASE 2.5: CITATION MANAGEMENT
+        # -----------------------------------------------------------------------
+        # STEP: Citation Management (deterministic — no LLM)
+        #   Input: scout_result['citations'], citation_style, language
+        #   Output: citation_database (CitationDatabase) + bibliography.json
+        #   Prompt: N/A — deterministic pipeline (dedup, scrape, filter, save)
+        #   Depends on: Scout
+        # -----------------------------------------------------------------------
         # ====================================================================
         if verbose:
             print("\n📚 PHASE 2.5: CITATION MANAGEMENT")
@@ -1313,6 +1355,14 @@ This research exposé serves as a starting point for a comprehensive {academic_l
             chapter_start = time.time()
             log_memory_usage("Before Chapter 1")
 
+            # -----------------------------------------------------------------------
+            # AGENT: Crafter — Introduction
+            #   Input: topic, formatter_output (first 2000 chars), citation_summary,
+            #          intro_target word count, language_instruction
+            #   Output: 01_introduction.md — Introduction chapter
+            #   Prompt: prompts/03_compose/crafter.md
+            #   Depends on: Formatter, Citation Management
+            # -----------------------------------------------------------------------
             if tracker:
                 tracker.log_activity("✍️ Writing Introduction chapter...", event_type="writing", phase="writing")
             intro_output = run_agent(
@@ -1388,6 +1438,14 @@ Outline:
             logger.info(f"  Output: {folders['drafts'] / '02_1_literature_review.md'}")
             section_start = time.time()
 
+            # -----------------------------------------------------------------------
+            # AGENT: Crafter — Literature Review
+            #   Input: topic, scribe_output (first 3000 chars), citation_summary,
+            #          formatter_output (first 2000 chars), lit_review_target word count
+            #   Output: 02_1_literature_review.md — Section 2.1
+            #   Prompt: prompts/03_compose/crafter.md
+            #   Depends on: Scribe, Formatter, Citation Management
+            # -----------------------------------------------------------------------
             if tracker:
                 tracker.log_activity("✍️ Writing Literature Review section...", event_type="writing", phase="writing")
             lit_review_output = run_agent(
@@ -1465,6 +1523,15 @@ Outline context:
             logger.info(f"  Output: {folders['drafts'] / '02_2_methodology.md'}")
             section_start = time.time()
             
+            # -----------------------------------------------------------------------
+            # AGENT: Crafter — Methodology
+            #   Input: topic, lit_review_output (last 2000 chars), signal_output
+            #          (first 1500 chars), formatter_output, citation_summary,
+            #          methodology_target word count
+            #   Output: 02_2_methodology.md — Section 2.2
+            #   Prompt: prompts/03_compose/crafter.md
+            #   Depends on: Crafter (Lit Review), Signal, Formatter, Citation Mgmt
+            # -----------------------------------------------------------------------
             if tracker:
                 tracker.log_activity("✍️ Writing Methodology section...", event_type="writing", phase="writing")
 
@@ -1555,6 +1622,15 @@ Outline:
             logger.info(f"  Output: {folders['drafts'] / '02_3_analysis_results.md'}")
             section_start = time.time()
             
+            # -----------------------------------------------------------------------
+            # AGENT: Crafter — Analysis and Results
+            #   Input: topic, methodology_output (last 1500 chars), lit_review_output
+            #          (first 1500 chars), scribe_output (chars 1000-2500),
+            #          citation_summary, results_target word count
+            #   Output: 02_3_results.md — Section 2.3
+            #   Prompt: prompts/03_compose/crafter.md
+            #   Depends on: Crafter (Methodology), Crafter (Lit Review), Scribe
+            # -----------------------------------------------------------------------
             if tracker:
                 tracker.log_activity("✍️ Writing Analysis & Results section...", event_type="writing", phase="writing")
 
@@ -1646,6 +1722,15 @@ Research data:
             logger.info(f"  Output: {folders['drafts'] / '02_4_discussion.md'}")
             section_start = time.time()
             
+            # -----------------------------------------------------------------------
+            # AGENT: Crafter — Discussion
+            #   Input: topic, results_output (last 2000 chars), lit_review_output
+            #          (first 1500 chars), signal_output (first 1000 chars),
+            #          citation_summary, discussion_target word count
+            #   Output: 02_4_discussion.md — Section 2.4
+            #   Prompt: prompts/03_compose/crafter.md
+            #   Depends on: Crafter (Results), Crafter (Lit Review), Signal
+            # -----------------------------------------------------------------------
             if tracker:
                 tracker.log_activity("✍️ Writing Discussion section...", event_type="writing", phase="writing")
 
@@ -1804,6 +1889,14 @@ You MUST include these explicit phrases to connect back to previous sections:
             chapter_start = time.time()
             log_memory_usage("Before Chapter 3")
             
+            # -----------------------------------------------------------------------
+            # AGENT: Crafter — Conclusion
+            #   Input: topic, body_output (first 2000 chars), citation_summary,
+            #          conclusion_target word count, language_instruction
+            #   Output: 03_conclusion.md — Conclusion chapter
+            #   Prompt: prompts/03_compose/crafter.md
+            #   Depends on: Crafter (all body sections)
+            # -----------------------------------------------------------------------
             if tracker:
                 tracker.log_activity("✍️ Writing Conclusion chapter...", event_type="writing", phase="writing")
 
@@ -1860,6 +1953,14 @@ Main findings:
 
         rate_limit_delay()
 
+        # -----------------------------------------------------------------------
+        # AGENT: Crafter — Appendices
+        #   Input: topic, intro_output (first 1500 chars), body_output (first 2000
+        #          chars), conclusion_output (first 1000 chars), citation_summary
+        #   Output: 04_appendices.md — Appendices A-D (or empty if target is '0')
+        #   Prompt: prompts/03_compose/crafter.md
+        #   Depends on: Crafter (Introduction, Body, Conclusion)
+        # -----------------------------------------------------------------------
         # ===== CHAPTER 4: Appendices =====
         try:
             appendices_target = word_targets['appendices']
@@ -2041,9 +2142,16 @@ Conclusion: {conclusion_output[:1500]}
 Appendices: {appendix_output[:1000]}
 """
 
+        # -----------------------------------------------------------------------
+        # AGENT: Thread
+        #   Input: all_chapters_for_qa (complete draft text)
+        #   Output: qa_narrative_consistency.md — consistency QA report
+        #   Prompt: prompts/03_compose/thread.md
+        #   Depends on: All Crafter agents (full draft assembled)
+        # -----------------------------------------------------------------------
         # === QA STEP 1: Thread Agent - Narrative Consistency ===
         try:
-            logger.info("[QA 1/2] Running Thread agent - Narrative Consistency Check")
+            logger.info("[QA 1/3] Running Thread agent - Narrative Consistency Check")
             qa_start = time.time()
 
             thread_report = run_agent(
@@ -2071,20 +2179,28 @@ Appendices: {appendix_output[:1000]}
             )
 
             thread_time = time.time() - qa_start
-            logger.info(f"[QA 1/2] ✅ Thread agent complete in {thread_time:.1f}s")
+            logger.info(f"[QA 1/3] ✅ Thread agent complete in {thread_time:.1f}s")
 
             if tracker:
                 tracker.update_phase("writing", progress_percent=78, chapters_count=4, details={"stage": "qa_narrative_complete"})
 
         except Exception as e:
-            logger.warning(f"[QA 1/2] ⚠️  Thread agent failed: {e}")
+            logger.warning(f"[QA 1/3] ⚠️  Thread agent failed: {e}")
             logger.warning("Continuing without narrative consistency check...")
 
         rate_limit_delay()
 
+        # -----------------------------------------------------------------------
+        # AGENT: Narrator
+        #   Input: all_chapters_for_qa (complete draft), academic_level,
+        #          citation_database.citation_style
+        #   Output: qa_voice_unification.md — voice consistency QA report
+        #   Prompt: prompts/03_compose/narrator.md
+        #   Depends on: All Crafter agents (full draft assembled)
+        # -----------------------------------------------------------------------
         # === QA STEP 2: Narrator Agent - Voice Unification ===
         try:
-            logger.info("[QA 2/2] Running Narrator agent - Voice Unification Check")
+            logger.info("[QA 2/3] Running Narrator agent - Voice Unification Check")
             qa_start = time.time()
 
             narrator_report = run_agent(
@@ -2110,14 +2226,83 @@ Appendices: {appendix_output[:1000]}
             )
 
             narrator_time = time.time() - qa_start
-            logger.info(f"[QA 2/2] ✅ Narrator agent complete in {narrator_time:.1f}s")
+            logger.info(f"[QA 2/3] ✅ Narrator agent complete in {narrator_time:.1f}s")
 
             if tracker:
-                tracker.update_phase("writing", progress_percent=80, chapters_count=4, details={"stage": "qa_complete"})
+                tracker.update_phase("writing", progress_percent=79, chapters_count=4, details={"stage": "qa_narrator_complete"})
 
         except Exception as e:
-            logger.warning(f"[QA 2/2] ⚠️  Narrator agent failed: {e}")
+            logger.warning(f"[QA 2/3] ⚠️  Narrator agent failed: {e}")
             logger.warning("Continuing without voice unification check...")
+
+        rate_limit_delay()
+
+        # -----------------------------------------------------------------------
+        # AGENT: FactCheck
+        #   Input: all_chapters_for_qa (complete draft text)
+        #   Output: qa_factcheck.md — fact verification report
+        #   Prompt: prompts/04_validate/factcheck_extract.md
+        #   Depends on: All Crafter agents (full draft assembled)
+        # -----------------------------------------------------------------------
+        # === QA STEP 3: FactCheck Agent - Factual Claim Verification ===
+        if config.validation.enable_factcheck:
+            try:
+                logger.info("[QA 3/3] Running FactCheck agent - Factual Claim Verification")
+                qa_start = time.time()
+
+                # Step 1: Extract claims using the extraction prompt
+                extraction_output = run_agent(
+                    model=model,
+                    name="FactCheck - Claim Extraction",
+                    prompt_path="prompts/04_validate/factcheck_extract.md",
+                    user_input=f"Extract all verifiable factual claims from this draft:\n\n{all_chapters_for_qa}",
+                    skip_validation=True,
+                    verbose=verbose,
+                )
+
+                # Parse claims from LLM output (strip markdown fences if present)
+                from utils.factcheck_verifier import strip_json_fences
+                claims = json.loads(strip_json_fences(extraction_output))
+                if not isinstance(claims, list):
+                    raise ValueError(f"Expected JSON array of claims, got {type(claims).__name__}")
+                logger.info(f"[QA 3/3] Extracted {len(claims)} factual claims for verification")
+
+                if claims:
+                    # Step 2: Verify claims using web-grounded evidence
+                    from utils.factcheck_verifier import FactCheckVerifier
+                    verifier = FactCheckVerifier(api_key=config.google_api_key)
+                    results = verifier.verify_claims(claims)
+
+                    # Step 3: Format and save report
+                    factcheck_report = verifier.format_report(results)
+                    factcheck_path = folders['drafts'] / "qa_factcheck.md"
+                    factcheck_path.write_text(factcheck_report, encoding='utf-8')
+
+                    contradicted_count = sum(1 for r in results if r["verdict"] == "CONTRADICTED")
+                    supported_count = sum(1 for r in results if r["verdict"] == "SUPPORTED")
+
+                    factcheck_time = time.time() - qa_start
+                    logger.info(
+                        f"[QA 3/3] ✅ FactCheck complete in {factcheck_time:.1f}s — "
+                        f"{len(claims)} claims checked, {supported_count} supported, "
+                        f"{contradicted_count} issues found"
+                    )
+                else:
+                    logger.info("[QA 3/3] No factual claims extracted — skipping verification")
+
+                if tracker:
+                    tracker.update_phase("writing", progress_percent=80, chapters_count=4, details={"stage": "qa_complete"})
+
+            except json.JSONDecodeError as e:
+                logger.warning(f"[QA 3/3] ⚠️  FactCheck claim extraction returned invalid JSON: {e}")
+                logger.warning("Continuing without fact-check verification...")
+            except Exception as e:
+                logger.warning(f"[QA 3/3] ⚠️  FactCheck agent failed: {e}")
+                logger.warning("Continuing without fact-check verification...")
+        else:
+            logger.info("[QA 3/3] FactCheck disabled (enable_factcheck=False) — skipping")
+            if tracker:
+                tracker.update_phase("writing", progress_percent=80, chapters_count=4, details={"stage": "qa_complete"})
 
         logger.info("="*80)
         logger.info("PHASE 3.5 COMPLETE - QA reports generated")

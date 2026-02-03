@@ -62,10 +62,13 @@ class ModelConfig:
 
 @dataclass
 class ValidationConfig:
-    """Configuration for validation agents (Skeptic, Verifier, Referee)."""
+    """Configuration for validation agents (Skeptic, Verifier, Referee, FactCheck)."""
     use_pro_model: bool = field(default_factory=lambda: os.getenv('USE_PRO_FOR_VALIDATION', 'false').lower() == 'true')
     pro_model_name: str = 'gemini-2.5-pro'
     validate_per_section: bool = True  # Always validate each section independently
+    enable_factcheck: bool = field(
+        default_factory=lambda: os.getenv('ENABLE_FACTCHECK', 'true').lower() == 'true'
+    )
 
     def get_validation_model(self, base_model: str) -> str:
         """Return appropriate model for validation tasks."""
