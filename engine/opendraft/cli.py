@@ -666,7 +666,8 @@ def run_interactive():
             author_name=author_name,
             institution=institution,
             department=department,
-            advisor=advisor
+            advisor=advisor,
+            citation_style=style
         )
 
         print()
@@ -919,7 +920,8 @@ def main():
             author_name=args.author,
             institution=args.institution,
             department=args.department,
-            advisor=args.advisor
+            advisor=args.advisor,
+            citation_style=args.style
         )
 
         print()

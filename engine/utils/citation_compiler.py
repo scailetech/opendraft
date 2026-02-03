@@ -185,6 +185,10 @@ class CitationCompiler:
             return self._format_apa_in_text(citation)
         elif self.style == "IEEE":
             return self._format_ieee_in_text(citation)
+        elif self.style == "Chicago":
+            return self._format_chicago_in_text(citation)
+        elif self.style == "MLA":
+            return self._format_mla_in_text(citation)
         else:
             # Default to APA
             return self._format_apa_in_text(citation)
@@ -208,6 +212,29 @@ class CitationCompiler:
         # cite_001 -> [1], cite_002 -> [2]
         number = citation.id.replace("cite_", "")
         return f"[{int(number)}]"
+
+    def _format_chicago_in_text(self, citation: Citation) -> str:
+        """Format in-text citation in Chicago Author-Date style."""
+        authors = citation.authors
+        year = citation.year
+
+        if len(authors) == 1:
+            return f"({authors[0]} {year})"
+        elif len(authors) == 2:
+            return f"({authors[0]} and {authors[1]} {year})"
+        else:
+            return f"({authors[0]} et al. {year})"
+
+    def _format_mla_in_text(self, citation: Citation) -> str:
+        """Format in-text citation in MLA 9th Edition style."""
+        authors = citation.authors
+
+        if len(authors) == 1:
+            return f"({authors[0]})"
+        elif len(authors) == 2:
+            return f"({authors[0]} and {authors[1]})"
+        else:
+            return f"({authors[0]} et al.)"
 
     def generate_reference_list(self, text: str) -> str:
         """
@@ -241,8 +268,8 @@ class CitationCompiler:
             else:
                 return "\n(No citations found)\n"
 
-        # Sort alphabetically by first author (APA style)
-        if self.style == "APA 7th":
+        # Sort alphabetically by first author (APA, Chicago, MLA)
+        if self.style in ("APA 7th", "Chicago", "MLA"):
             cited_citations.sort(key=lambda c: c.authors[0].lower())
 
         # Format references (without header initially)
@@ -253,6 +280,10 @@ class CitationCompiler:
                 ref = self._format_apa_reference(citation)
             elif self.style == "IEEE":
                 ref = self._format_ieee_reference(citation)
+            elif self.style == "Chicago":
+                ref = self._format_chicago_reference(citation)
+            elif self.style == "MLA":
+                ref = self._format_mla_reference(citation)
             else:
                 ref = self._format_apa_reference(citation)
 
@@ -493,6 +524,197 @@ class CitationCompiler:
 
         else:
             ref = f"[{citation.id.replace('cite_', '')}] {author_str}, \"{title},\" {year}."
+
+        return ref
+
+    def _format_chicago_reference(self, citation: Citation) -> str:
+        """Format full reference in Chicago Author-Date style."""
+        authors = citation.authors
+        year = citation.year
+        title = citation.title
+
+        # Chicago author format: Last. (since we only have last names)
+        if len(authors) == 1:
+            author_str = f"{authors[0]}."
+        elif len(authors) == 2:
+            author_str = f"{authors[0]} and {authors[1]}."
+        elif len(authors) == 3:
+            author_str = f"{authors[0]}, {authors[1]}, and {authors[2]}."
+        else:
+            author_str = f"{authors[0]} et al."
+
+        source_type = citation.source_type
+
+        if source_type == 'journal':
+            journal = citation.journal or ""
+            volume = citation.volume
+            issue = citation.issue
+            pages = citation.pages or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} \"{title}.\" *{journal}*"
+            if volume:
+                ref += f" {volume}"
+            if issue:
+                ref += f", no. {issue}"
+            ref += f" ({year})"
+            if pages:
+                ref += f": {pages}"
+            ref += "."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        elif source_type == 'book':
+            publisher = citation.publisher or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} *{title}*."
+            if publisher:
+                ref += f" {publisher},"
+            ref += f" {year}."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        elif source_type == 'conference':
+            publisher = citation.publisher or ""
+            pages = citation.pages or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} \"{title}.\""
+            if publisher:
+                ref += f" In *{publisher}*"
+            if pages:
+                ref += f", {pages}"
+            ref += f". {year}."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        elif source_type in ['report', 'website']:
+            publisher = citation.publisher or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} \"{title}.\""
+            if publisher:
+                ref += f" {publisher},"
+            ref += f" {year}."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        else:
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} \"{title}.\" {year}."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        return ref
+
+    def _format_mla_reference(self, citation: Citation) -> str:
+        """Format full reference in MLA 9th Edition style (Works Cited)."""
+        authors = citation.authors
+        year = citation.year
+        title = citation.title
+
+        # MLA author format: Last. (since we only have last names)
+        if len(authors) == 1:
+            author_str = f"{authors[0]}."
+        elif len(authors) == 2:
+            author_str = f"{authors[0]} and {authors[1]}."
+        else:
+            author_str = f"{authors[0]} et al."
+
+        source_type = citation.source_type
+
+        if source_type == 'journal':
+            journal = citation.journal or ""
+            volume = citation.volume
+            issue = citation.issue
+            pages = citation.pages or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} \"{title}.\" *{journal}*"
+            if volume:
+                ref += f", vol. {volume}"
+            if issue:
+                ref += f", no. {issue}"
+            ref += f", {year}"
+            if pages:
+                ref += f", pp. {pages}"
+            ref += "."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        elif source_type == 'book':
+            publisher = citation.publisher or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} *{title}*."
+            if publisher:
+                ref += f" {publisher},"
+            ref += f" {year}."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        elif source_type == 'conference':
+            publisher = citation.publisher or ""
+            pages = citation.pages or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} \"{title}.\" *{publisher}*"
+            ref += f", {year}"
+            if pages:
+                ref += f", pp. {pages}"
+            ref += "."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        elif source_type in ['report', 'website']:
+            publisher = citation.publisher or ""
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} *{title}*."
+            if publisher:
+                ref += f" {publisher},"
+            ref += f" {year}."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
+
+        else:
+            doi = citation.doi or ""
+            url = citation.url or ""
+
+            ref = f"{author_str} \"{title}.\" {year}."
+            if doi:
+                ref += f" https://doi.org/{doi}"
+            elif url:
+                ref += f" {url}"
 
         return ref
 

@@ -714,6 +714,7 @@ def generate_draft(
     second_examiner: Optional[str] = None,
     location: Optional[str] = None,
     student_id: Optional[str] = None,
+    citation_style: str = "apa",
 ) -> Tuple[Path, Path]:
     """
     Generate a complete academic draft using 19 specialized AI agents.
@@ -737,6 +738,7 @@ def generate_draft(
         second_examiner: Second examiner name
         location: City/location for date line
         student_id: Student matriculation number
+        citation_style: Citation style shorthand ('apa', 'ieee', 'chicago', 'mla')
 
     Returns:
         Tuple[Path, Path]: (pdf_path, docx_path) - Paths to generated draft files
@@ -760,6 +762,11 @@ def generate_draft(
     # STARTUP AND INITIALIZATION
     # ====================================================================
     draft_start_time = time.time()
+
+    # Resolve citation style shorthand to full name
+    style_map = {"apa": "APA 7th", "ieee": "IEEE", "chicago": "Chicago", "mla": "MLA"}
+    resolved_style = style_map.get(citation_style, "APA 7th")
+
     logger.info("="*80)
     logger.info("DRAFT GENERATION STARTED")
     logger.info("="*80)
@@ -1015,7 +1022,7 @@ def generate_draft(
             model=model,
             name="Formatter - Apply Style",
             prompt_path="prompts/02_structure/formatter.md",
-            user_input=f"Apply academic formatting:\n\n{architect_output[:2500]}\n\nStyle: APA 7th edition",
+            user_input=f"Apply academic formatting:\n\n{architect_output[:2500]}\n\nStyle: {resolved_style} edition",
             save_to=folders['drafts'] / "00_formatted_outline.md",
             skip_validation=skip_validation,
             verbose=verbose
@@ -1049,7 +1056,7 @@ def generate_draft(
 
         citation_database = CitationDatabase(
             citations=scout_citations,
-            citation_style="APA 7th",
+            citation_style=resolved_style,
             draft_language=get_language_name(language).lower()
         )
 
