@@ -16,7 +16,11 @@ from pydantic import ValidationError
 
 # Safe print function that handles broken pipes (worker runs with stdio: 'ignore')
 def safe_print(*args, **kwargs):
-    """Print wrapper that catches BrokenPipeError when stdout is closed."""
+    """Print wrapper that catches BrokenPipeError and respects verbosity settings."""
+    # In quiet mode, suppress detailed research output
+    if not _verbose_research:
+        return
+
     try:
         print(*args, **kwargs)
     except (BrokenPipeError, OSError):
@@ -70,6 +74,44 @@ logger = logging.getLogger(__name__)
 
 # Global verbose flag for CLI mode control
 _verbose_research = True
+
+
+def set_research_verbosity(verbose: bool) -> None:
+    """Control verbosity of research output for CLI mode."""
+    global _verbose_research
+    _verbose_research = verbose
+
+
+# =========================================================================
+# Rate Limiting
+# =========================================================================
+class GeminiRateLimiter:
+    """Simple rate limiter for Gemini API calls (free tier: ~60 req/min)."""
+
+    def __init__(self, requests_per_minute: int = 60):
+        self.requests_per_minute = requests_per_minute
+        self.min_interval = 60.0 / requests_per_minute
+        self.last_request_time = 0
+
+    def wait_if_needed(self) -> None:
+        """Wait if necessary to respect rate limit."""
+        import time
+
+        current_time = time.time()
+        time_since_last = current_time - self.last_request_time
+        if time_since_last < self.min_interval:
+            sleep_time = self.min_interval - time_since_last
+            time.sleep(sleep_time)
+        self.last_request_time = time.time()
+
+
+# Global rate limiter instance
+_gemini_rate_limiter = GeminiRateLimiter()
+
+
+def get_gemini_rate_limiter() -> GeminiRateLimiter:
+    """Get the global Gemini rate limiter instance."""
+    return _gemini_rate_limiter
 
 
 class CitationResearcher:
@@ -725,22 +767,51 @@ class CitationResearcher:
             Tuple of (metadata, source_name) or (None, api_name)
         """
         try:
+            logger.info(f"🔍 [{api_name.upper()}] Starting search for: {topic[:80]}...")
+
             if api_name == 'crossref' and self.enable_crossref:
+                logger.debug(f"  → Calling Crossref API...")
                 metadata = self.crossref.search_paper(topic)
                 if metadata:
+                    logger.info(
+                        f"  ✓ Crossref found: {metadata.get('title', 'Unknown')[:80]}... (DOI: {metadata.get('doi', 'N/A')})"
+                    )
                     return (metadata, "Crossref")
+                else:
+                    logger.debug(f"  ✗ Crossref returned no results")
             elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
+                logger.debug(f"  → Calling Semantic Scholar API...")
                 metadata = self.semantic_scholar.search_paper(topic)
                 if metadata:
+                    logger.info(
+                        f"  ✓ Semantic Scholar found: {metadata.get('title', 'Unknown')[:80]}... (DOI: {metadata.get('doi', 'N/A')})"
+                    )
                     return (metadata, "Semantic Scholar")
+                else:
+                    logger.debug(f"  ✗ Semantic Scholar returned no results")
             elif api_name == 'gemini_grounded' and self.enable_gemini_grounded:
+                logger.debug(f"  → Applying rate limiting before Gemini Grounded call...")
+                rate_limiter = get_gemini_rate_limiter()
+                rate_limiter.wait_if_needed()
+                logger.debug(f"  → Calling Gemini Grounded API...")
                 metadata = self.gemini_grounded.search_paper(topic)
                 if metadata:
+                    logger.info(
+                        f"  ✓ Gemini Grounded found: {metadata.get('title', 'Unknown')[:80]}... (URL: {metadata.get('url', 'N/A')[:50]})"
+                    )
                     source_name = "Serper" if self.use_serper else "Gemini Grounded"
                     return (metadata, source_name)
+                else:
+                    logger.debug(f"  ✗ Gemini Grounded returned no results")
+
+            return (None, api_name)
+
         except Exception as e:
-            logger.debug(f"{api_name} error: {e}")
-        return (None, api_name)
+            logger.error(
+                f"❌ [{api_name.upper()}] Error during search: {type(e).__name__}: {str(e)[:100]}",
+                exc_info=False,
+            )
+            return (None, api_name)
 
     def _pick_best_result(
         self, 

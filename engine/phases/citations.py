@@ -33,7 +33,7 @@ def run_citation_management(ctx: DraftContext) -> None:
         citation.id = f"cite_{i:03d}"
 
     # Map CLI-style values to internal CitationStyle format
-    style_map = {"apa": "APA 7th", "ieee": "IEEE"}
+    style_map = {"apa": "APA 7th", "ieee": "IEEE", "nalt": "NALT"}
     resolved_style = style_map.get(ctx.citation_style, "APA 7th")
 
     # Import get_language_name from draft_generator (stays there as utility)

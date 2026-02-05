@@ -163,7 +163,7 @@ def run_compile_and_export(ctx: DraftContext) -> Tuple[Path, Path]:
     from utils.citation_compiler import CitationCompiler
     from utils.abstract_generator import generate_abstract_for_draft
     from utils.export_professional import export_pdf, export_docx
-    from utils.text_utils import clean_ai_language, strip_meta_text, localize_chapter_headings
+    from utils.text_utils import clean_ai_language, strip_meta_text, localize_chapter_headings, clean_agent_output
     from draft_generator import slugify
 
     if ctx.verbose:
@@ -174,15 +174,15 @@ def run_compile_and_export(ctx: DraftContext) -> Tuple[Path, Path]:
         ctx.tracker.update_phase("compiling", progress_percent=75, details={"stage": "assembling_draft"})
         ctx.tracker.check_cancellation()
 
-    # Strip headers from section outputs
-    intro_clean = _strip_first_header(ctx.intro_output)
-    body_clean = _strip_first_header(ctx.body_output)
-    conclusion_clean = _strip_first_header(ctx.conclusion_output)
+    # Strip headers from section outputs (clean_agent_output removes preambles/metadata/cite_MISSING)
+    intro_clean = _strip_first_header(clean_agent_output(ctx.intro_output))
+    body_clean = _strip_first_header(clean_agent_output(ctx.body_output))
+    conclusion_clean = _strip_first_header(clean_agent_output(ctx.conclusion_output))
 
     appendices_file = ctx.folders['drafts'] / "04_appendices.md"
     if appendices_file.exists():
         appendix_content = appendices_file.read_text(encoding='utf-8')
-        appendix_clean = _strip_first_header(appendix_content)
+        appendix_clean = _strip_first_header(clean_agent_output(appendix_content))
     else:
         appendix_clean = ""
 
@@ -280,7 +280,7 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
 
     # Remove template References section and append generated one
     compiled_draft = re.sub(
-        r'^\s*#+ (?:\d+\.\s*)?References\s*\n\s*\[Citations will be compiled\]\s*',
+        r'^\s*#+ (?:\d+\.\s*)?(?:References|Bibliography)\s*\n\s*\[Citations will be compiled\]\s*',
         '',
         compiled_draft,
         flags=re.MULTILINE,
@@ -318,6 +318,7 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
     final_draft = fix_single_line_tables(final_draft)
     final_draft = deduplicate_appendices(final_draft)
     final_draft = clean_malformed_markdown(final_draft)
+    final_draft = clean_agent_output(final_draft)
     final_draft = clean_ai_language(final_draft)
     final_draft = strip_meta_text(final_draft)
     final_draft = localize_chapter_headings(final_draft, ctx.language)

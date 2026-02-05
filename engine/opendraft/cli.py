@@ -517,6 +517,7 @@ def run_interactive():
         [
             ("APA 7th Edition", "apa"),
             ("IEEE", "ieee"),
+            ("NALT (Nigerian Association of Law Teachers)", "nalt"),
             # Note: MLA and Chicago coming soon - see docs/CITATION_STYLES_ROADMAP.md
         ],
         default=0
@@ -767,9 +768,9 @@ def main():
 
     parser.add_argument(
         "--style", "-s",
-        choices=["apa", "ieee"],
+        choices=["apa", "ieee", "nalt"],
         default="apa",
-        help="Citation style (APA or IEEE)"
+        help="Citation style (APA, IEEE, or NALT)"
     )
 
     parser.add_argument(

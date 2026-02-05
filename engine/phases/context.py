@@ -25,7 +25,7 @@ class DraftContext:
     language: str = "en"
     academic_level: str = "master"
     output_type: str = "full"  # 'full' or 'expose'
-    citation_style: str = "apa"  # 'apa' or 'ieee'
+    citation_style: str = "apa"  # 'apa', 'ieee', or 'nalt'
     skip_validation: bool = True
     verbose: bool = True
     blurb: Optional[str] = None

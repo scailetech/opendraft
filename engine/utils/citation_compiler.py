@@ -36,6 +36,10 @@ class CitationCompiler:
         self.research_enabled = model is not None
         self.complexity_threshold = complexity_threshold
 
+        # NALT footnote state
+        self._nalt_footnote_counter = 0
+        self._nalt_footnote_definitions: List[str] = []
+
         # Initialize API-backed citation researcher (Crossref → Semantic Scholar → Gemini Grounded → Gemini LLM)
         # Semantic Scholar can be disabled via env var if rate limited (403 errors)
         import os
@@ -117,6 +121,11 @@ class CitationCompiler:
         missing_ids: List[str] = []
         researched_topics: List[str] = []
 
+        # Reset NALT footnote state for each compilation
+        if self.style == "NALT":
+            self._nalt_footnote_counter = 0
+            self._nalt_footnote_definitions = []
+
         # Step 1: Find and research all {cite_MISSING:topic} placeholders
         if research_missing:
             missing_pattern = r'\{cite_MISSING:([^}]+)\}'
@@ -169,6 +178,10 @@ class CitationCompiler:
                 if topic.strip() not in missing_ids:
                     missing_ids.append(f"TOPIC:{topic.strip()}")
 
+        # Step 4: Append NALT footnote definitions
+        if self.style == "NALT" and self._nalt_footnote_definitions:
+            formatted_text += "\n\n" + "\n\n".join(self._nalt_footnote_definitions)
+
         return formatted_text, missing_ids, researched_topics
 
     def format_in_text_citation(self, citation: Citation) -> str:
@@ -185,10 +198,12 @@ class CitationCompiler:
             return self._format_apa_in_text(citation)
         elif self.style == "IEEE":
             return self._format_ieee_in_text(citation)
+        elif self.style == "NALT":
+            return self._format_nalt_in_text(citation)
         else:
             raise NotImplementedError(
                 f"Citation style '{self.style}' is not yet implemented. "
-                f"Supported styles: 'APA 7th', 'IEEE'. "
+                f"Supported styles: 'APA 7th', 'IEEE', 'NALT'. "
                 f"See docs/CITATION_STYLES_ROADMAP.md for planned styles."
             )
 
@@ -211,6 +226,240 @@ class CitationCompiler:
         # cite_001 -> [1], cite_002 -> [2]
         number = citation.id.replace("cite_", "")
         return f"[{int(number)}]"
+
+    def _format_nalt_in_text(self, citation: Citation) -> str:
+        """Format in-text citation as NALT footnote marker [^N]."""
+        self._nalt_footnote_counter += 1
+        n = self._nalt_footnote_counter
+        footnote_text = self._format_nalt_footnote(citation)
+        self._nalt_footnote_definitions.append(f"[^{n}]: {footnote_text}")
+        return f"[^{n}]"
+
+    def _format_nalt_footnote(self, citation: Citation) -> str:
+        """Format NALT footnote text based on source type."""
+        source_type = citation.source_type
+
+        if source_type == "case":
+            return self._format_nalt_case(citation)
+        elif source_type == "statute":
+            return self._format_nalt_statute(citation)
+        elif source_type == "constitution":
+            return self._format_nalt_constitution(citation)
+        elif source_type == "treaty":
+            return self._format_nalt_treaty(citation)
+        elif source_type == "journal":
+            return self._format_nalt_journal(citation)
+        elif source_type == "book":
+            return self._format_nalt_book(citation)
+        elif source_type == "website":
+            return self._format_nalt_website(citation)
+        else:
+            # Fallback: book-like format
+            return self._format_nalt_book(citation)
+
+    def _format_nalt_case(self, citation: Citation) -> str:
+        """Format case citation: *Parties* [Year] Report (Court)"""
+        parties = citation.parties or citation.title
+        year = citation.year
+        law_report = citation.law_report or ""
+        court = citation.court or ""
+
+        ref = f"*{parties}* [{year}]"
+        if law_report:
+            ref += f" {law_report}"
+        if court:
+            ref += f" ({court})"
+        return ref
+
+    def _format_nalt_statute(self, citation: Citation) -> str:
+        """Format statute citation: Title Year, section"""
+        title = citation.title
+        year = citation.year
+        section = citation.section or ""
+
+        ref = f"{title} {year}"
+        if section:
+            ref += f", {section}"
+        return ref
+
+    def _format_nalt_constitution(self, citation: Citation) -> str:
+        """Format constitution citation: Title Year, section"""
+        title = citation.title
+        year = citation.year
+        section = citation.section or ""
+
+        ref = f"{title} {year}"
+        if section:
+            ref += f", {section}"
+        return ref
+
+    def _format_nalt_treaty(self, citation: Citation) -> str:
+        """Format treaty citation: Title (Year of adoption), section"""
+        title = citation.title
+        year = citation.year
+        section = citation.section or ""
+
+        ref = f"{title} ({year})"
+        if section:
+            ref += f", {section}"
+        return ref
+
+    def _format_nalt_journal(self, citation: Citation) -> str:
+        """Format journal: Author, 'Title' [Year] (Vol)(Issue) *Journal*, Pages"""
+        author_str = self._format_nalt_authors_footnote(citation.authors)
+        title = citation.title
+        year = citation.year
+        journal = citation.journal or ""
+        volume = citation.volume
+        issue = citation.issue
+        pages = citation.pages or ""
+
+        ref = f"{author_str}, '{title}' [{year}]"
+        if volume:
+            ref += f" ({volume})"
+        if issue:
+            ref += f"({issue})"
+        if journal:
+            ref += f" *{journal}*"
+        if pages:
+            ref += f", {pages}"
+        return ref
+
+    def _format_nalt_book(self, citation: Citation) -> str:
+        """Format book: Author, *Title* (Publisher Year)"""
+        author_str = self._format_nalt_authors_footnote(citation.authors)
+        title = citation.title
+        publisher = citation.publisher or ""
+        year = citation.year
+
+        if publisher:
+            ref = f"{author_str}, *{title}* ({publisher} {year})"
+        else:
+            ref = f"{author_str}, *{title}* ({year})"
+        return ref
+
+    def _format_nalt_website(self, citation: Citation) -> str:
+        """Format website: Author, 'Title' <URL> accessed Date"""
+        author_str = self._format_nalt_authors_footnote(citation.authors)
+        title = citation.title
+        url = citation.url or ""
+        access_date = citation.access_date or ""
+
+        ref = f"{author_str}, '{title}'"
+        if url:
+            ref += f" <{url}>"
+        if access_date:
+            ref += f" accessed {access_date}"
+        return ref
+
+    def _format_nalt_authors_footnote(self, authors: List[str]) -> str:
+        """
+        Format authors for NALT footnotes: first name precedes surname.
+
+        Since we only have surname data, we use as-is.
+        1-3 authors: listed with 'and' before last.
+        4+: first author 'and others'.
+        """
+        if not authors:
+            return ""
+        if len(authors) == 1:
+            return authors[0]
+        elif len(authors) == 2:
+            return f"{authors[0]} and {authors[1]}"
+        elif len(authors) == 3:
+            return f"{authors[0]}, {authors[1]} and {authors[2]}"
+        else:
+            return f"{authors[0]} and others"
+
+    def _format_nalt_authors_bibliography(self, authors: List[str]) -> str:
+        """
+        Format authors for NALT bibliography: surname first.
+
+        Since we only have surname data, we use as-is.
+        1-3 authors: listed with 'and' before last.
+        4+: first author 'and others'.
+        """
+        if not authors:
+            return ""
+        if len(authors) == 1:
+            return authors[0]
+        elif len(authors) == 2:
+            return f"{authors[0]} and {authors[1]}"
+        elif len(authors) == 3:
+            return f"{authors[0]}, {authors[1]} and {authors[2]}"
+        else:
+            return f"{authors[0]} and others"
+
+    def _format_nalt_bibliography_entry(self, citation: Citation) -> str:
+        """Format a single NALT bibliography entry (surname-first author order)."""
+        source_type = citation.source_type
+
+        if source_type == "case":
+            parties = citation.parties or citation.title
+            year = citation.year
+            law_report = citation.law_report or ""
+            court = citation.court or ""
+            ref = f"*{parties}* [{year}]"
+            if law_report:
+                ref += f" {law_report}"
+            if court:
+                ref += f" ({court})"
+            return ref
+
+        elif source_type == "statute":
+            ref = f"{citation.title} {citation.year}"
+            if citation.section:
+                ref += f", {citation.section}"
+            return ref
+
+        elif source_type == "constitution":
+            ref = f"{citation.title} {citation.year}"
+            if citation.section:
+                ref += f", {citation.section}"
+            return ref
+
+        elif source_type == "treaty":
+            ref = f"{citation.title} ({citation.year})"
+            if citation.section:
+                ref += f", {citation.section}"
+            return ref
+
+        elif source_type == "journal":
+            author_str = self._format_nalt_authors_bibliography(citation.authors)
+            journal = citation.journal or ""
+            volume = citation.volume
+            issue = citation.issue
+            pages = citation.pages or ""
+            ref = f"{author_str}, '{citation.title}' [{citation.year}]"
+            if volume:
+                ref += f" ({volume})"
+            if issue:
+                ref += f"({issue})"
+            if journal:
+                ref += f" *{journal}*"
+            if pages:
+                ref += f", {pages}"
+            return ref
+
+        elif source_type == "website":
+            author_str = self._format_nalt_authors_bibliography(citation.authors)
+            url = citation.url or ""
+            access_date = citation.access_date or ""
+            ref = f"{author_str}, '{citation.title}'"
+            if url:
+                ref += f" <{url}>"
+            if access_date:
+                ref += f" accessed {access_date}"
+            return ref
+
+        else:
+            # Default: book-like
+            author_str = self._format_nalt_authors_bibliography(citation.authors)
+            publisher = citation.publisher or ""
+            if publisher:
+                return f"{author_str}, *{citation.title}* ({publisher} {citation.year})"
+            else:
+                return f"{author_str}, *{citation.title}* ({citation.year})"
 
     def generate_reference_list(self, text: str) -> str:
         """
@@ -235,18 +484,21 @@ class CitationCompiler:
             if cid in self.citation_lookup
         ]
 
+        # Determine header name based on style
+        ref_header = "Bibliography" if self.style == "NALT" else "References"
+
         if not cited_citations:
             # Check if placeholder exists - if so, don't add another header
             if self._has_placeholder_references(text):
                 return "\n(No citations found)\n"
-            elif "## References" not in text:
-                return "## References\n\n(No citations found)\n"
+            elif f"## {ref_header}" not in text and "## References" not in text:
+                return f"## {ref_header}\n\n(No citations found)\n"
             else:
                 return "\n(No citations found)\n"
 
-        # Sort alphabetically by first author (APA style)
-        if self.style == "APA 7th":
-            cited_citations.sort(key=lambda c: c.authors[0].lower())
+        # Sort alphabetically by first author (APA and NALT style)
+        if self.style in ("APA 7th", "NALT"):
+            cited_citations.sort(key=lambda c: c.authors[0].lower() if c.authors else "")
 
         # Format references (without header initially)
         references = []
@@ -256,10 +508,12 @@ class CitationCompiler:
                 ref = self._format_apa_reference(citation)
             elif self.style == "IEEE":
                 ref = self._format_ieee_reference(citation)
+            elif self.style == "NALT":
+                ref = self._format_nalt_bibliography_entry(citation)
             else:
                 raise NotImplementedError(
                     f"Citation style '{self.style}' is not yet implemented. "
-                    f"Supported styles: 'APA 7th', 'IEEE'. "
+                    f"Supported styles: 'APA 7th', 'IEEE', 'NALT'. "
                     f"See docs/CITATION_STYLES_ROADMAP.md for planned styles."
                 )
 
@@ -278,9 +532,9 @@ class CitationCompiler:
             )
             return ""
         else:
-            # Either no References section, or only placeholder exists
+            # Either no References/Bibliography section, or only placeholder exists
             # Add full section with header
-            return f"\n\n## References\n\n{references_content}"
+            return f"\n\n## {ref_header}\n\n{references_content}"
 
     def _extract_cited_ids(self, text: str) -> Set[str]:
         """Extract all citation IDs mentioned in text."""

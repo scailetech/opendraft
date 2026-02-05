@@ -126,6 +126,9 @@ def export_pdf(
         >>> options = PDFGenerationOptions(line_spacing=1.5)
         >>> export_pdf(Path('draft.md'), Path('draft.pdf'), options=options)
     """
+    md_file = Path(md_file)
+    output_pdf = Path(output_pdf)
+
     # Extract metadata from YAML frontmatter
     metadata = extract_metadata_from_yaml(md_file)
 
@@ -276,6 +279,9 @@ def export_docx_basic(md_file: Path, output_docx: Path) -> bool:
     Returns:
         bool: True if DOCX generation succeeded, False otherwise
     """
+    md_file = Path(md_file)
+    output_docx = Path(output_docx)
+
     try:
         from docx import Document
         from docx.shared import Pt, Inches
@@ -399,6 +405,9 @@ def export_docx(
         >>> options = PDFGenerationOptions(enable_toc=True, toc_depth=3)
         >>> export_docx(Path('draft.md'), Path('draft.docx'), options)
     """
+    md_file = Path(md_file)
+    output_docx = Path(output_docx)
+
     import subprocess
     import shutil
 

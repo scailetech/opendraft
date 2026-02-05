@@ -497,27 +497,58 @@ def _strip_planning_preamble(text: str) -> str:
     - "Here's my plan..."
     - "I will write..."
     - "Let me first..."
+    - "Sure! Here is..."
+    - "Based on the provided..."
+    - "Here is the..."
     - Numbered planning steps (1. First I'll..., 2. Then I'll...)
     """
-    # Look for the first markdown heading
+    preamble_patterns = [
+        r'(?i)^okay[,.]?\s+I\s+(?:understand|will|\'ll)',
+        r'(?i)^here\'?s?\s+(?:my|the)\s+(?:plan|approach|draft|outline)',
+        r'(?i)^I\s+will\s+(?:write|draft|compose|create|start|begin)',
+        r'(?i)^let\s+me\s+(?:first|start|begin|think|plan|outline)',
+        r'(?i)^I\'?ll\s+(?:start|begin|write|draft|first)',
+        r'(?i)^(?:sure|certainly|of course)[,!.]',
+        r'(?i)^\d+\.\s+(?:first|then|next|finally)\b',
+        r'(?i)^sure!\s',
+        r'(?i)^based\s+on\s+the\s+provided\b',
+        r'(?i)^here\s+is\s+the\b',
+    ]
+
+    # Phase 1: heading exists — strip everything before it if preamble detected
     heading_match = re.search(r'^#{1,6}\s+\S', text, re.MULTILINE)
 
     if heading_match:
         before_heading = text[:heading_match.start()]
-        # Check if the text before the heading looks like planning preamble
-        preamble_patterns = [
-            r'(?i)^okay[,.]?\s+I\s+(?:understand|will|\'ll)',
-            r'(?i)^here\'?s?\s+(?:my|the)\s+(?:plan|approach|draft|outline)',
-            r'(?i)^I\s+will\s+(?:write|draft|compose|create|start|begin)',
-            r'(?i)^let\s+me\s+(?:first|start|begin|think|plan|outline)',
-            r'(?i)^I\'?ll\s+(?:start|begin|write|draft|first)',
-            r'(?i)^(?:sure|certainly|of course)[,!.]',
-            r'(?i)^\d+\.\s+(?:first|then|next|finally)\b',
-        ]
         for pattern in preamble_patterns:
             if re.search(pattern, before_heading.strip(), re.MULTILINE):
                 text = text[heading_match.start():]
                 break
+        return text
+
+    # Phase 2: no heading — strip consecutive preamble lines from the top
+    lines = text.split('\n')
+    first_content_idx = 0
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped:
+            # blank lines between preamble lines are part of the preamble
+            continue
+        is_preamble = False
+        for pattern in preamble_patterns:
+            if re.search(pattern, stripped):
+                is_preamble = True
+                break
+        if is_preamble:
+            first_content_idx = i + 1
+        else:
+            break
+
+    if first_content_idx > 0:
+        # Skip any leading blank lines after preamble
+        while first_content_idx < len(lines) and not lines[first_content_idx].strip():
+            first_content_idx += 1
+        text = '\n'.join(lines[first_content_idx:])
 
     return text
 
@@ -541,8 +572,23 @@ def _strip_metadata_sections(text: str) -> str:
         r'^\*{2}Section:\*{2}\s*[^\n]*$',
         r'^\*{2}Word\s*Count:\*{2}\s*[^\n]*$',
         r'^\*{2}Status:\*{2}\s*[^\n]*$',
+        r'^\*{2}Key\s+Points?:\*{2}\s*[^\n]*$',
+        r'^\*{2}Key\s+Takeaways?:\*{2}\s*[^\n]*$',
+        r'^\*{2}References:\*{2}\s*[^\n]*$',
+        r'^\*{2}Draft\s+Notes?:\*{2}\s*[^\n]*$',
+        r'^\*{2}Target\s+Word\s+Count:\*{2}\s*[^\n]*$',
+        r'^\*{2}Summary:\*{2}\s*[^\n]*$',
     ]
-    for pattern in line_patterns:
+
+    # Non-bold single-line metadata patterns
+    nonbold_line_patterns = [
+        r'^Section:\s*[^\n]*$',
+        r'^Word\s+Count:\s*[\d\.,]+[^\n]*$',
+        r'^Status:\s*[^\n]*$',
+        r'^Target\s+Word\s+Count:\s*[\d\.,]+[^\n]*$',
+    ]
+
+    for pattern in line_patterns + nonbold_line_patterns:
         text = re.sub(pattern, '', text, flags=re.MULTILINE | re.IGNORECASE)
 
     # Entire metadata sections: heading + content until next heading or EOF
@@ -550,6 +596,11 @@ def _strip_metadata_sections(text: str) -> str:
         r'Citations?\s+Used',
         r'Notes?\s+for\s+Revision',
         r'Word\s+Count\s+Breakdown',
+        r'Key\s+Points?',
+        r'Key\s+Takeaways?',
+        r'References',
+        r'Draft\s+Notes?',
+        r'Summary\s+of\s+(?:Changes|Edits|Revisions)',
     ]
     for heading in section_headings:
         # Match ## heading + everything until next ## heading or end of string
@@ -573,6 +624,26 @@ def _strip_cite_missing(text: str) -> str:
     They must be removed before reaching compile_citations().
     """
     text = re.sub(r'\{cite_MISSING\s*:\s*[^}]*\}', '', text)
+
+    # Clean up dangling prepositions from common citation phrases
+    # e.g. "According to , cities" → ", cities" → "Cities" (handled below)
+    dangling_phrases = [
+        r'[Aa]ccording\s+to\s*,',
+        r'[Aa]s\s+shown\s+by\s*,',
+        r'[Aa]s\s+described\s+by\s*,',
+        r'[Aa]s\s+noted\s+by\s*,',
+        r'[Rr]eported\s+by\s*,',
+    ]
+    for phrase in dangling_phrases:
+        text = re.sub(phrase, ',', text)
+
+    # Clean up leading comma at sentence start: ". , Foo" or start-of-text ", Foo"
+    # Capitalize the next word after removing the leading comma
+    text = re.sub(
+        r'(?:(?<=\.)|(?<=\n)|(?:^))\s*,\s+([a-z])',
+        lambda m: ' ' + m.group(1).upper() if text[max(0, m.start()-1):m.start()] else m.group(1).upper(),
+        text,
+    )
 
     # Clean up any double spaces left behind
     text = re.sub(r'  +', ' ', text)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ABOUTME: Tests for citation style formatting
-ABOUTME: Verifies APA and IEEE styles work correctly, and unsupported styles raise errors
+ABOUTME: Verifies APA, IEEE, and NALT styles work correctly, and unsupported styles raise errors
 """
 
 import pytest
@@ -654,6 +654,371 @@ class TestCitationCompilation:
         assert validation['total_citations'] == 1
         assert validation['successfully_compiled'] == 1
         assert validation['missing_citations'] == 0
+
+
+# =============================================================================
+# NALT FIXTURES
+# =============================================================================
+
+@pytest.fixture
+def nalt_database():
+    """Database configured for NALT style."""
+    return CitationDatabase(citations=[], citation_style="NALT")
+
+
+@pytest.fixture
+def sample_citation_case():
+    """Case law citation for NALT testing."""
+    return Citation(
+        citation_id="cite_001",
+        authors=["Bankole"],
+        year=1967,
+        title="Bankole v Eshugbayi Eleko",
+        source_type="case",
+        parties="Bankole v Eshugbayi Eleko",
+        law_report="2 NWLR 46",
+        court="SC",
+    )
+
+
+@pytest.fixture
+def sample_citation_statute():
+    """Statute citation for NALT testing."""
+    return Citation(
+        citation_id="cite_002",
+        authors=["National Assembly"],
+        year=2003,
+        title="Child Rights Act",
+        source_type="statute",
+        section="s15(1)(b)",
+    )
+
+
+@pytest.fixture
+def sample_citation_constitution():
+    """Constitution citation for NALT testing."""
+    return Citation(
+        citation_id="cite_003",
+        authors=["Federal Republic of Nigeria"],
+        year=1999,
+        title="Constitution of the Federal Republic of Nigeria",
+        source_type="constitution",
+        section="s36(1)",
+    )
+
+
+@pytest.fixture
+def sample_nalt_book():
+    """Book citation for NALT testing."""
+    return Citation(
+        citation_id="cite_004",
+        authors=["Nasir"],
+        year=2000,
+        title="The Law of Contract in Nigeria",
+        source_type="book",
+        publisher="Gbile Publishers",
+    )
+
+
+@pytest.fixture
+def sample_nalt_journal():
+    """Journal citation for NALT testing."""
+    return Citation(
+        citation_id="cite_005",
+        authors=["Nwoke"],
+        year=2005,
+        title="International Labour Law: An Appraisal",
+        source_type="journal",
+        journal="Journal of Public Law",
+        volume=3,
+        issue=1,
+        pages="40-51",
+    )
+
+
+@pytest.fixture
+def sample_nalt_website():
+    """Website citation for NALT testing."""
+    return Citation(
+        citation_id="cite_006",
+        authors=["Greenleaf"],
+        year=2015,
+        title="Free Access to Legal Information",
+        source_type="website",
+        url="http://www.austlii.edu.au/falip",
+        access_date="27 July 2015",
+    )
+
+
+@pytest.fixture
+def sample_citation_treaty():
+    """Treaty citation for NALT testing."""
+    return Citation(
+        citation_id="cite_007",
+        authors=["United Nations"],
+        year=1989,
+        title="Convention on the Rights of the Child",
+        source_type="treaty",
+        section="art 3",
+    )
+
+
+# =============================================================================
+# NALT IN-TEXT CITATION TESTS
+# =============================================================================
+
+class TestNALTInTextCitations:
+    """Test NALT footnote marker generation."""
+
+    def test_footnote_marker(self, nalt_database, sample_nalt_book):
+        """First citation produces [^1] marker."""
+        nalt_database.citations = [sample_nalt_book]
+        compiler = CitationCompiler(nalt_database)
+        result = compiler.format_in_text_citation(sample_nalt_book)
+        assert result == "[^1]"
+
+    def test_counter_increments(self, nalt_database, sample_nalt_book, sample_nalt_journal):
+        """Each citation gets next footnote number."""
+        nalt_database.citations = [sample_nalt_book, sample_nalt_journal]
+        compiler = CitationCompiler(nalt_database)
+        r1 = compiler.format_in_text_citation(sample_nalt_book)
+        r2 = compiler.format_in_text_citation(sample_nalt_journal)
+        assert r1 == "[^1]"
+        assert r2 == "[^2]"
+
+    def test_definitions_collected(self, nalt_database, sample_nalt_book):
+        """Footnote definitions are stored internally."""
+        nalt_database.citations = [sample_nalt_book]
+        compiler = CitationCompiler(nalt_database)
+        compiler.format_in_text_citation(sample_nalt_book)
+        assert len(compiler._nalt_footnote_definitions) == 1
+        assert compiler._nalt_footnote_definitions[0].startswith("[^1]: ")
+
+
+# =============================================================================
+# NALT FOOTNOTE FORMATTING TESTS
+# =============================================================================
+
+class TestNALTFootnoteFormatting:
+    """Test NALT footnote text formatting for each source type."""
+
+    def _make_compiler(self, citation):
+        db = CitationDatabase(citations=[citation], citation_style="NALT")
+        return CitationCompiler(db)
+
+    def test_book_format(self, sample_nalt_book):
+        """Book: Author, *Title* (Publisher Year)"""
+        compiler = self._make_compiler(sample_nalt_book)
+        result = compiler._format_nalt_footnote(sample_nalt_book)
+        assert "Nasir" in result
+        assert "*The Law of Contract in Nigeria*" in result
+        assert "(Gbile Publishers 2000)" in result
+
+    def test_journal_format(self, sample_nalt_journal):
+        """Journal: Author, 'Title' [Year] (Vol)(Issue) *Journal*, Pages"""
+        compiler = self._make_compiler(sample_nalt_journal)
+        result = compiler._format_nalt_footnote(sample_nalt_journal)
+        assert "Nwoke" in result
+        assert "'International Labour Law: An Appraisal'" in result
+        assert "[2005]" in result
+        assert "(3)" in result
+        assert "(1)" in result
+        assert "*Journal of Public Law*" in result
+        assert "40-51" in result
+
+    def test_case_format(self, sample_citation_case):
+        """Case: *Parties* [Year] Report (Court)"""
+        compiler = self._make_compiler(sample_citation_case)
+        result = compiler._format_nalt_footnote(sample_citation_case)
+        assert "*Bankole v Eshugbayi Eleko*" in result
+        assert "[1967]" in result
+        assert "2 NWLR 46" in result
+        assert "(SC)" in result
+
+    def test_statute_format(self, sample_citation_statute):
+        """Statute: Title Year, section"""
+        compiler = self._make_compiler(sample_citation_statute)
+        result = compiler._format_nalt_footnote(sample_citation_statute)
+        assert "Child Rights Act 2003" in result
+        assert "s15(1)(b)" in result
+
+    def test_constitution_format(self, sample_citation_constitution):
+        """Constitution: Title Year, section"""
+        compiler = self._make_compiler(sample_citation_constitution)
+        result = compiler._format_nalt_footnote(sample_citation_constitution)
+        assert "Constitution of the Federal Republic of Nigeria 1999" in result
+        assert "s36(1)" in result
+
+    def test_treaty_format(self, sample_citation_treaty):
+        """Treaty: Title (Year), section"""
+        compiler = self._make_compiler(sample_citation_treaty)
+        result = compiler._format_nalt_footnote(sample_citation_treaty)
+        assert "Convention on the Rights of the Child (1989)" in result
+        assert "art 3" in result
+
+    def test_website_format(self, sample_nalt_website):
+        """Website: Author, 'Title' <URL> accessed Date"""
+        compiler = self._make_compiler(sample_nalt_website)
+        result = compiler._format_nalt_footnote(sample_nalt_website)
+        assert "Greenleaf" in result
+        assert "'Free Access to Legal Information'" in result
+        assert "<http://www.austlii.edu.au/falip>" in result
+        assert "accessed 27 July 2015" in result
+
+    def test_fallback_format(self):
+        """Report type falls back to book-like format."""
+        citation = Citation(
+            citation_id="cite_010",
+            authors=["Unknown"],
+            year=2020,
+            title="Some Report",
+            source_type="report",
+            publisher="Gov Press",
+        )
+        compiler = self._make_compiler(citation)
+        result = compiler._format_nalt_footnote(citation)
+        assert "Unknown" in result
+        assert "*Some Report*" in result
+        assert "(Gov Press 2020)" in result
+
+
+# =============================================================================
+# NALT AUTHOR FORMATTING TESTS
+# =============================================================================
+
+class TestNALTAuthorFormatting:
+    """Test NALT author formatting rules."""
+
+    def _make_compiler(self):
+        db = CitationDatabase(citations=[], citation_style="NALT")
+        return CitationCompiler(db)
+
+    def test_single_author(self):
+        """1 author: just the name."""
+        compiler = self._make_compiler()
+        result = compiler._format_nalt_authors_footnote(["Smith"])
+        assert result == "Smith"
+
+    def test_two_authors(self):
+        """2 authors: joined with 'and'."""
+        compiler = self._make_compiler()
+        result = compiler._format_nalt_authors_footnote(["Smith", "Jones"])
+        assert result == "Smith and Jones"
+
+    def test_three_authors(self):
+        """3 authors: comma-separated with 'and' before last."""
+        compiler = self._make_compiler()
+        result = compiler._format_nalt_authors_footnote(["Smith", "Jones", "Brown"])
+        assert result == "Smith, Jones and Brown"
+
+    def test_four_plus_authors(self):
+        """4+ authors: first 'and others' (NOT et al.)."""
+        compiler = self._make_compiler()
+        result = compiler._format_nalt_authors_footnote(["Smith", "Jones", "Brown", "Lee"])
+        assert result == "Smith and others"
+        assert "et al" not in result
+
+
+# =============================================================================
+# NALT BIBLIOGRAPHY TESTS
+# =============================================================================
+
+class TestNALTBibliography:
+    """Test NALT bibliography generation."""
+
+    def test_bibliography_header(self):
+        """NALT uses 'Bibliography' header, not 'References'."""
+        citations = [
+            Citation(citation_id="cite_001", authors=["Smith"], year=2023,
+                     title="Test Book", source_type="book", publisher="Publisher"),
+        ]
+        db = CitationDatabase(citations=citations, citation_style="NALT")
+        compiler = CitationCompiler(db)
+        text = "See {cite_001} here."
+        result = compiler.generate_reference_list(text)
+        assert "## Bibliography" in result
+        assert "## References" not in result
+
+    def test_bibliography_alphabetical(self):
+        """Bibliography entries sorted alphabetically by author."""
+        citations = [
+            Citation(citation_id="cite_001", authors=["Zebra"], year=2023,
+                     title="Z Book", source_type="book", publisher="Pub"),
+            Citation(citation_id="cite_002", authors=["Alpha"], year=2022,
+                     title="A Book", source_type="book", publisher="Pub"),
+        ]
+        db = CitationDatabase(citations=citations, citation_style="NALT")
+        compiler = CitationCompiler(db)
+        text = "First {cite_001} and {cite_002} here."
+        result = compiler.generate_reference_list(text)
+        alpha_pos = result.find("Alpha")
+        zebra_pos = result.find("Zebra")
+        assert alpha_pos < zebra_pos
+
+
+# =============================================================================
+# NALT COMPILATION TESTS
+# =============================================================================
+
+class TestNALTCompilation:
+    """Test NALT full compilation pipeline."""
+
+    def _make_compiler(self, citations):
+        db = CitationDatabase(citations=citations, citation_style="NALT")
+        return CitationCompiler(db, model=None)
+
+    def test_full_pipeline(self):
+        """Compile replaces {cite_001} with [^1] and appends footnote definition."""
+        citations = [
+            Citation(citation_id="cite_001", authors=["Nasir"], year=2000,
+                     title="Contract Law", source_type="book", publisher="Gbile"),
+        ]
+        compiler = self._make_compiler(citations)
+        text = "As stated {cite_001} the law provides."
+        result, missing, _ = compiler.compile_citations(text, research_missing=False, verbose=False)
+
+        assert "[^1]" in result
+        assert "{cite_001}" not in result
+        assert "[^1]: " in result
+        assert "*Contract Law*" in result
+        assert missing == []
+
+    def test_multiple_footnotes(self):
+        """Multiple citations get sequential footnote numbers."""
+        citations = [
+            Citation(citation_id="cite_001", authors=["Nasir"], year=2000,
+                     title="Contract Law", source_type="book", publisher="Gbile"),
+            Citation(citation_id="cite_002", authors=["Nwoke"], year=2005,
+                     title="Labour Law", source_type="journal", journal="JPL",
+                     volume=3, pages="40-51"),
+        ]
+        compiler = self._make_compiler(citations)
+        text = "First {cite_001} and second {cite_002} here."
+        result, missing, _ = compiler.compile_citations(text, research_missing=False, verbose=False)
+
+        assert "[^1]" in result
+        assert "[^2]" in result
+        assert "[^1]: " in result
+        assert "[^2]: " in result
+        assert missing == []
+
+    def test_counter_reset(self):
+        """Counter resets between compile_citations() calls."""
+        citations = [
+            Citation(citation_id="cite_001", authors=["Nasir"], year=2000,
+                     title="Contract Law", source_type="book", publisher="Gbile"),
+        ]
+        compiler = self._make_compiler(citations)
+
+        # First compilation
+        result1, _, _ = compiler.compile_citations("See {cite_001}.", research_missing=False, verbose=False)
+        assert "[^1]" in result1
+
+        # Second compilation - counter should reset
+        result2, _, _ = compiler.compile_citations("See {cite_001}.", research_missing=False, verbose=False)
+        assert "[^1]" in result2
+        # Should NOT have [^2] from previous run
+        assert "[^2]" not in result2
 
 
 # =============================================================================

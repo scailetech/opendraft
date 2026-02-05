@@ -1,74 +1,212 @@
-#!/usr/bin/env python3
 """
-ABOUTME: Provider-specific token counting utilities
-ABOUTME: Ported from OpenPaper — Gemini native / tiktoken / fallback
+Token Counting Utility
+Accurately count tokens for different LLM providers
 """
 
 import logging
-from typing import Optional
-
+import re
 logger = logging.getLogger(__name__)
 
 
-def count_tokens_gemini(text: str, model_name: str = "gemini-3-pro-preview") -> Optional[int]:
+def count_tokens(text: str, model_name: str = "gemini-2.0-flash") -> int:
     """
-    Count tokens using Gemini's native count_tokens API.
+    Count tokens in text using the appropriate method for the model.
 
-    Returns None if the API call fails (e.g., not configured).
+    For Gemini models: Uses Gemini's native token counter
+    For OpenAI models: Uses approximation (1 token ≈ 4 characters)
+
+    Args:
+        text: Text to count tokens for
+        model_name: Name of the model
+
+    Returns:
+        Estimated number of tokens
+    """
+    if not text:
+        return 0
+
+    # Try Gemini token counter first
+    if "gemini" in model_name.lower():
+        return _count_gemini_tokens(text, model_name)
+    elif "gpt" in model_name.lower() or "openai" in model_name.lower():
+        return _count_openai_tokens(text)
+    else:
+        # Fallback to character-based approximation
+        return _count_fallback_tokens(text)
+
+
+def count_prompt_tokens(prompt: str, model_name: str = "gemini-2.0-flash") -> int:
+    """
+    Count tokens specifically for a prompt.
+
+    Args:
+        prompt: Prompt text
+        model_name: Name of the model
+
+    Returns:
+        Number of tokens
+    """
+    return count_tokens(prompt, model_name)
+
+
+def count_response_tokens(response: str, model_name: str = "gemini-2.0-flash") -> int:
+    """
+    Count tokens specifically for a response.
+
+    Args:
+        response: Response text
+        model_name: Name of the model
+
+    Returns:
+        Number of tokens
+    """
+    return count_tokens(response, model_name)
+
+
+def _count_gemini_tokens(text: str, model_name: str) -> int:
+    """
+    Count tokens using Gemini's token counter.
+
+    Args:
+        text: Text to count
+        model_name: Gemini model name
+
+    Returns:
+        Token count
     """
     try:
         import google.generativeai as genai
+
+        # Use the provided model name
         model = genai.GenerativeModel(model_name)
-        result = model.count_tokens(text)
-        return result.total_tokens
+
+        # Count tokens
+        response = model.count_tokens(text)
+        token_count = response.total_tokens
+
+        logger.debug(f"Gemini token count for {len(text)} chars: {token_count} tokens")
+        return token_count
+
     except Exception as e:
-        logger.debug(f"Gemini token counting failed: {e}")
-        return None
+        logger.warning(
+            f"Failed to count tokens with Gemini ({type(e).__name__}): {str(e)}, "
+            f"falling back to approximation"
+        )
+        # Fallback to approximation
+        return _count_fallback_tokens(text)
 
 
-def count_tokens_tiktoken(text: str, encoding_name: str = "cl100k_base") -> Optional[int]:
+def _count_openai_tokens(text: str) -> int:
     """
-    Count tokens using tiktoken (OpenAI tokenizer).
+    Count tokens for OpenAI models.
 
-    Works as a reasonable approximation for Gemini models.
-    Returns None if tiktoken is not installed.
+    OpenAI token counting can be more accurate with tiktoken library,
+    but we provide a reasonable approximation.
+
+    Args:
+        text: Text to count
+
+    Returns:
+        Estimated token count
     """
     try:
         import tiktoken
-        enc = tiktoken.get_encoding(encoding_name)
-        return len(enc.encode(text))
+
+        # Try to use tiktoken for more accurate counting
+        enc = tiktoken.encoding_for_model("gpt-4")
+        tokens = enc.encode(text)
+        token_count = len(tokens)
+
+        logger.debug(f"OpenAI token count for {len(text)} chars: {token_count} tokens")
+        return token_count
+
     except ImportError:
-        logger.debug("tiktoken not installed — skipping tiktoken counting")
-        return None
+        logger.debug("tiktoken not available, using approximation for OpenAI tokens")
+        return _count_fallback_tokens(text)
     except Exception as e:
-        logger.debug(f"tiktoken counting failed: {e}")
-        return None
+        logger.warning(
+            f"Failed to count OpenAI tokens ({type(e).__name__}): {str(e)}, "
+            f"using approximation"
+        )
+        return _count_fallback_tokens(text)
 
 
-def count_tokens_fallback(text: str) -> int:
+def _count_fallback_tokens(text: str) -> int:
     """
-    Rough fallback: ~4 characters per token (GPT/Gemini average).
+    Fallback token counter using character-based approximation.
 
-    Always succeeds.
+    Approximation: 1 token ≈ 4 characters (rough average)
+    This is a conservative estimate.
+
+    Args:
+        text: Text to count
+
+    Returns:
+        Estimated token count
     """
-    return max(1, len(text) // 4)
+    if not text:
+        return 0
+
+    # Remove extra whitespace
+    cleaned = re.sub(r"\s+", " ", text.strip())
+
+    # Rough approximation: 1 token per 4 characters
+    # This is conservative and may underestimate
+    token_count = max(1, len(cleaned) // 4)
+
+    logger.debug(f"Fallback token count for {len(cleaned)} chars: {token_count} tokens")
+    return token_count
 
 
-def count_tokens(text: str, model_name: str = "gemini-3-pro-preview") -> int:
+def estimate_tokens_in_messages(
+    messages: list, model_name: str = "gemini-2.0-flash"
+) -> int:
     """
-    Count tokens using best available method.
+    Estimate total tokens in a list of messages.
 
-    Priority: Gemini native -> tiktoken -> character fallback.
+    Args:
+        messages: List of message dicts with 'role' and 'content'
+        model_name: Name of the model
+
+    Returns:
+        Total estimated token count
     """
-    # Try Gemini native
-    result = count_tokens_gemini(text, model_name)
-    if result is not None:
-        return result
+    total_tokens = 0
 
-    # Try tiktoken
-    result = count_tokens_tiktoken(text)
-    if result is not None:
-        return result
+    for message in messages:
+        content = message.get("content", "")
+        role = message.get("role", "")
 
-    # Fallback
-    return count_tokens_fallback(text)
+        # Add tokens for content
+        total_tokens += count_tokens(content, model_name)
+
+        # Add overhead for role markers (usually ~4-5 tokens per message)
+        total_tokens += 5
+
+    # Add general conversation overhead
+    total_tokens += 10
+
+    return total_tokens
+
+
+if __name__ == "__main__":
+    # Test token counting
+    test_text = "This is a test string to count tokens for different models."
+
+    print(f"Text: {test_text}")
+    print(f"Character count: {len(test_text)}")
+    print(f"Fallback token estimate: {_count_fallback_tokens(test_text)}")
+
+    # Test with Gemini
+    try:
+        gemini_count = count_tokens(test_text, "gemini-2.0-flash")
+        print(f"Gemini token count: {gemini_count}")
+    except Exception as e:
+        print(f"Gemini counting failed: {e}")
+
+    # Test with OpenAI
+    try:
+        openai_count = count_tokens(test_text, "gpt-4")
+        print(f"OpenAI token count: {openai_count}")
+    except Exception as e:
+        print(f"OpenAI counting failed: {e}")

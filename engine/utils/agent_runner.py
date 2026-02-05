@@ -16,9 +16,17 @@ from pathlib import Path
 from typing import Optional, Callable, Tuple, List, TYPE_CHECKING, Any, Dict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
-# Safe print function that handles broken pipes (worker runs with stdio: 'ignore')
+# Safe print function that handles broken pipes and respects CLI quiet mode
 def safe_print(*args, **kwargs):
-    """Print wrapper that catches BrokenPipeError when stdout is closed."""
+    """Print wrapper that catches BrokenPipeError and respects CLI quiet mode."""
+    # Check verbosity setting from orchestrator (CLI quiet mode)
+    try:
+        from utils.api_citations.orchestrator import _verbose_research
+        if not _verbose_research:
+            return  # Suppress in CLI quiet mode
+    except ImportError:
+        pass  # If orchestrator not available, continue normally
+
     try:
         print(*args, **kwargs)
     except (BrokenPipeError, OSError):
@@ -41,6 +49,7 @@ from utils.output_validators import ValidationResult
 from utils.api_citations.orchestrator import CitationResearcher
 from utils.citation_database import Citation
 from utils.deep_research import DeepResearchPlanner
+from utils.token_tracker import CallStatus
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -330,6 +339,19 @@ def run_agent(
                 safe_print(f"❌ Error")
 
             logger.error(f"Agent '{name}': Exception on attempt {attempt+1}: {str(e)}")
+
+            # Track failed call if tracker is provided
+            if token_tracker:
+                try:
+                    token_tracker.add_call(
+                        stage=token_stage or name,
+                        input_tokens=0,
+                        output_tokens=0,
+                        status=CallStatus.FAILURE,
+                        error_message=str(e),
+                    )
+                except Exception:
+                    pass  # Never break generation for tracking failures
 
             # If not last attempt and it's a transient error, retry
             if attempt < max_retries - 1 and _is_transient_error(e):
@@ -720,6 +742,7 @@ def research_citations_via_api(
         enable_gemini_grounded=True,  # Enable for industry reports (McKinsey, Gartner, etc.)
         enable_smart_routing=True,     # Enable query classification for source diversity
         enable_llm_fallback=False,     # DISABLED: LLM hallucinates citations
+        use_serper=True,               # Enable Serper API for web search fallback
         verbose=verbose,
         progress_callback=progress_callback,  # Pass through for progress reporting
     )

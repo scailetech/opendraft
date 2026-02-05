@@ -40,23 +40,46 @@ class ModelConfig:
 
     Supports Gemini models with configurable parameters.
     """
-    provider: Literal['gemini', 'claude', 'openai'] = 'gemini'
-    model_name: str = field(default_factory=lambda: os.getenv('GEMINI_MODEL', 'gemini-3-pro-preview'))
+    provider: Literal['gemini', 'claude', 'openai'] = field(
+        default_factory=lambda: os.getenv('AI_PROVIDER', 'gemini')
+    )
+    model_name: str = field(
+        default_factory=lambda: (
+            os.getenv('OPENAI_MODEL', 'gpt-4.1-nano')
+            if os.getenv('AI_PROVIDER') == 'openai'
+            else os.getenv('GEMINI_MODEL', 'gemini-3-pro-preview')
+        )
+    )
     temperature: float = 0.7
     max_output_tokens: Optional[int] = None
+    api_key: Optional[str] = None
 
     def __post_init__(self):
         """Validate model configuration."""
-        valid_models = [
-            'gemini-3-pro-preview',    # Highest quality
-            'gemini-3-flash-preview',  # Fast, near-pro quality (3x faster)
-            'gemini-2.5-flash',        # Legacy fast
-            'gemini-2.5-pro',          # Legacy pro
+        valid_gemini_models = [
+            'gemini-3-pro-preview',    # Pro model for complex tasks
+            'gemini-3-flash-preview',  # Primary flash model (supports JSON output)
+            'gemini-2.5-pro',          # Legacy support
+            'gemini-2.5-flash',        # Legacy support
+            'gemini-2.0-flash-exp',    # Legacy support
+            'gemini-1.5-flash',
+            'gemini-1.5-pro',
         ]
-        if self.provider == 'gemini' and self.model_name not in valid_models:
+
+        valid_openai_models = [
+            'gpt-4.1-nano',
+        ]
+
+        if self.provider == 'gemini' and self.model_name not in valid_gemini_models:
             raise ValueError(
                 f"Invalid Gemini model: {self.model_name}. "
-                f"Valid options: {', '.join(valid_models)}"
+                f"Valid options: {', '.join(valid_gemini_models)}"
+            )
+
+        if self.provider == 'openai' and self.model_name not in valid_openai_models:
+            raise ValueError(
+                f"Invalid OpenAI model: {self.model_name}. "
+                f"Valid options: {', '.join(valid_openai_models)}"
             )
 
 
@@ -64,7 +87,7 @@ class ModelConfig:
 class ValidationConfig:
     """Configuration for validation agents (Skeptic, Verifier, Referee, FactCheck)."""
     use_pro_model: bool = field(default_factory=lambda: os.getenv('USE_PRO_FOR_VALIDATION', 'false').lower() == 'true')
-    pro_model_name: str = 'gemini-2.5-pro'
+    pro_model_name: str = 'gemini-3-pro-preview'
     validate_per_section: bool = True  # Always validate each section independently
     enable_factcheck: bool = field(
         default_factory=lambda: os.getenv('ENABLE_FACTCHECK', 'true').lower() == 'true'

@@ -6,9 +6,12 @@ ABOUTME: Verifies factual claims in generated text using web-grounded evidence a
 
 import sys
 import json
+import time
 import logging
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, Any, List, Optional
+from collections import OrderedDict
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -18,12 +21,50 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 # =========================================================================
+# FIFO Cache with TTL (ported from hallucination-detector-v2)
+# =========================================================================
+
+class FIFOCache:
+    """Simple FIFO cache with TTL expiry for verification results."""
+
+    def __init__(self, max_size: int = 100, ttl_seconds: int = 3600):
+        self._cache: OrderedDict = OrderedDict()
+        self._timestamps: Dict[str, float] = {}
+        self._lock = threading.Lock()
+        self.max_size = max_size
+        self.ttl_seconds = ttl_seconds
+
+    def get(self, key: str) -> Optional[Any]:
+        """Get a value from cache if it exists and hasn't expired."""
+        with self._lock:
+            if key not in self._cache:
+                return None
+            if time.time() - self._timestamps[key] > self.ttl_seconds:
+                del self._cache[key]
+                del self._timestamps[key]
+                return None
+            return self._cache[key]
+
+    def put(self, key: str, value: Any) -> None:
+        """Add a value to cache, evicting oldest if full."""
+        with self._lock:
+            if key in self._cache:
+                del self._cache[key]
+            elif len(self._cache) >= self.max_size:
+                oldest_key, _ = self._cache.popitem(last=False)
+                self._timestamps.pop(oldest_key, None)
+            self._cache[key] = value
+            self._timestamps[key] = time.time()
+
+
+# =========================================================================
 # Verdict Classification
 # =========================================================================
 
 VERDICT_SUPPORTED = "SUPPORTED"
 VERDICT_CONTRADICTED = "CONTRADICTED"
 VERDICT_INSUFFICIENT = "INSUFFICIENT"
+VALID_VERDICTS = {VERDICT_SUPPORTED, VERDICT_CONTRADICTED, VERDICT_INSUFFICIENT}
 
 
 def strip_json_fences(text: str) -> str:
@@ -85,6 +126,7 @@ class FactCheckVerifier:
         self.api_key = api_key
         self.model = model
         self.grounded_client = GeminiGroundedClient(api_key=api_key)
+        self._cache = FIFOCache(max_size=100, ttl_seconds=3600)
 
     def _verify_single_claim(self, i: int, total: int, claim_obj: Dict[str, str]) -> Optional[Dict[str, Any]]:
         """
@@ -96,6 +138,12 @@ class FactCheckVerifier:
         if not claim_text:
             return None
 
+        # Check cache
+        cached = self._cache.get(claim_text)
+        if cached is not None:
+            logger.debug(f"Cache hit for claim: {claim_text[:60]}...")
+            return cached
+
         logger.info(f"[FactCheck] Verifying claim {i+1}/{total}: {claim_text[:80]}...")
 
         try:
@@ -104,6 +152,9 @@ class FactCheckVerifier:
 
             # Step 2: Judge claim against evidence
             verdict = self._judge(claim_obj, evidence)
+
+            # Cache result
+            self._cache.put(claim_text, verdict)
             return verdict
 
         except Exception as e:

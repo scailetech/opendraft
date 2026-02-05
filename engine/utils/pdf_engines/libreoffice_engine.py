@@ -61,8 +61,14 @@ class LibreOfficeEngine(PDFEngine):
         if not DOCX_AVAILABLE:
             return False
 
-        # Check if libreoffice command exists
-        return shutil.which('libreoffice') is not None
+        # Check if libreoffice command exists (libreoffice on Linux, soffice on macOS)
+        return shutil.which('libreoffice') is not None or shutil.which('soffice') is not None
+
+    def _get_libreoffice_cmd(self) -> str:
+        """Get the correct LibreOffice command for this platform."""
+        if shutil.which('libreoffice'):
+            return 'libreoffice'
+        return 'soffice'
 
     def generate(
         self,
@@ -305,7 +311,7 @@ class LibreOfficeEngine(PDFEngine):
 
             # Run LibreOffice in headless mode
             cmd = [
-                'libreoffice',
+                self._get_libreoffice_cmd(),
                 '--headless',
                 '--convert-to', 'pdf',
                 '--outdir', str(output_dir),

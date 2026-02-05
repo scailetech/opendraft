@@ -115,6 +115,52 @@ class TestStripPreamble:
         result = clean_agent_output(text)
         assert "The analysis of housing markets" in result
 
+    def test_strip_preamble_no_heading_sure(self):
+        """Preamble starting with 'Sure!' removed even without heading."""
+        text = (
+            "Sure! Here is the requested section.\n"
+            "\n"
+            "The analysis of housing markets reveals several trends."
+        )
+        result = clean_agent_output(text)
+        assert "Sure!" not in result
+        assert "The analysis of housing markets" in result
+
+    def test_strip_preamble_no_heading_based_on(self):
+        """Preamble starting with 'Based on the provided' removed without heading."""
+        text = (
+            "Based on the provided research materials, I will draft the section.\n"
+            "\n"
+            "Urban sprawl has accelerated since the 1990s."
+        )
+        result = clean_agent_output(text)
+        assert "Based on the provided" not in result
+        assert "Urban sprawl has accelerated" in result
+
+    def test_strip_preamble_no_heading_here_is(self):
+        """Preamble starting with 'Here is the' removed without heading."""
+        text = (
+            "Here is the methodology section as requested.\n"
+            "\n"
+            "This study employs a mixed-methods approach."
+        )
+        result = clean_agent_output(text)
+        assert "Here is the" not in result
+        assert "This study employs" in result
+
+    def test_strip_preamble_no_heading_multiline(self):
+        """Multiple consecutive preamble lines removed without heading."""
+        text = (
+            "Sure! I will write this section.\n"
+            "I'll start with the background.\n"
+            "\n"
+            "Climate change has had measurable effects on coastal regions."
+        )
+        result = clean_agent_output(text)
+        assert "Sure!" not in result
+        assert "I'll start" not in result
+        assert "Climate change has had measurable effects" in result
+
 
 # ---------------------------------------------------------------------------
 # Pass B — Metadata stripping (Ticket 018)
@@ -216,6 +262,68 @@ class TestStripMetadata:
         assert "mixed-methods approach" in result
         assert "Creswell (2014)" in result
 
+    def test_strip_metadata_key_points(self):
+        text = "**Key Points:** Main argument and supporting evidence\n\nThe data shows..."
+        result = clean_agent_output(text)
+        assert "**Key Points:**" not in result
+        assert "The data shows..." in result
+
+    def test_strip_metadata_key_takeaways(self):
+        text = "**Key Takeaways:** Three main findings\n\nThe results indicate..."
+        result = clean_agent_output(text)
+        assert "**Key Takeaways:**" not in result
+        assert "The results indicate..." in result
+
+    def test_strip_metadata_references_bold(self):
+        text = "**References:** See bibliography\n\nThe study concludes..."
+        result = clean_agent_output(text)
+        assert "**References:**" not in result
+        assert "The study concludes..." in result
+
+    def test_strip_metadata_draft_notes(self):
+        text = "**Draft Notes:** Needs revision\n\nThe analysis reveals..."
+        result = clean_agent_output(text)
+        assert "**Draft Notes:**" not in result
+        assert "The analysis reveals..." in result
+
+    def test_strip_metadata_target_word_count(self):
+        text = "**Target Word Count:** 2,500\n\nThe experiment demonstrated..."
+        result = clean_agent_output(text)
+        assert "**Target Word Count:**" not in result
+        assert "The experiment demonstrated..." in result
+
+    def test_strip_metadata_summary_bold(self):
+        text = "**Summary:** Overview of findings\n\nThe findings suggest..."
+        result = clean_agent_output(text)
+        assert "**Summary:**" not in result
+        assert "The findings suggest..." in result
+
+    def test_strip_metadata_nonbold_word_count(self):
+        text = "Word Count: 1,850 words\n\nThe primary contribution of this work..."
+        result = clean_agent_output(text)
+        assert "Word Count:" not in result
+        assert "The primary contribution" in result
+
+    def test_strip_metadata_section_heading_key_points(self):
+        text = (
+            "# Discussion\n\nThe results are significant.\n\n"
+            "## Key Points\n\n- Point A\n- Point B\n"
+        )
+        result = clean_agent_output(text)
+        assert "## Key Points" not in result
+        assert "Point A" not in result
+        assert "The results are significant." in result
+
+    def test_strip_metadata_section_heading_summary_of_changes(self):
+        text = (
+            "# Conclusion\n\nIn summary, the evidence is clear.\n\n"
+            "## Summary of Changes\n\n- Revised paragraph 2\n- Added new data\n"
+        )
+        result = clean_agent_output(text)
+        assert "## Summary of Changes" not in result
+        assert "Revised paragraph 2" not in result
+        assert "the evidence is clear." in result
+
 
 # ---------------------------------------------------------------------------
 # Pass C — cite_MISSING stripping (Ticket 019)
@@ -232,7 +340,8 @@ class TestStripCiteMissing:
         text = "According to {cite_MISSING:urban planning theory}, cities evolve."
         result = clean_agent_output(text)
         assert "{cite_MISSING" not in result
-        assert "According to, cities evolve." in result
+        assert "According to" not in result
+        assert "cities evolve." in result or "Cities evolve." in result
 
     def test_strip_cite_missing_preserves_valid(self):
         text = "As shown by prior research {cite_001}, the trend is clear."
@@ -247,6 +356,28 @@ class TestStripCiteMissing:
         result = clean_agent_output(text)
         assert "{cite_MISSING" not in result
         assert "Evidence suggests that further investigation is needed." in result
+
+    def test_strip_cite_missing_according_to_cleanup(self):
+        """'According to {cite_MISSING:...}, X' should not leave 'According to, X'."""
+        text = "According to {cite_MISSING: Smith 2020}, cities are growing."
+        result = clean_agent_output(text)
+        assert "{cite_MISSING" not in result
+        assert "According to," not in result
+        assert "cities are growing" in result or "Cities are growing" in result
+
+    def test_strip_cite_missing_as_noted_by_cleanup(self):
+        """'as noted by {cite_MISSING:...}, X' should clean up dangling preposition."""
+        text = "The trend, as noted by {cite_MISSING: Jones}, is clear."
+        result = clean_agent_output(text)
+        assert "{cite_MISSING" not in result
+        assert "as noted by," not in result
+
+    def test_strip_cite_missing_reported_by_cleanup(self):
+        """'reported by {cite_MISSING:...}, X' should clean up."""
+        text = "Data reported by {cite_MISSING: WHO 2023}, shows a decline."
+        result = clean_agent_output(text)
+        assert "{cite_MISSING" not in result
+        assert "reported by," not in result
 
 
 # ---------------------------------------------------------------------------

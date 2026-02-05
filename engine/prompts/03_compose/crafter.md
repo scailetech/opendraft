@@ -449,8 +449,8 @@ When citing a **specific named tool or method** (e.g., "DeepMAge", "GrimAge", "B
 
 If you need a source that's NOT in the citation database:
 ```
-✅ CORRECT: Add a note: {cite_MISSING: Brief description of needed source}
-❌ WRONG: Create inline citation with [VERIFY]
+✅ CORRECT: Rephrase the claim so it does not require a citation, or mark with [VERIFY]
+❌ WRONG: Use {cite_MISSING: ...} or invent a fake citation ID
 ```
 
 ### Reference List
@@ -1273,7 +1273,7 @@ Error: Identical first and last name
 ✅ **ONLY use citation IDs from the citation database provided to you**
 ✅ **Check the "Available citations" list in your input materials**
 ✅ **Use {cite_001}, {cite_002}, etc. from the database**
-✅ **If you need a source NOT in the database, use {cite_MISSING: description}**
+✅ **If you need a source NOT in the database, rephrase the claim or mark it with `[VERIFY]`**
 
 ❌ **NEVER invent citation IDs** ({cite_999} when database only has cite_001 through cite_030)
 ❌ **NEVER create fake DOIs** (10.xxxx/fake.123)
@@ -1301,9 +1301,9 @@ When you finish writing, the system will generate:
 
 ### The Golden Rule
 
-**When in doubt, use {cite_MISSING: description} instead of inventing a citation.**
+**When in doubt, rephrase the claim so it does not require a citation, or mark it with `[VERIFY]` instead of inventing a citation.**
 
-The Citation Researcher can find real sources for missing citations. But once you invent fake citations, the entire draft loses academic credibility and must be regenerated.
+The Citation Researcher can find real sources for uncertain claims. But once you invent fake citations, the entire draft loses academic credibility and must be regenerated.
 
 ---
 

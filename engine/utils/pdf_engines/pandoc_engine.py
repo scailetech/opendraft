@@ -141,6 +141,9 @@ class PandocLatexEngine(PDFEngine):
             # Converts `*   ` and `* ` variations to standard `- ` format
             md_content = self._normalize_bullet_lists(md_content)
 
+            # BUG #21 FIX: Escape LaTeX special characters in URLs and plain text
+            md_content = self._escape_latex_special_chars(md_content)
+
             # Note: XeLaTeX handles Unicode natively, no sanitization needed
             # (Previous pdflatex required _sanitize_unicode_for_latex)
 
@@ -989,3 +992,64 @@ class PandocLatexEngine(PDFEngine):
             md_content = md_content.replace(unicode_char, ascii_equiv)
 
         return md_content
+
+    def _escape_latex_special_chars(self, md_content: str) -> str:
+        """
+        Escape LaTeX special characters in URLs and plain text to prevent compilation errors.
+
+        Fixes BUG #21: "Missing $ inserted" errors from unescaped characters.
+
+        Common problematic characters:
+        - `_` (underscore) in URLs like `doi.org/10.1007/978-3-319-64964-1_5`
+        - `%` (percent) in URL-encoded strings like `%20`
+        - `&` (ampersand) in query strings
+
+        This function:
+        1. Wraps bare URLs in angle brackets for Pandoc to properly process
+        2. Fixes `Https://` to `https://` (common AI hallucination)
+        3. Escapes remaining special chars in plain text (outside URLs and math)
+        """
+        import re
+
+        # Separate YAML frontmatter from body
+        if md_content.strip().startswith('---'):
+            parts = md_content.split('---', 2)
+            if len(parts) >= 3:
+                yaml_section = f'---{parts[1]}---'
+                body_content = parts[2]
+            else:
+                yaml_section = ''
+                body_content = md_content
+        else:
+            yaml_section = ''
+            body_content = md_content
+
+        # Fix 1: Normalize Https:// to https:// (AI sometimes capitalizes)
+        body_content = re.sub(r'\bHttps://', 'https://', body_content)
+        body_content = re.sub(r'\bHttp://', 'http://', body_content)
+
+        # Fix 2: Wrap bare URLs in angle brackets for Pandoc to handle properly
+        url_pattern = r'(?<![<\[])(https?://[^\s\)\]>]+)(?![>\]])'
+        body_content = re.sub(url_pattern, r'<\1>', body_content)
+
+        # Fix 3: Escape underscores in plain text (outside URLs, math mode, and emphasis)
+        lines = body_content.split('\n')
+        processed_lines = []
+
+        for line in lines:
+            if '$' in line:
+                processed_lines.append(line)
+                continue
+            if '<http' in line:
+                processed_lines.append(line)
+                continue
+            if line.strip().startswith('|') and line.strip().endswith('|'):
+                processed_lines.append(line)
+                continue
+            if '_' in line and not re.search(r'[*_]{1,2}\w+[*_]{1,2}', line):
+                line = re.sub(r'(?<!\\)_(?!\w+_)', r'\\_', line)
+            processed_lines.append(line)
+
+        body_content = '\n'.join(processed_lines)
+
+        return yaml_section + body_content if yaml_section else body_content

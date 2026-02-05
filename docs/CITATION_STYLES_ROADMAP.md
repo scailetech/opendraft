@@ -1,8 +1,8 @@
 # OpenDraft Citation Styles - Technical Roadmap
 
 > **Date**: 2026-02-02 (updated 2026-02-03)
-> **Status**: Phases 0–2.5 complete. Phase 3 pending.
-> **Priority**: Feature Request (NALT — Phase 3)
+> **Status**: Phases 0–3 complete. ibid/supra deferred to Phase 3.1.
+> **Priority**: Feature Request (NALT — Phase 3) ✅ Shipped
 
 ---
 
@@ -57,7 +57,7 @@ CLI Selection → CitationDatabase → CitationCompiler → Formatted Output
 
 ```python
 # citation_database.py:126
-CitationStyle = Literal["APA 7th", "IEEE", "Chicago", "MLA"]
+CitationStyle = Literal["APA 7th", "IEEE", "NALT"]
 ```
 
 ### Current Citation Class
@@ -476,19 +476,33 @@ plan = ResearchPlan.model_validate_json(response.text)  # Validates structure
    - Integrated into `agent_runner.py`
    - Generates `token_usage.json` per run
 
-### Phase 3: NALT Implementation
+### Phase 3: NALT Implementation ✅ DONE
 
-1. **Extend Citation class** with legal fields
-2. **Add new source types** (case, statute, constitution)
-3. **Implement footnote system** (separate from in-text citations)
-4. **Implement NALT formatters**:
-   - `_format_nalt_footnote()` - Full footnote citation
-   - `_format_nalt_bibliography()` - Bibliography entry
-   - `_format_nalt_case()` - Case law specific
-   - `_format_nalt_statute()` - Legislation specific
-5. **Implement citation tracking** for ibid/supra
-6. **Add CLI option** for NALT
-7. **Write comprehensive tests**
+1. ~~**Extend Citation class** with legal fields~~ ✅ Added `court`, `law_report`, `parties`, `section`
+2. ~~**Add new source types** (case, statute, constitution, treaty)~~ ✅ All four added to `CitationSourceType`
+3. ~~**Implement footnote system** (separate from in-text citations)~~ ✅ Markdown `[^N]` syntax, counter + definitions
+4. ~~**Implement NALT formatters**~~ ✅
+   - `_format_nalt_footnote()` - Dispatch to source-type formatters
+   - `_format_nalt_bibliography_entry()` - Bibliography entry (surname-first)
+   - `_format_nalt_case()` - Case law: `*Parties* [Year] Report (Court)`
+   - `_format_nalt_statute()` - Legislation: `Title Year, section`
+   - `_format_nalt_constitution()` - Constitution: `Title Year, section`
+   - `_format_nalt_treaty()` - Treaty: `Title (Year), section`
+   - `_format_nalt_journal()` - Journal: `Author, 'Title' [Year] (Vol)(Issue) *Journal*, Pages`
+   - `_format_nalt_book()` - Book: `Author, *Title* (Publisher Year)`
+   - `_format_nalt_website()` - Website: `Author, 'Title' <URL> accessed Date`
+   - Author helpers: `_format_nalt_authors_footnote()`, `_format_nalt_authors_bibliography()`
+5. **Implement citation tracking for ibid/supra** — ⏳ Deferred to Phase 3.1
+6. ~~**Add CLI option** for NALT~~ ✅ Interactive menu + `--style nalt` argument
+7. ~~**Write comprehensive tests**~~ ✅ 20 new NALT tests (53 total in test_citation_styles.py)
+
+### Phase 3.1: ibid/supra (Planned)
+
+1. Track `_nalt_citation_order: Dict[str, int]` mapping citation_id → first footnote number
+2. Track `_last_citation_id: Optional[str]` for consecutive detection
+3. Same source consecutively → `ibid` (+ page if different)
+4. Earlier source → `Surname (nN) page`
+5. ~150 additional lines + dedicated tests
 
 ---
 
@@ -519,16 +533,13 @@ Full NALT style guide available at: `/Users/federicodeponte/Downloads/NALT Style
 
 ---
 
-## Open Questions
+## Open Questions (Resolved)
 
-1. **Footnote rendering**: How to handle footnotes in Markdown output? Options:
-   - Markdown footnote syntax `[^1]`
-   - HTML `<sup>` tags
-   - Custom markers for post-processing
+1. **Footnote rendering**: ✅ Resolved — Using Markdown `[^N]` syntax. Pandoc (the export engine) natively supports this for PDF/DOCX output.
 
-2. **Legal source APIs**: Current citation APIs (Crossref, Semantic Scholar) are academic-focused. Need legal databases for case law verification?
+2. **Legal source APIs**: Open — Current citation APIs (Crossref, Semantic Scholar) are academic-focused. Legal databases for case law verification remain a future consideration.
 
-3. **Scope of legal support**: Start with Nigerian law only, or include UK/Commonwealth cases (referenced in NALT guide)?
+3. **Scope of legal support**: ✅ Resolved — Source types (case, statute, constitution, treaty) are generic and work for Nigerian, UK, and Commonwealth legal systems. Not country-specific.
 
 ---
 
@@ -656,25 +667,25 @@ These are style-only and don't need porting.
 | Change | Priority | Effort | Status |
 |--------|----------|--------|--------|
 | API key handling (GEMINI_API_KEY) | High | 10 min | ✅ Already present |
-| Tier-adaptive concurrency | High | 30 min | Pending |
-| Quiet mode in agent_runner | Medium | 15 min | Pending |
-| Path/str flexibility in export | Low | 5 min | Pending |
+| Tier-adaptive concurrency | High | 30 min | ✅ Already present (concurrency_config.py) |
+| Quiet mode in agent_runner | Medium | 15 min | ✅ Phase 3 sync |
+| Path/str flexibility in export | Low | 5 min | ✅ Phase 3 sync |
 | `citation_count` field | Low | 5 min | ✅ Phase 2 |
-| Token tracking system (3 files) | Medium | 30 min | Pending |
+| Token tracking system (3 files) | Medium | 30 min | ✅ Phase 2.5 |
 | Multi-key API rotation (Gemini) | High | — | ✅ Phase 2 |
 | Tenacity retry library | Medium | — | ✅ Phase 2 |
 
 #### Port TO OpenPaper (from OpenDraft)
 
-| Change | Priority | Effort |
-|--------|----------|--------|
-| Preprint handling in scout.md | High | 5 min |
+| Change | Priority | Effort | Status |
+|--------|----------|--------|--------|
+| Preprint handling in scout.md | High | 5 min | ✅ Phase 3 sync |
 
 #### Align Across Both
 
-| Change | Priority | Effort |
-|--------|----------|--------|
-| Supabase env var names | Medium | 15 min |
+| Change | Priority | Effort | Status |
+|--------|----------|--------|--------|
+| Supabase env var names | Medium | 15 min | ✅ Phase 3 sync (both accept both naming conventions) |
 
 ---
 
