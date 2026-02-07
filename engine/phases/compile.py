@@ -164,6 +164,7 @@ def run_compile_and_export(ctx: DraftContext) -> Tuple[Path, Path]:
     from utils.abstract_generator import generate_abstract_for_draft
     from utils.export_professional import export_pdf, export_docx
     from utils.text_utils import clean_ai_language, strip_meta_text, localize_chapter_headings, clean_agent_output
+    from utils.text_cleanup import apply_full_cleanup
     from draft_generator import slugify
 
     if ctx.verbose:
@@ -319,6 +320,25 @@ generated_by: "OpenDraft AI - https://github.com/federicodeponte/opendraft"
     final_draft = deduplicate_appendices(final_draft)
     final_draft = clean_malformed_markdown(final_draft)
     final_draft = clean_agent_output(final_draft)
+
+    # Apply comprehensive text cleanup (vocab diversity, claim calibration, fillers, etc.)
+    cleanup_result = apply_full_cleanup(final_draft)
+    final_draft = cleanup_result["text"]
+    cleanup_stats = cleanup_result["stats"]
+    total_fixes = sum(cleanup_stats.values())
+    logger.info(f"Text cleanup applied: {cleanup_stats}")
+
+    if ctx.verbose and total_fixes > 0:
+        print(f"   ✨ Text cleanup: {total_fixes} fixes (fillers={cleanup_stats['fillers']}, "
+              f"vocab={cleanup_stats['vocab_diversified']}, claims={cleanup_stats['claims_calibrated']})")
+
+    if ctx.tracker and total_fixes > 0:
+        ctx.tracker.log_activity(
+            f"✨ Prose polished ({total_fixes} fixes)",
+            event_type="info",
+            phase="compiling"
+        )
+
     final_draft = clean_ai_language(final_draft)
     final_draft = strip_meta_text(final_draft)
     final_draft = localize_chapter_headings(final_draft, ctx.language)
