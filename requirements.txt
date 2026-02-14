@@ -8,7 +8,7 @@ openai>=1.0.0,<2.0.0
 google-generativeai>=0.8.0,<1.0.0  # Updated for Google Search grounding support
 
 # === Citation Management ===
-pybtex>=0.24.0,<0.25.0      # BibTeX parsing/generation
+pybtex>=0.24.0,<0.26.0      # BibTeX parsing/generation
 citeproc-py>=0.6.0,<0.7.0   # Citation formatting (APA, MLA, Chicago, IEEE)
 PyYAML>=6.0.0,<7.0.0        # YAML frontmatter parsing
 
