@@ -43,6 +43,10 @@ Scope: `/Users/federicodeponte/opendraft`
 - Regression test added:
   - `tests/test_output_cleanliness.py::TestStripMetadata::test_preserve_real_references_section`
 
+### 5) Quality workflow collection error fixed
+- Removed stale `genai.GenerativeModel` type reference from `engine/utils/citation_compiler.py` helper signature.
+- This eliminates import-time `NameError` during pytest collection in CI quality runs.
+
 ## Remaining Tracked Gaps
 - None from this issue set.
 

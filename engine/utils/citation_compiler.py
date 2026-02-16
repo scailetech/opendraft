@@ -977,7 +977,7 @@ def compile_citations_in_file(
     input_path: Path,
     output_path: Path,
     database: CitationDatabase,
-    model: Optional[genai.GenerativeModel] = None,
+    model: Optional[Any] = None,
     research_missing: bool = True
 ) -> Tuple[bool, List[str], List[str]]:
     """
