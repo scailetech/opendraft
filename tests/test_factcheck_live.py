@@ -7,6 +7,7 @@ ABOUTME: Tests claim extraction, evidence search, judge verdicts, and end-to-end
 import json
 import os
 import sys
+import socket
 from pathlib import Path
 
 import pytest
@@ -33,6 +34,33 @@ def require_api_key():
     if not key:
         pytest.skip("GOOGLE_API_KEY / GEMINI_API_KEY not set")
     return key
+
+
+def require_network_access():
+    """Skip test if outbound network/DNS for Gemini endpoint is unavailable."""
+    try:
+        socket.getaddrinfo("generativelanguage.googleapis.com", 443, proto=socket.IPPROTO_TCP)
+    except OSError as e:
+        pytest.skip(f"Network/DNS unavailable for Gemini endpoint: {e}")
+
+
+def is_network_error(exc: Exception) -> bool:
+    """Detect connectivity-related errors in restricted environments."""
+    if isinstance(exc, OSError):
+        return True
+    error_text = str(exc).lower()
+    network_markers = [
+        "connecterror",
+        "connection error",
+        "connection reset",
+        "timed out",
+        "deadline exceeded",
+        "temporary failure in name resolution",
+        "name or service not known",
+        "nodename nor servname",
+        "[errno 8]",
+    ]
+    return any(marker in error_text for marker in network_markers)
 
 
 def strip_and_parse_json(text: str):
@@ -77,7 +105,8 @@ def test_claim_extraction():
     Feed a fake draft with known claims to the factcheck_extract prompt.
     Verify output is valid JSON with correct structure and captures key claims.
     """
-    api_key = require_api_key()
+    require_api_key()
+    require_network_access()
 
     from utils.agent_runner import setup_model, run_agent
 
@@ -86,14 +115,19 @@ def test_claim_extraction():
     # Read the extraction prompt
     prompt_path = "prompts/04_validate/factcheck_extract.md"
 
-    extraction_output = run_agent(
-        model=model,
-        name="FactCheck - Claim Extraction (test)",
-        prompt_path=prompt_path,
-        user_input=f"Extract all verifiable factual claims from this draft:\n\n{FAKE_DRAFT}",
-        skip_validation=True,
-        verbose=False,
-    )
+    try:
+        extraction_output = run_agent(
+            model=model,
+            name="FactCheck - Claim Extraction (test)",
+            prompt_path=prompt_path,
+            user_input=f"Extract all verifiable factual claims from this draft:\n\n{FAKE_DRAFT}",
+            skip_validation=True,
+            verbose=False,
+        )
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during live extraction: {e}")
+        raise
 
     # Parse the output
     claims = strip_and_parse_json(extraction_output)
@@ -137,6 +171,7 @@ def test_evidence_search():
     Test that _search_evidence returns useful evidence for known claims.
     """
     api_key = require_api_key()
+    require_network_access()
 
     from utils.agent_runner import setup_model
     model = setup_model()
@@ -144,12 +179,22 @@ def test_evidence_search():
     verifier = FactCheckVerifier(api_key=api_key, model=model)
 
     # Test with a well-known false claim
-    evidence_false = verifier._search_evidence("GPT-4 was released in 2022")
+    try:
+        evidence_false = verifier._search_evidence("GPT-4 was released in 2022")
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during evidence search: {e}")
+        raise
     assert len(evidence_false) >= 1, "Expected at least 1 evidence item for GPT-4 claim"
     assert evidence_false[0]["snippet"], "Evidence snippet should not be empty"
 
     # Test with a well-known true claim
-    evidence_true = verifier._search_evidence("Python was created by Guido van Rossum")
+    try:
+        evidence_true = verifier._search_evidence("Python was created by Guido van Rossum")
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during evidence search: {e}")
+        raise
     assert len(evidence_true) >= 1, "Expected at least 1 evidence item for Python claim"
     assert evidence_true[0]["snippet"], "Evidence snippet should not be empty"
 
@@ -164,6 +209,7 @@ def test_judge():
     Test that _judge returns correct verdicts given claim + evidence pairs.
     """
     api_key = require_api_key()
+    require_network_access()
 
     from utils.agent_runner import setup_model
     model = setup_model()
@@ -183,7 +229,12 @@ def test_judge():
             "title": "GPT-4 - Wikipedia",
         }
     ]
-    verdict_false = verifier._judge(false_claim, contradicting_evidence)
+    try:
+        verdict_false = verifier._judge(false_claim, contradicting_evidence)
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during judge call: {e}")
+        raise
     assert verdict_false["verdict"] == VERDICT_CONTRADICTED, \
         f"Expected CONTRADICTED for false claim, got: {verdict_false['verdict']}"
     # wrong_part should be set and be a substring of the claim
@@ -204,7 +255,12 @@ def test_judge():
             "title": "Python (programming language)",
         }
     ]
-    verdict_true = verifier._judge(true_claim, supporting_evidence)
+    try:
+        verdict_true = verifier._judge(true_claim, supporting_evidence)
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during judge call: {e}")
+        raise
     assert verdict_true["verdict"] == VERDICT_SUPPORTED, \
         f"Expected SUPPORTED for true claim, got: {verdict_true['verdict']}"
 
@@ -214,7 +270,12 @@ def test_judge():
         "section": "2.3",
         "line": "our experiments show the XYZ algorithm reduces latency by 47.3%",
     }
-    verdict_unknown = verifier._judge(unknown_claim, [])
+    try:
+        verdict_unknown = verifier._judge(unknown_claim, [])
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during judge call: {e}")
+        raise
     assert verdict_unknown["verdict"] == VERDICT_INSUFFICIENT, \
         f"Expected INSUFFICIENT for empty evidence, got: {verdict_unknown['verdict']}"
 
@@ -229,6 +290,7 @@ def test_end_to_end():
     Full pipeline: fake draft -> extract claims -> verify -> report.
     """
     api_key = require_api_key()
+    require_network_access()
 
     from utils.agent_runner import setup_model, run_agent
 
@@ -236,14 +298,19 @@ def test_end_to_end():
 
     # Step 1: Extract claims
     prompt_path = "prompts/04_validate/factcheck_extract.md"
-    extraction_output = run_agent(
-        model=model,
-        name="FactCheck - Claim Extraction (e2e test)",
-        prompt_path=prompt_path,
-        user_input=f"Extract all verifiable factual claims from this draft:\n\n{FAKE_DRAFT}",
-        skip_validation=True,
-        verbose=False,
-    )
+    try:
+        extraction_output = run_agent(
+            model=model,
+            name="FactCheck - Claim Extraction (e2e test)",
+            prompt_path=prompt_path,
+            user_input=f"Extract all verifiable factual claims from this draft:\n\n{FAKE_DRAFT}",
+            skip_validation=True,
+            verbose=False,
+        )
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during e2e extraction: {e}")
+        raise
 
     claims = strip_and_parse_json(extraction_output)
     assert isinstance(claims, list), f"Expected list, got {type(claims)}"
@@ -251,7 +318,12 @@ def test_end_to_end():
 
     # Step 2: Verify claims
     verifier = FactCheckVerifier(api_key=api_key, model=model)
-    results = verifier.verify_claims(claims)
+    try:
+        results = verifier.verify_claims(claims)
+    except Exception as e:
+        if is_network_error(e):
+            pytest.skip(f"Network unavailable during e2e verification: {e}")
+        raise
     assert len(results) >= 2, f"Expected at least 2 results, got {len(results)}"
 
     # Step 3: Format report
