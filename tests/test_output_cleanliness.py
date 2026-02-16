@@ -249,6 +249,22 @@ class TestStripMetadata:
         assert "Introduction: 450 words" not in result
         assert "Three key themes emerged from the data." in result
 
+    def test_preserve_real_references_section(self):
+        text = (
+            "# Conclusion\n"
+            "\n"
+            "The findings support the core thesis.\n"
+            "\n"
+            "## References\n"
+            "\n"
+            "- Smith, J. (2020). Housing Markets.\n"
+            "- Brown, A. (2021). Urban Policy.\n"
+        )
+        result = clean_agent_output(text)
+        assert "## References" in result
+        assert "Housing Markets" in result
+        assert "Urban Policy" in result
+
     def test_strip_metadata_preserves_content(self):
         text = (
             "# 3. Methodology\n"

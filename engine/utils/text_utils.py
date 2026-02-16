@@ -598,7 +598,6 @@ def _strip_metadata_sections(text: str) -> str:
         r'Word\s+Count\s+Breakdown',
         r'Key\s+Points?',
         r'Key\s+Takeaways?',
-        r'References',
         r'Draft\s+Notes?',
         r'Summary\s+of\s+(?:Changes|Edits|Revisions)',
     ]
