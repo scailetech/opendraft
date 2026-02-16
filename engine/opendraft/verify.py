@@ -9,7 +9,7 @@ from pathlib import Path
 def check_python_version():
     """Check if Python version is compatible."""
     version = sys.version_info
-    required = (3, 9)
+    required = (3, 10)
 
     print(f"🐍 Python version: {version.major}.{version.minor}.{version.micro}")
 

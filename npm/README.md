@@ -13,7 +13,7 @@ That's it! The CLI will guide you through setup.
 ## Requirements
 
 - **Node.js 14+** (for npx)
-- **Python 3.10+** (installed automatically on first run)
+- **Python 3.10+** (must be installed on your system)
 
 ## Usage
 
