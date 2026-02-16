@@ -250,6 +250,10 @@ Contributions welcome!
 - Add export formats
 - Translate prompts
 
+Maintainer workflow docs:
+- Push/auth runbook: `docs/MAINTAINER_PUSH_RUNBOOK.md`
+- Automated push preflight: `scripts/push-preflight.sh`
+
 ---
 
 ## Links
