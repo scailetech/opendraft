@@ -44,7 +44,9 @@ def test_polish_has_grammar_section():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_polish_has_data_plurality_rule():
@@ -70,7 +72,9 @@ def test_polish_has_data_plurality_rule():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_polish_has_tense_guidance():
@@ -95,7 +99,9 @@ def test_polish_has_tense_guidance():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_polish_has_which_that_rule():
@@ -120,7 +126,9 @@ def test_polish_has_which_that_rule():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

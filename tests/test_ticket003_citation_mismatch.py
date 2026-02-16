@@ -49,7 +49,9 @@ def test_verifier_has_named_entity_checks():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_verifier_shows_wrong_vs_right():
@@ -74,7 +76,9 @@ def test_verifier_shows_wrong_vs_right():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_crafter_has_named_tool_warning():
@@ -100,7 +104,9 @@ def test_crafter_has_named_tool_warning():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

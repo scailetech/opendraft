@@ -47,7 +47,9 @@ def test_skeptic_has_reference_quality():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_skeptic_shows_red_flags():
@@ -73,7 +75,9 @@ def test_skeptic_shows_red_flags():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_crafter_has_no_padding_warning():
@@ -100,7 +104,9 @@ def test_crafter_has_no_padding_warning():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

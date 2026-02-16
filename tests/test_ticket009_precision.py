@@ -45,7 +45,9 @@ def test_crafter_has_precision_section():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_crafter_has_dunedinpace_example():
@@ -70,7 +72,9 @@ def test_crafter_has_dunedinpace_example():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_crafter_has_precision_rules():
@@ -96,7 +100,9 @@ def test_crafter_has_precision_rules():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

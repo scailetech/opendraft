@@ -46,7 +46,9 @@ def test_formatter_has_url_priority():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_formatter_bans_discovery_tools():
@@ -76,7 +78,9 @@ def test_formatter_bans_discovery_tools():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_formatter_explains_why():
@@ -101,7 +105,9 @@ def test_formatter_explains_why():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

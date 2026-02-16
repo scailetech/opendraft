@@ -47,7 +47,9 @@ def test_polish_has_claim_calibration():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_polish_has_replacement_table():
@@ -73,7 +75,9 @@ def test_polish_has_replacement_table():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_crafter_has_claim_calibration():
@@ -99,7 +103,9 @@ def test_crafter_has_claim_calibration():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

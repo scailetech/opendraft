@@ -49,7 +49,9 @@ def test_verifier_has_preprint_checks():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_verifier_shows_update_example():
@@ -74,7 +76,9 @@ def test_verifier_shows_update_example():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_scout_has_preprint_handling():
@@ -102,7 +106,9 @@ def test_scout_has_preprint_handling():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

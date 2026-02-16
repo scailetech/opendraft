@@ -44,7 +44,9 @@ def test_signal_has_domain_section():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_signal_has_epigenetics_requirements():
@@ -70,7 +72,9 @@ def test_signal_has_epigenetics_requirements():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_signal_has_ml_requirements():
@@ -97,7 +101,9 @@ def test_signal_has_ml_requirements():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_signal_has_technical_gaps():
@@ -124,7 +130,9 @@ def test_signal_has_technical_gaps():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():
