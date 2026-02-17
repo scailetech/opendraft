@@ -3,7 +3,7 @@
 ABOUTME: Production-grade retry decorator with exponential backoff and jitter
 ABOUTME: Provides resilient error recovery for network operations and transient failures
 
-This module implements a robust retry mechanism following industry best practices:
+This module implements a robust retry mechanism powered by Tenacity:
 - Exponential backoff to avoid overwhelming failing services
 - Jitter to prevent thundering herd problem
 - Configurable max attempts and delays
@@ -16,11 +16,17 @@ Design Principles:
 - Production-grade: Handles transient failures gracefully
 """
 
-import time
 import random
 import functools
 from typing import TypeVar, Callable, Optional, Type, Tuple, Any
 from utils.logging_config import get_logger
+from tenacity import (
+    retry as tenacity_retry,
+    stop_after_attempt,
+    wait_exponential_jitter,
+    retry_if_exception_type,
+    RetryCallState,
+)
 
 logger = get_logger(__name__)
 
@@ -93,50 +99,43 @@ def retry(
     Raises:
         The last exception if all retries are exhausted
     """
+    def _before_sleep(retry_state: RetryCallState) -> None:
+        """Log warning and call on_retry callback before each retry sleep."""
+        exc = retry_state.outcome.exception() if retry_state.outcome else None
+        attempt_number = retry_state.attempt_number
+        func_name = retry_state.fn.__name__ if retry_state.fn else "unknown"
+
+        logger.warning(
+            f"{func_name} failed (attempt {attempt_number}/{max_attempts}): {exc}"
+            f" - Retrying..."
+        )
+
+        if on_retry and exc:
+            on_retry(exc, attempt_number)
+
+    def _after_final_failure(retry_state: RetryCallState) -> None:
+        """Log error when all retry attempts are exhausted."""
+        if retry_state.outcome and retry_state.outcome.failed:
+            if retry_state.attempt_number >= max_attempts:
+                exc = retry_state.outcome.exception()
+                func_name = retry_state.fn.__name__ if retry_state.fn else "unknown"
+                logger.error(
+                    f"{func_name} failed after {max_attempts} attempts: {exc}",
+                    exc_info=exc,
+                )
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        @tenacity_retry(
+            stop=stop_after_attempt(max_attempts),
+            wait=wait_exponential_jitter(initial=base_delay, max=max_delay, jitter=base_delay * 0.25),
+            retry=retry_if_exception_type(exceptions),
+            reraise=True,
+            before_sleep=_before_sleep,
+            after=_after_final_failure,
+        )
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
-            last_exception: Optional[Exception] = None
-
-            for attempt in range(max_attempts):
-                try:
-                    # Attempt the function call
-                    return func(*args, **kwargs)
-
-                except exceptions as e:
-                    last_exception = e
-
-                    # If this was the last attempt, re-raise
-                    if attempt == max_attempts - 1:
-                        logger.error(
-                            f"{func.__name__} failed after {max_attempts} attempts: {str(e)}",
-                            exc_info=True
-                        )
-                        raise
-
-                    # Calculate backoff delay
-                    delay = exponential_backoff_with_jitter(
-                        attempt, base_delay, max_delay
-                    )
-
-                    # Log retry
-                    logger.warning(
-                        f"{func.__name__} failed (attempt {attempt + 1}/{max_attempts}): {str(e)}"
-                        f" - Retrying in {delay:.2f}s..."
-                    )
-
-                    # Call custom retry callback if provided
-                    if on_retry:
-                        on_retry(e, attempt + 1)
-
-                    # Wait before retrying
-                    time.sleep(delay)
-
-            # Should never reach here, but type checker needs it
-            if last_exception:
-                raise last_exception
-
-            raise RuntimeError(f"{func.__name__}: Unreachable code reached")
+            return func(*args, **kwargs)
 
         return wrapper
     return decorator
@@ -172,49 +171,60 @@ def retry_on_network_error(
     """
     import requests
 
-    def should_retry_http_error(exc: requests.HTTPError) -> bool:
-        """Check if HTTP error is retriable (5xx only)."""
-        if exc.response is None:
+    def _should_retry(retry_state: RetryCallState) -> bool:
+        """Custom predicate: retry on Timeout, ConnectionError, or 5xx HTTPError."""
+        if retry_state.outcome is None:
+            return False
+        exc = retry_state.outcome.exception()
+        if exc is None:
+            return False
+        if isinstance(exc, (requests.Timeout, requests.ConnectionError)):
             return True
-        # Retry 5xx server errors, not 4xx client errors
-        return 500 <= exc.response.status_code < 600
+        if isinstance(exc, requests.HTTPError):
+            if exc.response is None:
+                return True
+            return 500 <= exc.response.status_code < 600
+        return False
 
-    def custom_exception_filter(func: Callable[..., T]) -> Callable[..., T]:
+    def _before_sleep(retry_state: RetryCallState) -> None:
+        """Log warning before each retry sleep."""
+        exc = retry_state.outcome.exception() if retry_state.outcome else None
+        attempt_number = retry_state.attempt_number
+        func_name = retry_state.fn.__name__ if retry_state.fn else "unknown"
+
+        if isinstance(exc, requests.HTTPError) and exc.response is not None:
+            logger.warning(
+                f"HTTP {exc.response.status_code} error "
+                f"(attempt {attempt_number}/{max_attempts}) - Retrying..."
+            )
+        else:
+            logger.warning(
+                f"Network error (attempt {attempt_number}/{max_attempts}): {exc} "
+                f"- Retrying..."
+            )
+
+    def _after_final_failure(retry_state: RetryCallState) -> None:
+        """Log error when all retry attempts are exhausted."""
+        if retry_state.outcome and retry_state.outcome.failed:
+            if retry_state.attempt_number >= max_attempts:
+                exc = retry_state.outcome.exception()
+                logger.error(f"Network error after {max_attempts} attempts: {exc}")
+
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        @tenacity_retry(
+            stop=stop_after_attempt(max_attempts),
+            wait=wait_exponential_jitter(initial=base_delay, max=max_delay, jitter=base_delay * 0.25),
+            retry=_should_retry,
+            reraise=True,
+            before_sleep=_before_sleep,
+            after=_after_final_failure,
+        )
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
-            for attempt in range(max_attempts):
-                try:
-                    return func(*args, **kwargs)
-
-                except (requests.Timeout, requests.ConnectionError) as e:
-                    # Always retry timeouts and connection errors
-                    if attempt == max_attempts - 1:
-                        logger.error(f"Network error after {max_attempts} attempts: {e}")
-                        raise
-
-                    delay = exponential_backoff_with_jitter(attempt, base_delay, max_delay)
-                    logger.warning(
-                        f"Network error (attempt {attempt + 1}/{max_attempts}): {e} "
-                        f"- Retrying in {delay:.2f}s..."
-                    )
-                    time.sleep(delay)
-
-                except requests.HTTPError as e:
-                    # Only retry 5xx errors
-                    if not should_retry_http_error(e) or attempt == max_attempts - 1:
-                        raise
-
-                    delay = exponential_backoff_with_jitter(attempt, base_delay, max_delay)
-                    logger.warning(
-                        f"HTTP {e.response.status_code if e.response else 'N/A'} error "
-                        f"(attempt {attempt + 1}/{max_attempts}) - Retrying in {delay:.2f}s..."
-                    )
-                    time.sleep(delay)
-
-            raise RuntimeError(f"{func.__name__}: Unreachable code reached")
+            return func(*args, **kwargs)
 
         return wrapper
-    return custom_exception_filter
+    return decorator
 
 
 # Example usage and testing

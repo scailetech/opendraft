@@ -458,6 +458,200 @@ def estimate_tokens(text: str, chars_per_token: float = 4.0) -> int:
     return int(len(text) / chars_per_token)
 
 
+def clean_agent_output(text: str) -> str:
+    """
+    Defense-in-depth scrubbing of raw LLM agent output.
+
+    Applies three passes to remove artifacts that should never appear
+    in downstream content:
+
+    Pass A - Strip planning preambles (Ticket 017):
+        Removes conversational/planning text before actual content begins.
+    Pass B - Strip metadata sections (Ticket 018):
+        Removes meta-commentary lines and sections (word counts, status, etc.).
+    Pass C - Strip cite_MISSING markers (Ticket 019):
+        Removes {cite_MISSING: ...} placeholders before they reach citation compile.
+
+    Args:
+        text: Raw LLM output string
+
+    Returns:
+        Cleaned text with all three artifact types removed
+    """
+    if not text or not text.strip():
+        return text
+
+    text = _strip_planning_preamble(text)
+    text = _strip_metadata_sections(text)
+    text = _strip_cite_missing(text)
+
+    return text
+
+
+def _strip_planning_preamble(text: str) -> str:
+    """
+    Pass A: Remove planning/conversational preamble before actual content.
+
+    Catches patterns like:
+    - "Okay, I understand..."
+    - "Here's my plan..."
+    - "I will write..."
+    - "Let me first..."
+    - "Sure! Here is..."
+    - "Based on the provided..."
+    - "Here is the..."
+    - Numbered planning steps (1. First I'll..., 2. Then I'll...)
+    """
+    preamble_patterns = [
+        r'(?i)^okay[,.]?\s+I\s+(?:understand|will|\'ll)',
+        r'(?i)^here\'?s?\s+(?:my|the)\s+(?:plan|approach|draft|outline)',
+        r'(?i)^I\s+will\s+(?:write|draft|compose|create|start|begin)',
+        r'(?i)^let\s+me\s+(?:first|start|begin|think|plan|outline)',
+        r'(?i)^I\'?ll\s+(?:start|begin|write|draft|first)',
+        r'(?i)^(?:sure|certainly|of course)[,!.]',
+        r'(?i)^\d+\.\s+(?:first|then|next|finally)\b',
+        r'(?i)^sure!\s',
+        r'(?i)^based\s+on\s+the\s+provided\b',
+        r'(?i)^here\s+is\s+the\b',
+    ]
+
+    # Phase 1: heading exists — strip everything before it if preamble detected
+    heading_match = re.search(r'^#{1,6}\s+\S', text, re.MULTILINE)
+
+    if heading_match:
+        before_heading = text[:heading_match.start()]
+        for pattern in preamble_patterns:
+            if re.search(pattern, before_heading.strip(), re.MULTILINE):
+                text = text[heading_match.start():]
+                break
+        return text
+
+    # Phase 2: no heading — strip consecutive preamble lines from the top
+    lines = text.split('\n')
+    first_content_idx = 0
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped:
+            # blank lines between preamble lines are part of the preamble
+            continue
+        is_preamble = False
+        for pattern in preamble_patterns:
+            if re.search(pattern, stripped):
+                is_preamble = True
+                break
+        if is_preamble:
+            first_content_idx = i + 1
+        else:
+            break
+
+    if first_content_idx > 0:
+        # Skip any leading blank lines after preamble
+        while first_content_idx < len(lines) and not lines[first_content_idx].strip():
+            first_content_idx += 1
+        text = '\n'.join(lines[first_content_idx:])
+
+    return text
+
+
+def _strip_metadata_sections(text: str) -> str:
+    """
+    Pass B: Remove metadata lines and entire metadata sections.
+
+    Removes single-line metadata:
+    - **Section:** ...
+    - **Word Count:** ...
+    - **Status:** ...
+
+    Removes entire sections (heading + body until next heading or EOF):
+    - ## Citations Used
+    - ## Notes for Revision
+    - ## Word Count Breakdown
+    """
+    # Single-line metadata patterns (bold-formatted)
+    line_patterns = [
+        r'^\*{2}Section:\*{2}\s*[^\n]*$',
+        r'^\*{2}Word\s*Count:\*{2}\s*[^\n]*$',
+        r'^\*{2}Status:\*{2}\s*[^\n]*$',
+        r'^\*{2}Key\s+Points?:\*{2}\s*[^\n]*$',
+        r'^\*{2}Key\s+Takeaways?:\*{2}\s*[^\n]*$',
+        r'^\*{2}References:\*{2}\s*[^\n]*$',
+        r'^\*{2}Draft\s+Notes?:\*{2}\s*[^\n]*$',
+        r'^\*{2}Target\s+Word\s+Count:\*{2}\s*[^\n]*$',
+        r'^\*{2}Summary:\*{2}\s*[^\n]*$',
+    ]
+
+    # Non-bold single-line metadata patterns
+    nonbold_line_patterns = [
+        r'^Section:\s*[^\n]*$',
+        r'^Word\s+Count:\s*[\d\.,]+[^\n]*$',
+        r'^Status:\s*[^\n]*$',
+        r'^Target\s+Word\s+Count:\s*[\d\.,]+[^\n]*$',
+    ]
+
+    for pattern in line_patterns + nonbold_line_patterns:
+        text = re.sub(pattern, '', text, flags=re.MULTILINE | re.IGNORECASE)
+
+    # Entire metadata sections: heading + content until next heading or EOF
+    section_headings = [
+        r'Citations?\s+Used',
+        r'Notes?\s+for\s+Revision',
+        r'Word\s+Count\s+Breakdown',
+        r'Key\s+Points?',
+        r'Key\s+Takeaways?',
+        r'Draft\s+Notes?',
+        r'Summary\s+of\s+(?:Changes|Edits|Revisions)',
+    ]
+    for heading in section_headings:
+        # Match ## heading + everything until next ## heading or end of string
+        # Uses DOTALL-free approach: match the heading line, then greedily consume
+        # all subsequent lines that don't start with a markdown heading
+        # Note: pattern built via concatenation to avoid rf-string escaping issues
+        pattern = r'^#{1,6}\s+' + heading + r'[^\n]*(?:\n(?!#{1,6}\s).*)*'
+        text = re.sub(pattern, '', text, flags=re.MULTILINE | re.IGNORECASE)
+
+    # Clean up multiple consecutive blank lines
+    text = re.sub(r'\n{3,}', '\n\n', text)
+
+    return text.strip()
+
+
+def _strip_cite_missing(text: str) -> str:
+    """
+    Pass C: Remove {cite_MISSING: ...} and {cite_MISSING:...} placeholders.
+
+    These markers indicate the LLM couldn't find a real citation.
+    They must be removed before reaching compile_citations().
+    """
+    text = re.sub(r'\{cite_MISSING\s*:\s*[^}]*\}', '', text)
+
+    # Clean up dangling prepositions from common citation phrases
+    # e.g. "According to , cities" → ", cities" → "Cities" (handled below)
+    dangling_phrases = [
+        r'[Aa]ccording\s+to\s*,',
+        r'[Aa]s\s+shown\s+by\s*,',
+        r'[Aa]s\s+described\s+by\s*,',
+        r'[Aa]s\s+noted\s+by\s*,',
+        r'[Rr]eported\s+by\s*,',
+    ]
+    for phrase in dangling_phrases:
+        text = re.sub(phrase, ',', text)
+
+    # Clean up leading comma at sentence start: ". , Foo" or start-of-text ", Foo"
+    # Capitalize the next word after removing the leading comma
+    text = re.sub(
+        r'(?:(?<=\.)|(?<=\n)|(?:^))\s*,\s+([a-z])',
+        lambda m: ' ' + m.group(1).upper() if text[max(0, m.start()-1):m.start()] else m.group(1).upper(),
+        text,
+    )
+
+    # Clean up any double spaces left behind
+    text = re.sub(r'  +', ' ', text)
+    # Clean up space before punctuation (e.g. "to , cities" → "to, cities")
+    text = re.sub(r' +([.,;:!?])', r'\1', text)
+
+    return text
+
+
 def clean_ai_language(text: str) -> str:
     """
     Clean AI-typical language patterns from text.
@@ -576,3 +770,51 @@ def clean_ai_language(text: str) -> str:
     text = re.sub(r'\. +([a-z])', lambda m: '. ' + m.group(1).upper(), text)
 
     return text
+
+
+# =============================================================================
+# SHARED UTILITIES (to avoid circular imports from draft_generator.py)
+# =============================================================================
+
+def slugify(text: str, max_length: int = 30) -> str:
+    """Convert text to a safe filename slug."""
+    slug = re.sub(r'[^\w\s-]', '', text.lower())
+    slug = re.sub(r'[\s_]+', '_', slug).strip('_')
+    return slug[:max_length]
+
+
+def get_language_name(language_code: str) -> str:
+    """
+    Convert language code to full language name for prompts and formatting.
+
+    Args:
+        language_code: ISO 639-1 language code (e.g., 'en-US', 'en-GB', 'es', 'fr')
+
+    Returns:
+        Full language name (e.g., 'American English', 'British English', 'Spanish', 'French')
+    """
+    language_map = {
+        'en': 'English', 'en-US': 'American English', 'en-GB': 'British English',
+        'en-AU': 'Australian English', 'en-CA': 'Canadian English',
+        'en-NZ': 'New Zealand English', 'en-IE': 'Irish English',
+        'en-ZA': 'South African English',
+        'de': 'German', 'de-DE': 'German (Germany)', 'de-AT': 'German (Austria)',
+        'de-CH': 'German (Switzerland)',
+        'es': 'Spanish', 'es-ES': 'Spanish (Spain)', 'es-MX': 'Spanish (Mexico)',
+        'es-AR': 'Spanish (Argentina)',
+        'fr': 'French', 'fr-FR': 'French (France)', 'fr-CA': 'French (Canada)',
+        'fr-BE': 'French (Belgium)',
+        'it': 'Italian',
+        'pt': 'Portuguese', 'pt-BR': 'Portuguese (Brazil)', 'pt-PT': 'Portuguese (Portugal)',
+        'nl': 'Dutch', 'nl-NL': 'Dutch (Netherlands)', 'nl-BE': 'Dutch (Belgium)',
+        'ru': 'Russian',
+        'zh': 'Chinese', 'zh-CN': 'Chinese (Simplified)', 'zh-TW': 'Chinese (Traditional)',
+        'ja': 'Japanese', 'ko': 'Korean', 'ar': 'Arabic', 'hi': 'Hindi',
+        'sv': 'Swedish', 'no': 'Norwegian', 'da': 'Danish', 'fi': 'Finnish',
+        'pl': 'Polish', 'cs': 'Czech', 'tr': 'Turkish', 'he': 'Hebrew',
+        'th': 'Thai', 'vi': 'Vietnamese', 'id': 'Indonesian', 'ms': 'Malay',
+        'uk': 'Ukrainian', 'ro': 'Romanian', 'hu': 'Hungarian', 'el': 'Greek',
+        'bg': 'Bulgarian', 'hr': 'Croatian', 'sk': 'Slovak', 'sl': 'Slovenian',
+        'et': 'Estonian', 'lv': 'Latvian', 'lt': 'Lithuanian',
+    }
+    return language_map.get(language_code, language_code.upper())

@@ -34,7 +34,7 @@ if sys.version_info < (3, 10):
     print()
     sys.exit(1)
 
-# Suppress deprecation warnings from dependencies (google-generativeai, weasyprint)
+# Suppress deprecation warnings from dependencies (Gemini SDK, weasyprint)
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -516,9 +516,9 @@ def run_interactive():
         "Citation style",
         [
             ("APA 7th Edition", "apa"),
-            ("MLA 9th Edition", "mla"),
-            ("Chicago", "chicago"),
             ("IEEE", "ieee"),
+            ("Chicago (Author-Date)", "chicago"),
+            ("MLA 9th Edition", "mla"),
         ],
         default=0
     )
@@ -667,7 +667,7 @@ def run_interactive():
             institution=institution,
             department=department,
             advisor=advisor,
-            citation_style=style
+            citation_style=style,
         )
 
         print()
@@ -768,9 +768,9 @@ def main():
 
     parser.add_argument(
         "--style", "-s",
-        choices=["apa", "mla", "chicago", "ieee"],
+        choices=["apa", "ieee", "chicago", "mla", "nalt"],
         default="apa",
-        help="Citation style"
+        help="Citation style (apa, ieee, chicago, mla, nalt)"
     )
 
     parser.add_argument(
@@ -821,6 +821,12 @@ def main():
         "--expose",
         action="store_true",
         help="Generate research exposé only (faster, no full draft)"
+    )
+
+    parser.add_argument(
+        "--resume",
+        type=Path,
+        help="Resume from checkpoint (path to checkpoint.json or output directory)"
     )
 
     args = parser.parse_args()
@@ -908,6 +914,22 @@ def main():
         output_dir = args.output or Path.cwd() / 'opendraft_output'
         output_type = 'expose' if args.expose else 'full'
 
+        # Handle resume from checkpoint
+        resume_from = None
+        if args.resume:
+            resume_path = Path(args.resume)
+            if resume_path.is_dir():
+                resume_from = resume_path / "checkpoint.json"
+            else:
+                resume_from = resume_path
+            if resume_from.exists():
+                print(f"  {c.CYAN}Resuming from checkpoint...{c.RESET}")
+                # Use output_dir from checkpoint location
+                output_dir = resume_from.parent
+            else:
+                print(f"  {c.YELLOW}!{c.RESET} Checkpoint not found: {resume_from}")
+                resume_from = None
+
         pdf_path, docx_path = generate_draft(
             topic=args.topic,
             language=args.lang,
@@ -921,7 +943,8 @@ def main():
             institution=args.institution,
             department=args.department,
             advisor=args.advisor,
-            citation_style=args.style
+            citation_style=args.style,
+            resume_from=resume_from,
         )
 
         print()

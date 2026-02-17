@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""
+ABOUTME: DraftContext dataclass — mutable shared state for inter-phase communication
+ABOUTME: Each phase reads inputs from ctx and writes outputs back to ctx
+"""
+
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+
+@dataclass
+class DraftContext:
+    """
+    Mutable inter-phase communication bus for draft generation.
+
+    Each phase function takes a DraftContext, reads its inputs,
+    and writes its outputs back onto the same object.
+    """
+
+    # ------------------------------------------------------------------
+    # User inputs (set once at initialization)
+    # ------------------------------------------------------------------
+    topic: str = ""
+    language: str = "en"
+    academic_level: str = "master"
+    output_type: str = "full"  # 'full' or 'expose'
+    citation_style: str = "apa"  # 'apa', 'ieee', or 'nalt'
+    skip_validation: bool = True
+    verbose: bool = True
+    blurb: Optional[str] = None
+
+    # Academic metadata (optional, for cover page)
+    author_name: Optional[str] = None
+    institution: Optional[str] = None
+    department: Optional[str] = None
+    faculty: Optional[str] = None
+    advisor: Optional[str] = None
+    second_examiner: Optional[str] = None
+    location: Optional[str] = None
+    student_id: Optional[str] = None
+
+    # ------------------------------------------------------------------
+    # Infrastructure (set during initialization)
+    # ------------------------------------------------------------------
+    config: Any = None  # AppConfig instance
+    model: Any = None  # GenerativeModel instance
+    folders: Dict[str, Path] = field(default_factory=dict)
+    word_targets: Dict[str, Any] = field(default_factory=dict)
+    language_name: str = ""
+    language_instruction: str = ""
+
+    # Progress reporting (optional)
+    tracker: Any = None  # ProgressTracker
+    streamer: Any = None  # MilestoneStreamer
+
+    # ------------------------------------------------------------------
+    # Research phase outputs
+    # ------------------------------------------------------------------
+    scout_result: Optional[Dict[str, Any]] = None
+    scout_output: str = ""
+    scribe_output: str = ""
+    signal_output: str = ""
+
+    # ------------------------------------------------------------------
+    # Structure phase outputs
+    # ------------------------------------------------------------------
+    architect_output: str = ""
+    formatter_output: str = ""
+
+    # ------------------------------------------------------------------
+    # Citation management outputs
+    # ------------------------------------------------------------------
+    citation_database: Any = None  # CitationDatabase
+    citation_summary: str = ""
+
+    # ------------------------------------------------------------------
+    # Compose phase outputs
+    # ------------------------------------------------------------------
+    intro_output: str = ""
+    lit_review_output: str = ""
+    methodology_output: str = ""
+    results_output: str = ""
+    discussion_output: str = ""
+    body_output: str = ""
+    conclusion_output: str = ""
+    appendix_output: str = ""
+
+    # ------------------------------------------------------------------
+    # Token tracking (optional)
+    # ------------------------------------------------------------------
+    token_tracker: Any = None  # TokenTracker

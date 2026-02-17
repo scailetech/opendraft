@@ -44,7 +44,9 @@ def test_narrator_has_document_type_section():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_narrator_lists_document_types():
@@ -70,7 +72,9 @@ def test_narrator_lists_document_types():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_narrator_shows_inconsistency_example():
@@ -95,7 +99,9 @@ def test_narrator_shows_inconsistency_example():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

@@ -44,7 +44,9 @@ def test_polish_has_repetition_detection():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_polish_lists_overused_words():
@@ -69,7 +71,9 @@ def test_polish_lists_overused_words():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_polish_shows_variation_suggestions():
@@ -94,7 +98,9 @@ def test_polish_shows_variation_suggestions():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

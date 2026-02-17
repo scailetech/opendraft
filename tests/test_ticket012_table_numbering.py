@@ -46,7 +46,9 @@ def test_formatter_has_numbering_section():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_formatter_shows_correct_numbering():
@@ -72,7 +74,9 @@ def test_formatter_shows_correct_numbering():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_formatter_has_cross_reference_guidance():
@@ -97,7 +101,9 @@ def test_formatter_has_cross_reference_guidance():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

@@ -10,7 +10,7 @@ from typing import Literal, Optional, Dict, Tuple
 from pathlib import Path
 import json
 
-import google.generativeai as genai
+from google import genai
 
 
 class APITierDetector:
@@ -36,9 +36,9 @@ class APITierDetector:
             api_key: Gemini API key (uses GOOGLE_API_KEY env var if not provided)
             force_detect: Force fresh detection (ignore cache)
         """
-        self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
+        self.api_key = api_key or os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
         if not self.api_key:
-            raise ValueError("GOOGLE_API_KEY not found in environment")
+            raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY not found in environment")
 
         self.force_detect = force_detect
         self._cached_result: Optional[Dict] = None
@@ -129,12 +129,9 @@ class APITierDetector:
         Returns:
             tuple: (tier_name, rpm_limit)
         """
-        genai.configure(api_key=self.api_key)
+        client = genai.Client(api_key=self.api_key)
 
         try:
-            # Create test model (lightweight)
-            model = genai.GenerativeModel('gemini-2.5-flash', tools=None)
-
             # Test 1: Send 3 rapid requests (2 seconds apart = 90 RPM equivalent)
             if verbose:
                 print("  Testing rate limit (3 rapid requests)...")
@@ -145,9 +142,10 @@ class APITierDetector:
             for i in range(request_count):
                 try:
                     # Minimal request to test rate limiting
-                    model.generate_content(
-                        "Say OK",
-                        generation_config={"max_output_tokens": 5}
+                    client.models.generate_content(
+                        model='gemini-2.5-flash',
+                        contents="Say OK",
+                        config={"max_output_tokens": 5},
                     )
 
                     if verbose:

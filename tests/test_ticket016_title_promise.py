@@ -44,7 +44,9 @@ def test_architect_has_title_promise_section():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_architect_has_keyword_table():
@@ -70,7 +72,9 @@ def test_architect_has_keyword_table():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_architect_has_evaluation_framework():
@@ -96,7 +100,9 @@ def test_architect_has_evaluation_framework():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_architect_shows_audit_example():
@@ -120,7 +126,9 @@ def test_architect_shows_audit_example():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

@@ -12,9 +12,15 @@ from typing import Optional, Dict, Any, Tuple, List, Callable
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
+from pydantic import ValidationError
+
 # Safe print function that handles broken pipes (worker runs with stdio: 'ignore')
 def safe_print(*args, **kwargs):
-    """Print wrapper that catches BrokenPipeError when stdout is closed."""
+    """Print wrapper that catches BrokenPipeError and respects verbosity settings."""
+    # In quiet mode, suppress detailed research output
+    if not _verbose_research:
+        return
+
     try:
         print(*args, **kwargs)
     except (BrokenPipeError, OSError):
@@ -30,8 +36,11 @@ def safe_print(*args, **kwargs):
 from .crossref import CrossrefClient
 from .semantic_scholar import SemanticScholarClient
 from .gemini_grounded import GeminiGroundedClient
+from .serper_client import SerperClient
 from .query_router import QueryRouter, QueryClassification
 from .base import validate_publication_year, validate_author_name
+
+from ..models import strip_markdown_json, LLMCitationResponse
 
 # =========================================================================
 # Preprint Detection (Fix 3 from devil's advocate analysis)
@@ -67,6 +76,44 @@ logger = logging.getLogger(__name__)
 _verbose_research = True
 
 
+def set_research_verbosity(verbose: bool) -> None:
+    """Control verbosity of research output for CLI mode."""
+    global _verbose_research
+    _verbose_research = verbose
+
+
+# =========================================================================
+# Rate Limiting
+# =========================================================================
+class GeminiRateLimiter:
+    """Simple rate limiter for Gemini API calls (free tier: ~60 req/min)."""
+
+    def __init__(self, requests_per_minute: int = 60):
+        self.requests_per_minute = requests_per_minute
+        self.min_interval = 60.0 / requests_per_minute
+        self.last_request_time = 0
+
+    def wait_if_needed(self) -> None:
+        """Wait if necessary to respect rate limit."""
+        import time
+
+        current_time = time.time()
+        time_since_last = current_time - self.last_request_time
+        if time_since_last < self.min_interval:
+            sleep_time = self.min_interval - time_since_last
+            time.sleep(sleep_time)
+        self.last_request_time = time.time()
+
+
+# Global rate limiter instance
+_gemini_rate_limiter = GeminiRateLimiter()
+
+
+def get_gemini_rate_limiter() -> GeminiRateLimiter:
+    """Get the global Gemini rate limiter instance."""
+    return _gemini_rate_limiter
+
+
 class CitationResearcher:
     """
     Orchestrates citation research across multiple sources with intelligent fallback.
@@ -98,6 +145,7 @@ class CitationResearcher:
         enable_gemini_grounded: bool = True,
         enable_llm_fallback: bool = True,
         enable_smart_routing: bool = True,
+        use_serper: bool = None,  # None = auto-detect from env
         verbose: bool = True,
         progress_callback: Optional[Callable[[str, str], None]] = None,
     ):
@@ -111,6 +159,7 @@ class CitationResearcher:
             enable_gemini_grounded: Whether to use Gemini with Google Search grounding (includes DataForSEO fallback)
             enable_llm_fallback: Whether to fall back to LLM if all else fails
             enable_smart_routing: Whether to use smart query routing (default: True)
+            use_serper: Whether to use Serper.dev instead of Gemini Grounded for web search
             verbose: Whether to print progress
             progress_callback: Optional callback(message, event_type) for progress reporting
         """
@@ -121,6 +170,11 @@ class CitationResearcher:
         self.enable_gemini_grounded = enable_gemini_grounded
         self.enable_llm_fallback = enable_llm_fallback and gemini_model is not None
         self.enable_smart_routing = enable_smart_routing
+        # Auto-detect Serper from env if not explicitly set
+        if use_serper is None:
+            self.use_serper = os.getenv('USE_SERPER', 'false').lower() == 'true'
+        else:
+            self.use_serper = use_serper
         self.verbose = verbose
 
         # Initialize API clients
@@ -128,15 +182,22 @@ class CitationResearcher:
             self.crossref = CrossrefClient()
         if self.enable_semantic_scholar:
             self.semantic_scholar = SemanticScholarClient()
+
+        # Web search client: Serper (preferred) or Gemini Grounded (fallback)
         if self.enable_gemini_grounded:
-            try:
-                self.gemini_grounded = GeminiGroundedClient(
-                    validate_urls=False,  # Disable URL validation to prevent timeouts
-                    timeout=30  # Reduced timeout for fast gemini-2.5-flash
-                )
-            except Exception as e:
-                logger.warning(f"Gemini Grounded client unavailable: {e}")
-                self.enable_gemini_grounded = False
+            if self.use_serper:
+                try:
+                    self.gemini_grounded = SerperClient(
+                        validate_urls=False,  # Disable URL validation for speed
+                        timeout=15,
+                    )
+                    logger.info("Using Serper.dev for web search (replaces Gemini Grounded)")
+                except Exception as e:
+                    logger.warning(f"Serper client unavailable: {e}, falling back to Gemini Grounded")
+                    self.use_serper = False
+                    self._init_gemini_grounded()
+            else:
+                self._init_gemini_grounded()
 
         # Initialize smart query router
         if self.enable_smart_routing:
@@ -150,7 +211,19 @@ class CitationResearcher:
             "Semantic Scholar": 0,
             "Crossref": 0,
             "Gemini Grounded": 0,
+            "Serper": 0,
         }
+
+    def _init_gemini_grounded(self):
+        """Initialize Gemini Grounded client."""
+        try:
+            self.gemini_grounded = GeminiGroundedClient(
+                validate_urls=False,  # Disable URL validation to prevent timeouts
+                timeout=30  # Reduced timeout for fast gemini-2.5-flash
+            )
+        except Exception as e:
+            logger.warning(f"Gemini Grounded client unavailable: {e}")
+            self.enable_gemini_grounded = False
 
     def _report_progress(self, message: str, event_type: str = "search") -> None:
         """Report progress to callback if available."""
@@ -416,12 +489,14 @@ class CitationResearcher:
                 elif api_name == 'gemini_grounded' and self.enable_gemini_grounded:
                     self._report_progress("AI-powered academic search...", "search")
                     if self.verbose:
-                        safe_print(f"    → Trying Gemini Grounded (Google Search)...", end=" ", flush=True)
+                        search_name = "Serper" if self.use_serper else "Gemini Grounded (Google Search)"
+                        safe_print(f"    → Trying {search_name}...", end=" ", flush=True)
                     try:
                         metadata = self.gemini_grounded.search_paper(topic)
                         if metadata and (metadata.get('doi') or metadata.get('url')):
-                            valid_results.append((metadata, "Gemini Grounded"))
-                            self.source_usage_count["Gemini Grounded"] = self.source_usage_count.get("Gemini Grounded", 0) + 1
+                            source_name = "Serper" if self.use_serper else "Gemini Grounded"
+                            valid_results.append((metadata, source_name))
+                            self.source_usage_count[source_name] = self.source_usage_count.get(source_name, 0) + 1
                             if self.verbose:
                                 safe_print(f"✓")
                         else:
@@ -672,6 +747,7 @@ class CitationResearcher:
                 url=metadata.get("url", ""),
                 api_source=source,  # Track which API found this citation
                 abstract=abstract,  # Include abstract from API responses
+                citation_count=metadata.get("citation_count"),
             )
 
             return citation
@@ -691,21 +767,51 @@ class CitationResearcher:
             Tuple of (metadata, source_name) or (None, api_name)
         """
         try:
+            logger.info(f"🔍 [{api_name.upper()}] Starting search for: {topic[:80]}...")
+
             if api_name == 'crossref' and self.enable_crossref:
+                logger.debug(f"  → Calling Crossref API...")
                 metadata = self.crossref.search_paper(topic)
                 if metadata:
+                    logger.info(
+                        f"  ✓ Crossref found: {metadata.get('title', 'Unknown')[:80]}... (DOI: {metadata.get('doi', 'N/A')})"
+                    )
                     return (metadata, "Crossref")
+                else:
+                    logger.debug(f"  ✗ Crossref returned no results")
             elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
+                logger.debug(f"  → Calling Semantic Scholar API...")
                 metadata = self.semantic_scholar.search_paper(topic)
                 if metadata:
+                    logger.info(
+                        f"  ✓ Semantic Scholar found: {metadata.get('title', 'Unknown')[:80]}... (DOI: {metadata.get('doi', 'N/A')})"
+                    )
                     return (metadata, "Semantic Scholar")
+                else:
+                    logger.debug(f"  ✗ Semantic Scholar returned no results")
             elif api_name == 'gemini_grounded' and self.enable_gemini_grounded:
+                logger.debug(f"  → Applying rate limiting before Gemini Grounded call...")
+                rate_limiter = get_gemini_rate_limiter()
+                rate_limiter.wait_if_needed()
+                logger.debug(f"  → Calling Gemini Grounded API...")
                 metadata = self.gemini_grounded.search_paper(topic)
                 if metadata:
-                    return (metadata, "Gemini Grounded")
+                    logger.info(
+                        f"  ✓ Gemini Grounded found: {metadata.get('title', 'Unknown')[:80]}... (URL: {metadata.get('url', 'N/A')[:50]})"
+                    )
+                    source_name = "Serper" if self.use_serper else "Gemini Grounded"
+                    return (metadata, source_name)
+                else:
+                    logger.debug(f"  ✗ Gemini Grounded returned no results")
+
+            return (None, api_name)
+
         except Exception as e:
-            logger.debug(f"{api_name} error: {e}")
-        return (None, api_name)
+            logger.error(
+                f"❌ [{api_name.upper()}] Error during search: {type(e).__name__}: {str(e)[:100]}",
+                exc_info=False,
+            )
+            return (None, api_name)
 
     def _pick_best_result(
         self, 
@@ -826,24 +932,11 @@ Return a JSON object with this structure:
 - If you cannot find a paper, return: {{"error": "No paper found"}}
 """
 
-            # Call Gemini with relaxed safety settings for academic research
-            import google.generativeai as genai
-
-            # Safety settings: Allow academic research content
-            # Default filters are too aggressive for legitimate academic queries
-            safety_settings = {
-                genai.types.HarmCategory.HARM_CATEGORY_HATE_SPEECH: genai.types.HarmBlockThreshold.BLOCK_NONE,
-                genai.types.HarmCategory.HARM_CATEGORY_HARASSMENT: genai.types.HarmBlockThreshold.BLOCK_NONE,
-                genai.types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: genai.types.HarmBlockThreshold.BLOCK_NONE,
-                genai.types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: genai.types.HarmBlockThreshold.BLOCK_NONE,
-            }
-
+            # Call Gemini for LLM fallback
+            # Note: Safety settings are handled by model/provider configuration.
             response = self.gemini_model.generate_content(
                 [scout_prompt, user_input],
-                generation_config=genai.GenerationConfig(
-                    temperature=0.2, max_output_tokens=2048  # Low temperature for factual research
-                ),
-                safety_settings=safety_settings,
+                generation_config={"temperature": 0.2, "max_output_tokens": 2048},
             )
 
             # Parse JSON response with error handling for safety blocks
@@ -870,44 +963,43 @@ Return a JSON object with this structure:
                 return None
 
             # Remove markdown code blocks if present
-            if response_text.startswith("```"):
-                response_text = response_text.split("```")[1]
-                if response_text.startswith("json"):
-                    response_text = response_text[4:]
-                response_text = response_text.strip()
+            response_text = strip_markdown_json(response_text)
 
-            # Parse JSON with robust error handling
+            # Parse JSON first (error responses lack required fields for Pydantic)
             try:
-                data = json.loads(response_text)
+                raw_data = json.loads(response_text)
             except json.JSONDecodeError as e:
                 logger.warning(f"LLM returned invalid JSON for topic '{topic[:50]}...': {e}")
                 logger.debug(f"Raw response: {response_text[:200]}...")
                 return None
 
-            # Check for error
-            if "error" in data:
-                logger.debug(f"LLM returned error response for topic '{topic[:50]}...': {data['error']}")
+            # Check for error before validation
+            if "error" in raw_data:
+                logger.debug(f"LLM returned error response for topic '{topic[:50]}...': {raw_data['error']}")
                 return None
 
-            # Validate and return
-            if data.get("title") and data.get("authors") and data.get("year"):
-                return {
-                    "title": data["title"],
-                    "authors": data["authors"],
-                    "year": int(data["year"]),
-                    "doi": data.get("doi", ""),
-                    "url": data.get("url", ""),
-                    "journal": data.get("journal", "") or data.get("conference", ""),
-                    "publisher": data.get("publisher", ""),
-                    "volume": data.get("volume", ""),
-                    "issue": data.get("issue", ""),
-                    "pages": data.get("pages", ""),
-                    "source_type": data.get("source_type", "journal"),
-                    "confidence": 0.5,  # Lower confidence for LLM results
-                }
-            else:
-                logger.debug(f"LLM returned incomplete metadata for topic '{topic[:50]}...'")
+            # Validate with Pydantic
+            try:
+                data = LLMCitationResponse.model_validate(raw_data)
+            except ValidationError as e:
+                logger.warning(f"LLM returned invalid citation for topic '{topic[:50]}...': {e}")
                 return None
+
+            # Convert validated model to dict for existing pipeline
+            return {
+                "title": data.title,
+                "authors": data.authors,
+                "year": data.year,
+                "doi": data.doi,
+                "url": data.url,
+                "journal": data.journal or data.conference,
+                "publisher": data.publisher,
+                "volume": data.volume,
+                "issue": data.issue,
+                "pages": data.pages,
+                "source_type": data.source_type,
+                "confidence": 0.5,  # Lower confidence for LLM results
+            }
 
         except Exception as e:
             logger.error(f"LLM research failed for topic '{topic[:50]}...': {e}")

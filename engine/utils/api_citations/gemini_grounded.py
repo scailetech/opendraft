@@ -7,9 +7,12 @@ ABOUTME: Uses Google Search tool via REST API to find and validate real web sour
 import os
 import re
 import json
+import logging
 import sys
 from typing import Optional, Dict, Any, List
 from urllib.parse import urlparse
+
+logger = logging.getLogger(__name__)
 
 # Safe print function that handles broken pipes (worker runs with stdio: 'ignore')
 def safe_print(*args, **kwargs):
@@ -19,8 +22,6 @@ def safe_print(*args, **kwargs):
     except (BrokenPipeError, OSError):
         # Pipe is closed (worker running with stdio: 'ignore'), use logger instead
         try:
-            import logging
-            logger = logging.getLogger(__name__)
             message = ' '.join(str(arg) for arg in args)
             logger.debug(message)
         except:
@@ -226,10 +227,13 @@ class GeminiGroundedClient(BaseAPIClient):
 
         # Use Gemini 2.5 Flash for fast grounding with two-step approach
         self.model_name = 'gemini-2.5-flash'
-        
-        # Fallback API key for 429 rate limit handling
-        self.fallback_api_key = os.getenv('GOOGLE_API_KEY_FALLBACK')
-        self._using_fallback = False
+
+        # Multi-key rotation for 429 rate limit handling
+        self._fallback_keys = {
+            'fallback': os.getenv('GOOGLE_API_KEY_FALLBACK', ''),
+            'fallback_2': os.getenv('GOOGLE_API_KEY_FALLBACK_2', ''),
+            'fallback_3': os.getenv('GOOGLE_API_KEY_FALLBACK_3', ''),
+        }
 
         self.forbidden_domains = forbidden_domains or []
         self.validate_urls = validate_urls
@@ -375,41 +379,46 @@ class GeminiGroundedClient(BaseAPIClient):
 
             if not response.ok:
                 error_text = response.text[:500]
-                
-                # Handle 429 rate limit with fallback key
+
+                # Handle 429 rate limit with multi-key rotation
                 if response.status_code == 429:
-                    # Signal backpressure system
                     try:
                         from utils.backpressure import BackpressureManager, APIType
                         bp = BackpressureManager()
-                        api_type = APIType.GEMINI_FALLBACK if self._using_fallback else APIType.GEMINI_PRIMARY
-                        bp.signal_429(api_type)
+                        bp.signal_429(APIType.GEMINI_PRIMARY)
+
+                        # Only attempt key rotation if at least one fallback key is configured
+                        available_fallbacks = [k for k in self._fallback_keys.values() if k]
+                        if available_fallbacks:
+                            # Use backpressure manager to pick the least-throttled key
+                            best_key, best_type = bp.get_best_gemini_key(
+                                primary=self.api_key,
+                                fallback=available_fallbacks[0],
+                                fallback_2=available_fallbacks[1] if len(available_fallbacks) > 1 else None,
+                                fallback_3=available_fallbacks[2] if len(available_fallbacks) > 2 else None,
+                            )
+
+                            # Only retry if we got a different, non-empty key
+                            if best_key and best_key != self.api_key:
+                                safe_print(f"Gemini API rate limit (429) - switching to {best_type.value}")
+                                retry_url = f"{self.base_url}/{self.model_name}:generateContent?key={best_key}"
+                                response = self.session.post(
+                                    retry_url,
+                                    json=body,
+                                    headers={"Content-Type": "application/json"},
+                                    timeout=self.timeout
+                                )
+                                if response.ok:
+                                    data = response.json()
+                                    if data.get('candidates'):
+                                        return data
+                                # Signal 429 for the fallback key too
+                                if response.status_code == 429:
+                                    bp.signal_429(best_type)
+                                safe_print(f"Fallback key ({best_type.value}) also failed: {response.status_code}")
                     except Exception as bp_err:
-                        pass  # Don't fail on backpressure errors
-                    
-                    if self.fallback_api_key and not self._using_fallback:
-                        safe_print(f"Gemini API rate limit (429) - switching to fallback key")
-                        self._using_fallback = True
-                        # Retry with fallback key
-                        fallback_url = f"{self.base_url}/{self.model_name}:generateContent?key={self.fallback_api_key}"
-                        response = self.session.post(
-                            fallback_url,
-                            json=body,
-                            headers={"Content-Type": "application/json"},
-                            timeout=self.timeout
-                        )
-                        if response.ok:
-                            data = response.json()
-                            if data.get('candidates'):
-                                return data
-                        # If fallback also fails, signal that too and log
-                        if response.status_code == 429:
-                            try:
-                                bp.signal_429(APIType.GEMINI_FALLBACK)
-                            except:
-                                pass
-                        safe_print(f"Fallback key also failed: {response.status_code}")
-                
+                        logger.debug(f"Backpressure key rotation error: {bp_err}")
+
                 safe_print(f"Gemini API error {response.status_code}: {error_text}")
                 return None
 

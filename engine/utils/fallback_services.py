@@ -3,11 +3,15 @@ Fallback Services for Web Search and Page Scraping
 ===================================================
 
 Tools:
-- DataForSEO: Web search via SERP API (2000 RPM)
-- OpenPull: Page scraping with JavaScript rendering (crawl4ai + Playwright)
+- Serper.dev: Web search via Google SERP API (preferred)
+- DataForSEO: Web search via SERP API (2000 RPM) (legacy fallback)
+- Firecrawl: Page scraping with JavaScript rendering (preferred)
+- OpenPull: Page scraping with JavaScript rendering (crawl4ai + Playwright) (legacy)
 - Simple fallback: Basic requests-based scraping for non-JS pages
 
 Usage:
+    from fallback_services import search_web_serper, scrape_page_with_firecrawl
+    # Legacy:
     from fallback_services import search_web_dataforseo, scrape_page_with_openpull
 """
 
@@ -54,7 +58,79 @@ def with_retry_sync(func, max_retries=3, base_delay=0.5):
 
 
 # ==============================================================================
-# DataForSEO Web Search Fallback
+# Serper.dev Web Search (Preferred)
+# ==============================================================================
+
+def search_web_serper(
+    query: str,
+    num_results: int = 5,
+) -> Dict[str, Any]:
+    """
+    Search the web using Serper.dev Google Search API.
+
+    Preferred over DataForSEO for better pricing and speed.
+
+    Args:
+        query: Search query string
+        num_results: Number of results to return (default 5)
+
+    Returns:
+        Dict with 'success', 'results' (list of search results), and 'error' if failed
+
+    Environment Variables Required:
+        SERPER_API_KEY: Serper.dev API key
+    """
+    try:
+        from utils.api_citations.serper_client import SerperClient
+
+        client = SerperClient(num_results=num_results)
+        result = client.search_paper(query)
+
+        if result:
+            return {
+                "success": True,
+                "results": [result],  # Wrap single result in list for compatibility
+                "query": query
+            }
+        return {"success": False, "error": "No results found", "results": []}
+
+    except Exception as e:
+        logger.warning(f"Serper search failed: {e}, falling back to DataForSEO")
+        return search_web_dataforseo(query, num_results)
+
+
+# ==============================================================================
+# Firecrawl Page Scraping (Preferred)
+# ==============================================================================
+
+def scrape_page_with_firecrawl(url: str) -> Dict[str, Any]:
+    """
+    Scrape a webpage using Firecrawl API.
+
+    Preferred over OpenPull/crawl4ai for reliability and JS rendering.
+
+    Args:
+        url: The URL to scrape
+
+    Returns:
+        Dict with 'success', 'content', and 'error' if failed
+
+    Environment Variables Required:
+        FIRECRAWL_API_KEY: Firecrawl API key
+    """
+    try:
+        from utils.firecrawl_client import FirecrawlClient
+
+        client = FirecrawlClient()
+        return client.scrape_url(url)
+
+    except Exception as e:
+        logger.warning(f"Firecrawl scrape failed: {e}, falling back to simple scraper")
+        return get_url_context_simple(url)
+
+
+# ==============================================================================
+# DataForSEO Web Search Fallback (Legacy)
 # ==============================================================================
 
 def search_web_dataforseo(

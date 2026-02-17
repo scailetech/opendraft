@@ -5,22 +5,26 @@ Live test for TICKET-001 and TICKET-002
 Runs the crafter agent with methodology and analysis requests,
 then checks output for forbidden/required patterns.
 
-Run with: cd $(pwd) && python tests/test_live_crafter.py
+Run with: python tests/test_live_crafter.py
 """
 
 import sys
 import os
+import socket
 from pathlib import Path
 
 # Project root
 PROJECT_ROOT = Path(__file__).parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 # Load environment with override to ensure fresh values
 from dotenv import load_dotenv
 load_dotenv(PROJECT_ROOT / ".env", override=True)
 load_dotenv(PROJECT_ROOT / ".env.local", override=True)
 
-import google.generativeai as genai
+from google import genai
+from engine.utils.gemini_client import GeminiModelWrapper
 
 
 def load_prompt(prompt_path: str) -> str:
@@ -33,11 +37,41 @@ def load_prompt(prompt_path: str) -> str:
 def setup_model():
     """Setup Gemini model"""
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-    if not api_key:
-        raise ValueError("No API key found")
-    genai.configure(api_key=api_key)
+    client = genai.Client(api_key=api_key)
     model_name = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
-    return genai.GenerativeModel(model_name)
+    return GeminiModelWrapper(client, model_name)
+
+
+def has_api_key():
+    """Return whether a Gemini API key is configured."""
+    return bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
+
+
+def network_ready():
+    """Check DNS reachability for Gemini endpoint."""
+    try:
+        socket.getaddrinfo("generativelanguage.googleapis.com", 443, proto=socket.IPPROTO_TCP)
+        return True, ""
+    except OSError as exc:
+        return False, str(exc)
+
+
+def is_network_error(exc: Exception) -> bool:
+    """Detect connectivity errors for graceful skip behavior."""
+    if isinstance(exc, OSError):
+        return True
+    error_text = str(exc).lower()
+    markers = [
+        "connecterror",
+        "connection error",
+        "timed out",
+        "deadline exceeded",
+        "temporary failure in name resolution",
+        "name or service not known",
+        "nodename nor servname",
+        "[errno 8]",
+    ]
+    return any(marker in error_text for marker in markers)
 
 # TICKET-001: Forbidden methodology phrases
 FORBIDDEN_METHODOLOGY = [
@@ -57,7 +91,7 @@ REQUIRED_ANALYSIS = [
 ]
 
 
-def run_crafter_test(test_name: str, user_input: str, checks: dict) -> bool:
+def run_crafter_test(test_name: str, user_input: str, checks: dict):
     """Run crafter with input and check output"""
     print(f"\n{'='*60}")
     print(f"LIVE TEST: {test_name}")
@@ -117,6 +151,9 @@ def run_crafter_test(test_name: str, user_input: str, checks: dict) -> bool:
         return all_passed
 
     except Exception as e:
+        if is_network_error(e):
+            print(f"  ⏭️  SKIP: Network unavailable during live call ({e})")
+            return None
         print(f"  ❌ ERROR: {e}")
         import traceback
         traceback.print_exc()
@@ -127,6 +164,15 @@ def main():
     print("\n" + "="*60)
     print("LIVE CRAFTER TESTS - TICKET-001 & TICKET-002")
     print("="*60)
+
+    if not has_api_key():
+        print("⏭️  SKIP: No GOOGLE_API_KEY/GEMINI_API_KEY configured")
+        return 0
+
+    ready, reason = network_ready()
+    if not ready:
+        print(f"⏭️  SKIP: Network/DNS unavailable for Gemini endpoint ({reason})")
+        return 0
 
     results = {}
 
@@ -234,14 +280,20 @@ def main():
     print("SUMMARY")
     print("="*60)
 
-    passed = sum(1 for r in results.values() if r)
-    failed = len(results) - passed
+    passed = sum(1 for r in results.values() if r is True)
+    failed = sum(1 for r in results.values() if r is False)
+    skipped = sum(1 for r in results.values() if r is None)
 
     for name, result in results.items():
-        status = "✅ PASS" if result else "❌ FAIL"
+        if result is True:
+            status = "✅ PASS"
+        elif result is False:
+            status = "❌ FAIL"
+        else:
+            status = "⏭️  SKIP"
         print(f"  {status}: {name}")
 
-    print(f"\n  Total: {passed} passed, {failed} failed")
+    print(f"\n  Total: {passed} passed, {failed} failed, {skipped} skipped")
 
     return 0 if failed == 0 else 1
 

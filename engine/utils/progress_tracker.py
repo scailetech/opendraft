@@ -115,7 +115,10 @@ class ProgressTracker:
             self.supabase = supabase_client
         else:
             from supabase import create_client
-            supabase_url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+            supabase_url = (os.environ.get("SUPABASE_URL")
+                           or os.environ.get("SUPABASE_PROJECT_URL")
+                           or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+                           or os.environ.get("NEXT_PUBLIC_SUPABASE_PROJECT_URL"))
             supabase_key = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
             self.supabase = create_client(supabase_url, supabase_key)
 

@@ -250,6 +250,10 @@ Contributions welcome!
 - Add export formats
 - Translate prompts
 
+Maintainer workflow docs:
+- Push/auth runbook: `docs/MAINTAINER_PUSH_RUNBOOK.md`
+- Automated push preflight: `scripts/push-preflight.sh`
+
 ---
 
 ## Links
@@ -258,6 +262,7 @@ Contributions welcome!
 - 📝 **Hosted Version:** [Join Waitlist](https://opendraft.xyz/waitlist)
 - 💬 **Discussions:** [GitHub Discussions](https://github.com/federicodeponte/opendraft/discussions)
 - 🐛 **Issues:** [Report Bug](https://github.com/federicodeponte/opendraft/issues)
+- 🗒️ **Changelog:** [CHANGELOG.md](CHANGELOG.md)
 - 📜 **License:** [MIT](LICENSE)
 
 ---

@@ -5,7 +5,7 @@
 # === LLM APIs ===
 anthropic>=0.20.0,<1.0.0
 openai>=1.0.0,<2.0.0
-google-generativeai>=0.8.0,<1.0.0  # Updated for Google Search grounding support
+google-genai>=1.0.0,<2.0.0  # Gemini SDK
 
 # === Citation Management ===
 pybtex>=0.24.0,<0.25.0      # BibTeX parsing/generation
@@ -26,3 +26,4 @@ lxml>=4.9.0,<6.0.0          # Fast XML/HTML parser for BeautifulSoup
 python-dotenv>=1.0.0,<2.0.0 # Load .env files
 rich>=13.0.0,<14.0.0        # Pretty terminal output (for scripts)
 psutil>=5.9.0,<7.0.0        # System monitoring for health checks
+tenacity>=8.2.0,<10.0.0    # Production-grade retry with exponential backoff

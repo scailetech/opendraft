@@ -122,8 +122,11 @@ def normalize_title(title: str) -> str:
 
 
 # Type definitions for citations
-CitationSourceType = Literal["journal", "book", "report", "website", "conference"]
-CitationStyle = Literal["APA 7th", "IEEE", "Chicago", "MLA"]
+CitationSourceType = Literal["journal", "book", "report", "website", "conference", "case", "statute", "constitution", "treaty"]
+# Supported citation styles
+# Note: Chicago and MLA are planned but not yet implemented
+# See: docs/CITATION_STYLES_ROADMAP.md
+CitationStyle = Literal["APA 7th", "IEEE", "NALT", "Chicago", "MLA"]
 Language = Literal["english", "german", "spanish", "french"]
 
 
@@ -148,6 +151,11 @@ class Citation:
         access_date: Optional[str] = None,
         api_source: Optional[str] = None,
         abstract: Optional[str] = None,
+        citation_count: Optional[int] = None,
+        court: Optional[str] = None,
+        law_report: Optional[str] = None,
+        parties: Optional[str] = None,
+        section: Optional[str] = None,
     ):
         self.id = citation_id
         self.authors = authors
@@ -165,6 +173,11 @@ class Citation:
         self.access_date = access_date
         self.api_source = api_source
         self.abstract = abstract
+        self.citation_count = citation_count
+        self.court = court
+        self.law_report = law_report
+        self.parties = parties
+        self.section = section
 
     def to_dict(self) -> Dict:
         """Convert to dictionary for JSON serialization."""
@@ -198,6 +211,16 @@ class Citation:
             data["api_source"] = self.api_source
         if self.abstract:
             data["abstract"] = self.abstract
+        if self.citation_count is not None:
+            data["citation_count"] = self.citation_count
+        if self.court:
+            data["court"] = self.court
+        if self.law_report:
+            data["law_report"] = self.law_report
+        if self.parties:
+            data["parties"] = self.parties
+        if self.section:
+            data["section"] = self.section
 
         return data
 
@@ -221,6 +244,11 @@ class Citation:
             access_date=data.get("access_date"),
             abstract=data.get("abstract"),
             api_source=data.get("api_source"),
+            citation_count=data.get("citation_count"),
+            court=data.get("court"),
+            law_report=data.get("law_report"),
+            parties=data.get("parties"),
+            section=data.get("section"),
         )
 
 
@@ -448,7 +476,7 @@ def has_more_metadata(citation_a: Citation, citation_b: Citation) -> bool:
         bool: True if citation_a has more complete metadata than citation_b
     """
     # Count non-None optional fields for each citation
-    optional_fields = ['journal', 'publisher', 'volume', 'issue', 'pages', 'doi', 'url', 'access_date', 'abstract']
+    optional_fields = ['journal', 'publisher', 'volume', 'issue', 'pages', 'doi', 'url', 'access_date', 'abstract', 'citation_count', 'court', 'law_report', 'parties', 'section']
 
     score_a = sum(1 for field in optional_fields if getattr(citation_a, field) is not None)
     score_b = sum(1 for field in optional_fields if getattr(citation_b, field) is not None)

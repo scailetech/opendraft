@@ -1,0 +1,50 @@
+name: Live Validation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 1"
+
+jobs:
+  live_checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check Live Secret Availability
+        id: secret_check
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [[ -n "${GOOGLE_API_KEY:-}" || -n "${GEMINI_API_KEY:-}" ]]; then
+            echo "has_key=true" >> "$GITHUB_OUTPUT"
+            echo "Live API secret detected."
+          else
+            echo "has_key=false" >> "$GITHUB_OUTPUT"
+            echo "No live API secret configured; skipping live checks."
+          fi
+
+      - name: Install Dependencies
+        if: steps.secret_check.outputs.has_key == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pytest
+
+      - name: Run Live Integration Checks
+        if: steps.secret_check.outputs.has_key == 'true'
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python -m pytest tests/test_factcheck_live.py -q -m integration
+          python tests/test_live_crafter.py
+          python tests/audit_output.py

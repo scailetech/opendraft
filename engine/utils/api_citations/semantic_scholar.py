@@ -224,6 +224,7 @@ class SemanticScholarClient(BaseAPIClient):
                 "source_type": source_type,
                 "confidence": confidence,
                 "abstract": abstract if abstract else None,
+                "citation_count": citation_count,
             }
 
         except Exception as e:

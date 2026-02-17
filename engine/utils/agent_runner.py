@@ -16,9 +16,17 @@ from pathlib import Path
 from typing import Optional, Callable, Tuple, List, TYPE_CHECKING, Any, Dict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
-# Safe print function that handles broken pipes (worker runs with stdio: 'ignore')
+# Safe print function that handles broken pipes and respects CLI quiet mode
 def safe_print(*args, **kwargs):
-    """Print wrapper that catches BrokenPipeError when stdout is closed."""
+    """Print wrapper that catches BrokenPipeError and respects CLI quiet mode."""
+    # Check verbosity setting from orchestrator (CLI quiet mode)
+    try:
+        from utils.api_citations.orchestrator import _verbose_research
+        if not _verbose_research:
+            return  # Suppress in CLI quiet mode
+    except ImportError:
+        pass  # If orchestrator not available, continue normally
+
     try:
         print(*args, **kwargs)
     except (BrokenPipeError, OSError):
@@ -34,13 +42,15 @@ def safe_print(*args, **kwargs):
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import google.generativeai as genai
+from google import genai
 from config import get_config
 from concurrency.concurrency_config import get_concurrency_config
 from utils.output_validators import ValidationResult
 from utils.api_citations.orchestrator import CitationResearcher
 from utils.citation_database import Citation
+from utils.gemini_client import GeminiModelWrapper
 from utils.deep_research import DeepResearchPlanner
+from utils.token_tracker import CallStatus
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -48,13 +58,13 @@ logger = logging.getLogger(__name__)
 
 def setup_model(model_override: Optional[str] = None) -> Any:
     """
-    Initialize and return configured Gemini model.
+    Initialize and return configured Gemini model wrapper.
 
     Args:
         model_override: Optional model name to override config default
 
     Returns:
-        genai.GenerativeModel: Configured Gemini model instance
+        GeminiModelWrapper: Configured model wrapper with generate_content() method
 
     Raises:
         ValueError: If API key is missing or model name is invalid
@@ -66,22 +76,13 @@ def setup_model(model_override: Optional[str] = None) -> Any:
             "GOOGLE_API_KEY not found. Set it in .env file or environment variables."
         )
 
-    genai.configure(api_key=config.google_api_key)  # type: ignore[attr-defined]
-
+    client = genai.Client(api_key=config.google_api_key)
     model_name = model_override or config.model.model_name
 
-    # Disable SDK tools - we use fallback services (DataForSEO/OpenPull) instead
-    # The googleSearch tool in SDK is causing errors: "Unknown field for FunctionDeclaration: googleSearch"
-    # Instead, we rely on:
-    # - Backend REST APIs for citation research (CrossRef, Semantic Scholar, Gemini Grounded REST)
-    # - Fallback services (DataForSEO for web search, OpenPull for URL scraping)
-    
-    return genai.GenerativeModel(  # type: ignore[attr-defined]
-        model_name,
-        generation_config={
-            'temperature': config.model.temperature,
-        },
-        tools=None  # Explicitly disable tools to avoid "Unknown field" errors
+    return GeminiModelWrapper(
+        client=client,
+        model_name=model_name,
+        temperature=config.model.temperature,
     )
 
 
@@ -121,7 +122,9 @@ def run_agent(
     verbose: bool = True,
     validators: Optional[List[Callable[[str], ValidationResult]]] = None,
     max_retries: int = 3,
-    skip_validation: bool = False
+    skip_validation: bool = False,
+    token_tracker: Optional[Any] = None,
+    token_stage: Optional[str] = None,
 ) -> str:
     """
     Run an AI agent with given prompt and input, with optional validation.
@@ -262,7 +265,23 @@ def run_agent(
             
             output = str(output)
 
+            # Defense-in-depth: scrub planning preambles, metadata, and cite_MISSING markers
+            from utils.text_utils import clean_agent_output
+            output = clean_agent_output(output)
+
             logger.debug(f"Agent '{name}': Generated {len(output)} chars in {time.time() - start_time:.1f}s")
+
+            # Track token usage if tracker is provided
+            if token_tracker and hasattr(response, 'usage_metadata'):
+                try:
+                    meta = response.usage_metadata
+                    token_tracker.add_call(
+                        stage=token_stage or name,
+                        input_tokens=getattr(meta, 'prompt_token_count', 0) or 0,
+                        output_tokens=getattr(meta, 'candidates_token_count', 0) or 0,
+                    )
+                except Exception:
+                    pass  # Never break generation for tracking failures
 
             # Validate output if validators provided (and not skipped)
             if validators and not skip_validation:
@@ -312,6 +331,19 @@ def run_agent(
                 safe_print(f"❌ Error")
 
             logger.error(f"Agent '{name}': Exception on attempt {attempt+1}: {str(e)}")
+
+            # Track failed call if tracker is provided
+            if token_tracker:
+                try:
+                    token_tracker.add_call(
+                        stage=token_stage or name,
+                        input_tokens=0,
+                        output_tokens=0,
+                        status=CallStatus.FAILURE,
+                        error_message=str(e),
+                    )
+                except Exception:
+                    pass  # Never break generation for tracking failures
 
             # If not last attempt and it's a transient error, retry
             if attempt < max_retries - 1 and _is_transient_error(e):
@@ -702,6 +734,7 @@ def research_citations_via_api(
         enable_gemini_grounded=True,  # Enable for industry reports (McKinsey, Gartner, etc.)
         enable_smart_routing=True,     # Enable query classification for source diversity
         enable_llm_fallback=False,     # DISABLED: LLM hallucinates citations
+        use_serper=True,               # Enable Serper API for web search fallback
         verbose=verbose,
         progress_callback=progress_callback,  # Pass through for progress reporting
     )

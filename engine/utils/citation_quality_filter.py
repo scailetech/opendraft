@@ -79,7 +79,15 @@ class CitationQualityFilter:
         """
         # Load database
         with open(database_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError as e:
+                import logging
+                logging.getLogger(__name__).warning(f"Invalid JSON in {database_path}: {e}")
+                return {
+                    'total_original': 0, 'total_filtered': 0,
+                    'total_removed': 0, 'removal_reasons': {},
+                }
 
         original_count = len(data.get('citations', []))
         citations = data.get('citations', [])
@@ -219,7 +227,11 @@ def main():
     if args.dry_run:
         print("🔍 DRY RUN MODE - No files will be modified\n")
         with open(args.database, 'r') as f:
-            data = json.load(f)
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Invalid JSON in {args.database}: {e}")
+                return 1
 
         validator = CitationValidator()
         to_remove = 0

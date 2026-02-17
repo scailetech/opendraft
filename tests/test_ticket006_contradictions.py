@@ -46,7 +46,9 @@ def test_skeptic_has_contradiction_detection():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_skeptic_shows_contradiction_examples():
@@ -73,7 +75,9 @@ def test_skeptic_shows_contradiction_examples():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_skeptic_has_hedge_table():
@@ -100,7 +104,9 @@ def test_skeptic_has_hedge_table():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def main():

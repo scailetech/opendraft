@@ -9,6 +9,14 @@ import json
 import logging
 from typing import Tuple
 
+
+def _research_print(*args, **kwargs):
+    """Print only if verbose research mode is enabled."""
+    # Import at call time to get current value (not import-time snapshot)
+    from .api_citations.orchestrator import _verbose_research
+    if _verbose_research:
+        print(*args, **kwargs)
+
 # Gemini finish_reason codes
 # 1 = STOP (normal), 2 = SAFETY, 3 = MAX_TOKENS, 4 = RECITATION
 SAFETY_BLOCKED = 2
@@ -43,11 +51,11 @@ from typing import List, Dict, Any, Optional
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 
 try:
-    import google.generativeai as genai
+    from google import genai
+    from .gemini_client import GeminiModelWrapper
 except ImportError:
     genai = None
-
-from .citation_database import Citation
+    GeminiModelWrapper = None
 
 logger = logging.getLogger(__name__)
 
@@ -95,8 +103,8 @@ class DeepResearchPlanner:
         else:
             if not genai:
                 raise ImportError(
-                    "google-generativeai not installed. "
-                    "Run: pip install google-generativeai>=0.8.0"
+                    "google-genai not installed. "
+                    "Run: pip install google-genai>=1.0.0"
                 )
 
             api_key = api_key or os.getenv('GOOGLE_API_KEY')
@@ -105,9 +113,9 @@ class DeepResearchPlanner:
                     "GOOGLE_API_KEY not found. Set via environment variable or constructor."
                 )
 
-            genai.configure(api_key=api_key)
-            # Use Gemini 2.5 Flash for fast research planning (matches gtm-backend)
-            self.model = genai.GenerativeModel('gemini-2.5-flash', tools=None)
+            client = genai.Client(api_key=api_key)
+            # Use Gemini 3 Flash Preview for fast research planning
+            self.model = GeminiModelWrapper(client, 'gemini-3-flash-preview')
 
     def create_research_plan(
         self,
@@ -136,9 +144,9 @@ class DeepResearchPlanner:
                 - strategy: str - Research strategy description
         """
         if self.verbose:
-            print(f"\n🔍 Creating deep research plan for: {topic}")
+            _research_print(f"\n🔍 Creating deep research plan for: {topic}")
             if scope:
-                print(f"   Scope: {scope}")
+                _research_print(f"   Scope: {scope}")
 
         # Build planning prompt
         prompt = self._build_planning_prompt(topic, scope, seed_references)
@@ -174,12 +182,13 @@ class DeepResearchPlanner:
                     # Wrap API call in timeout to prevent 504 Deadline Exceeded
                     def _generate_with_timeout():
                         return self.model.generate_content(
-                    self._build_planning_prompt(current_topic, scope, seed_references),
-                    generation_config=genai.GenerationConfig(
-                        temperature=0.3,  # Lower temperature for systematic planning
-                        max_output_tokens=8192
-                    )
-                )
+                            self._build_planning_prompt(current_topic, scope, seed_references),
+                            generation_config={
+                                "temperature": 0.3,  # Lower temperature for systematic planning
+                                "max_output_tokens": 8192,
+                                "response_mime_type": "application/json",  # Structured JSON output
+                            },
+                        )
                 
                     # Execute with timeout wrapper
                     with ThreadPoolExecutor(max_workers=1) as executor:
@@ -234,7 +243,7 @@ class DeepResearchPlanner:
                         logger.warning(f"Safety filter triggered for '{current_topic}', rephrasing (attempt {attempt + 1})")
                         current_topic = self._rephrase_topic_for_safety(topic)
                         if self.verbose:
-                            print(f"   ⚠️ Safety filter triggered, retrying with: {current_topic}")
+                            _research_print(f"   ⚠️ Safety filter triggered, retrying with: {current_topic}")
                 except TimeoutError:
                     # Re-raise timeout errors
                     raise
@@ -268,17 +277,15 @@ class DeepResearchPlanner:
             if not plan_text:
                 raise ValueError(f"Unable to generate research plan after {max_retries} attempts (safety filter)")
 
-            # Remove markdown code blocks if present
-            if plan_text.startswith("```"):
-                plan_text = plan_text.split("```")[1]
-                if plan_text.startswith("json"):
-                    plan_text = plan_text[4:]
-                plan_text = plan_text.strip()
-
-            plan = json.loads(plan_text)
+            # Parse JSON response (structured output should return valid JSON directly)
+            try:
+                plan = json.loads(plan_text.strip())
+            except json.JSONDecodeError:
+                # Fallback: robust extraction for edge cases
+                plan = self._extract_json_from_response(plan_text)
 
             if self.verbose:
-                print(f"   ✓ Plan created: {len(plan.get('queries', []))} research queries")
+                _research_print(f"   ✓ Plan created: {len(plan.get('queries', []))} research queries")
 
             return plan
 
@@ -324,6 +331,152 @@ class DeepResearchPlanner:
                 pass
             # #endregion
             raise
+
+    def _extract_json_from_response(self, text: str) -> dict:
+        """
+        Robustly extract JSON from LLM response.
+
+        Handles:
+        - Markdown code blocks (```json ... ```)
+        - Extra text before/after JSON
+        - Common JSON syntax issues
+        - Non-JSON responses (generates fallback structure)
+
+        Args:
+            text: Raw LLM response text
+
+        Returns:
+            Parsed JSON as dict
+
+        Raises:
+            json.JSONDecodeError: If no valid JSON found and fallback generation fails
+        """
+        # Strategy 1: Try direct parse first
+        try:
+            return json.loads(text.strip())
+        except json.JSONDecodeError:
+            pass
+
+        # Strategy 2: Extract from markdown code blocks
+        code_block_pattern = r'```(?:json)?\s*([\s\S]*?)```'
+        matches = re.findall(code_block_pattern, text)
+        for match in matches:
+            try:
+                return json.loads(match.strip())
+            except json.JSONDecodeError:
+                continue
+
+        # Strategy 3: Find JSON object by matching braces
+        brace_depth = 0
+        start_idx = None
+        for i, char in enumerate(text):
+            if char == '{':
+                if brace_depth == 0:
+                    start_idx = i
+                brace_depth += 1
+            elif char == '}':
+                brace_depth -= 1
+                if brace_depth == 0 and start_idx is not None:
+                    json_str = text[start_idx:i+1]
+                    try:
+                        return json.loads(json_str)
+                    except json.JSONDecodeError:
+                        repaired = self._repair_json(json_str)
+                        try:
+                            return json.loads(repaired)
+                        except json.JSONDecodeError:
+                            start_idx = None
+                            continue
+
+        # Strategy 4: Last resort - try with repairs on full text
+        cleaned = re.sub(r'```(?:json)?', '', text)
+        cleaned = cleaned.replace('```', '').strip()
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError:
+            pass
+
+        # Strategy 5: Generate fallback structure from text
+        logger.warning(f"Could not parse JSON, attempting to extract queries from text")
+        fallback = self._generate_fallback_from_text(text)
+        if fallback:
+            return fallback
+
+        raise json.JSONDecodeError(
+            f"Could not extract valid JSON from response (length: {len(text)} chars)",
+            text[:500] if len(text) > 500 else text,
+            0
+        )
+
+    def _generate_fallback_from_text(self, text: str) -> Optional[dict]:
+        """
+        Generate a fallback research plan structure from non-JSON text.
+
+        Extracts queries by looking for:
+        - Numbered lists (1. query, 2. query)
+        - Bullet points (- query, * query)
+        - Lines that look like search queries
+
+        Args:
+            text: Non-JSON response text
+
+        Returns:
+            Dict with queries, strategy, outline if extraction successful
+        """
+        queries = []
+
+        # Look for numbered items
+        numbered_pattern = r'^\s*\d+[\.\)]\s*(.+)$'
+        for match in re.finditer(numbered_pattern, text, re.MULTILINE):
+            query = match.group(1).strip().strip('"\'')
+            if 5 < len(query) < 200:
+                queries.append(query)
+
+        # Look for bullet points
+        bullet_pattern = r'^\s*[-*•]\s*(.+)$'
+        for match in re.finditer(bullet_pattern, text, re.MULTILINE):
+            query = match.group(1).strip().strip('"\'')
+            if 5 < len(query) < 200 and query not in queries:
+                queries.append(query)
+
+        # Look for quoted strings (potential queries)
+        quoted_pattern = r'"([^"]{10,150})"'
+        for match in re.finditer(quoted_pattern, text):
+            query = match.group(1).strip()
+            if query not in queries:
+                queries.append(query)
+
+        if len(queries) >= 5:
+            logger.info(f"Generated fallback plan with {len(queries)} queries from text")
+            return {
+                "queries": queries[:100],
+                "strategy": "Fallback strategy generated from text response",
+                "outline": "Section headings to be determined from research results"
+            }
+
+        return None
+
+    def _repair_json(self, json_str: str) -> str:
+        """
+        Attempt to repair common JSON syntax issues.
+
+        Args:
+            json_str: Potentially malformed JSON string
+
+        Returns:
+            Repaired JSON string
+        """
+        # Fix trailing commas in arrays/objects
+        repaired = re.sub(r',\s*([}\]])', r'\1', json_str)
+
+        # Fix missing commas between array elements (common with multi-line)
+        repaired = re.sub(r'"\s*\n\s*"', '",\n"', repaired)
+
+        # Fix unquoted keys (simple cases)
+        repaired = re.sub(r'{\s*(\w+)\s*:', r'{"\1":', repaired)
+        repaired = re.sub(r',\s*(\w+)\s*:', r',"\1":', repaired)
+
+        return repaired
 
     def _build_planning_prompt(
         self,
@@ -509,7 +662,7 @@ Return ONLY valid JSON, no markdown blocks or explanations.
             Refined research plan
         """
         if self.verbose:
-            print(f"\n🔄 Refining research plan...")
+            _research_print(f"\n🔄 Refining research plan...")
 
         prompt = f"""You are refining a research plan based on feedback.
 
@@ -528,23 +681,18 @@ Return ONLY valid JSON, no markdown blocks.
         try:
             response = self.model.generate_content(
                 prompt,
-                generation_config=genai.GenerationConfig(
-                    temperature=0.3,
-                    max_output_tokens=8192
-                )
+                generation_config={
+                    "temperature": 0.3,
+                    "max_output_tokens": 8192,
+                    "response_mime_type": "application/json",  # Structured JSON output
+                },
             )
 
             plan_text = response.text.strip()
-            if plan_text.startswith("```"):
-                plan_text = plan_text.split("```")[1]
-                if plan_text.startswith("json"):
-                    plan_text = plan_text[4:]
-                plan_text = plan_text.strip()
-
             refined_plan = json.loads(plan_text)
 
             if self.verbose:
-                print(f"   ✓ Plan refined: {len(refined_plan.get('queries', []))} queries")
+                _research_print(f"   ✓ Plan refined: {len(refined_plan.get('queries', []))} queries")
 
             return refined_plan
 

@@ -40,32 +40,58 @@ class ModelConfig:
 
     Supports Gemini models with configurable parameters.
     """
-    provider: Literal['gemini', 'claude', 'openai'] = 'gemini'
-    model_name: str = field(default_factory=lambda: os.getenv('GEMINI_MODEL', 'gemini-3-pro-preview'))
+    provider: Literal['gemini', 'claude', 'openai'] = field(
+        default_factory=lambda: os.getenv('AI_PROVIDER', 'gemini')
+    )
+    model_name: str = field(
+        default_factory=lambda: (
+            os.getenv('OPENAI_MODEL', 'gpt-4.1-nano')
+            if os.getenv('AI_PROVIDER') == 'openai'
+            else os.getenv('GEMINI_MODEL', 'gemini-3-pro-preview')
+        )
+    )
     temperature: float = 0.7
     max_output_tokens: Optional[int] = None
+    api_key: Optional[str] = None
 
     def __post_init__(self):
         """Validate model configuration."""
-        valid_models = [
-            'gemini-3-pro-preview',  # Default - highest quality
-            'gemini-3-flash',        # Fast, cost-effective
-            'gemini-2.5-flash',      # Legacy
-            'gemini-2.5-pro',        # Legacy
+        valid_gemini_models = [
+            'gemini-3-pro-preview',    # Pro model for complex tasks
+            'gemini-3-flash-preview',  # Primary flash model (supports JSON output)
+            'gemini-2.5-pro',          # Legacy support
+            'gemini-2.5-flash',        # Legacy support
+            'gemini-2.0-flash-exp',    # Legacy support
+            'gemini-1.5-flash',
+            'gemini-1.5-pro',
         ]
-        if self.provider == 'gemini' and self.model_name not in valid_models:
+
+        valid_openai_models = [
+            'gpt-4.1-nano',
+        ]
+
+        if self.provider == 'gemini' and self.model_name not in valid_gemini_models:
             raise ValueError(
                 f"Invalid Gemini model: {self.model_name}. "
-                f"Valid options: {', '.join(valid_models)}"
+                f"Valid options: {', '.join(valid_gemini_models)}"
+            )
+
+        if self.provider == 'openai' and self.model_name not in valid_openai_models:
+            raise ValueError(
+                f"Invalid OpenAI model: {self.model_name}. "
+                f"Valid options: {', '.join(valid_openai_models)}"
             )
 
 
 @dataclass
 class ValidationConfig:
-    """Configuration for validation agents (Skeptic, Verifier, Referee)."""
+    """Configuration for validation agents (Skeptic, Verifier, Referee, FactCheck)."""
     use_pro_model: bool = field(default_factory=lambda: os.getenv('USE_PRO_FOR_VALIDATION', 'false').lower() == 'true')
-    pro_model_name: str = 'gemini-2.5-pro'
+    pro_model_name: str = 'gemini-3-pro-preview'
     validate_per_section: bool = True  # Always validate each section independently
+    enable_factcheck: bool = field(
+        default_factory=lambda: os.getenv('ENABLE_FACTCHECK', 'true').lower() == 'true'
+    )
 
     def get_validation_model(self, base_model: str) -> str:
         """Return appropriate model for validation tasks."""
@@ -93,8 +119,13 @@ class AppConfig:
     Single source of truth for all settings across the application.
     Follows SOLID principles and provides type-safe access to configuration.
     """
-    # API Keys
-    google_api_key: str = field(default_factory=lambda: os.getenv('GOOGLE_API_KEY', ''))
+    # API Keys (GEMINI_API_KEY is alias for GOOGLE_API_KEY)
+    google_api_key: str = field(
+        default_factory=lambda: os.getenv('GOOGLE_API_KEY') or os.getenv('GEMINI_API_KEY', '')
+    )
+    google_api_key_fallback: str = field(default_factory=lambda: os.getenv('GOOGLE_API_KEY_FALLBACK', ''))
+    google_api_key_fallback_2: str = field(default_factory=lambda: os.getenv('GOOGLE_API_KEY_FALLBACK_2', ''))
+    google_api_key_fallback_3: str = field(default_factory=lambda: os.getenv('GOOGLE_API_KEY_FALLBACK_3', ''))
     anthropic_api_key: str = field(default_factory=lambda: os.getenv('ANTHROPIC_API_KEY', ''))
     openai_api_key: str = field(default_factory=lambda: os.getenv('OPENAI_API_KEY', ''))
 

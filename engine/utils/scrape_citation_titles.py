@@ -337,7 +337,12 @@ def scrape_citation_database_titles(
 
     # Load database
     with open(db_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError as e:
+            import logging
+            logging.getLogger(__name__).warning(f"Invalid JSON in {database_path}: {e}")
+            return {'total_citations': 0, 'scraped_count': 0, 'successful': 0, 'failed': 0}
 
     citations = data.get('citations', [])
 

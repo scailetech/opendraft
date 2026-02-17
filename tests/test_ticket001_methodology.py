@@ -71,7 +71,9 @@ def test_prompt_contains_honesty_rules():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_architect_has_review_types():
@@ -96,7 +98,9 @@ def test_architect_has_review_types():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_deep_research_not_systematic():
@@ -122,7 +126,9 @@ def test_deep_research_not_systematic():
         if not condition:
             all_passed = False
 
-    return all_passed
+    if __name__ == "__main__":
+        return all_passed
+    assert all_passed
 
 
 def test_crafter_output_live(skip_if_no_key=True):

@@ -301,7 +301,15 @@ class CitationValidator:
             Tuple of (issues_list, stats_dict)
         """
         with open(database_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError as e:
+                import logging
+                logging.getLogger(__name__).warning(f"Invalid JSON in {database_path}: {e}")
+                return [], {'total_citations': 0, 'total_issues': 0,
+                            'critical_issues': 0, 'warnings': 0,
+                            'invalid_dois': 0, 'invalid_authors': 0,
+                            'invalid_urls': 0, 'invalid_metadata': 0}
 
         citations = data.get('citations', [])
         all_issues = []

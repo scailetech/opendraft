@@ -26,7 +26,7 @@ Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 Requires-Dist: anthropic>=0.20.0
 Requires-Dist: openai>=1.0.0
-Requires-Dist: google-generativeai>=0.8.0
+Requires-Dist: google-genai>=1.0.0
 Requires-Dist: pybtex>=0.24.0
 Requires-Dist: citeproc-py>=0.6.0
 Requires-Dist: PyYAML>=6.0.0

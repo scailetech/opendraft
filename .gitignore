@@ -45,3 +45,13 @@ test_results/
 # Generated outputs (keep examples/)
 THESIS_OUTPUT.*
 .venv-modal/
+
+# Generated thesis output directories
+output_thesis*/
+thesis_*/
+theses_output/
+section_comparison/
+
+# Generated JSON artifacts
+quality_test_results.json
+token_usage.json

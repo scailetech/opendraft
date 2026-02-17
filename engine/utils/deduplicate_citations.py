@@ -326,7 +326,12 @@ def deduplicate_citation_database(
 
     # Load database
     with open(db_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError as e:
+            import logging
+            logging.getLogger(__name__).warning(f"Invalid JSON in {database_path}: {e}")
+            return {'original_count': 0, 'final_count': 0, 'removed_count': 0}
 
     citations = data.get('citations', [])
 
