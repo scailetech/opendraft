@@ -604,6 +604,14 @@ def generate_draft(
         if resume_from and resume_from.exists():
             logger.info(f"Resuming from checkpoint: {resume_from}")
             checkpoint_data, completed_phase = load_checkpoint(resume_from)
+
+            # Warn if topic doesn't match checkpoint
+            checkpoint_topic = checkpoint_data.get("topic", "")
+            if topic and checkpoint_topic and topic != checkpoint_topic:
+                logger.warning(f"Topic mismatch: CLI='{topic[:50]}' vs checkpoint='{checkpoint_topic[:50]}'")
+                if verbose:
+                    print(f"   Warning: Using checkpoint topic, not CLI topic")
+
             restore_context(ctx, checkpoint_data)
 
             # Reload citation database if citations phase was completed
