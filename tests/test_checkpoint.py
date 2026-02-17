@@ -244,3 +244,172 @@ class TestCitationSerialization:
         assert _deserialize_scout_result(None) is None
         assert _serialize_scout_result({}) == {}
         assert _deserialize_scout_result({}) == {}
+
+
+class TestEdgeCases:
+    """Test edge cases and error handling."""
+
+    def test_corrupt_checkpoint_json(self, tmp_path):
+        """Test loading corrupt JSON raises appropriate error."""
+        checkpoint_path = tmp_path / "checkpoint.json"
+        checkpoint_path.write_text("{ invalid json }", encoding='utf-8')
+
+        with pytest.raises(json.JSONDecodeError):
+            load_checkpoint(checkpoint_path)
+
+    def test_checkpoint_missing_fields(self, tmp_path):
+        """Test checkpoint with missing fields uses defaults."""
+        checkpoint_path = tmp_path / "checkpoint.json"
+        # Minimal checkpoint - only required fields
+        checkpoint_path.write_text(json.dumps({
+            "version": "1.0",
+            "completed_phase": "research",
+            "topic": "Minimal Test",
+        }), encoding='utf-8')
+
+        data, phase = load_checkpoint(checkpoint_path)
+        assert phase == "research"
+        assert data["topic"] == "Minimal Test"
+
+        # Restore should handle missing fields gracefully
+        ctx = DraftContext()
+        restore_context(ctx, data)
+        assert ctx.topic == "Minimal Test"
+        assert ctx.language == "en"  # Default
+        assert ctx.scout_output == ""  # Default empty
+
+    def test_checkpoint_with_unicode(self, tmp_path):
+        """Test checkpoint handles unicode in topic/outputs."""
+        ctx = DraftContext()
+        ctx.topic = "Künstliche Intelligenz: 人工智能 и ИИ"
+        ctx.scout_output = "研究摘要 with émojis 🎉"
+        ctx.folders = {'root': tmp_path}
+
+        save_checkpoint(ctx, "research", tmp_path)
+        data, _ = load_checkpoint(tmp_path / "checkpoint.json")
+
+        new_ctx = DraftContext()
+        restore_context(new_ctx, data)
+
+        assert new_ctx.topic == "Künstliche Intelligenz: 人工智能 и ИИ"
+        assert new_ctx.scout_output == "研究摘要 with émojis 🎉"
+
+    def test_checkpoint_overwrites_previous(self, mock_context, tmp_path):
+        """Test that saving checkpoint overwrites previous one."""
+        # Save after research
+        save_checkpoint(mock_context, "research", tmp_path)
+        _, phase1 = load_checkpoint(tmp_path / "checkpoint.json")
+        assert phase1 == "research"
+
+        # Save after structure (should overwrite)
+        mock_context.architect_output = "New outline content"
+        save_checkpoint(mock_context, "structure", tmp_path)
+        data, phase2 = load_checkpoint(tmp_path / "checkpoint.json")
+
+        assert phase2 == "structure"
+        assert data["architect_output"] == "New outline content"
+
+
+class TestResumeWorkflow:
+    """Test the resume-from-checkpoint workflow."""
+
+    def test_resume_skips_completed_phases(self, mock_context, tmp_path):
+        """Test that resuming from research checkpoint means structure is next."""
+        # Save checkpoint after research
+        save_checkpoint(mock_context, "research", tmp_path)
+
+        # Load and check next phase
+        _, completed = load_checkpoint(tmp_path / "checkpoint.json")
+        next_phase = get_next_phase(completed)
+
+        assert completed == "research"
+        assert next_phase == "structure"
+
+    def test_resume_from_citations_phase(self, mock_context, tmp_path):
+        """Test resuming from citations phase skips research and structure."""
+        # Save checkpoint after citations
+        mock_context.citation_summary = "10 citations found"
+        save_checkpoint(mock_context, "citations", tmp_path)
+
+        _, completed = load_checkpoint(tmp_path / "checkpoint.json")
+        next_phase = get_next_phase(completed)
+
+        assert completed == "citations"
+        assert next_phase == "compose"
+
+    def test_context_roundtrip_with_all_fields(self, tmp_path):
+        """Test full context save/restore preserves all fields."""
+        original = DraftContext()
+        original.topic = "Full Test Topic"
+        original.language = "de"
+        original.academic_level = "phd"
+        original.output_type = "full"
+        original.citation_style = "ieee"
+        original.skip_validation = False
+        original.verbose = True
+        original.blurb = "Test blurb content"
+
+        # Academic metadata
+        original.author_name = "Dr. Test Author"
+        original.institution = "Test University"
+        original.department = "Computer Science"
+        original.faculty = "Engineering"
+        original.advisor = "Prof. Advisor"
+        original.second_examiner = "Prof. Second"
+        original.location = "Berlin"
+        original.student_id = "12345"
+
+        # Phase outputs
+        original.scout_output = "Scout research output"
+        original.scribe_output = "Scribe summary"
+        original.signal_output = "Research gaps"
+        original.architect_output = "Document outline"
+        original.formatter_output = "Formatted outline"
+        original.intro_output = "Introduction text"
+        original.body_output = "Body content"
+        original.conclusion_output = "Conclusion text"
+
+        original.folders = {
+            'root': tmp_path,
+            'research': tmp_path / 'research',
+            'drafts': tmp_path / 'drafts',
+        }
+        original.word_targets = {'min_citations': 50, 'total': '50000-80000'}
+        original.language_name = "German"
+        original.language_instruction = "Write in German"
+
+        # Save and restore
+        save_checkpoint(original, "compose", tmp_path)
+        data, _ = load_checkpoint(tmp_path / "checkpoint.json")
+
+        restored = DraftContext()
+        restore_context(restored, data)
+
+        # Verify all fields
+        assert restored.topic == original.topic
+        assert restored.language == original.language
+        assert restored.academic_level == original.academic_level
+        assert restored.citation_style == original.citation_style
+        assert restored.author_name == original.author_name
+        assert restored.institution == original.institution
+        assert restored.scout_output == original.scout_output
+        assert restored.architect_output == original.architect_output
+        assert restored.body_output == original.body_output
+        assert restored.word_targets == original.word_targets
+
+    def test_checkpoint_timestamp_updated(self, mock_context, tmp_path):
+        """Test that checkpoint timestamp is updated on each save."""
+        import time
+
+        save_checkpoint(mock_context, "research", tmp_path)
+        data1, _ = load_checkpoint(tmp_path / "checkpoint.json")
+        ts1 = data1["timestamp"]
+
+        time.sleep(0.1)  # Small delay
+
+        save_checkpoint(mock_context, "structure", tmp_path)
+        data2, _ = load_checkpoint(tmp_path / "checkpoint.json")
+        ts2 = data2["timestamp"]
+
+        assert ts1 != ts2
+        assert ts2 > ts1  # Second timestamp should be later
