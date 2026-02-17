@@ -233,31 +233,68 @@ class TestAPAReferenceFormatting:
 # =============================================================================
 # UNSUPPORTED STYLE TESTS
 # =============================================================================
+# CHICAGO IN-TEXT CITATION TESTS
+# =============================================================================
 
-class TestUnsupportedStyles:
-    """Test that unsupported styles raise appropriate errors."""
+class TestChicagoInTextCitations:
+    """Test Chicago Author-Date in-text citation formatting."""
 
-    def test_chicago_raises_error(self, sample_citation_single_author):
-        """Chicago style should raise NotImplementedError."""
+    def test_single_author(self, sample_citation_single_author):
+        """Single author: (Smith 2023)"""
         db = CitationDatabase(citations=[], citation_style="Chicago")
         compiler = CitationCompiler(db)
+        result = compiler.format_in_text_citation(sample_citation_single_author)
+        assert result == "(Smith 2023)"
 
-        with pytest.raises(NotImplementedError) as exc_info:
-            compiler.format_in_text_citation(sample_citation_single_author)
+    def test_two_authors(self, sample_citation_two_authors):
+        """Two authors: (Smith and Johnson 2022)"""
+        db = CitationDatabase(citations=[], citation_style="Chicago")
+        compiler = CitationCompiler(db)
+        result = compiler.format_in_text_citation(sample_citation_two_authors)
+        assert result == "(Smith and Johnson 2022)"
 
-        assert "Chicago" in str(exc_info.value)
-        assert "not yet implemented" in str(exc_info.value)
+    def test_multiple_authors(self, sample_citation_multiple_authors):
+        """3+ authors: (Smith et al. 2021)"""
+        db = CitationDatabase(citations=[], citation_style="Chicago")
+        compiler = CitationCompiler(db)
+        result = compiler.format_in_text_citation(sample_citation_multiple_authors)
+        assert result == "(Smith et al. 2021)"
 
-    def test_mla_raises_error(self, sample_citation_single_author):
-        """MLA style should raise NotImplementedError."""
+
+# =============================================================================
+# MLA IN-TEXT CITATION TESTS
+# =============================================================================
+
+class TestMLAInTextCitations:
+    """Test MLA 9th Edition in-text citation formatting."""
+
+    def test_single_author(self, sample_citation_single_author):
+        """Single author: (Smith)"""
         db = CitationDatabase(citations=[], citation_style="MLA")
         compiler = CitationCompiler(db)
+        result = compiler.format_in_text_citation(sample_citation_single_author)
+        assert result == "(Smith)"
 
-        with pytest.raises(NotImplementedError) as exc_info:
-            compiler.format_in_text_citation(sample_citation_single_author)
+    def test_two_authors(self, sample_citation_two_authors):
+        """Two authors: (Smith and Johnson)"""
+        db = CitationDatabase(citations=[], citation_style="MLA")
+        compiler = CitationCompiler(db)
+        result = compiler.format_in_text_citation(sample_citation_two_authors)
+        assert result == "(Smith and Johnson)"
 
-        assert "MLA" in str(exc_info.value)
-        assert "not yet implemented" in str(exc_info.value)
+    def test_multiple_authors(self, sample_citation_multiple_authors):
+        """3+ authors: (Smith et al.)"""
+        db = CitationDatabase(citations=[], citation_style="MLA")
+        compiler = CitationCompiler(db)
+        result = compiler.format_in_text_citation(sample_citation_multiple_authors)
+        assert result == "(Smith et al.)"
+
+
+# =============================================================================
+# UNSUPPORTED STYLES TESTS
+# =============================================================================
+
+class TestUnsupportedStyles:
 
     def test_unknown_style_raises_error(self, sample_citation_single_author):
         """Unknown style should raise NotImplementedError."""
