@@ -227,6 +227,190 @@ def retry_on_network_error(
     return decorator
 
 
+# Circuit Breaker Pattern (V3 feature)
+# Prevents cascading failures by temporarily blocking calls to failing services
+
+import threading
+import time as time_module
+from enum import Enum
+from dataclasses import dataclass
+
+
+class CircuitState(Enum):
+    """Circuit breaker states."""
+    CLOSED = "closed"      # Normal operation, calls allowed
+    OPEN = "open"          # Failures exceeded threshold, calls blocked
+    HALF_OPEN = "half_open"  # Testing if service recovered
+
+
+@dataclass
+class CircuitBreakerConfig:
+    """Configuration for circuit breaker."""
+    failure_threshold: int = 5      # Open circuit after N failures
+    reset_timeout: float = 60.0     # Seconds before trying half-open
+    success_threshold: int = 2      # Successes needed to close from half-open
+
+
+class CircuitBreaker:
+    """
+    Circuit breaker to prevent cascading failures.
+
+    When a service fails repeatedly, the circuit breaker "opens" and
+    immediately rejects calls instead of wasting resources on a failing
+    service. After a cooldown period, it allows a probe call to check
+    if the service has recovered.
+
+    Usage:
+        breaker = CircuitBreaker("gemini_api")
+
+        @breaker.protect
+        def call_gemini(prompt: str) -> str:
+            return gemini_client.generate(prompt)
+
+        # Or manual:
+        if breaker.allow_request():
+            try:
+                result = call_gemini(prompt)
+                breaker.record_success()
+            except Exception as e:
+                breaker.record_failure(e)
+                raise
+    """
+
+    _instances: dict = {}  # Shared state across instances by name
+    _lock = threading.Lock()
+
+    def __new__(cls, name: str, config: Optional[CircuitBreakerConfig] = None):
+        """Ensure single instance per name (singleton per service)."""
+        with cls._lock:
+            if name not in cls._instances:
+                instance = super().__new__(cls)
+                instance._initialized = False
+                cls._instances[name] = instance
+            return cls._instances[name]
+
+    def __init__(self, name: str, config: Optional[CircuitBreakerConfig] = None):
+        """Initialize circuit breaker for a named service."""
+        if getattr(self, '_initialized', False):
+            return  # Already initialized
+
+        self.name = name
+        self.config = config or CircuitBreakerConfig()
+        self.state = CircuitState.CLOSED
+        self.failure_count = 0
+        self.success_count = 0
+        self.last_failure_time: Optional[float] = None
+        self._state_lock = threading.Lock()
+        self._initialized = True
+
+        logger.debug(f"CircuitBreaker '{name}' initialized: {self.config}")
+
+    def allow_request(self) -> bool:
+        """Check if a request should be allowed."""
+        with self._state_lock:
+            if self.state == CircuitState.CLOSED:
+                return True
+
+            if self.state == CircuitState.OPEN:
+                # Check if reset timeout has passed
+                if self.last_failure_time is None:
+                    return True
+                elapsed = time_module.time() - self.last_failure_time
+                if elapsed >= self.config.reset_timeout:
+                    # Transition to half-open
+                    self.state = CircuitState.HALF_OPEN
+                    self.success_count = 0
+                    logger.info(f"CircuitBreaker '{self.name}': OPEN -> HALF_OPEN (probe allowed)")
+                    return True
+                return False
+
+            if self.state == CircuitState.HALF_OPEN:
+                # Allow single probe request
+                return True
+
+            return False
+
+    def record_success(self) -> None:
+        """Record a successful call."""
+        with self._state_lock:
+            if self.state == CircuitState.HALF_OPEN:
+                self.success_count += 1
+                if self.success_count >= self.config.success_threshold:
+                    self.state = CircuitState.CLOSED
+                    self.failure_count = 0
+                    self.success_count = 0
+                    logger.info(f"CircuitBreaker '{self.name}': HALF_OPEN -> CLOSED (service recovered)")
+            elif self.state == CircuitState.CLOSED:
+                # Reset failure count on success
+                self.failure_count = 0
+
+    def record_failure(self, error: Optional[Exception] = None) -> None:
+        """Record a failed call."""
+        with self._state_lock:
+            self.failure_count += 1
+            self.last_failure_time = time_module.time()
+
+            if self.state == CircuitState.HALF_OPEN:
+                # Probe failed, back to open
+                self.state = CircuitState.OPEN
+                logger.warning(f"CircuitBreaker '{self.name}': HALF_OPEN -> OPEN (probe failed: {error})")
+            elif self.state == CircuitState.CLOSED:
+                if self.failure_count >= self.config.failure_threshold:
+                    self.state = CircuitState.OPEN
+                    logger.warning(
+                        f"CircuitBreaker '{self.name}': CLOSED -> OPEN "
+                        f"(threshold {self.config.failure_threshold} reached)"
+                    )
+
+    def protect(self, func: Callable[..., T]) -> Callable[..., T]:
+        """Decorator to protect a function with the circuit breaker."""
+        @functools.wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> T:
+            if not self.allow_request():
+                raise CircuitOpenError(
+                    f"Circuit breaker '{self.name}' is OPEN - service unavailable"
+                )
+            try:
+                result = func(*args, **kwargs)
+                self.record_success()
+                return result
+            except Exception as e:
+                self.record_failure(e)
+                raise
+        return wrapper
+
+    def reset(self) -> None:
+        """Reset circuit breaker to closed state (for testing)."""
+        with self._state_lock:
+            self.state = CircuitState.CLOSED
+            self.failure_count = 0
+            self.success_count = 0
+            self.last_failure_time = None
+            logger.debug(f"CircuitBreaker '{self.name}' reset to CLOSED")
+
+
+class CircuitOpenError(Exception):
+    """Raised when circuit breaker is open and request is rejected."""
+    pass
+
+
+# Pre-configured circuit breakers for common services
+def get_gemini_circuit_breaker() -> CircuitBreaker:
+    """Get or create circuit breaker for Gemini API."""
+    return CircuitBreaker(
+        "gemini_api",
+        CircuitBreakerConfig(failure_threshold=5, reset_timeout=60.0, success_threshold=2)
+    )
+
+
+def get_citation_circuit_breaker() -> CircuitBreaker:
+    """Get or create circuit breaker for citation APIs."""
+    return CircuitBreaker(
+        "citation_apis",
+        CircuitBreakerConfig(failure_threshold=10, reset_timeout=30.0, success_threshold=3)
+    )
+
+
 # Example usage and testing
 if __name__ == '__main__':
     import requests

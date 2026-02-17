@@ -171,6 +171,10 @@ def run_agent(
     # Initialize output variable with explicit type
     output: str = ""
 
+    # Empty loop detection (V3 feature): exit early if model produces empty output repeatedly
+    consecutive_empty_outputs = 0
+    MAX_CONSECUTIVE_EMPTY = 3
+
     # Retry loop with exponential backoff
     for attempt in range(max_retries):
         if verbose and attempt > 0:
@@ -269,6 +273,29 @@ def run_agent(
             from utils.text_utils import clean_agent_output
             output = clean_agent_output(output)
 
+            # Empty loop detection (V3 feature): track consecutive empty/trivial outputs
+            if len(output.strip()) < 50:  # Effectively empty or trivial
+                consecutive_empty_outputs += 1
+                logger.warning(
+                    f"Agent '{name}': Empty/trivial output detected ({consecutive_empty_outputs}/{MAX_CONSECUTIVE_EMPTY})"
+                )
+                if consecutive_empty_outputs >= MAX_CONSECUTIVE_EMPTY:
+                    logger.error(
+                        f"Agent '{name}': Exiting early after {MAX_CONSECUTIVE_EMPTY} consecutive empty outputs"
+                    )
+                    if verbose:
+                        safe_print(f"⚠️ Model stuck - {MAX_CONSECUTIVE_EMPTY} consecutive empty outputs")
+                    # Return whatever partial output we have (could be empty)
+                    break
+                # Continue to retry
+                if attempt < max_retries - 1:
+                    backoff_seconds = 2 ** attempt
+                    time.sleep(backoff_seconds)
+                    continue
+            else:
+                # Reset counter on successful non-empty output
+                consecutive_empty_outputs = 0
+
             logger.debug(f"Agent '{name}': Generated {len(output)} chars in {time.time() - start_time:.1f}s")
 
             # Track token usage if tracker is provided
@@ -352,6 +379,17 @@ def run_agent(
                 time.sleep(backoff_seconds)
                 continue
             else:
+                # Partial output capture (V3 feature): on timeout, check for any files written
+                if save_to and ('timeout' in str(e).lower() or 'timed out' in str(e).lower()):
+                    partial_output = _capture_partial_output(save_to, name)
+                    if partial_output:
+                        logger.warning(
+                            f"Agent '{name}': Timeout, but captured partial output ({len(partial_output)} chars)"
+                        )
+                        if verbose:
+                            safe_print(f"⚠️ Timeout - captured {len(partial_output)} chars of partial output")
+                        output = partial_output
+                        break  # Exit retry loop with partial output
                 raise Exception(f"Agent '{name}' execution failed: {str(e)}") from e
 
     elapsed = time.time() - start_time
@@ -385,6 +423,57 @@ def run_agent(
     return output
 
 
+def _capture_partial_output(save_path: Path, agent_name: str) -> Optional[str]:
+    """
+    Capture partial output on timeout (V3 feature).
+
+    When an agent times out, check if any partial work was written to the output
+    directory. This recovers work that would otherwise be lost.
+
+    Args:
+        save_path: Path where output would be saved
+        agent_name: Name of the agent (for logging)
+
+    Returns:
+        str or None: Partial output if found, None otherwise
+    """
+    try:
+        output_dir = save_path.parent
+        if not output_dir.exists():
+            return None
+
+        # Check for the output file itself (might have been partially written)
+        if save_path.exists() and save_path.stat().st_size > 0:
+            content = save_path.read_text(encoding='utf-8')
+            if len(content.strip()) > 50:  # Non-trivial content
+                logger.info(f"Agent '{agent_name}': Found partial output in {save_path}")
+                return content
+
+        # Check for any recent files in the output directory
+        recent_files = []
+        for f in output_dir.iterdir():
+            if f.is_file() and f.suffix in ['.md', '.txt', '.json']:
+                recent_files.append((f, f.stat().st_mtime))
+
+        if not recent_files:
+            return None
+
+        # Get most recently modified file
+        recent_files.sort(key=lambda x: x[1], reverse=True)
+        most_recent = recent_files[0][0]
+
+        if most_recent.stat().st_size > 0:
+            content = most_recent.read_text(encoding='utf-8')
+            if len(content.strip()) > 50:
+                logger.info(f"Agent '{agent_name}': Found partial output in {most_recent}")
+                return content
+
+        return None
+    except Exception as e:
+        logger.debug(f"Agent '{agent_name}': Partial output capture failed: {e}")
+        return None
+
+
 def _is_transient_error(error: Exception) -> bool:
     """
     Check if error is transient and worth retrying.
@@ -397,15 +486,43 @@ def _is_transient_error(error: Exception) -> bool:
         bool: True if error is transient (network, rate limit, etc.)
     """
     error_str = str(error).lower()
+    # Expanded patterns from V3 - covers more network/API edge cases
     transient_patterns = [
+        # Rate limiting
         'timeout',
         'rate limit',
+        'rate_limit',
+        'ratelimit',
         'quota',
+        'throttl',
+        '429',  # Too Many Requests
+        # Server errors
         'service unavailable',
         'temporarily unavailable',
-        '429',  # Too Many Requests
+        'server error',
+        'internal error',
+        '500',  # Internal Server Error
+        '502',  # Bad Gateway
         '503',  # Service Unavailable
         '504',  # Gateway Timeout
+        # Network errors
+        'connection reset',
+        'connection refused',
+        'connection closed',
+        'server disconnected',
+        'broken pipe',
+        'network unreachable',
+        'dns',
+        'ssl',
+        'certificate',
+        'handshake',
+        # API-specific
+        'resource exhausted',
+        'overloaded',
+        'capacity',
+        'retry',
+        'try again',
+        'temporary',
     ]
 
     is_transient = any(pattern in error_str for pattern in transient_patterns)

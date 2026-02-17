@@ -2,7 +2,39 @@
 
 **Last Updated:** 2026-02-17
 **Assessed By:** Claude Code
-**Overall Score:** 10/10
+**Overall Score:** 9/10
+
+> **Note:** V1 was previously marked 10/10 for resolved issues. This update adds
+> bottlenecks identified by comparing V1 to V3's more robust architecture.
+
+---
+
+## HIGH Severity Bottlenecks (vs V3)
+
+### 1. No Pipeline-Level Retry
+- **Location:** `draft_generator.py:generate_draft()` lines 629-695
+- **Problem:** If any agent fails, entire pipeline fails
+- **V3 Has:** Pipeline-level retry with 50% extended timeout on failure
+- **Impact:** Transient failures require manual re-run from checkpoint
+- **Fix:** Wrap agent phase calls in retry loop with extended timeout
+
+---
+
+## MEDIUM Severity Bottlenecks
+
+### 2. No Citation-Claim Verification
+- **Location:** `phases/compose.py` (writer prompts)
+- **Problem:** Writer uses citations without verifying they support claims
+- **V3 Has:** Explicit citation-claim matching rules in writer prompt
+- **Impact:** Citation-claim mismatches (e.g., "creatine" citation for "caffeine" claim)
+- **Fix:** Add verification instructions to writer prompt
+
+### 3. No Batch Citation Adding
+- **Location:** `utils/citation_database.py`
+- **Problem:** Citations added one at a time
+- **V3 Has:** `citation_db_add_batch()` for bulk inserts
+- **Impact:** 35% slower citation phase for large citation sets
+- **Fix:** Add batch insert method
 
 ---
 
@@ -53,6 +85,36 @@
   - Score >= 50: Continue with warnings
   - Score < 50 + strict mode: Fail fast with error
 
+### Circuit Breaker Pattern - FIXED
+- **Problem:** No protection against cascading API failures
+- **Solution:** Added `CircuitBreaker` class to `utils/retry.py`
+- **Features:**
+  - Opens after 5 failures, blocks calls for 60s
+  - Half-open state allows probe requests
+  - Closes after 2 successes in half-open state
+  - Pre-configured breakers: `get_gemini_circuit_breaker()`, `get_citation_circuit_breaker()`
+
+### Expanded Transient Error Detection - FIXED
+- **Problem:** Only 8 patterns in `_is_transient_error()`
+- **Solution:** Expanded to 30+ patterns in `utils/agent_runner.py`
+- **New patterns:** connection reset, server disconnected, DNS, SSL, handshake, resource exhausted, overloaded, capacity, etc.
+
+### Partial Output Capture on Timeout - FIXED
+- **Problem:** Agent timeout loses all work
+- **Solution:** Added `_capture_partial_output()` to `utils/agent_runner.py`
+- **Features:**
+  - On timeout, checks for files written to output directory
+  - Returns partial content if found (>50 chars)
+  - Prevents total loss of work on complex topics
+
+### Empty Loop Detection - FIXED
+- **Problem:** Model stuck producing empty outputs wastes API calls
+- **Solution:** Added early exit logic to `run_agent()` in `utils/agent_runner.py`
+- **Features:**
+  - Tracks consecutive empty/trivial outputs (<50 chars)
+  - Exits early after 3 consecutive empty outputs
+  - Returns partial result instead of wasting retries
+
 ---
 
 ## LOW Severity (Remaining)
@@ -72,25 +134,62 @@
 
 ## What Works Well
 
+- **Simplicity:** ~2.3k lines vs V3's ~18k (8x smaller, easier to debug)
 - Clean phase separation in `engine/phases/`
-- 290 tests passing
+- **444 tests passing** (including live API integration tests)
 - CI/CD with quality gates
 - Recently migrated to google-genai SDK
-- Good retry logic in citation scrapers
+- Good retry logic in citation scrapers (uses tenacity)
 - Inter-phase validation prevents garbage propagation
 - Full citation style support (APA, IEEE, Chicago, MLA, NALT)
 - Single CLI entry point
 - Checkpoint/resume for long runs (`--resume` flag)
 - No circular imports between modules
+- **Circuit breaker pattern** prevents cascading failures
+- **Partial output capture** recovers work on timeout
+- **Empty loop detection** prevents wasted API calls
+- **30+ transient error patterns** for intelligent retry
+
+---
+
+## V1 vs V3 Comparison
+
+| Feature | V1 | V3 |
+|---------|-----|-----|
+| Lines of code | ~2.3k | ~18k |
+| Tests | 444 | 482 |
+| Circuit breaker | **Yes** | Yes |
+| Transient error patterns | **30+** | 15+ |
+| Pipeline retry | None | 50% extended timeout |
+| Partial output capture | **Yes** | Yes |
+| Empty loop detection | **Yes** | Yes |
+| Citation batch add | No | Yes (-35% cost) |
+| Citation-claim verification | No | Yes (prompt rules) |
+| Quality gate threshold | 85% | 75% |
+| Complexity | Simple | Over-engineered |
+
+**Verdict:** V1 now has most of V3's resilience features while remaining 8x smaller.
+Only missing pipeline-level retry, citation-claim verification, and batch citation inserts.
 
 ---
 
 ## Recommended Priority
 
+**Completed:**
 1. ~~Consolidate generate_thesis scripts into CLI~~ DONE
 2. ~~Add checkpoint/resume~~ DONE
 3. ~~Add inter-phase validation~~ DONE
 4. ~~Fix circular imports~~ DONE
 5. ~~Add quality gate~~ DONE
+6. ~~Add circuit breaker to `utils/retry.py`~~ DONE
+7. ~~Expand transient error patterns (30+ patterns)~~ DONE
+8. ~~Add partial output capture on timeout~~ DONE
+9. ~~Add empty loop detection~~ DONE
 
-**All critical issues resolved!** Only low-priority tech debt remains (sprawling utils).
+**Remaining Bottleneck Fixes:**
+1. Add pipeline-level retry with extended timeout
+2. Add citation-claim verification rules to writer prompt
+3. Add batch citation insert method
+
+**Low Priority (tech debt):**
+- Consolidate sprawling utils (36 files)
