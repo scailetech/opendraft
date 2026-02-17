@@ -36,8 +36,8 @@ def run_citation_management(ctx: DraftContext) -> None:
     style_map = {"apa": "APA 7th", "ieee": "IEEE", "nalt": "NALT", "chicago": "Chicago", "mla": "MLA"}
     resolved_style = style_map.get(ctx.citation_style, "APA 7th")
 
-    # Import get_language_name from draft_generator (stays there as utility)
-    from draft_generator import get_language_name
+    # Import get_language_name from text_utils (shared to avoid circular imports)
+    from utils.text_utils import get_language_name
 
     ctx.citation_database = CitationDatabase(
         citations=scout_citations,

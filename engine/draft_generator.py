@@ -59,6 +59,12 @@ from phases import (
     run_expose_export,
 )
 
+# Checkpoint system
+from utils.checkpoint import save_checkpoint, load_checkpoint, restore_context, get_next_phase
+
+# Quality gate
+from utils.quality_gate import run_quality_gate
+
 # Configure comprehensive logging
 logging.basicConfig(
     level=logging.INFO,
@@ -321,6 +327,61 @@ def get_word_count_targets(academic_level: str) -> dict:
     return targets.get(academic_level, targets['master'])
 
 
+class PipelineValidationError(ValueError):
+    """Raised when inter-phase validation fails."""
+    pass
+
+
+def validate_research_phase(ctx: 'DraftContext') -> None:
+    """Validate research phase outputs before proceeding to structure."""
+    if not ctx.scout_result:
+        raise PipelineValidationError("Research phase failed: scout_result is empty")
+
+    citations = ctx.scout_result.get('citations', [])
+    if not citations:
+        raise PipelineValidationError("Research phase failed: no citations found")
+
+    min_citations = ctx.word_targets.get('min_citations', 10)
+    # Allow proceeding with fewer citations, but warn
+    if len(citations) < min_citations // 2:
+        logger.warning(f"Research found only {len(citations)} citations (target: {min_citations})")
+
+
+def validate_structure_phase(ctx: 'DraftContext') -> None:
+    """Validate structure phase outputs before proceeding to citation management."""
+    if not ctx.architect_output:
+        raise PipelineValidationError("Structure phase failed: architect_output is empty")
+
+    # Check for basic outline structure
+    if '##' not in ctx.architect_output and '#' not in ctx.architect_output:
+        logger.warning("Structure output may be malformed: no markdown headers found")
+
+
+def validate_citation_phase(ctx: 'DraftContext') -> None:
+    """Validate citation management outputs before proceeding to compose."""
+    if not ctx.citation_database:
+        raise PipelineValidationError("Citation phase failed: citation_database is empty")
+
+    if not ctx.citation_database.citations:
+        raise PipelineValidationError("Citation phase failed: no citations in database")
+
+    if not ctx.citation_summary:
+        logger.warning("Citation summary is empty - writers may not cite correctly")
+
+
+def validate_compose_phase(ctx: 'DraftContext') -> None:
+    """Validate compose phase outputs before proceeding to compile."""
+    if not ctx.intro_output:
+        raise PipelineValidationError("Compose phase failed: introduction is empty")
+
+    # Check at least some body content exists
+    body_sections = [ctx.lit_review_output, ctx.methodology_output, ctx.results_output, ctx.discussion_output]
+    filled_sections = sum(1 for s in body_sections if s)
+
+    if filled_sections == 0:
+        raise PipelineValidationError("Compose phase failed: no body sections generated")
+
+
 def copy_tools_to_output(tools_dir: Path, topic: str, academic_level: str, verbose: bool = True):
     """Copy refinement prompts and create .cursorrules for the output folder."""
     project_root = Path(__file__).parent.parent
@@ -389,6 +450,7 @@ def generate_draft(
     location: Optional[str] = None,
     student_id: Optional[str] = None,
     citation_style: str = "apa",
+    resume_from: Optional[Path] = None,
 ) -> Tuple[Path, Path]:
     """
     Generate a complete academic draft using specialized AI agents.
@@ -413,6 +475,7 @@ def generate_draft(
         location: City/location for date line
         student_id: Student matriculation number
         citation_style: Citation format - 'apa' or 'ieee' (default: 'apa')
+        resume_from: Path to checkpoint.json to resume from (skips completed phases)
 
     Returns:
         Tuple[Path, Path]: (pdf_path, docx_path) - Paths to generated draft files
@@ -535,19 +598,83 @@ def generate_draft(
             ctx.token_tracker = None
 
         # ====================================================================
-        # Execute pipeline phases
+        # Handle resume from checkpoint
         # ====================================================================
-        run_research_phase(ctx)
-        run_structure_phase(ctx)
-        run_citation_management(ctx)
+        completed_phase = None
+        if resume_from and resume_from.exists():
+            logger.info(f"Resuming from checkpoint: {resume_from}")
+            checkpoint_data, completed_phase = load_checkpoint(resume_from)
+            restore_context(ctx, checkpoint_data)
 
+            # Reload citation database if citations phase was completed
+            if completed_phase in ["citations", "compose", "validate", "compile"]:
+                from utils.citation_database import load_citation_database
+                bibliography_path = ctx.folders['research'] / "bibliography.json"
+                if bibliography_path.exists():
+                    ctx.citation_database = load_citation_database(bibliography_path)
+                    logger.info(f"Restored citation database: {len(ctx.citation_database.citations)} citations")
+
+            if verbose:
+                print(f"   Resumed from checkpoint (completed: {completed_phase})")
+
+        # ====================================================================
+        # Execute pipeline phases with inter-phase validation and checkpoints
+        # ====================================================================
+
+        # RESEARCH PHASE
+        if not completed_phase or get_next_phase(completed_phase) == "research":
+            if completed_phase:
+                logger.info("Starting fresh (no phases completed yet)")
+            run_research_phase(ctx)
+            validate_research_phase(ctx)
+            save_checkpoint(ctx, "research", output_dir)
+            completed_phase = "research"
+
+        # STRUCTURE PHASE
+        if get_next_phase(completed_phase) == "structure" or completed_phase == "research":
+            run_structure_phase(ctx)
+            validate_structure_phase(ctx)
+            save_checkpoint(ctx, "structure", output_dir)
+            completed_phase = "structure"
+
+        # CITATIONS PHASE
+        if get_next_phase(completed_phase) == "citations" or completed_phase == "structure":
+            run_citation_management(ctx)
+            validate_citation_phase(ctx)
+            save_checkpoint(ctx, "citations", output_dir)
+            completed_phase = "citations"
+
+        # EXPOSE MODE: Early exit after citations
         if ctx.output_type == 'expose':
             pdf_path, docx_path = run_expose_export(ctx)
             _finalize(ctx, pdf_path, docx_path, draft_start_time)
             return pdf_path, docx_path
 
-        run_compose_phase(ctx)
-        run_validate_phase(ctx)
+        # COMPOSE PHASE
+        if get_next_phase(completed_phase) == "compose" or completed_phase == "citations":
+            run_compose_phase(ctx)
+            validate_compose_phase(ctx)
+            save_checkpoint(ctx, "compose", output_dir)
+            completed_phase = "compose"
+
+        # QUALITY GATE (after compose, before validate)
+        quality_result = run_quality_gate(ctx, strict=not skip_validation)
+        if verbose:
+            print(f"   Quality Score: {quality_result.total_score}/100")
+            if quality_result.issues:
+                for issue in quality_result.issues[:3]:  # Show top 3 issues
+                    print(f"   ⚠ {issue}")
+
+        # VALIDATE PHASE (skip if quality is very high)
+        if quality_result.total_score >= 85:
+            logger.info(f"Quality score {quality_result.total_score} >= 85, skipping QA phase")
+            if verbose:
+                print("   ✓ High quality - skipping QA phase")
+            completed_phase = "validate"  # Mark as complete
+        elif get_next_phase(completed_phase) == "validate" or completed_phase == "compose":
+            run_validate_phase(ctx)
+            save_checkpoint(ctx, "validate", output_dir)
+            completed_phase = "validate"
 
         # Copy tools and README
         copy_tools_to_output(folders['tools'], topic, academic_level, verbose)

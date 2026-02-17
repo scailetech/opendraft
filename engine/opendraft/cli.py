@@ -823,6 +823,12 @@ def main():
         help="Generate research exposé only (faster, no full draft)"
     )
 
+    parser.add_argument(
+        "--resume",
+        type=Path,
+        help="Resume from checkpoint (path to checkpoint.json or output directory)"
+    )
+
     args = parser.parse_args()
     c = Colors
 
@@ -908,6 +914,22 @@ def main():
         output_dir = args.output or Path.cwd() / 'opendraft_output'
         output_type = 'expose' if args.expose else 'full'
 
+        # Handle resume from checkpoint
+        resume_from = None
+        if args.resume:
+            resume_path = Path(args.resume)
+            if resume_path.is_dir():
+                resume_from = resume_path / "checkpoint.json"
+            else:
+                resume_from = resume_path
+            if resume_from.exists():
+                print(f"  {c.CYAN}Resuming from checkpoint...{c.RESET}")
+                # Use output_dir from checkpoint location
+                output_dir = resume_from.parent
+            else:
+                print(f"  {c.YELLOW}!{c.RESET} Checkpoint not found: {resume_from}")
+                resume_from = None
+
         pdf_path, docx_path = generate_draft(
             topic=args.topic,
             language=args.lang,
@@ -922,6 +944,7 @@ def main():
             department=args.department,
             advisor=args.advisor,
             citation_style=args.style,
+            resume_from=resume_from,
         )
 
         print()

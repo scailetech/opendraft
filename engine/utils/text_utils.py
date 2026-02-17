@@ -770,3 +770,51 @@ def clean_ai_language(text: str) -> str:
     text = re.sub(r'\. +([a-z])', lambda m: '. ' + m.group(1).upper(), text)
 
     return text
+
+
+# =============================================================================
+# SHARED UTILITIES (to avoid circular imports from draft_generator.py)
+# =============================================================================
+
+def slugify(text: str, max_length: int = 30) -> str:
+    """Convert text to a safe filename slug."""
+    slug = re.sub(r'[^\w\s-]', '', text.lower())
+    slug = re.sub(r'[\s_]+', '_', slug).strip('_')
+    return slug[:max_length]
+
+
+def get_language_name(language_code: str) -> str:
+    """
+    Convert language code to full language name for prompts and formatting.
+
+    Args:
+        language_code: ISO 639-1 language code (e.g., 'en-US', 'en-GB', 'es', 'fr')
+
+    Returns:
+        Full language name (e.g., 'American English', 'British English', 'Spanish', 'French')
+    """
+    language_map = {
+        'en': 'English', 'en-US': 'American English', 'en-GB': 'British English',
+        'en-AU': 'Australian English', 'en-CA': 'Canadian English',
+        'en-NZ': 'New Zealand English', 'en-IE': 'Irish English',
+        'en-ZA': 'South African English',
+        'de': 'German', 'de-DE': 'German (Germany)', 'de-AT': 'German (Austria)',
+        'de-CH': 'German (Switzerland)',
+        'es': 'Spanish', 'es-ES': 'Spanish (Spain)', 'es-MX': 'Spanish (Mexico)',
+        'es-AR': 'Spanish (Argentina)',
+        'fr': 'French', 'fr-FR': 'French (France)', 'fr-CA': 'French (Canada)',
+        'fr-BE': 'French (Belgium)',
+        'it': 'Italian',
+        'pt': 'Portuguese', 'pt-BR': 'Portuguese (Brazil)', 'pt-PT': 'Portuguese (Portugal)',
+        'nl': 'Dutch', 'nl-NL': 'Dutch (Netherlands)', 'nl-BE': 'Dutch (Belgium)',
+        'ru': 'Russian',
+        'zh': 'Chinese', 'zh-CN': 'Chinese (Simplified)', 'zh-TW': 'Chinese (Traditional)',
+        'ja': 'Japanese', 'ko': 'Korean', 'ar': 'Arabic', 'hi': 'Hindi',
+        'sv': 'Swedish', 'no': 'Norwegian', 'da': 'Danish', 'fi': 'Finnish',
+        'pl': 'Polish', 'cs': 'Czech', 'tr': 'Turkish', 'he': 'Hebrew',
+        'th': 'Thai', 'vi': 'Vietnamese', 'id': 'Indonesian', 'ms': 'Malay',
+        'uk': 'Ukrainian', 'ro': 'Romanian', 'hu': 'Hungarian', 'el': 'Greek',
+        'bg': 'Bulgarian', 'hr': 'Croatian', 'sk': 'Slovak', 'sl': 'Slovenian',
+        'et': 'Estonian', 'lv': 'Latvian', 'lt': 'Lithuanian',
+    }
+    return language_map.get(language_code, language_code.upper())

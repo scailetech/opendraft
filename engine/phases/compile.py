@@ -24,7 +24,7 @@ def run_expose_export(ctx: DraftContext) -> Tuple[Path, Path]:
     Returns: (pdf_path, docx_path)
     """
     from utils.export_professional import export_pdf, export_docx
-    from draft_generator import slugify, get_language_name
+    from utils.text_utils import slugify, get_language_name
 
     logger.info("=" * 80)
     logger.info("EXPOSE MODE: Generating research overview (skipping full draft)")
@@ -165,7 +165,7 @@ def run_compile_and_export(ctx: DraftContext) -> Tuple[Path, Path]:
     from utils.export_professional import export_pdf, export_docx
     from utils.text_utils import clean_ai_language, strip_meta_text, localize_chapter_headings, clean_agent_output
     from utils.text_cleanup import apply_full_cleanup
-    from draft_generator import slugify
+    from utils.text_utils import slugify
 
     if ctx.verbose:
         print("\n🔧 PHASE 4: COMPILE")
