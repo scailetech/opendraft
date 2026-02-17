@@ -33,7 +33,7 @@ def run_citation_management(ctx: DraftContext) -> None:
         citation.id = f"cite_{i:03d}"
 
     # Map CLI-style values to internal CitationStyle format
-    style_map = {"apa": "APA 7th", "ieee": "IEEE", "nalt": "NALT"}
+    style_map = {"apa": "APA 7th", "ieee": "IEEE", "nalt": "NALT", "chicago": "Chicago", "mla": "MLA"}
     resolved_style = style_map.get(ctx.citation_style, "APA 7th")
 
     # Import get_language_name from draft_generator (stays there as utility)
@@ -125,7 +125,7 @@ def _build_citation_summary(citation_database) -> str:
                 abstract_preview += "..."
             citation_summary += f"   Abstract: {abstract_preview}\n"
 
-        citation_summary += f"   Citation format: {{{{cite_{citation.id}}}}}\n\n"
+        citation_summary += f"   Citation format: {{{{{citation.id}}}}}\n\n"
 
     citation_summary += f"\n{'='*80}\n"
     citation_summary += f"Total citations available: {len(citation_database.citations)}\n"
