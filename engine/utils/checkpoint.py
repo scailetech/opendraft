@@ -201,7 +201,7 @@ def get_next_phase(completed_phase: str) -> Optional[str]:
 
 def _serialize_scout_result(scout_result: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """Serialize scout_result, converting Citation objects to dicts."""
-    if not scout_result:
+    if scout_result is None:
         return None
 
     from utils.citation_database import Citation
@@ -220,7 +220,7 @@ def _serialize_scout_result(scout_result: Optional[Dict[str, Any]]) -> Optional[
 
 def _deserialize_scout_result(scout_result: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """Deserialize scout_result, converting dicts back to Citation objects."""
-    if not scout_result:
+    if scout_result is None:
         return None
 
     from utils.citation_database import Citation

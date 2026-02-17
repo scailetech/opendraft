@@ -15,8 +15,11 @@ from utils.checkpoint import (
     restore_context,
     get_next_phase,
     PHASES,
+    _serialize_scout_result,
+    _deserialize_scout_result,
 )
 from phases.context import DraftContext
+from utils.citation_database import Citation
 
 
 @pytest.fixture
@@ -150,9 +153,94 @@ class TestRestoreContext:
         """Test folders are restored as Path objects."""
         save_checkpoint(mock_context, "research", tmp_path)
         data, _ = load_checkpoint(tmp_path / "checkpoint.json")
-        
+
         new_ctx = DraftContext()
         restore_context(new_ctx, data)
-        
+
         assert isinstance(new_ctx.folders['root'], Path)
         assert str(new_ctx.folders['root']) == "/tmp/test"
+
+
+class TestCitationSerialization:
+    """Test Citation object serialization roundtrip."""
+
+    def test_serialize_citation_objects(self):
+        """Test that Citation objects serialize to dicts."""
+        citation = Citation(
+            citation_id="cite_001",
+            authors=["Smith, J.", "Doe, A."],
+            year=2024,
+            title="Test Paper Title",
+            source_type="journal",
+            journal="Test Journal",
+            doi="10.1234/test",
+        )
+
+        scout_result = {
+            "citations": [citation],
+            "other_data": "preserved"
+        }
+
+        serialized = _serialize_scout_result(scout_result)
+
+        assert serialized["other_data"] == "preserved"
+        assert isinstance(serialized["citations"][0], dict)
+        assert serialized["citations"][0]["id"] == "cite_001"
+        assert serialized["citations"][0]["authors"] == ["Smith, J.", "Doe, A."]
+
+    def test_deserialize_citation_dicts(self):
+        """Test that citation dicts deserialize to Citation objects."""
+        scout_result = {
+            "citations": [{
+                "id": "cite_001",
+                "authors": ["Smith, J."],
+                "year": 2024,
+                "title": "Test Paper",
+                "source_type": "journal",
+                "language": "english",
+            }],
+            "other_data": "preserved"
+        }
+
+        deserialized = _deserialize_scout_result(scout_result)
+
+        assert deserialized["other_data"] == "preserved"
+        assert isinstance(deserialized["citations"][0], Citation)
+        assert deserialized["citations"][0].id == "cite_001"
+        assert deserialized["citations"][0].authors == ["Smith, J."]
+
+    def test_citation_roundtrip(self):
+        """Test full serialize -> deserialize roundtrip preserves data."""
+        original_citation = Citation(
+            citation_id="cite_042",
+            authors=["Alice, B.", "Charlie, D.", "Eve, F."],
+            year=2023,
+            title="Roundtrip Test Paper",
+            source_type="conference",
+            journal=None,
+            publisher="Test Publisher",
+            doi="10.5678/roundtrip",
+            url="https://example.com/paper",
+            abstract="This is a test abstract.",
+        )
+
+        scout_result = {"citations": [original_citation]}
+
+        serialized = _serialize_scout_result(scout_result)
+        deserialized = _deserialize_scout_result(serialized)
+
+        restored = deserialized["citations"][0]
+
+        assert restored.id == original_citation.id
+        assert restored.authors == original_citation.authors
+        assert restored.year == original_citation.year
+        assert restored.title == original_citation.title
+        assert restored.source_type == original_citation.source_type
+        assert restored.doi == original_citation.doi
+
+    def test_empty_scout_result(self):
+        """Test handling of None/empty scout_result."""
+        assert _serialize_scout_result(None) is None
+        assert _deserialize_scout_result(None) is None
+        assert _serialize_scout_result({}) == {}
+        assert _deserialize_scout_result({}) == {}
