@@ -70,8 +70,14 @@ dev = [
 docker = [
     "streamlit>=1.28.0",
 ]
+pdf = [
+    "pymupdf>=1.23.0",
+]
+audio = [
+    "requests>=2.31.0",
+]
 all = [
-    "opendraft[dev,docker]",
+    "opendraft[dev,docker,pdf,audio]",
 ]
 
 [project.urls]

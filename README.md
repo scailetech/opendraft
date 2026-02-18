@@ -105,6 +105,53 @@ MIT license. Self-host with your own API keys. No subscriptions, no paywalls, no
 
 ---
 
+## TL;DR and Digest Tools
+
+OpenDraft includes two standalone tools for quickly understanding any research paper:
+
+### TL;DR: 5-Bullet Summary
+
+Generate a concise 5-bullet summary of any paper in seconds:
+
+```bash
+# As a subcommand
+opendraft tldr paper.pdf
+
+# Or standalone
+opendraft-tldr paper.pdf
+
+# Output to file
+opendraft tldr paper.pdf -o summary.md
+```
+
+Each bullet follows academic structure: thesis, key finding, method, implication, limitation.
+
+### Digest: 60-Second Audio Briefing
+
+Generate a podcast-style audio summary you can listen to:
+
+```bash
+# Generate script + audio
+opendraft digest paper.pdf
+
+# Choose a different voice (rachel, adam, josh, elli, bella)
+opendraft digest paper.pdf --voice adam
+
+# Script only (no audio)
+opendraft digest paper.pdf --no-audio
+
+# Specify output directory
+opendraft digest paper.pdf -o output/
+```
+
+**Requirements:**
+- Digest audio requires an [ElevenLabs API key](https://elevenlabs.io/) set as `ELEVENLABS_API_KEY`
+- PDF reading requires the optional `pdf` extra: `pip install opendraft[pdf]`
+
+Both tools work with any academic paper (PDF, Markdown, or plain text), not just OpenDraft-generated documents.
+
+---
+
 ## Quick Start
 
 ### Prerequisites
