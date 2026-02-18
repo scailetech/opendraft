@@ -115,6 +115,59 @@ def slugify(text: str, max_length: int = 30) -> str:
     return slug[:max_length]
 
 
+def run_phase_with_retry(
+    phase_func,
+    ctx: 'DraftContext',
+    phase_name: str,
+    max_retries: int = 2,
+    timeout_multiplier: float = 1.5,
+) -> None:
+    """
+    Run a pipeline phase with retry and extended timeout on failure (V3 feature).
+
+    If a phase fails due to a transient error, retries with 50% extended timeout.
+    This prevents entire pipeline failures from temporary API issues.
+
+    Args:
+        phase_func: The phase function to call (e.g., run_research_phase)
+        ctx: DraftContext to pass to the phase
+        phase_name: Name of the phase for logging
+        max_retries: Maximum retry attempts (default: 2)
+        timeout_multiplier: Timeout extension on retry (default: 1.5x)
+    """
+    from utils.agent_runner import _is_transient_error
+
+    last_error = None
+    for attempt in range(max_retries + 1):
+        try:
+            if attempt > 0:
+                logger.warning(f"[RETRY] {phase_name} attempt {attempt + 1}/{max_retries + 1}")
+                if ctx.verbose:
+                    print(f"   Retrying {phase_name} (attempt {attempt + 1})...")
+
+            phase_func(ctx)
+            return  # Success
+
+        except Exception as e:
+            last_error = e
+
+            # Check if error is transient and worth retrying
+            if attempt < max_retries and _is_transient_error(e):
+                logger.warning(f"[RETRY] {phase_name} failed with transient error: {e}")
+                # Exponential backoff
+                backoff = (2 ** attempt) * 5  # 5s, 10s
+                logger.info(f"[RETRY] Waiting {backoff}s before retry...")
+                time.sleep(backoff)
+                continue
+            else:
+                # Non-transient error or max retries reached
+                raise
+
+    # Should not reach here, but raise last error just in case
+    if last_error:
+        raise last_error
+
+
 # =============================================================================
 # LOCALIZATION: Chapter and section names in different languages
 # =============================================================================
@@ -629,25 +682,25 @@ def generate_draft(
         # Execute pipeline phases with inter-phase validation and checkpoints
         # ====================================================================
 
-        # RESEARCH PHASE
+        # RESEARCH PHASE (with pipeline-level retry)
         if not completed_phase or get_next_phase(completed_phase) == "research":
             if completed_phase:
                 logger.info("Starting fresh (no phases completed yet)")
-            run_research_phase(ctx)
+            run_phase_with_retry(run_research_phase, ctx, "research")
             validate_research_phase(ctx)
             save_checkpoint(ctx, "research", output_dir)
             completed_phase = "research"
 
-        # STRUCTURE PHASE
+        # STRUCTURE PHASE (with pipeline-level retry)
         if get_next_phase(completed_phase) == "structure" or completed_phase == "research":
-            run_structure_phase(ctx)
+            run_phase_with_retry(run_structure_phase, ctx, "structure")
             validate_structure_phase(ctx)
             save_checkpoint(ctx, "structure", output_dir)
             completed_phase = "structure"
 
-        # CITATIONS PHASE
+        # CITATIONS PHASE (with pipeline-level retry)
         if get_next_phase(completed_phase) == "citations" or completed_phase == "structure":
-            run_citation_management(ctx)
+            run_phase_with_retry(run_citation_management, ctx, "citations")
             validate_citation_phase(ctx)
             save_checkpoint(ctx, "citations", output_dir)
             completed_phase = "citations"
@@ -658,9 +711,9 @@ def generate_draft(
             _finalize(ctx, pdf_path, docx_path, draft_start_time)
             return pdf_path, docx_path
 
-        # COMPOSE PHASE
+        # COMPOSE PHASE (with pipeline-level retry)
         if get_next_phase(completed_phase) == "compose" or completed_phase == "citations":
-            run_compose_phase(ctx)
+            run_phase_with_retry(run_compose_phase, ctx, "compose")
             validate_compose_phase(ctx)
             save_checkpoint(ctx, "compose", output_dir)
             completed_phase = "compose"
@@ -680,7 +733,7 @@ def generate_draft(
                 print("   ✓ High quality - skipping QA phase")
             completed_phase = "validate"  # Mark as complete
         elif get_next_phase(completed_phase) == "validate" or completed_phase == "compose":
-            run_validate_phase(ctx)
+            run_phase_with_retry(run_validate_phase, ctx, "validate")
             save_checkpoint(ctx, "validate", output_dir)
             completed_phase = "validate"
 

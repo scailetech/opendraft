@@ -163,6 +163,13 @@ Outline context:
 5. **Citations:** Use {{cite_XXX}} format from citation database
 6. **Depth:** Use 4 levels of headings (##, ###, ####, #####)
 
+**CITATION-CLAIM VERIFICATION (V3 feature):**
+- Before using a citation, verify it actually supports your claim
+- Check the citation's title/abstract matches the topic you're citing it for
+- Do NOT cite a paper about "X" to support a claim about "Y"
+- Example: A paper about "creatine supplementation" should NOT be cited for a claim about "caffeine effects"
+- If unsure whether a citation supports a claim, rephrase the claim to match what the citation actually covers
+
 **Content to cover:**
 - Theoretical framework and foundational concepts
 - Review of empirical studies (with abstracts provided)
@@ -241,6 +248,12 @@ Outline:
    - Put details in prose AFTER the table, not inside cells
 5. **Build on Literature Review:** Reference gaps identified in section 2.1
 6. **Citations:** ONLY use citations from the CITATION DATABASE above with {{cite_XXX}} format
+
+**CITATION-CLAIM VERIFICATION:**
+- Before using a citation, verify it actually supports your claim
+- Check the citation's title/abstract matches the methodology you're describing
+- Do NOT cite a paper about "X methodology" to describe "Y methodology"
+- If unsure, rephrase to match what the citation actually covers
 
 **\U0001f6a8 CRITICAL ANTI-HALLUCINATION RULES:**
 - **NEVER claim "we conducted studies"** - This is a literature review draft, not an empirical study
@@ -329,6 +342,12 @@ Research data:
    - Put details in prose AFTER the table, not inside cells
 5. **Synthesize Literature Findings:** Present results FROM CITED SOURCES, not from new research
 6. **Citations:** ONLY use citations from the CITATION DATABASE above with {{cite_XXX}} format
+
+**CITATION-CLAIM VERIFICATION:**
+- Before citing a source for a finding, verify the citation actually reports that finding
+- Check citation title/abstract matches the result you're attributing to it
+- Do NOT cite a study about "X" to support findings about "Y"
+- If unsure, rephrase to match what the citation actually found
 
 **\U0001f6a8 CRITICAL ANTI-HALLUCINATION RULES:**
 - **NEVER claim "we found", "we analyzed", "our results show"** - This is a literature review, not an empirical study
