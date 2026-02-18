@@ -84,13 +84,15 @@ Changelog = "https://github.com/federicodeponte/opendraft/blob/main/CHANGELOG.md
 [project.scripts]
 opendraft = "opendraft.cli:main"
 draft-ai = "opendraft.cli:main"
+opendraft-tldr = "tldr:main"
+opendraft-digest = "digest:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["opendraft*", "utils*", "concurrency*", "phases*"]
 
 [tool.setuptools]
-py-modules = ["config", "draft_generator"]
+py-modules = ["config", "draft_generator", "tldr", "digest"]
 include-package-data = true
 
 [tool.setuptools.package-data]

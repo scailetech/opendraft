@@ -719,9 +719,152 @@ def run_interactive():
         return 1
 
 
+def run_tldr_command(argv):
+    """Run TL;DR subcommand."""
+    import argparse
+    c = Colors
+
+    parser = argparse.ArgumentParser(
+        prog="opendraft tldr",
+        description="Generate 5-bullet TL;DR summary for any paper"
+    )
+    parser.add_argument("document", help="Path to document (PDF, MD, or TXT)")
+    parser.add_argument("--output", "-o", help="Output file path")
+
+    args = parser.parse_args(argv)
+    document_path = Path(args.document)
+
+    if not document_path.exists():
+        print(f"\n  {c.RED}✗{c.RESET} File not found: {document_path}\n")
+        return 1
+
+    print()
+    print(f"  {c.BOLD}TL;DR{c.RESET}")
+    print(f"  {c.GRAY}{'─' * 40}{c.RESET}")
+    print(f"  {c.GRAY}Document:{c.RESET} {document_path.name}")
+
+    try:
+        # Import here to avoid slow startup
+        sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+        from tldr import generate_tldr
+        from utils.document_reader import get_document_info
+
+        info = get_document_info(document_path)
+        print(f"  {c.GRAY}Words:{c.RESET}    {info['word_count']:,}")
+        print()
+        print(f"  {c.PURPLE}⣾{c.RESET} Generating TL;DR...")
+
+        tldr = generate_tldr(document_path)
+
+        print()
+        print(f"  {c.GREEN}{'─' * 40}{c.RESET}")
+        # Print TL;DR with nice formatting
+        for line in tldr.split('\n'):
+            if line.strip():
+                print(f"  {line}")
+        print(f"  {c.GREEN}{'─' * 40}{c.RESET}")
+
+        if args.output:
+            output_path = Path(args.output)
+            output_path.write_text(tldr, encoding="utf-8")
+            print(f"\n  {c.GREEN}✓{c.RESET} Saved to: {output_path}")
+
+        print()
+        return 0
+
+    except Exception as e:
+        print_friendly_error(e)
+        return 1
+
+
+def run_digest_command(argv):
+    """Run digest subcommand."""
+    import argparse
+    c = Colors
+
+    parser = argparse.ArgumentParser(
+        prog="opendraft digest",
+        description="Generate 60-second audio digest for any paper"
+    )
+    parser.add_argument("document", help="Path to document (PDF, MD, or TXT)")
+    parser.add_argument("--output", "-o", help="Output directory")
+    parser.add_argument(
+        "--voice",
+        default="rachel",
+        choices=["rachel", "adam", "josh", "elli", "bella"],
+        help="ElevenLabs voice (default: rachel)"
+    )
+    parser.add_argument(
+        "--no-audio",
+        action="store_true",
+        help="Skip audio generation (script only)"
+    )
+
+    args = parser.parse_args(argv)
+    document_path = Path(args.document)
+
+    if not document_path.exists():
+        print(f"\n  {c.RED}✗{c.RESET} File not found: {document_path}\n")
+        return 1
+
+    print()
+    print(f"  {c.BOLD}Digest{c.RESET}")
+    print(f"  {c.GRAY}{'─' * 40}{c.RESET}")
+    print(f"  {c.GRAY}Document:{c.RESET} {document_path.name}")
+    print(f"  {c.GRAY}Voice:{c.RESET}    {args.voice}")
+
+    try:
+        sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+        from digest import generate_digest
+        from utils.document_reader import get_document_info
+
+        info = get_document_info(document_path)
+        print(f"  {c.GRAY}Words:{c.RESET}    {info['word_count']:,}")
+        print()
+        print(f"  {c.PURPLE}⣾{c.RESET} Generating digest...")
+
+        output_dir = Path(args.output) if args.output else None
+
+        result = generate_digest(
+            document_path,
+            output_dir=output_dir,
+            voice=args.voice,
+            generate_audio=not args.no_audio,
+        )
+
+        print()
+        print(f"  {c.GREEN}{'─' * 40}{c.RESET}")
+        print(f"  {result['script']}")
+        print(f"  {c.GREEN}{'─' * 40}{c.RESET}")
+        print()
+        print(f"  {c.GRAY}Words:{c.RESET} {result['word_count']}")
+        print(f"  {c.GREEN}✓{c.RESET} Script: {result['script_path']}")
+
+        if "audio_path" in result:
+            print(f"  {c.GREEN}✓{c.RESET} Audio:  {result['audio_path']}")
+        elif "audio_error" in result:
+            print(f"  {c.YELLOW}!{c.RESET} Audio skipped: {result['audio_error']}")
+            print(f"    {c.GRAY}Set ELEVENLABS_API_KEY to enable audio{c.RESET}")
+
+        print()
+        return 0
+
+    except Exception as e:
+        print_friendly_error(e)
+        return 1
+
+
 def main():
     """Main CLI entry point."""
     import argparse
+
+    # Handle subcommands before argparse (they have their own parsers)
+    if len(sys.argv) > 1:
+        cmd = sys.argv[1].lower()
+        if cmd == 'tldr':
+            return run_tldr_command(sys.argv[2:])
+        if cmd == 'digest':
+            return run_digest_command(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         prog="opendraft",
@@ -733,11 +876,14 @@ def main():
   opendraft setup              Configure API key + verify installation
   opendraft verify             Check system dependencies (PDF, LaTeX)
   opendraft "Your Topic"       Quick generate
+  opendraft tldr <file>        Generate 5-bullet TL;DR for any paper
+  opendraft digest <file>      Generate 60-second audio digest
 
 {Colors.BOLD}Examples:{Colors.RESET}
   opendraft "Impact of AI on Education"
   opendraft "Climate Change" --level phd --lang de
-  opendraft "Machine Learning" --author "John Smith" --institution "MIT"
+  opendraft tldr paper.pdf
+  opendraft digest paper.pdf --voice josh
   opendraft "Neural Networks" --expose              Quick research overview
 
 {Colors.BOLD}Languages:{Colors.RESET}
@@ -846,6 +992,7 @@ def main():
     if args.topic and args.topic.lower() == 'verify':
         from opendraft.verify import verify_installation
         return verify_installation()
+
 
     # Interactive mode
     if not args.topic:
