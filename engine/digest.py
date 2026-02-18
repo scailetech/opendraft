@@ -99,8 +99,10 @@ def _clean_script(script: str) -> str:
     # Remove any headers
     script = re.sub(r'^#+\s+.*$', '', script, flags=re.MULTILINE)
 
-    # Remove citations
-    script = re.sub(r'\([^)]*\d{4}[^)]*\)', '', script)
+    # Remove citations (Author Year pattern only, not general parentheticals)
+    # Matches: (Smith 2020), (Smith et al., 2020), (Smith & Jones 2019)
+    # Does NOT match: (about 3000 participants), (2019-2020), (circa 1985)
+    script = re.sub(r'\([A-Z][a-zA-Z\s&.,]+(?:19|20)\d{2}[^)]*\)', '', script)
     script = re.sub(r'\[[^\]]+\]', '', script)
 
     # Clean whitespace

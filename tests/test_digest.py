@@ -95,6 +95,24 @@ class TestDigestGeneration:
         assert "`" not in clean
         assert "[" not in clean
 
+    def test_script_cleaning_removes_citations(self):
+        """Test that academic citations are removed."""
+        from digest import _clean_script
+
+        # Should remove citation patterns
+        assert "Smith" not in _clean_script("A study (Smith 2020) found.")
+        assert "et al" not in _clean_script("Results (Smith et al., 2020) show.")
+        assert "Jones" not in _clean_script("Paper (Smith & Jones 2019) analyzed.")
+
+    def test_script_cleaning_preserves_non_citations(self):
+        """Test that non-citation parentheticals are preserved."""
+        from digest import _clean_script
+
+        # Should NOT remove these (not citations)
+        assert "3000 participants" in _clean_script("The study (about 3000 participants) shows.")
+        assert "2019-2020" in _clean_script("In the year (2019-2020) there was growth.")
+        assert "circa 1985" in _clean_script("Results from (circa 1985) experiments.")
+
 
 class TestDigestCLI:
     """Tests for digest CLI command."""
