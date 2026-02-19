@@ -854,6 +854,196 @@ def run_digest_command(argv):
         return 1
 
 
+def run_revise_command(argv):
+    """Run revise subcommand."""
+    import argparse
+    c = Colors
+
+    parser = argparse.ArgumentParser(
+        prog="opendraft revise",
+        description="Revise an existing draft with AI assistance"
+    )
+    parser.add_argument("target", help="Path to draft folder or markdown file")
+    parser.add_argument("instructions", help="Revision instructions (e.g., 'make the introduction longer')")
+    parser.add_argument("--model", "-m", default="gemini-3-flash-preview",
+                        help="Gemini model to use (default: gemini-3-flash-preview)")
+
+    args = parser.parse_args(argv)
+    target_path = Path(args.target)
+
+    if not target_path.exists():
+        print(f"\n  {c.RED}✗{c.RESET} Path not found: {target_path}\n")
+        return 1
+
+    print()
+    print(f"  {c.BOLD}Revise{c.RESET}")
+    print(f"  {c.GRAY}{'─' * 40}{c.RESET}")
+    print(f"  {c.GRAY}Target:{c.RESET}       {target_path}")
+    print(f"  {c.GRAY}Instructions:{c.RESET} {args.instructions[:50]}{'...' if len(args.instructions) > 50 else ''}")
+    print()
+
+    # Ensure API key is set
+    if not has_api_key():
+        print(f"  {c.YELLOW}!{c.RESET} Run {c.BOLD}opendraft setup{c.RESET} first.\n")
+        return 1
+
+    if not os.getenv('GOOGLE_API_KEY'):
+        os.environ['GOOGLE_API_KEY'] = get_api_key()
+
+    try:
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        from utils.revise import revise_draft, find_draft_in_folder
+
+        # Show which file will be revised
+        if target_path.is_dir():
+            draft_path = find_draft_in_folder(target_path)
+            if draft_path:
+                print(f"  {c.GRAY}Found draft:{c.RESET} {draft_path.name}")
+            else:
+                print(f"\n  {c.RED}✗{c.RESET} No draft found in {target_path}\n")
+                return 1
+        print()
+        print(f"  {c.PURPLE}⣾{c.RESET} Revising draft...")
+
+        result = revise_draft(target_path, args.instructions, model=args.model)
+
+        print()
+        print(f"  {c.GREEN}{'─' * 40}{c.RESET}")
+        print(f"  {c.GREEN}✓{c.RESET} {c.BOLD}Revision complete!{c.RESET}")
+        print(f"  {c.GREEN}{'─' * 40}{c.RESET}")
+        print()
+
+        # Score changes
+        delta_color = c.GREEN if result['delta'] >= 0 else c.RED
+        delta_sign = "+" if result['delta'] >= 0 else ""
+        print(f"  {c.GRAY}Quality:{c.RESET} {result['score_before']} → {result['score_after']} ({delta_color}{delta_sign}{result['delta']}{c.RESET})")
+        print(f"  {c.GRAY}Words:{c.RESET}   {result['word_count_before']:,} → {result['word_count']:,}")
+
+        print()
+        print(f"  {c.GRAY}Files:{c.RESET}")
+        print(f"    {c.CYAN}📝{c.RESET} {result['md_path']}")
+        if result['pdf_path']:
+            print(f"    {c.CYAN}📄{c.RESET} {result['pdf_path']}")
+        if result['docx_path']:
+            print(f"    {c.CYAN}📑{c.RESET} {result['docx_path']}")
+        print()
+
+        return 0
+
+    except Exception as e:
+        print_friendly_error(e)
+        return 1
+
+
+def run_data_command(argv):
+    """Run data subcommand for fetching research datasets."""
+    import argparse
+    c = Colors
+
+    parser = argparse.ArgumentParser(
+        prog="opendraft data",
+        description="Fetch research data from World Bank, Eurostat, or Our World in Data"
+    )
+    parser.add_argument("provider", choices=["worldbank", "eurostat", "owid", "search", "list"],
+                        help="Data provider or 'list' to show providers")
+    parser.add_argument("query", nargs="?", help="Indicator code or dataset name")
+    parser.add_argument("--countries", "-c", default="all",
+                        help="Countries for World Bank (semicolon-separated codes, e.g., 'USA;DEU;FRA')")
+    parser.add_argument("--start", "-s", type=int, help="Start year")
+    parser.add_argument("--end", "-e", type=int, help="End year")
+    parser.add_argument("--output", "-o", type=Path, default=Path.cwd(),
+                        help="Output directory (default: current directory)")
+
+    args = parser.parse_args(argv)
+
+    print()
+    print(f"  {c.BOLD}Data Fetch{c.RESET}")
+    print(f"  {c.GRAY}{'─' * 40}{c.RESET}")
+
+    try:
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        from utils.data_fetch import DataFetcher, SDMX_PROVIDERS
+
+        # List providers
+        if args.provider == "list":
+            print(f"\n  {c.BOLD}Available Data Providers{c.RESET}\n")
+            for key, info in SDMX_PROVIDERS.items():
+                print(f"  {c.CYAN}{key:12}{c.RESET} {info['name']} - {info['description']}")
+            print()
+            print(f"  {c.GRAY}Examples:{c.RESET}")
+            print(f"    opendraft data search GDP")
+            print(f"    opendraft data worldbank NY.GDP.MKTP.CD --countries USA;DEU;FRA")
+            print(f"    opendraft data owid covid-19")
+            print(f"    opendraft data eurostat nama_10_gdp")
+            print()
+            return 0
+
+        if not args.query:
+            print(f"\n  {c.RED}✗{c.RESET} Query/indicator required for provider '{args.provider}'\n")
+            return 1
+
+        fetcher = DataFetcher(args.output)
+
+        print(f"  {c.GRAY}Provider:{c.RESET} {args.provider}")
+        print(f"  {c.GRAY}Query:{c.RESET}    {args.query}")
+        print()
+        print(f"  {c.PURPLE}⣾{c.RESET} Fetching data...")
+
+        # Execute fetch
+        if args.provider == "worldbank":
+            result = fetcher.fetch_worldbank(
+                args.query,
+                countries=args.countries,
+                start_year=args.start,
+                end_year=args.end,
+            )
+        elif args.provider == "eurostat":
+            result = fetcher.fetch_eurostat(
+                args.query,
+                start_period=str(args.start) if args.start else None,
+                end_period=str(args.end) if args.end else None,
+            )
+        elif args.provider == "owid":
+            result = fetcher.fetch_owid(args.query)
+        elif args.provider == "search":
+            result = fetcher.search_worldbank(args.query)
+        else:
+            result = {"status": "error", "message": f"Unknown provider: {args.provider}"}
+
+        print()
+
+        if result.get("status") == "success":
+            print(f"  {c.GREEN}✓{c.RESET} {result.get('message', 'Success')}")
+            print()
+
+            if "file_path" in result:
+                print(f"  {c.GRAY}Saved to:{c.RESET} {result['file_path']}")
+            if "rows" in result:
+                print(f"  {c.GRAY}Rows:{c.RESET}     {result['rows']:,}")
+            if "countries" in result:
+                print(f"  {c.GRAY}Countries:{c.RESET} {result['countries']}")
+            if "years" in result:
+                print(f"  {c.GRAY}Years:{c.RESET}    {result['years']}")
+            if "columns" in result:
+                print(f"  {c.GRAY}Columns:{c.RESET}  {', '.join(result['columns'][:5])}...")
+            if "indicators" in result:
+                print()
+                print(f"  {c.BOLD}Matching Indicators:{c.RESET}")
+                for ind in result['indicators'][:10]:
+                    print(f"    {c.CYAN}{ind['code']:25}{c.RESET} {ind['name'][:50]}")
+                if len(result['indicators']) > 10:
+                    print(f"    {c.GRAY}... and {len(result['indicators']) - 10} more{c.RESET}")
+            print()
+            return 0
+        else:
+            print(f"  {c.RED}✗{c.RESET} {result.get('message', 'Unknown error')}\n")
+            return 1
+
+    except Exception as e:
+        print_friendly_error(e)
+        return 1
+
+
 def main():
     """Main CLI entry point."""
     import argparse
@@ -865,6 +1055,10 @@ def main():
             return run_tldr_command(sys.argv[2:])
         if cmd == 'digest':
             return run_digest_command(sys.argv[2:])
+        if cmd == 'revise':
+            return run_revise_command(sys.argv[2:])
+        if cmd == 'data':
+            return run_data_command(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         prog="opendraft",
@@ -878,6 +1072,8 @@ def main():
   opendraft "Your Topic"       Quick generate
   opendraft tldr <file>        Generate 5-bullet TL;DR for any paper
   opendraft digest <file>      Generate 60-second audio digest
+  opendraft revise <folder> "instructions"   Revise existing draft
+  opendraft data <provider> <query>          Fetch research datasets
 
 {Colors.BOLD}Examples:{Colors.RESET}
   opendraft "Impact of AI on Education"
@@ -885,6 +1081,8 @@ def main():
   opendraft tldr paper.pdf
   opendraft digest paper.pdf --voice josh
   opendraft "Neural Networks" --expose              Quick research overview
+  opendraft revise ./output "make the intro longer"
+  opendraft data worldbank NY.GDP.MKTP.CD --countries USA;DEU
 
 {Colors.BOLD}Languages:{Colors.RESET}
   en, de, es, fr, it, pt, nl, zh, ja, ko, ru, ar

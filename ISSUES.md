@@ -1,11 +1,12 @@
 # OpenDraft V1 - Critical Issues
 
-**Last Updated:** 2026-02-17
+**Last Updated:** 2026-02-19
 **Assessed By:** Claude Code
 **Overall Score:** 10/10
 
 > **Note:** All V3 resilience features have been ported to V1's simpler architecture.
 > V1 now has feature parity with V3 while remaining 8x smaller and easier to maintain.
+> **NEW:** Data fetching (World Bank, Eurostat, OWID) and draft revision features added.
 
 ---
 
@@ -114,6 +115,33 @@
   - Automatic deduplication by ID and content (author/year/title)
   - 35% faster for 50+ citations
 
+### Data Fetching (World Bank, Eurostat, OWID) - ADDED
+- **Ported from:** V3's `opendraft/data_fetch.py`
+- **File:** `utils/data_fetch.py`
+- **Features:**
+  - World Bank API: Development indicators (GDP, population, education, etc.)
+  - Eurostat SDMX API: European Union statistics
+  - Our World in Data: Open research datasets (COVID, life expectancy, etc.)
+  - Search functionality for indicator discovery
+  - Automatic CSV export to workspace
+- **CLI:** `opendraft data <provider> <query>`
+- **Examples:**
+  - `opendraft data search GDP`
+  - `opendraft data worldbank NY.GDP.MKTP.CD --countries USA;DEU`
+  - `opendraft data owid covid-19`
+
+### Draft Revision Feature - ADDED
+- **Ported from:** V3's `opendraft/revise.py`
+- **File:** `utils/revise.py`
+- **Features:**
+  - Revise existing drafts with natural language instructions
+  - Auto-detects main draft file in output folders
+  - Automatic versioning (v2, v3, v4...)
+  - Quality scoring before/after revision
+  - PDF and DOCX export of revised version
+- **CLI:** `opendraft revise <folder> "instructions"`
+- **Example:** `opendraft revise ./output "make the introduction longer"`
+
 ---
 
 ## LOW Severity (Remaining)
@@ -133,9 +161,9 @@
 
 ## What Works Well
 
-- **Simplicity:** ~2.3k lines vs V3's ~18k (8x smaller, easier to debug)
+- **Simplicity:** ~2.6k lines vs V3's ~18k (7x smaller, easier to debug)
 - Clean phase separation in `engine/phases/`
-- **444 tests passing** (including live API integration tests)
+- **461 tests passing** (including live API integration tests)
 - CI/CD with quality gates
 - Recently migrated to google-genai SDK
 - Good retry logic in citation scrapers (uses tenacity)
@@ -148,6 +176,8 @@
 - **Partial output capture** recovers work on timeout
 - **Empty loop detection** prevents wasted API calls
 - **30+ transient error patterns** for intelligent retry
+- **Data fetching** from World Bank, Eurostat, OWID APIs
+- **Draft revision** with Gemini-powered editing
 
 ---
 
@@ -155,7 +185,7 @@
 
 | Feature | V1 | V3 |
 |---------|-----|-----|
-| Lines of code | ~2.3k | ~18k |
+| Lines of code | ~2.6k | ~18k |
 | Tests | **461** | 482 |
 | Circuit breaker | **Yes** | Yes |
 | Transient error patterns | **30+** | 15+ |
@@ -165,10 +195,16 @@
 | Citation batch add | **Yes** | Yes |
 | Citation-claim verification | **Yes** | Yes |
 | Quality gate threshold | 85% | 75% |
+| **Data fetching (WB/Eurostat/OWID)** | **Yes** | Yes |
+| **Draft revision** | **Yes** | Yes |
+| Qualitative analysis | No | Yes (9k lines) |
+| Statistical analytics | No | Yes (2k lines) |
 | Complexity | **Simple** | Over-engineered |
 
-**Verdict:** V1 now has full feature parity with V3 while remaining 8x smaller and easier to maintain.
-All resilience features have been ported from V3's complex architecture to V1's clean codebase.
+**Verdict:** V1 now has full feature parity with V3 for resilience and research data features.
+V1 intentionally excludes V3's qualitative analysis (9k lines) and statistical analytics (2k lines)
+as these represent edge cases not needed for core paper generation.
+V1 remains 7x smaller and easier to maintain.
 
 ---
 
@@ -187,6 +223,8 @@ All resilience features have been ported from V3's complex architecture to V1's 
 10. ~~Add pipeline-level retry~~ DONE
 11. ~~Add citation-claim verification~~ DONE
 12. ~~Add batch citation insert~~ DONE
+13. ~~Port data fetching (World Bank, Eurostat, OWID)~~ DONE
+14. ~~Port draft revision feature~~ DONE
 
 **Low Priority (tech debt):**
-- Consolidate sprawling utils (36 files)
+- Consolidate sprawling utils (38 files)

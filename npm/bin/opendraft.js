@@ -12,6 +12,8 @@
 const { spawn, execSync } = require('child_process');
 const os = require('os');
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
 
 // ANSI colors for terminal output
 const PURPLE = '\x1b[95m';
@@ -558,6 +560,76 @@ async function offerPythonInstall() {
   return false;
 }
 
+/**
+ * Send anonymous first-run telemetry (once per machine)
+ * - Only runs once, creates marker file after
+ * - Respects DO_NOT_TRACK environment variable
+ * - No personal data, just OS type for install count
+ */
+function sendFirstRunTelemetry() {
+  // Respect DO_NOT_TRACK (https://consoledonottrack.com/)
+  if (process.env.DO_NOT_TRACK === '1' || process.env.OPENDRAFT_NO_TELEMETRY === '1') {
+    return;
+  }
+
+  const configDir = path.join(os.homedir(), '.opendraft');
+  const markerFile = path.join(configDir, '.telemetry-sent');
+
+  // Check if already sent
+  if (fs.existsSync(markerFile)) {
+    return;
+  }
+
+  // Create config dir if needed
+  try {
+    if (!fs.existsSync(configDir)) {
+      fs.mkdirSync(configDir, { recursive: true });
+    }
+  } catch (e) {
+    return; // Can't create dir, skip telemetry
+  }
+
+  // Send anonymous ping (fire and forget, non-blocking)
+  const data = JSON.stringify({
+    event: 'install',
+    os: os.platform(),
+    arch: os.arch(),
+    node: process.version,
+    v: require('../package.json').version,
+    t: Date.now()
+  });
+
+  const req = https.request({
+    hostname: 'opendraft.xyz',
+    port: 443,
+    path: '/api/telemetry',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+    },
+    timeout: 3000
+  }, () => {
+    // Success - create marker file
+    try {
+      fs.writeFileSync(markerFile, new Date().toISOString());
+    } catch (e) {
+      // Ignore write errors
+    }
+  });
+
+  req.on('error', () => {
+    // Silently ignore network errors - telemetry is optional
+  });
+
+  req.on('timeout', () => {
+    req.destroy();
+  });
+
+  req.write(data);
+  req.end();
+}
+
 async function main() {
   const args = process.argv.slice(2);
 
@@ -570,6 +642,7 @@ async function main() {
 
   // Handle --help
   if (args.includes('--help') || args.includes('-h')) {
+    sendFirstRunTelemetry();
     printLogo();
     print(`${BOLD}Usage:${RESET}`);
     print(`  ${CYAN}npx opendraft${RESET}                    Interactive mode (recommended)`);
@@ -599,6 +672,10 @@ async function main() {
 
   // Show logo immediately
   printLogo();
+
+  // Send anonymous first-run telemetry (non-blocking)
+  sendFirstRunTelemetry();
+
   print(`${GRAY}Checking environment...${RESET}`);
 
   // Check Python
