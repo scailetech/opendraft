@@ -7,15 +7,66 @@ Supports fetching datasets from:
 - World Bank: Development indicators (GDP, population, education, etc.)
 - Eurostat: European Union statistics
 - OWID: Our World in Data datasets (COVID, life expectancy, etc.)
+
+Features:
+- File-based caching (24h TTL) to avoid redundant API calls
+- Automatic retry with exponential backoff on transient errors
 """
 
+import hashlib
+import json
 import logging
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import requests
 
+from utils.retry import retry
+
 logger = logging.getLogger(__name__)
+
+# Cache settings
+CACHE_DIR = Path.home() / ".opendraft" / "data_cache"
+CACHE_TTL_SECONDS = 24 * 60 * 60  # 24 hours
+
+
+def _get_cache_key(provider: str, query: str, **kwargs) -> str:
+    """Generate a cache key from request parameters."""
+    key_data = f"{provider}:{query}:{json.dumps(kwargs, sort_keys=True)}"
+    return hashlib.md5(key_data.encode()).hexdigest()
+
+
+def _get_cached(cache_key: str) -> Optional[Dict[str, Any]]:
+    """Get cached response if valid."""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_file = CACHE_DIR / f"{cache_key}.json"
+
+    if cache_file.exists():
+        try:
+            data = json.loads(cache_file.read_text())
+            if time.time() - data.get("_cached_at", 0) < CACHE_TTL_SECONDS:
+                logger.debug(f"Cache hit for {cache_key}")
+                del data["_cached_at"]
+                return data
+        except (json.JSONDecodeError, KeyError):
+            pass
+    return None
+
+
+def _set_cache(cache_key: str, data: Dict[str, Any]) -> None:
+    """Cache a response."""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_file = CACHE_DIR / f"{cache_key}.json"
+
+    cache_data = data.copy()
+    cache_data["_cached_at"] = time.time()
+
+    try:
+        cache_file.write_text(json.dumps(cache_data))
+        logger.debug(f"Cached response for {cache_key}")
+    except Exception as e:
+        logger.warning(f"Failed to cache: {e}")
 
 # Try to import pandas, but make it optional
 try:
@@ -47,12 +98,20 @@ SDMX_PROVIDERS = {
 
 
 class DataFetcher:
-    """Fetch data from World Bank, Eurostat, and OWID APIs."""
+    """Fetch data from World Bank, Eurostat, and OWID APIs with caching and retry."""
 
-    def __init__(self, workspace_dir: Path, timeout: int = 30):
+    def __init__(self, workspace_dir: Path, timeout: int = 30, use_cache: bool = True):
         self.workspace_dir = Path(workspace_dir)
         self.workspace_dir.mkdir(parents=True, exist_ok=True)
         self.timeout = timeout
+        self.use_cache = use_cache
+
+    @retry(max_attempts=3, base_delay=2.0, exceptions=(requests.exceptions.RequestException,))
+    def _request_with_retry(self, url: str, params: Optional[Dict] = None) -> requests.Response:
+        """Make HTTP request with retry on transient errors."""
+        response = requests.get(url, params=params, timeout=self.timeout)
+        response.raise_for_status()
+        return response
 
     def list_providers(self) -> str:
         """List available data providers."""
@@ -84,6 +143,14 @@ class DataFetcher:
         Returns:
             Dict with status, message, data, and file_path
         """
+        # Check cache first
+        cache_key = _get_cache_key("worldbank", indicator, countries=countries, start=start_year, end=end_year)
+        if self.use_cache:
+            cached = _get_cached(cache_key)
+            if cached:
+                logger.info(f"Using cached World Bank data for {indicator}")
+                return cached
+
         base_url = "https://api.worldbank.org/v2"
         url = f"{base_url}/country/{countries}/indicator/{indicator}"
 
@@ -95,8 +162,7 @@ class DataFetcher:
             params["date"] = f"{start_year}:{end_year or 2024}"
 
         try:
-            response = requests.get(url, params=params, timeout=self.timeout)
-            response.raise_for_status()
+            response = self._request_with_retry(url, params)
             data = response.json()
 
             # World Bank returns [metadata, data]
@@ -136,7 +202,7 @@ class DataFetcher:
                 countries_count = len(set(r['country'] for r in parsed))
                 years_count = len(set(r['year'] for r in parsed))
 
-            return {
+            result = {
                 "status": "success",
                 "message": f"Fetched World Bank indicator '{indicator}'",
                 "file_path": str(filepath),
@@ -145,6 +211,13 @@ class DataFetcher:
                 "years": years_count,
                 "data": parsed[:10],  # First 10 rows for preview
             }
+
+            # Cache the result (without file_path which is local)
+            if self.use_cache:
+                cache_result = {k: v for k, v in result.items() if k != "file_path"}
+                _set_cache(cache_key, cache_result)
+
+            return result
 
         except requests.exceptions.HTTPError as e:
             return {"status": "error", "message": f"HTTP error: {e.response.status_code}"}
@@ -163,13 +236,20 @@ class DataFetcher:
         Returns:
             Dict with matching indicators
         """
+        # Check cache first
+        cache_key = _get_cache_key("worldbank_search", query)
+        if self.use_cache:
+            cached = _get_cached(cache_key)
+            if cached:
+                logger.info(f"Using cached World Bank search for '{query}'")
+                return cached
+
         # Use the indicator search endpoint with query parameter
         url = f"https://api.worldbank.org/v2/indicator"
         params = {"format": "json", "per_page": 500, "source": 2}  # WDI source
 
         try:
-            response = requests.get(url, params=params, timeout=self.timeout)
-            response.raise_for_status()
+            response = self._request_with_retry(url, params)
             data = response.json()
 
             if len(data) < 2 or not data[1]:
@@ -210,11 +290,16 @@ class DataFetcher:
             if not matches:
                 return {"status": "error", "message": f"No indicators matching '{query}'. Try: gdp, population, education, life expectancy"}
 
-            return {
+            result = {
                 "status": "success",
                 "message": f"Found {len(matches)} indicators matching '{query}'",
                 "indicators": matches[:20],
             }
+
+            if self.use_cache:
+                _set_cache(cache_key, result)
+
+            return result
 
         except Exception as e:
             return {"status": "error", "message": f"Error: {str(e)}"}
@@ -229,6 +314,14 @@ class DataFetcher:
         Returns:
             Dict with status, message, data, and file_path
         """
+        # Check cache first
+        cache_key = _get_cache_key("owid", dataset_name)
+        if self.use_cache:
+            cached = _get_cached(cache_key)
+            if cached:
+                logger.info(f"Using cached OWID data for '{dataset_name}'")
+                return cached
+
         # OWID datasets URLs
         urls_to_try = [
             f"https://raw.githubusercontent.com/owid/owid-datasets/master/datasets/{dataset_name}/{dataset_name}.csv",
@@ -243,7 +336,7 @@ class DataFetcher:
 
         for url in urls_to_try:
             try:
-                response = requests.get(url, timeout=self.timeout)
+                response = self._request_with_retry(url, None)
                 if response.status_code == 200:
                     # Save directly as CSV
                     filename = f"owid_{dataset_name.replace('-', '_')}.csv"
@@ -259,13 +352,19 @@ class DataFetcher:
                         rows = response.text.count('\n')
                         columns = response.text.split('\n')[0].split(',')[:5]
 
-                    return {
+                    result = {
                         "status": "success",
                         "message": f"Fetched OWID dataset '{dataset_name}'",
                         "file_path": str(filepath),
                         "rows": rows,
                         "columns": columns,
                     }
+
+                    if self.use_cache:
+                        cache_result = {k: v for k, v in result.items() if k != "file_path"}
+                        _set_cache(cache_key, cache_result)
+
+                    return result
             except Exception:
                 continue
 
@@ -293,6 +392,14 @@ class DataFetcher:
         Returns:
             Dict with status, message, and data
         """
+        # Check cache first
+        cache_key = _get_cache_key("eurostat", dataset_id, filters=filters, start=start_period, end=end_period)
+        if self.use_cache:
+            cached = _get_cached(cache_key)
+            if cached:
+                logger.info(f"Using cached Eurostat data for '{dataset_id}'")
+                return cached
+
         base_url = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data"
         filter_str = "all" if not filters else ".".join(filters.get(k, "") for k in filters)
         url = f"{base_url}/{dataset_id}/{filter_str}"
@@ -304,8 +411,7 @@ class DataFetcher:
             params["endPeriod"] = end_period
 
         try:
-            response = requests.get(url, params=params, timeout=self.timeout)
-            response.raise_for_status()
+            response = self._request_with_retry(url, params)
             data = response.json()
 
             # Parse SDMX-JSON
@@ -332,13 +438,19 @@ class DataFetcher:
                 rows = len(df)
                 columns = list(df[0].keys())
 
-            return {
+            result = {
                 "status": "success",
                 "message": f"Fetched Eurostat dataset '{dataset_id}'",
                 "file_path": str(filepath),
                 "rows": rows,
                 "columns": columns,
             }
+
+            if self.use_cache:
+                cache_result = {k: v for k, v in result.items() if k != "file_path"}
+                _set_cache(cache_key, cache_result)
+
+            return result
 
         except requests.exceptions.HTTPError as e:
             return {"status": "error", "message": f"HTTP error: {e.response.status_code}"}

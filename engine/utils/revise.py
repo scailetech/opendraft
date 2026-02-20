@@ -188,17 +188,22 @@ def score_draft_simple(text: str) -> Dict[str, Any]:
     Simple quality scoring for revisions (V1 simplified version).
 
     Returns dict with overall_score (0-100) and component scores.
+    Uses proportional scoring so small improvements are visible.
     """
-    score = 0
-
-    # Word count (30 points)
+    # Word count (30 points) - tiered scoring for sensitivity at all lengths
+    # 0-100 words: 0-5 points (0.05 per word)
+    # 100-500 words: 5-15 points
+    # 500-1500 words: 15-25 points
+    # 1500-3000 words: 25-30 points
     word_count = len(text.split())
-    if word_count >= 3000:
-        score += 30
-    elif word_count >= 1500:
-        score += 20
-    elif word_count >= 500:
-        score += 10
+    if word_count <= 100:
+        word_score = int(word_count * 0.05)
+    elif word_count <= 500:
+        word_score = 5 + int((word_count - 100) / 400 * 10)
+    elif word_count <= 1500:
+        word_score = 15 + int((word_count - 500) / 1000 * 10)
+    else:
+        word_score = min(30, 25 + int((word_count - 1500) / 1500 * 5))
 
     # Citations (25 points) - detect both {cite_X} and (Author, Year) formats
     cite_format = len(re.findall(r'\{cite_\d+\}', text))
@@ -209,35 +214,33 @@ def score_draft_simple(text: str) -> Dict[str, Any]:
         text
     ))
     citations = cite_format + parenthetical
-    if citations >= 15:
-        score += 25
-    elif citations >= 8:
-        score += 15
-    elif citations >= 3:
-        score += 8
+    # Proportional: 1 citation = ~1.67 points, caps at 15 citations
+    citation_score = min(25, int((citations / 15) * 25))
 
-    # Structure (25 points) - headers
+    # Structure (25 points) - headers, proportional
     headers = len(re.findall(r'^#{1,3}\s+.+$', text, re.MULTILINE))
-    if headers >= 6:
-        score += 25
-    elif headers >= 3:
-        score += 15
-    elif headers >= 1:
-        score += 8
+    # Proportional: 1 header = ~4.2 points, caps at 6 headers
+    structure_score = min(25, int((headers / 6) * 25))
 
     # Completeness (20 points) - key sections
     sections_found = 0
     for keyword in ['introduction', 'literature', 'methodology', 'results', 'conclusion', 'discussion']:
         if keyword.lower() in text.lower():
             sections_found += 1
-    score += min(20, sections_found * 4)
+    completeness_score = min(20, sections_found * 4)
+
+    score = word_score + citation_score + structure_score + completeness_score
 
     return {
         'overall_score': min(100, score),
         'word_count': word_count,
+        'word_score': word_score,
         'citations': citations,
+        'citation_score': citation_score,
         'headers': headers,
+        'structure_score': structure_score,
         'sections_found': sections_found,
+        'completeness_score': completeness_score,
     }
 
 

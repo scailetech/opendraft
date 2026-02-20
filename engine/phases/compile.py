@@ -153,10 +153,15 @@ This research expose serves as a starting point for a comprehensive {ctx.academi
         print("📄 Exporting PDF...")
 
     pdf_path = ctx.folders['exports'] / f"{topic_slug}_expose.pdf"
-    pdf_success = export_pdf(md_file=expose_md_path, output_pdf=pdf_path, engine='pandoc')
+    # Try 'auto' engine which falls back through multiple engines
+    # For expose (quick overview), PDF is optional - don't fail if it doesn't work
+    pdf_success = export_pdf(md_file=expose_md_path, output_pdf=pdf_path, engine='auto')
 
     if not pdf_success or not pdf_path.exists():
-        raise RuntimeError(f"PDF export failed for expose: {pdf_path}")
+        logger.warning(f"PDF export failed for expose - continuing with DOCX only")
+        if ctx.verbose:
+            print("   ⚠️ PDF export failed (continuing with DOCX)")
+        pdf_path = None  # Signal that PDF wasn't created
 
     if ctx.verbose:
         print("📝 Exporting Word document...")
@@ -179,10 +184,12 @@ This research expose serves as a starting point for a comprehensive {ctx.academi
 
     if ctx.verbose:
         print(f"\n\u2705 Research Expose complete!")
-        print(f"   PDF: {pdf_path}")
+        if pdf_path:
+            print(f"   PDF: {pdf_path}")
         print(f"   DOCX: {docx_path}")
 
-    return pdf_path, docx_path
+    # Return paths (pdf_path may be None if PDF export failed, fall back to md)
+    return pdf_path or expose_md_path, docx_path
 
 
 def run_compile_and_export(ctx: DraftContext) -> Tuple[Path, Path]:
