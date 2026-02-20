@@ -228,3 +228,35 @@ V1 remains 7x smaller and easier to maintain.
 
 **Low Priority (tech debt):**
 - Consolidate sprawling utils (38 files)
+
+---
+
+## PENDING: Document Auxiliary Features
+
+### Expose, TL;DR, and Digest Modes
+**Status:** Features exist but are underdocumented
+
+These powerful features exist in CLI but need better visibility:
+
+```bash
+# Expose - fast research outline (2-5 min vs 20-30 min for full paper)
+opendraft "Quantum computing" --expose
+
+# TL;DR - summarize any PDF/paper (30 sec)
+opendraft tldr paper.pdf
+
+# Digest - 60-second audio summary with ElevenLabs TTS
+opendraft digest paper.pdf --voice rachel
+```
+
+**Tasks:**
+- [ ] Add to README.md prominently with examples
+- [ ] Add to `--help` output
+- [ ] Expose: clearly label output as "Research Exposé"
+- [ ] TL;DR: support more formats (DOCX, URL?)
+- [ ] Digest: fallback to text-only if no ElevenLabs key
+
+**WhatsApp Integration:** Already done in `opendraft-whatsapp`:
+- `"topic quick"` → expose mode
+- Send PDF + `tldr` → 5-bullet summary
+- Send PDF + `digest` → audio voice message

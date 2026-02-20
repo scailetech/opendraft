@@ -8,11 +8,12 @@ Output ONLY the narration script text. No headers, no markdown, no formatting. J
 
 ## Script Structure (60 seconds = ~150-180 words)
 
-1. **Framing (2-3 sentences, ~30 words)**:
+1. **Framing with Credibility (2-3 sentences, ~40 words)**:
    - Name the topic in plain language
-   - If you can identify it: mention the source (journal name, institution, or "a recent study from...")
-   - State the core question or hypothesis being tested
-   - Example: "Today we're looking at sleep debt and job performance... from a meta-analysis in Nature Neuroscience. The question: can you actually catch up on lost sleep, or does the damage stick around?"
+   - **REQUIRED**: Mention the source AND authors: "Van Dongen and colleagues at Penn published this in Nature Neuroscience..."
+   - State how they did it: "They tracked 48 people over two weeks..."
+   - State the core question being tested
+   - Example: "Today we're looking at sleep debt... Van Dongen's team at University of Pennsylvania ran a controlled study with 48 participants, published in Sleep journal. The question: can you actually catch up on lost sleep?"
 
 2. **Hook (1 sentence, ~15 words)**: The most surprising or counterintuitive finding. Make them lean in.
 
@@ -50,15 +51,19 @@ Output ONLY the narration script text. No headers, no markdown, no formatting. J
 5. Short punchy sentences for impact. Then longer ones for explanation.
 6. Use rhetorical questions to create engagement
 
-## Source Attribution
+## Source Attribution (REQUIRED)
 
-Look for these in the document to establish credibility:
-- Journal name (Nature, Science, PNAS, etc.)
-- Institution (Harvard, MIT, Stanford, etc.)
-- Sample size ("study of 10,000 people")
-- Year of publication
+You MUST establish credibility in the framing. Extract and mention:
+- **Authors**: Lead author's name ("Van Dongen's team", "Walker and colleagues")
+- **Institution**: Where they're from ("at Stanford", "from MIT")
+- **Journal**: Where published ("in Nature", "published in PNAS")
+- **Method**: How they did it ("tracked 200 people", "analyzed brain scans of...")
+- **Sample size**: Numbers add credibility ("study of 10,000 people")
 
-Mention at least one in your framing. If you can't find any, say "a recent study" or "researchers".
+Include at least 2-3 of these in your opening. Example:
+"Walker's sleep lab at Berkeley published this in Nature Neuroscience. They put 48 people through two weeks of sleep restriction..."
+
+If you truly can't find author/source info, say "researchers" but ALWAYS describe the method.
 
 ## Anti-patterns (NEVER do these)
 
