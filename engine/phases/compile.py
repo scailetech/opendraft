@@ -41,24 +41,47 @@ def run_expose_export(ctx: DraftContext) -> Tuple[Path, Path]:
 
     # Extract research credibility info from citations
     journals = set()
-    institutions = set()
     years = set()
     author_teams = []
-    for citation in ctx.citation_database.citations[:20]:  # Top 20 sources
+    all_authors = set()
+    source_types = {"journal": 0, "book": 0, "conference": 0, "other": 0}
+    top_tier_journals = {"Nature", "Science", "Cell", "PNAS", "JAMA", "Lancet", "BMJ",
+                         "IEEE", "ACM", "Physical Review", "Chemical Reviews"}
+
+    top_tier_count = 0
+    recent_count = 0  # Last 5 years
+    current_year = datetime.now().year
+
+    for citation in ctx.citation_database.citations:
         if citation.journal:
             journals.add(citation.journal)
+            # Check if top-tier
+            if any(top in citation.journal for top in top_tier_journals):
+                top_tier_count += 1
         if citation.year:
             years.add(citation.year)
+            if current_year - citation.year <= 5:
+                recent_count += 1
         if citation.authors:
+            all_authors.update(citation.authors)
             lead = citation.authors[0] if citation.authors else "Unknown"
             if len(citation.authors) > 1:
                 author_teams.append(f"{lead} et al.")
             else:
                 author_teams.append(lead)
+        # Count source types
+        src_type = getattr(citation, 'source_type', 'journal')
+        if src_type in source_types:
+            source_types[src_type] += 1
+        else:
+            source_types["other"] += 1
 
+    total_sources = len(ctx.citation_database.citations)
     year_range = f"{min(years)}-{max(years)}" if years else "Various"
     top_journals = ", ".join(list(journals)[:5]) if journals else "Multiple sources"
     key_researchers = ", ".join(author_teams[:5]) if author_teams else "Multiple researchers"
+    recency_pct = int((recent_count / total_sources) * 100) if total_sources else 0
+    unique_authors = len(all_authors)
 
     # Compile the expose document
     expose_content = f"""# Research Expose: {ctx.topic}
@@ -77,12 +100,17 @@ This research expose provides a preliminary overview of the topic "{ctx.topic}" 
 
 ## Research Sources Overview
 
-**Number of Sources:** {len(ctx.citation_database.citations)} peer-reviewed papers
-**Publication Years:** {year_range}
-**Key Journals:** {top_journals}
-**Key Research Teams:** {key_researchers}
+| Metric | Value |
+|--------|-------|
+| **Total Sources** | {total_sources} peer-reviewed papers |
+| **Publication Years** | {year_range} |
+| **Recent Sources** | {recency_pct}% from last 5 years |
+| **Unique Authors** | {unique_authors} researchers |
+| **Top-Tier Journals** | {top_tier_count} sources |
+| **Key Journals** | {top_journals} |
+| **Key Research Teams** | {key_researchers} |
 
-This expose synthesizes findings from established researchers in the field. The sources include empirical studies, meta-analyses, and theoretical frameworks published in reputable academic venues.
+This expose synthesizes findings from {unique_authors} researchers across {len(journals)} journals. {recency_pct}% of sources are from the last 5 years, indicating current research relevance.
 
 ---
 

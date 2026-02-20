@@ -147,8 +147,15 @@ class DataFetcher:
         cache_key = _get_cache_key("worldbank", indicator, countries=countries, start=start_year, end=end_year)
         if self.use_cache:
             cached = _get_cached(cache_key)
-            if cached:
+            if cached and cached.get("status") == "success":
                 logger.info(f"Using cached World Bank data for {indicator}")
+                # Re-create CSV file from cached data
+                filename = f"worldbank_{indicator.replace('.', '_')}.csv"
+                filepath = self.workspace_dir / filename
+                if cached.get("data") and HAS_PANDAS:
+                    import pandas as pd
+                    pd.DataFrame(cached["data"]).to_csv(filepath, index=False)
+                    cached["file_path"] = str(filepath)
                 return cached
 
         base_url = "https://api.worldbank.org/v2"
