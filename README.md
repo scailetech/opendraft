@@ -152,6 +152,53 @@ Both tools work with any academic paper (PDF, Markdown, or plain text), not just
 
 ---
 
+## Data Fetching
+
+Fetch research data from major statistical APIs directly into your workflow:
+
+```bash
+# Search for indicators
+opendraft data search GDP
+
+# Fetch World Bank data
+opendraft data worldbank NY.GDP.MKTP.CD --countries USA;DEU --start 2020 --end 2023
+
+# Fetch EU statistics (Eurostat)
+opendraft data eurostat nama_10_gdp
+
+# Fetch Our World in Data datasets
+opendraft data owid covid-19
+```
+
+**Supported providers:**
+- **World Bank** - Development indicators (GDP, population, education, health)
+- **Eurostat** - European Union statistics
+- **Our World in Data** - Open research datasets
+
+Data is saved as CSV files for use in your research.
+
+---
+
+## Draft Revision
+
+Revise existing drafts with AI assistance:
+
+```bash
+# Revise a draft with natural language instructions
+opendraft revise ./output "Make the introduction longer and add more context"
+
+# The revised draft is saved as draft_v2.md (with PDF/DOCX exports)
+```
+
+Features:
+- Auto-detects draft files in output folders
+- Preserves all citations during revision
+- Automatic versioning (v2, v3, v4...)
+- Quality scoring before/after
+- PDF and DOCX export of revised version
+
+---
+
 ## Quick Start
 
 ### Prerequisites
