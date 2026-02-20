@@ -199,6 +199,31 @@ Features:
 
 ---
 
+## Research Expose Mode
+
+Generate a quick research overview instead of a full draft:
+
+```bash
+opendraft "Neural Networks in Healthcare" --expose
+```
+
+This produces a research expose with:
+- **Research Sources Overview** - Number of sources, publication years, key journals
+- **Key Research Teams** - Major authors and research groups in the field
+- **Structured Outline** - Chapter/section structure for a full paper
+- **Complete Bibliography** - All sources with DOIs and journal info
+- **Next Steps** - Guidance for developing into a full draft
+
+Use expose mode when you want to:
+- Quickly scope a research topic
+- Validate there's enough literature
+- Get a structured starting point
+- Review sources before committing to a full draft
+
+Expose mode is ~3x faster than full draft generation.
+
+---
+
 ## Quick Start
 
 ### Prerequisites
