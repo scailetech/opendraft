@@ -72,10 +72,21 @@ DOCUMENT: {document_path.name}
 
 ---
 
-Generate exactly 5 bullet points. Each bullet must:
-1. Start with a bold label in brackets: **[Thesis]**, **[Finding]**, etc.
-2. Be followed by a colon and a single sentence
-3. Be no more than 15 words after the colon
+IMPORTANT: Follow this EXACT format:
+
+### Research Context
+**Authors**: [Extract lead author et al. from document]
+**Source**: [Journal/conference name, year]
+**Method**: [One sentence describing study type, sample size, approach]
+
+### Key Findings
+- **[Thesis]**: [Main argument, max 15 words]
+- **[Finding]**: [Key result, max 15 words]
+- **[Finding]**: [Key result, max 15 words]
+- **[Implication]**: [Significance, max 15 words]
+- **[Limitation]**: [Caveat, max 15 words]
+
+The Research Context block is REQUIRED. Extract author names and methodology from the document.
 """
 
     # Generate
@@ -86,21 +97,52 @@ Generate exactly 5 bullet points. Each bullet must:
 
 
 def _extract_tldr(output: str) -> str:
-    """Extract and format the TL;DR bullets."""
+    """Extract and format the TL;DR with Research Context."""
     lines = output.strip().split("\n")
 
-    # Find bullet lines
+    result_lines = []
+    in_context = False
+    in_findings = False
     bullets = []
+
     for line in lines:
-        line = line.strip()
-        if line.startswith("- **") or line.startswith("* **"):
-            bullets.append(line)
+        line_stripped = line.strip()
 
-    if len(bullets) >= 5:
-        return "## TL;DR\n\n" + "\n".join(bullets[:5])
+        # Detect sections
+        if "Research Context" in line_stripped or "**Authors**" in line_stripped:
+            in_context = True
+            in_findings = False
+        elif "Key Findings" in line_stripped or "Findings" in line_stripped:
+            in_context = False
+            in_findings = True
 
-    # Fallback: return cleaned output
-    return "## TL;DR\n\n" + output.strip()
+        # Collect Research Context lines
+        if in_context and line_stripped:
+            if line_stripped.startswith("**") or line_stripped.startswith("###"):
+                result_lines.append(line_stripped)
+
+        # Collect bullet points
+        if line_stripped.startswith("- **") or line_stripped.startswith("* **"):
+            bullets.append(line_stripped)
+
+    # Build output
+    output_parts = ["## TL;DR\n"]
+
+    # Add Research Context if found
+    context_lines = [l for l in result_lines if l.startswith("**")]
+    if context_lines:
+        output_parts.append("### Research Context\n")
+        output_parts.extend([l + "\n" for l in context_lines])
+        output_parts.append("\n### Key Findings\n")
+
+    # Add bullets
+    if bullets:
+        output_parts.extend([b + "\n" for b in bullets[:5]])
+    else:
+        # Fallback
+        output_parts.append(output.strip())
+
+    return "".join(output_parts).strip()
 
 
 def main():
