@@ -5,7 +5,7 @@
 [![Open Source](https://img.shields.io/badge/Open%20Source-100%25-brightgreen.svg)](https://github.com/federicodeponte/opendraft)
 [![GitHub stars](https://img.shields.io/github/stars/federicodeponte/opendraft?style=social)](https://github.com/federicodeponte/opendraft)
 
-> Generate research drafts with citations verified against 200M+ academic papers. OpenDraft is a free, open-source Python engine for thesis-level research drafts.
+> Generate research drafts with citations verified against 250M+ academic papers. OpenDraft is a free, open-source Python engine for thesis-level research drafts.
 
 <p align="center">
   <a href="https://opendraft.xyz/waitlist"><strong>Try Hosted Version (Coming Soon) →</strong></a>
@@ -54,7 +54,7 @@ It is a research assistance and drafting tool, not an autonomous author.
 |----------|---------|-----------|
 | Does it hallucinate citations? | Yes (often) | **Verified against real databases** |
 | Can it write 20,000+ words? | No (hits limits) | **Yes** |
-| Does it search real papers? | No | **Yes (200M+ papers)** |
+| Does it search real papers? | No | **Yes (250M+ papers)** |
 | Thesis structure? | Generic | **Academic chapters & sections** |
 | Export to PDF/Word? | No | **Yes** |
 | Free? | Limited | **100% free (self-host)** |
@@ -69,7 +69,7 @@ It is a research assistance and drafting tool, not an autonomous author.
 OpenDraft uses **19 specialized AI agents** that work like a research team:
 
 ```
-📚 RESEARCH PHASE    → Finds relevant papers from 200M+ sources
+📚 RESEARCH PHASE    → Finds relevant papers from 250M+ sources
 🏗️ STRUCTURE PHASE   → Creates thesis outline with chapters
 ✍️ WRITING PHASE     → Drafts each section with academic tone
 🔍 CITATION PHASE    → Verifies every source exists (CrossRef, arXiv)
@@ -84,7 +84,7 @@ OpenDraft uses **19 specialized AI agents** that work like a research team:
 ## Features
 
 ### AI That Doesn't Make Up Citations
-Every citation is verified against CrossRef, Semantic Scholar, and arXiv. If a paper doesn't exist, it's not included.
+Every citation is verified against CrossRef, OpenAlex, Semantic Scholar, and arXiv. If a paper doesn't exist, it's not included.
 
 ### Write Any Type of Academic Paper
 - Research papers (5-10 pages)
@@ -318,7 +318,7 @@ opendraft/
 
 ### Is this better than ChatGPT for academic writing?
 
-**For research drafts, yes.** ChatGPT often hallucinates citations. OpenDraft verifies every citation against CrossRef, Semantic Scholar, and arXiv.
+**For research drafts, yes.** ChatGPT often hallucinates citations. OpenDraft verifies every citation against CrossRef, OpenAlex, Semantic Scholar, and arXiv.
 
 ### Can I use this for my university thesis?
 
@@ -354,7 +354,7 @@ Most AI tools use a single model. OpenDraft uses **19 specialized agents**—one
 
 - **Engine:** Python 3.10+, multi-agent orchestration
 - **Models:** Google Gemini 3, Anthropic Claude 4.5, OpenAI GPT-5
-- **Citations:** CrossRef API, Semantic Scholar API, arXiv API
+- **Citations:** CrossRef API, OpenAlex API, Semantic Scholar API, arXiv API
 - **Export:** WeasyPrint (PDF), python-docx (Word)
 
 ---
@@ -388,7 +388,7 @@ Maintainer workflow docs:
 
 ## Summary
 
-**OpenDraft** is a free, open-source Python engine for generating academic research drafts. It uses 19 specialized AI agents to create drafts with citations verified against real databases (CrossRef, Semantic Scholar, arXiv).
+**OpenDraft** is a free, open-source Python engine for generating academic research drafts. It uses 19 specialized AI agents to create drafts with citations verified against real databases (CrossRef, OpenAlex, Semantic Scholar, arXiv).
 
 **Keywords:** AI thesis writer, AI research paper generator, ChatGPT alternative, free thesis generator, open source AI writing, multi-agent AI, verified citations, Python thesis generator, academic writing 2025
 
