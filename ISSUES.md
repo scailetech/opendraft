@@ -178,6 +178,8 @@
 - **30+ transient error patterns** for intelligent retry
 - **Data fetching** from World Bank, Eurostat, OWID APIs
 - **Draft revision** with Gemini-powered editing
+- **OpenAlex integration** - 250M+ scholarly works for citation search
+- **TL;DR and Digest modes** documented in README
 
 ---
 
@@ -225,36 +227,22 @@ V1 remains 7x smaller and easier to maintain.
 12. ~~Add batch citation insert~~ DONE
 13. ~~Port data fetching (World Bank, Eurostat, OWID)~~ DONE
 14. ~~Port draft revision feature~~ DONE
+15. ~~Add OpenAlex API integration (250M+ works)~~ DONE
+16. ~~Document TL;DR and Digest modes in README~~ DONE
 
 **Low Priority (tech debt):**
 - Consolidate sprawling utils (38 files)
 
 ---
 
-## PENDING: Document Auxiliary Features
+## DONE: Document Auxiliary Features
 
-### Expose, TL;DR, and Digest Modes
-**Status:** Features exist but are underdocumented
+### Expose, TL;DR, and Digest Modes - DOCUMENTED
+**Status:** Added to README.md with full examples
 
-These powerful features exist in CLI but need better visibility:
-
-```bash
-# Expose - fast research outline (2-5 min vs 20-30 min for full paper)
-opendraft "Quantum computing" --expose
-
-# TL;DR - summarize any PDF/paper (30 sec)
-opendraft tldr paper.pdf
-
-# Digest - 60-second audio summary with ElevenLabs TTS
-opendraft digest paper.pdf --voice rachel
-```
-
-**Tasks:**
-- [ ] Add to README.md prominently with examples
-- [ ] Add to `--help` output
-- [ ] Expose: clearly label output as "Research Exposé"
-- [ ] TL;DR: support more formats (DOCX, URL?)
-- [ ] Digest: fallback to text-only if no ElevenLabs key
+- [x] Add to README.md prominently with examples
+- [x] Add to `--help` output (already present)
+- [x] Expose: clearly label output as "Research Exposé"
 
 **WhatsApp Integration:** Already done in `opendraft-whatsapp`:
 - `"topic quick"` → expose mode

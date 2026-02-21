@@ -224,6 +224,56 @@ Expose mode is ~3x faster than full draft generation.
 
 ---
 
+## TL;DR Mode
+
+Generate a 5-bullet summary of any academic paper in seconds:
+
+```bash
+# Summarize a PDF
+opendraft tldr paper.pdf
+
+# Summarize a markdown file
+opendraft tldr draft.md
+
+# Save to file
+opendraft tldr paper.pdf --output summary.md
+```
+
+Output:
+```
+📄 TL;DR: paper.pdf
+
+• Main finding: Neural networks improve diagnostic accuracy by 23%
+• Method: Retrospective analysis of 50,000 patient records
+• Key limitation: Single-center study, needs external validation
+• Implication: AI-assisted diagnosis could reduce misdiagnosis rates
+• Future work: Multi-center trials planned for 2025
+```
+
+Works with any PDF, Markdown, or text file.
+
+---
+
+## Audio Digest
+
+Generate a 60-second audio summary using ElevenLabs TTS:
+
+```bash
+# Generate audio digest (requires ElevenLabs API key)
+opendraft digest paper.pdf
+
+# Choose a voice
+opendraft digest paper.pdf --voice adam
+
+# Available voices: rachel (default), adam, josh, elli, bella
+```
+
+Output: `paper_digest.mp3` - a professional narration summarizing the key points.
+
+**Setup:** Set `ELEVENLABS_API_KEY` in your environment or `.env` file.
+
+---
+
 ## Quick Start
 
 ### Prerequisites
