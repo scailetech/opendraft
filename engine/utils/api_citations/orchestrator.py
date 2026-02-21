@@ -34,6 +34,7 @@ def safe_print(*args, **kwargs):
             pass
 
 from .crossref import CrossrefClient
+from .openalex import OpenAlexClient
 from .semantic_scholar import SemanticScholarClient
 from .gemini_grounded import GeminiGroundedClient
 from .serper_client import SerperClient
@@ -141,6 +142,7 @@ class CitationResearcher:
         self,
         gemini_model: Optional[Any] = None,
         enable_crossref: bool = True,
+        enable_openalex: bool = True,
         enable_semantic_scholar: bool = True,
         enable_gemini_grounded: bool = True,
         enable_llm_fallback: bool = True,
@@ -155,6 +157,7 @@ class CitationResearcher:
         Args:
             gemini_model: Gemini model for LLM fallback (optional)
             enable_crossref: Whether to use Crossref API
+            enable_openalex: Whether to use OpenAlex API (250M+ works)
             enable_semantic_scholar: Whether to use Semantic Scholar API
             enable_gemini_grounded: Whether to use Gemini with Google Search grounding (includes DataForSEO fallback)
             enable_llm_fallback: Whether to fall back to LLM if all else fails
@@ -166,6 +169,7 @@ class CitationResearcher:
         self.gemini_model = gemini_model
         self.progress_callback = progress_callback
         self.enable_crossref = enable_crossref
+        self.enable_openalex = enable_openalex
         self.enable_semantic_scholar = enable_semantic_scholar
         self.enable_gemini_grounded = enable_gemini_grounded
         self.enable_llm_fallback = enable_llm_fallback and gemini_model is not None
@@ -180,6 +184,8 @@ class CitationResearcher:
         # Initialize API clients
         if self.enable_crossref:
             self.crossref = CrossrefClient()
+        if self.enable_openalex:
+            self.openalex = OpenAlexClient()
         if self.enable_semantic_scholar:
             self.semantic_scholar = SemanticScholarClient()
 
@@ -208,8 +214,9 @@ class CitationResearcher:
 
         # Track source usage for round-robin variety (reset each session)
         self.source_usage_count: Dict[str, int] = {
-            "Semantic Scholar": 0,
             "Crossref": 0,
+            "OpenAlex": 0,
+            "Semantic Scholar": 0,
             "Gemini Grounded": 0,
             "Serper": 0,
         }
@@ -356,12 +363,14 @@ class CitationResearcher:
                 safe_print(f"    📊 Query type: {classification.query_type} (confidence: {classification.confidence:.2f})")
         else:
             # Use original fallback chain if smart routing disabled
-            api_chain = ['crossref', 'semantic_scholar', 'gemini_grounded']
+            api_chain = ['crossref', 'openalex', 'semantic_scholar', 'gemini_grounded']
 
         # Filter out disabled APIs from chain (Day 1 Fix)
         enabled_chain = []
         for api_name in api_chain:
             if api_name == 'crossref' and not self.enable_crossref:
+                continue
+            if api_name == 'openalex' and not self.enable_openalex:
                 continue
             if api_name == 'semantic_scholar' and not self.enable_semantic_scholar:
                 continue
@@ -380,30 +389,33 @@ class CitationResearcher:
 
 
         # Determine if we should use parallel queries
-        # Use parallel for academic/journal queries where both CrossRef and Semantic Scholar are in chain
+        # Use parallel for academic/journal queries where multiple academic APIs are in chain
         use_parallel = (
             'crossref' in api_chain
-            and 'semantic_scholar' in api_chain
+            and ('openalex' in api_chain or 'semantic_scholar' in api_chain)
             and self.enable_crossref
-            and self.enable_semantic_scholar
         )
 
         if use_parallel:
-            # Query ALL 3 APIs in parallel for maximum source diversity
-            parallel_apis = ['crossref', 'semantic_scholar']
+            # Query ALL academic APIs in parallel for maximum source diversity
+            parallel_apis = ['crossref']
+            if self.enable_openalex:
+                parallel_apis.append('openalex')
+            if self.enable_semantic_scholar:
+                parallel_apis.append('semantic_scholar')
             if self.enable_gemini_grounded:
                 parallel_apis.append('gemini_grounded')
 
 
             # Report progress for parallel search
-            self._report_progress("Querying Crossref, Semantic Scholar & AI search in parallel...", "search")
+            self._report_progress("Querying academic APIs in parallel...", "search")
 
             if self.verbose:
                 apis_str = " + ".join([a.replace("_", " ").title() for a in parallel_apis])
                 safe_print(f"    → Querying {apis_str} in parallel...", end=" ", flush=True)
             results: List[Tuple[Optional[Dict[str, Any]], str]] = []
 
-            with ThreadPoolExecutor(max_workers=3) as executor:
+            with ThreadPoolExecutor(max_workers=4) as executor:
                 futures = {
                     executor.submit(self._search_api, api, topic): api
                     for api in parallel_apis
@@ -466,6 +478,25 @@ class CitationResearcher:
                         if self.verbose:
                             safe_print(f"✗ Error: {e}")
                         logger.error(f"Crossref error: {e}")
+
+                elif api_name == 'openalex' and self.enable_openalex:
+                    self._report_progress("Searching OpenAlex (250M+ works)...", "search")
+                    if self.verbose:
+                        safe_print(f"    → Trying OpenAlex API...", end=" ", flush=True)
+                    try:
+                        metadata = self.openalex.search_paper(topic)
+                        if metadata and (metadata.get('doi') or metadata.get('url')):
+                            valid_results.append((metadata, "OpenAlex"))
+                            self.source_usage_count["OpenAlex"] = self.source_usage_count.get("OpenAlex", 0) + 1
+                            if self.verbose:
+                                safe_print(f"✓")
+                        else:
+                            if self.verbose:
+                                safe_print(f"✗")
+                    except Exception as e:
+                        if self.verbose:
+                            safe_print(f"✗ Error: {e}")
+                        logger.error(f"OpenAlex error: {e}")
 
                 elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
                     self._report_progress("Searching Semantic Scholar (200M+ papers)...", "search")
@@ -760,7 +791,7 @@ class CitationResearcher:
         Search a single API for citations.
 
         Args:
-            api_name: Name of the API ('crossref', 'semantic_scholar', 'gemini_grounded')
+            api_name: Name of the API ('crossref', 'openalex', 'semantic_scholar', 'gemini_grounded')
             topic: Topic to search for
 
         Returns:
@@ -779,6 +810,16 @@ class CitationResearcher:
                     return (metadata, "Crossref")
                 else:
                     logger.debug(f"  ✗ Crossref returned no results")
+            elif api_name == 'openalex' and self.enable_openalex:
+                logger.debug(f"  → Calling OpenAlex API...")
+                metadata = self.openalex.search_paper(topic)
+                if metadata:
+                    logger.info(
+                        f"  ✓ OpenAlex found: {metadata.get('title', 'Unknown')[:80]}... (DOI: {metadata.get('doi', 'N/A')})"
+                    )
+                    return (metadata, "OpenAlex")
+                else:
+                    logger.debug(f"  ✗ OpenAlex returned no results")
             elif api_name == 'semantic_scholar' and self.enable_semantic_scholar:
                 logger.debug(f"  → Calling Semantic Scholar API...")
                 metadata = self.semantic_scholar.search_paper(topic)
